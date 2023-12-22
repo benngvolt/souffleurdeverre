@@ -4,6 +4,11 @@ import './index.css';
 import { Provider } from './utils/Context';
 import reportWebVitals from './reportWebVitals';
 import Home from './pages/Home/Home';
+import Compagnie from './pages/Compagnie/Compagnie';
+import Actualite from './pages/Actualite/Actualite';
+import Spectacles from './pages/Spectacles/Spectacles';
+import Mediation from './pages/Mediation/Mediation';
+import Header from './components/Header/Header';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -11,8 +16,13 @@ root.render(
   <React.StrictMode>
     <Provider>
       <Router>
+        <Header/>
         <Routes>
           <Route path="/" element={<Home/>} />
+          <Route path="/compagnie" element={<Compagnie/>} />
+          <Route path="/actualite" element={<Actualite/>} />
+          <Route path="/spectacles" element={<Spectacles/>} />
+          <Route path="/mediation" element={<Mediation/>} />
         </Routes>
       </Router>
     </Provider>
