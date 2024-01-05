@@ -17,6 +17,6 @@ router.post('/', multer.single('image'), uploadImage, biographiesCtrl.createBiog
 router.get('/', biographiesCtrl.getAllBiographies);
 router.get('/:id', biographiesCtrl.getOneBiography);
 // router.delete ('/:id', auth, biographiesCtrl.deleteOneBiography);
-// router.put ('/:id', auth, multer.array('images'), uploadImages, biographiesCtrl.updateOneBiography);
+router.put ('/:id', multer.single('image'), uploadImage, biographiesCtrl.updateOneBiography);
 
 module.exports = router;

@@ -6,7 +6,7 @@ import {useRef, useState } from 'react'
 // import { useNavigate } from 'react-router-dom'
 
  
-function BioForm() {
+function BioForm({biographyEdit, bioFormMode}) {
 
     const inputSurnameRef = useRef(null);
     const inputNameRef = useRef(null);
@@ -31,25 +31,47 @@ function BioForm() {
         bioFormData.append('biography', inputBioRef.current.value);
         bioFormData.append('field', inputFieldRef.current.value);
         
-        fetch(`${API_URL}/api/biographies`, {
-            method: "POST",
-            headers: {
-                // 'Content-Type': 'application/json',
-                // 'Authorization': 'Bearer ' + token,
-            },
-            body: bioFormData,
-            })
-            .then((response) => {
-                if (response.ok) {
-                    return response;
-                } else {
-                    throw new Error('La requête a échoué');
-                }
-            })
-            .then(()=> {
-                closeForm();
-            })
-            .catch((error) => console.error(error));
+        if (bioFormMode==='add') {
+            fetch(`${API_URL}/api/biographies`, {
+                method: "POST",
+                headers: {
+                    // 'Content-Type': 'application/json',
+                    // 'Authorization': 'Bearer ' + token,
+                },
+                body: bioFormData,
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response;
+                    } else {
+                        throw new Error('La requête a échoué');
+                    }
+                })
+                .then(()=> {
+                    closeForm();
+                })
+                .catch((error) => console.error(error));
+        } else if (bioFormMode==='edit') {
+            fetch(`${API_URL}/api/biographies/${biographyEdit._id}`, {
+                method: "PUT",
+                headers: {
+                    // 'Content-Type': 'application/json',
+                    // 'Authorization': 'Bearer ' + token,
+                },
+                body: bioFormData,
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response;
+                    } else {
+                        throw new Error('La requête a échoué');
+                    }
+                })
+                .then(()=> {
+                    closeForm();
+                })
+                .catch((error) => console.error(error));
+        }
     }
 
 
@@ -100,26 +122,26 @@ function BioForm() {
             </div>
             <div className='bioForm_surname'>
                 <label htmlFor='inputSurname'>NOM</label>
-                <input type='text' id='inputSurname' ref={inputSurnameRef}></input>
+                <input type='text' id='inputSurname' ref={inputSurnameRef} defaultValue={bioFormMode==='edit'? biographyEdit.surname : null}></input>
             </div>
             <div className='bioForm_name'>
                 <label htmlFor='inputName'>PRENOM</label>
-                <input type='text' id='inputName' ref={inputNameRef}></input>
+                <input type='text' id='inputName' ref={inputNameRef} defaultValue={bioFormMode==='edit'? biographyEdit.name : null}></input>
             </div>
             <div className='bioForm_role'>
                 <label htmlFor='inputRole'>ROLE</label>
-                <input type='text' id='inputRole' ref={inputRoleRef}></input>
+                <input type='text' id='inputRole' ref={inputRoleRef} defaultValue={bioFormMode==='edit'? biographyEdit.role : null}></input>
             </div>
             <div className='bioForm_field'>
                 <label htmlFor='inputField'>CHAMPS</label>
-                <select id='inputField' ref={inputFieldRef} name="field">
+                <select id='inputField' ref={inputFieldRef} name="field" defaultValue={bioFormMode==='edit'? biographyEdit.field : 'artiste'} >
                     <option value="artiste">Artiste</option>
                     <option value="administration">Administration</option>
                 </select>
             </div>
             <div className='bioForm_bio'>
                 <label htmlFor='inputBio'>BIOGRAPHIE</label>
-                <input type='textarea' id='inputBio' ref={inputBioRef}></input>
+                <input type='textarea' id='inputBio' ref={inputBioRef} defaultValue={bioFormMode==='edit'? biographyEdit.biography : null}></input>
             </div>
             <div className='bioForm_buttons'>
                 <button type='submit'>VALIDER</button>

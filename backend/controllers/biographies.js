@@ -57,3 +57,34 @@ exports.createBiography = async (req, res) => {
         res.status(500).json({ error: 'Erreur serveur lors de la recherche de la biographie.' });
       });
   };
+
+  exports.updateOneBiography = (req, res) => {
+
+    const biographyData = {
+      ... req.body,
+      bioImageUrl: req.imageUrl,
+    }
+
+    Biography.findOne({ _id: req.params.id })
+      .then(biography => {
+        if (!biography) {
+          // Aucune correspondance trouvée, renvoyer une réponse appropriée
+          return res.status(404).json({ message: 'Aucune biographie trouvée pour le nom de famille spécifié.' });
+        }
+        
+        Biography.updateOne({ _id: req.params.id }, biographyData)
+              .then(() => {
+                  res.status(200).json({ message: 'Evènement modifiée!' });
+              })
+              .catch(error => {
+                  res.status(400).json({ error });
+                  console.log(error);
+              });
+
+       
+      })
+      .catch(error => {
+        console.error(error);
+        res.status(500).json({ error: 'Erreur serveur lors de la recherche de la biographie.' });
+      });
+  };
