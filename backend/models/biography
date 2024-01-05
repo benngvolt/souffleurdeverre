@@ -1,0 +1,14 @@
+const mongoose = require('mongoose');
+const validator = require('validator');
+
+const biographySchema = mongoose.Schema({
+    surname: {type: String, required: true},
+    name: {type: String, required: true},
+    role: {type: String, required: true},
+    field: {type: String, required: true},
+    biography: {type: String, required: true},
+    bioImageUrl: {type: String, required: true},
+});
+
+
+module.exports = mongoose.model('Biography', biographySchema);

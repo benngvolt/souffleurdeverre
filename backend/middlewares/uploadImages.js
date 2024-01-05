@@ -26,7 +26,7 @@ function uploadImages(req, res, next) {
             .toBuffer();
     
           // Créez un blob dans le stockage Google Cloud Storage
-          const blob = bucket.file('series_images/' + originalname);
+          const blob = bucket.file(originalname);
           const blobStream = blob.createWriteStream({
             resumable: false
           });
@@ -78,11 +78,9 @@ function uploadImages(req, res, next) {
 
   function uploadImage(req, res, next) {
     try {
-
       if (!req.file) {
         next(); // Pas de fichier, passez directement au contrôleur suivant
       } else if (req.file) {
-  
         const file = req.file;
         const { originalname, buffer } = file;
       
@@ -97,7 +95,7 @@ function uploadImages(req, res, next) {
           .toBuffer()
           .then((resizedImageBuffer) => {
             // Créez un blob dans le stockage Google Cloud Storage
-            const blob = bucket.file('main_image/' + originalname);
+            const blob = bucket.file(originalname);
             const blobStream = blob.createWriteStream({
               resumable: false
             });
@@ -108,7 +106,7 @@ function uploadImages(req, res, next) {
               );
     
               // Stockez l'URL de l'image dans req
-              req.mainImageUrl = publicUrl;
+              req.imageUrl = publicUrl;
               next(); // Passez au middleware suivant ou à la route
             }).on('error', (error) => {
               console.error(error);
