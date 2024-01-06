@@ -1,5 +1,6 @@
 import './Edit.scss'
 import BioForm from '../../components/BioForm/BioForm'
+import ProjectForm from '../../components/ProjectForm/ProjectForm'
 import { API_URL } from '../../utils/constants'
 // import { Link } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
@@ -13,6 +14,11 @@ function Edit() {
     const [bioFormMode, setBioFormMode] = useState('');
     const [biographyEdit, setBiographyEdit] = useState(null);
     const [handleDisplayBioForm, setHandleDisplayBioForm] = useState(false);
+
+    const [projects, setProjects] = useState([]);
+    const [projectFormMode, setProjectFormMode] = useState('');
+    const [projectEdit, setProjectEdit] = useState(null);
+    const [handleDisplayProjectForm, setHandleDisplayProjectForm] = useState(false);
 
 
     /*-------------------------------------
@@ -58,6 +64,7 @@ function Edit() {
                 <button onClick={() => addBio()}>+ AJOUTER UN.E COLLABORA.TEUR.TRICE</button>
                 <div className={handleDisplayBioForm===false ? "--displayOff" : "--displayOn"}>
                     <BioForm biographyEdit={biographyEdit} bioFormMode={bioFormMode} />
+                    <ProjectForm projectEdit={projectEdit} projectFormMode={projectFormMode} />
                 </div>
             </div>
         </div>

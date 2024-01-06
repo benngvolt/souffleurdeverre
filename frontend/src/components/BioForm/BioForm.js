@@ -92,27 +92,26 @@ function BioForm({biographyEdit, bioFormMode}) {
         }
     }
 
-    function resetFields() {
-        inputBioImageFileRef.current.value = null;
-        inputSurnameRef.current.value = null;
-        inputNameRef.current.value = null;
-        inputRoleRef.current.value = null;
-        inputBioRef.current.value = null;
-        inputFieldRef.current.value = null;
-        bioImageSampleRef.current.setAttribute("src", "");
-        bioImageSampleRef.current.setAttribute("alt", "");
-        bioImageSampleRef.current.setAttribute("class", "bioForm_sampleContainer_img--displayOff");
-    }
+    // function resetFields() {
+    //     inputBioImageFileRef.current.value = null;
+    //     inputSurnameRef.current.value = null;
+    //     inputNameRef.current.value = null;
+    //     inputRoleRef.current.value = null;
+    //     inputBioRef.current.value = null;
+    //     inputFieldRef.current.value = null;
+    //     bioImageSampleRef.current.setAttribute("src", "");
+    //     bioImageSampleRef.current.setAttribute("alt", "");
+    //     bioImageSampleRef.current.setAttribute("class", "bioForm_sampleContainer_img--displayOff");
+    // }
 
     function closeForm() {
-        resetFields();
+        
     }
 
     
 
     return  (      
         <form onSubmit={(event) => bioFormSubmit(event)} method="post" className='bioForm'>
-            <p>COLLABORA.TEUR.TRICE</p>
             <div  className="bioForm_sampleContainer">
                 <img id='imageSample' ref={bioImageSampleRef} src='' className="bioForm_sampleContainer_img" alt=''/>
             </div>
