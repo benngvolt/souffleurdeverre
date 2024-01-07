@@ -11,12 +11,12 @@ import React, { useEffect, useState } from 'react'
 function Edit() {
 
     const [biographies, setBiographies] = useState([]);
-    const [bioFormMode, setBioFormMode] = useState('');
+    const [bioFormMode, setBioFormMode] = useState('add');
     const [biographyEdit, setBiographyEdit] = useState(null);
     const [handleDisplayBioForm, setHandleDisplayBioForm] = useState(false);
 
     const [projects, setProjects] = useState([]);
-    const [projectFormMode, setProjectFormMode] = useState('');
+    const [projectFormMode, setProjectFormMode] = useState('add');
     const [projectEdit, setProjectEdit] = useState(null);
     const [handleDisplayProjectForm, setHandleDisplayProjectForm] = useState(false);
 

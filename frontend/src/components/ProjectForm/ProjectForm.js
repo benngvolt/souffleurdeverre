@@ -15,68 +15,79 @@ function ProjectForm({ projectEdit, projectFormMode }) {
     const inputProjectCreationDateRef = useRef(null);
     const inputProjectDescriptionRef = useRef(null);
     const inputProjectMoreInfosRef = useRef(null);
-    const inputProjectArtistFunctionRef = useRef(null);
-    const inputProjectArtistNameRef = useRef(null);
-    const inputProjectArtistSurnameRef = useRef(null);
 
+    const projectMainImageSampleRef = useRef (null);
+    const inputProjectMainImageFileRef = useRef (null);
 
     // const [isImageLoaded, setIsImageLoaded] = useState(false);
+    const [artistsList, setArtistsList] = useState([]);
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+    const handleAddArtist = () => {
+        setArtistsList([...artistsList, { artistFunction: '', artistName: '', artistSurname: '' }]);
+    };
+    const supprArtist = () => {
+        console.log('ouipui')
+    }
 
 
     function projectFormSubmit(event) {
-        console.log('youhou');
-    //     event.preventDefault();
+        console.log(JSON.stringify(artistsList));
+        event.preventDefault();
     //     // const token = window.sessionStorage.getItem('1');
-    //     const bioFormData = new FormData();
+        const projectFormData = new FormData();
 
-    //     bioFormData.append('image', inputBioImageFileRef.current.files[0]);
-    //     bioFormData.append('surname', inputSurnameRef.current.value);
-    //     bioFormData.append('name', inputNameRef.current.value);
-    //     bioFormData.append('role', inputRoleRef.current.value);
-    //     bioFormData.append('biography', inputBioRef.current.value);
-    //     bioFormData.append('field', inputFieldRef.current.value);
+        projectFormData.append('image', inputProjectMainImageFileRef.current.files[0]);
+        projectFormData.append('title', inputProjectTitleRef.current.value);
+        projectFormData.append('subtitle', inputProjectSubtitleRef.current.value);
+        projectFormData.append('state', inputProjectStateRef.current.value);
+        projectFormData.append('duration', inputProjectDurationRef.current.value);
+        projectFormData.append('description', inputProjectDescriptionRef.current.value);
+        projectFormData.append('moreInfos', inputProjectMoreInfosRef.current.value);
+        projectFormData.append('artistsList', JSON.stringify(artistsList));
         
-    //     if (bioFormMode==='add') {
-    //         fetch(`${API_URL}/api/biographies`, {
-    //             method: "POST",
-    //             headers: {
-    //                 // 'Content-Type': 'application/json',
-    //                 // 'Authorization': 'Bearer ' + token,
-    //             },
-    //             body: bioFormData,
-    //             })
-    //             .then((response) => {
-    //                 if (response.ok) {
-    //                     return response;
-    //                 } else {
-    //                     throw new Error('La requête a échoué');
-    //                 }
-    //             })
-    //             .then(()=> {
-    //                 closeForm();
-    //             })
-    //             .catch((error) => console.error(error));
-    //     } else if (bioFormMode==='edit') {
-    //         fetch(`${API_URL}/api/biographies/${biographyEdit._id}`, {
-    //             method: "PUT",
-    //             headers: {
-    //                 // 'Content-Type': 'application/json',
-    //                 // 'Authorization': 'Bearer ' + token,
-    //             },
-    //             body: bioFormData,
-    //             })
-    //             .then((response) => {
-    //                 if (response.ok) {
-    //                     return response;
-    //                 } else {
-    //                     throw new Error('La requête a échoué');
-    //                 }
-    //             })
-    //             .then(()=> {
-    //                 closeForm();
-    //             })
-    //             .catch((error) => console.error(error));
-    //     }
+        if (projectFormMode==='add') {
+            fetch(`${API_URL}/api/projects`, {
+                method: "POST",
+                headers: {
+                    // 'Content-Type': 'application/json',
+                    // 'Authorization': 'Bearer ' + token,
+                },
+                body: projectFormData,
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response;
+                    } else {
+                        throw new Error('La requête a échoué');
+                    }
+                })
+                .then(()=> {
+                    closeForm();
+                })
+                .catch((error) => console.error(error));
+        } else if (projectFormMode==='edit') {
+            console.log('edit');
+            // fetch(`${API_URL}/api/biographies/${biographyEdit._id}`, {
+            //     method: "PUT",
+            //     headers: {
+            //         // 'Content-Type': 'application/json',
+            //         // 'Authorization': 'Bearer ' + token,
+            //     },
+            //     body: bioFormData,
+            //     })
+            //     .then((response) => {
+            //         if (response.ok) {
+            //             return response;
+            //         } else {
+            //             throw new Error('La requête a échoué');
+            //         }
+            //     })
+            //     .then(()=> {
+            //         closeForm();
+            //     })
+            //     .catch((error) => console.error(error));
+        }
     }
 
 
@@ -113,17 +124,34 @@ function ProjectForm({ projectEdit, projectFormMode }) {
         
     }
 
+
+    function displaySample() {
+        if(!inputProjectMainImageFileRef.current.files || inputProjectMainImageFileRef.current.files.length === 0) {
+            setIsImageLoaded(false);
+            return
+        } else {
+            const file = inputProjectMainImageFileRef.current.files[0]; // récupération du fichier image dans le formulaire
+            const reader = new FileReader(); // un objet FileReader est créé pour lire le contenu du fichier image sélectionné.
+            reader.readAsDataURL(file); // lecture du fichier image récupéré comme adresse url
+            reader.onload = function() { // création des attributs de l'image (src, alt, class)
+                projectMainImageSampleRef.current.setAttribute("src", reader.result);
+                projectMainImageSampleRef.current.setAttribute("alt", "");
+                projectMainImageSampleRef.current.setAttribute("class", "bioForm_sampleContainer_img--displayOn");
+            }
+            setIsImageLoaded(true);
+        }
+    }
     
 
     return  (      
         <form onSubmit={(event) => projectFormSubmit(event)} method="post" className='projectForm'>
-            {/* <div  className="projectForm_sampleContainer">
-                <img id='imageSample' ref={projectImageSampleRef} src='' className="projectForm_sampleContainer_img" alt=''/>
+            <div  className="projectForm_sampleContainer">
+                <img id='imageSample' ref={projectMainImageSampleRef} src='' className="projectForm_sampleContainer_img" alt=''/>
             </div>
             <div className='projectForm_projectImageFile'>
                 <label htmlFor='inputProjectImageFile'>{isImageLoaded ? 'MODIFIER L\'IMAGE' : '+ AJOUTER UNE IMAGE'}</label>
-                <input type='file' id='inputProjectImageFile' name="image" ref={inputProjectImageFileRef} onChange={displaySample}></input>
-            </div> */}
+                <input type='file' id='inputProjectImageFile' name="image" ref={inputProjectMainImageFileRef} onChange={displaySample}></input>
+            </div>
 
             <div className='projectForm_projectTitle'>
                 <label htmlFor='inputProjectTitle'>TITRE*</label>
@@ -161,22 +189,59 @@ function ProjectForm({ projectEdit, projectFormMode }) {
             {/* -----CRÉATION D'UN TABLEAU D'OBJETS  */}
 
             <div className='projectForm_projectArtistsList'>
+
                 <p> ARTISTES </p>
-                <div className='projectForm_projectArtistsList_objectForm'>
-                    <label htmlFor='inputProjectArtistFunction'>FONCTION</label>
-                    <input type='text' id='inputProjectArtistFunction' ref={inputProjectArtistFunctionRef} defaultValue={projectFormMode==='edit'? projectEdit.artistList.artistFunction : null}></input>
-                    <label htmlFor='inputProjectArtistName'>PRÉNOM</label>
-                    <input type='text' id='inputProjectArtistName' ref={inputProjectArtistNameRef} defaultValue={projectFormMode==='edit'? projectEdit.artistList.artistName : null}></input>
-                    <label htmlFor='inputProjectArtistSurname'>NOM</label>
-                    <input type='text' id='inputProjectArtistSurname' ref={inputProjectArtistSurnameRef} defaultValue={projectFormMode==='edit'? projectEdit.artistList.artistSurname : null}></input>
-                </div>
-                <button>+ AJOUTER UN ARTISTE</button>
+                {artistsList.map((artist, index) => (
+                    <div key={index}>
+                        <div>
+                            <label htmlFor={`inputProjectArtistFunction${index}`}>FONCTION</label>
+                            <input
+                                type='text'
+                                id={`inputProjectArtistFunction${index}`}
+                                value={artist.artistFunction}
+                                onChange={(e) => {
+                                    const updatedArtistsList = [...artistsList];
+                                    updatedArtistsList[index].artistFunction = e.target.value;
+                                    setArtistsList(updatedArtistsList);
+                                }}
+                            ></input>
+                        </div>
+                        <div>
+                            <label htmlFor={`inputProjectArtistSurname${index}`}>NOM</label>
+                            <input
+                                type='text'
+                                id={`inputProjectArtistSurname${index}`}
+                                value={artist.artistSurname}
+                                onChange={(e) => {
+                                    const updatedArtistsList = [...artistsList];
+                                    updatedArtistsList[index].artistSurname = e.target.value;
+                                    setArtistsList(updatedArtistsList);
+                                }}
+                            ></input>
+                        </div>
+                        <div>
+                            <label htmlFor={`inputProjectArtistName${index}`}>PRÉNOM</label>
+                            <input
+                                type='text'
+                                id={`inputProjectArtistName${index}`}
+                                value={artist.artistName}
+                                onChange={(e) => {
+                                    const updatedArtistsList = [...artistsList];
+                                    updatedArtistsList[index].artistName = e.target.value;
+                                    setArtistsList(updatedArtistsList);
+                                }}
+                            ></input>
+                        </div>
+                        <button type='button' onClick={() => supprArtist()}>SUPPRIMER</button>
+                    </div>              
+                ))}
+                <button type='button' onClick={() =>handleAddArtist()} >+ AJOUTER UN ARTISTE</button>
             </div>
 
             
             <div className='projectForm_buttons'>
                 <button type='submit'>VALIDER</button>
-                <button onClick={() => closeForm()}>ANNULER</button>
+                <button type='button' onClick={() => closeForm()}>ANNULER</button>
             </div>
         </form>
     )

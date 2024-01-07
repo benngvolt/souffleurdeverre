@@ -4,13 +4,14 @@ const validator = require('validator');
 const projectSchema = mongoose.Schema({
     title: {type: String, required: true},
     subtitle: {type: String, required: false},
-    projectState: {type: String, required: true},
+    projectState: {type: String, required: false},
     duration: {type: String, required: false},
     creationDate: {type: String, required: false},
     description: {type: String, required: false},
     moreInfos: {type: String, required: false},
-    mainImageIndex: { type: Number, required: true },
-    artistList: [
+    mainImageUrl: { type: String, required: false },
+    mainImageIndex: { type: Number, required: false },
+    artistsList: [
         {
         artistFunction: {type: String, required: false},
         artistName: {type: String, required: false},
