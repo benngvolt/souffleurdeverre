@@ -4,11 +4,11 @@ const Project = require('../models/project')
 ----- GET ALL PROJECTS ---
 -------------------------*/
 
-// exports.getAllProjects = (req, res) => {
-//     Project.find()
-//       .then (projects =>res.status(200).json(projects))
-//       .catch (error => res.status (400).json({error}))
-//   }
+exports.getAllProjects = (req, res) => {
+    Project.find()
+      .then (projects =>res.status(200).json(projects))
+      .catch (error => res.status (400).json({error}))
+  }
 
 /*------------------------
 ----- GET ONE PROJECT ----
@@ -23,7 +23,12 @@ exports.createProject = async (req, res) => {
     const projectData = req.body;
     const imageUrl = req.imageUrl;
     const artistsList = JSON.parse(req.body.artistsList);
-    console.log(artistsList);
+    const productionList = JSON.parse(req.body.productionList);
+    const pressList = JSON.parse(req.body.pressList);
+    const videoList = JSON.parse(req.body.videoList);
+    const residenciesList = JSON.parse(req.body.residenciesList);
+    const showsList = JSON.parse(req.body.showsList);
+  
     // const projectDescriptionWithBr = projectData.description.replace(/(\r\n|\n|\r)/g, "<br>");
   
     if (!projectData.title || !projectData.state) {
@@ -37,7 +42,12 @@ exports.createProject = async (req, res) => {
           ... projectData,
           // description: projectDescriptionWithBr,
           mainImageUrl: imageUrl,
-          artistsList: artistsList
+          artistsList: artistsList,
+          productionList: productionList,
+          pressList: pressList,
+          videoList: videoList,
+          residenciesList: residenciesList,
+          showsList: showsList
         });
   
         await project.save();
@@ -107,9 +117,9 @@ exports.createProject = async (req, res) => {
 //         }
 //     }
 
-// /*--------------------------
-// ----- UPDATE ONE SERIE -----
-// --------------------------*/
+/*--------------------------
+----- UPDATE ONE SERIE -----
+--------------------------*/
 
 // exports.updateOneProject = async (req, res) => {
 

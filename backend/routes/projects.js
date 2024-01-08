@@ -14,7 +14,7 @@ const uploadImage = require('../middlewares/uploadImages').uploadImage;
 // l'argument next permet de passer au middleware suivant
 
 router.post('/', multer.single('image'), uploadImage, projectsCtrl.createProject);
-// router.get('/', projectsCtrl.getAllProjects);
+router.get('/', projectsCtrl.getAllProjects);
 // router.delete ('/:id', auth, projectsCtrl.deleteOneProject);
 // router.put ('/:id', auth, multer.array('images'), uploadImages, projectsCtrl.updateOneProject);
 

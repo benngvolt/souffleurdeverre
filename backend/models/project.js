@@ -20,9 +20,39 @@ const projectSchema = mongoose.Schema({
     ],
     productionList: [
         {
-        prodFunction: {type: String, required: false},
-        prodName: {type: String, required: false},
-        prodSurname: {type: String, required: false},
+        productionFunction: {type: String, required: false},
+        productionName: {type: String, required: false},
+        productionSurname: {type: String, required: false},
+        }
+    ],
+    pressList: [
+        {
+        quote: {type: String, required: false},
+        mediaName: {type: String, required: false},
+        }
+    ],
+    videoList: [
+        {   
+        videoName: {type: String, required: false},
+        videoLink: {type: String, required: false},
+        }
+    ],
+    residenciesList: [
+        {
+        residencyType : {type: String, required: false},
+        dates: {type: String, required: false},
+        city: {type: String, required: false},
+        placeName: {type: String, required: false},
+        placeLink: {type: String, required: false},
+        }
+    ],
+    showsList: [
+        {
+        dates: {type: String, required: false},
+        city: {type: String, required: false},
+        placeName: {type: String, required: false},
+        placeLink: {type: String, required: false},
+        showsNumber: {type: Number, required: false},
         }
     ],
     pdfList : [
@@ -31,44 +61,12 @@ const projectSchema = mongoose.Schema({
         pdfLink: {type: String, required: false},
         }
     ],
-    press: [
-        {
-        quote: {type: String, required: false},
-        mediaName: {type: String, required: false},
-        }
-    ],
-    videos: [
-        {   
-        videoName: {type: String, required: false},
-        videoLink: {type: String, required: false},
-        }
-    ],
     images: [
         {
         imageUrl: {type: String, required: false},
         photograph: {type: String, required: false},
         }
     ],
-    agendaList: {
-        residencies: [
-            {
-            residencyType : {type: String, required: false},
-            dates: {type: String, required: false},
-            city: {type: String, required: false},
-            placeName: {type: String, required: false},
-            placeLink: {type: String, required: false},
-            }
-        ],
-        shows: [
-            {
-            dates: {type: String, required: false},
-            city: {type: String, required: false},
-            placeName: {type: String, required: false},
-            placeLink: {type: String, required: false},
-            showsNumber: {type: Number, required: false},
-            }
-        ],
-    }
 });
 
 
