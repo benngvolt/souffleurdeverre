@@ -2,10 +2,11 @@ import './ProjectForm.scss'
 import { API_URL } from '../../utils/constants'
 // import { Link } from 'react-router-dom'
 import {useRef, useState, useEffect } from 'react'
+import { v4 as uuidv4 } from 'uuid'
+import DNDGallery from '../../components/DNDGallery/DNDGallery'
 // import { Context } from '../../utils/Context'
 // import { useNavigate } from 'react-router-dom'
 
- 
 function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList, productionList, setProductionList, pressList, setPressList, videoList, setVideoList, residenciesList, setResidenciesList, showsList, setShowsList }) {
 
     const inputProjectTitleRef = useRef(null);
@@ -20,7 +21,10 @@ function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList
     const inputProjectMainImageFileRef = useRef (null);
 
     const [isImageLoaded, setIsImageLoaded] = useState(false);
-
+    const [newImage, setNewImage] = useState(null);
+    const [imageFiles, setImageFiles] = useState([]);
+    const [mainImageIndex, setMainImageIndex]=  useState(0);
+     
     // const [isImageLoaded, setIsImageLoaded] = useState(false);
     
     /* ---------------------------
@@ -101,7 +105,7 @@ function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList
         // const token = window.sessionStorage.getItem('1');
         const projectFormData = new FormData();
 
-        projectFormData.append('image', inputProjectMainImageFileRef.current.files[0]);
+        
         projectFormData.append('title', inputProjectTitleRef.current.value);
         projectFormData.append('subtitle', inputProjectSubtitleRef.current.value);
         projectFormData.append('state', inputProjectStateRef.current.value);
@@ -114,6 +118,19 @@ function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList
         projectFormData.append('videoList', JSON.stringify(videoList));
         projectFormData.append('residenciesList', JSON.stringify(residenciesList));
         projectFormData.append('showsList', JSON.stringify(showsList));
+        const newImageFiles = Array.from(imageFiles);
+        const imagesWithIndex = newImageFiles.map((image, index) => ({
+            index,
+            image
+        }));
+        imagesWithIndex.forEach(({ index, image }) => {
+            if (image instanceof File) {
+                projectFormData.append('images', image);
+                projectFormData.append('fileIndexes', index)
+            } else {
+                projectFormData.append(`existingImages[${index}]`, JSON.stringify(image));
+            }
+        });
         
         if (projectFormMode==='add') {
             fetch(`${API_URL}/api/projects`, {
@@ -194,33 +211,71 @@ function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList
     }
 
 
-    function displaySample() {
-        if(!inputProjectMainImageFileRef.current.files || inputProjectMainImageFileRef.current.files.length === 0) {
-            setIsImageLoaded(false);
-            return
-        } else {
-            const file = inputProjectMainImageFileRef.current.files[0]; // récupération du fichier image dans le formulaire
-            const reader = new FileReader(); // un objet FileReader est créé pour lire le contenu du fichier image sélectionné.
-            reader.readAsDataURL(file); // lecture du fichier image récupéré comme adresse url
-            reader.onload = function() { // création des attributs de l'image (src, alt, class)
-                projectMainImageSampleRef.current.setAttribute("src", reader.result);
+    function displaySample(event) {
+
+            const image = inputProjectMainImageFileRef.current.files[0];
+            
+            if (image) {
+                setNewImage (image);
+                const id = uuidv4(); // Générez un identifiant unique
+                image._id = id;
+                image.sampleImageUrl= URL.createObjectURL(image);
+                projectMainImageSampleRef.current.setAttribute("src", image.sampleImageUrl);
                 projectMainImageSampleRef.current.setAttribute("alt", "");
-                projectMainImageSampleRef.current.setAttribute("class", "bioForm_sampleContainer_img--displayOn");
-            }
-            setIsImageLoaded(true);
+                // projectMainImageSampleRef.current.setAttribute("class", "");
+                setIsImageLoaded(true);
+                if (newImage) {
+                    console.log('new')
+                } else {
+                    console.log('null')
+                }
+                
+            } else {
+                setIsImageLoaded(false);
+            }    
+    }
+
+    function handleAddFile() {
+
+        if (newImage) {
+            const updatedImageFiles = [...imageFiles, newImage];
+            setImageFiles(updatedImageFiles);
+            // setSerieObject({
+            //     ...serieObject,
+            //     images: updatedImageFiles
+            // });
         }
+        setIsImageLoaded(false);
+        cancelAddFile();
+        
+    }
+
+    function cancelAddFile() {
+        setNewImage (null);
+        setIsImageLoaded(false);
+        projectMainImageSampleRef.current.setAttribute("src", "");
+        projectMainImageSampleRef.current.setAttribute("alt", "");
     }
     
 
     return  (      
         <form onSubmit={(event) => projectFormSubmit(event)} method="post" className='projectForm'>
-            <div  className="projectForm_sampleContainer">
-                <img id='imageSample' ref={projectMainImageSampleRef} src='' className="projectForm_sampleContainer_img" alt=''/>
-            </div>
+
+
+            <DNDGallery imageFiles={imageFiles} setImageFiles={setImageFiles} mainImageIndex={mainImageIndex} setMainImageIndex={setMainImageIndex} />
             <div className='projectForm_projectImageFile'>
-                <label htmlFor='inputProjectImageFile'>{isImageLoaded ? 'MODIFIER L\'IMAGE' : '+ AJOUTER UNE IMAGE'}</label>
-                <input type='file' id='inputProjectImageFile' name="image" ref={inputProjectMainImageFileRef} onChange={displaySample}></input>
+                <label htmlFor='inputProjectImageFile'>{isImageLoaded ? 'CHANGER D\'IMAGE' : '+ AJOUTER UNE IMAGE'}</label>
+                <input type='file' id='inputProjectImageFile' name="images" ref={inputProjectMainImageFileRef} onChange={displaySample}></input>
+                <div  className="projectForm_sampleContainer">
+                    <img id='imageSample' ref={projectMainImageSampleRef} src='' className="projectForm_sampleContainer_img" alt=''/>
+                    <div>
+                        <button aria-label="Ajouter l'image" onClick={handleAddFile} type="button">AJOUTER</button>
+                        <button aria-label="Annuler" onClick={cancelAddFile} type="button">ANNULER</button>
+                    </div>
+                </div>
             </div>
+
+
 
             <div className='projectForm_projectTitle'>
                 <label htmlFor='inputProjectTitle'>TITRE*</label>

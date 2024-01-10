@@ -21,7 +21,7 @@ exports.getAllProjects = (req, res) => {
 exports.createProject = async (req, res) => {
 
     const projectData = req.body;
-    const imageUrl = req.imageUrl;
+    const images = req.newImagesObjects;
     const artistsList = JSON.parse(req.body.artistsList);
     const productionList = JSON.parse(req.body.productionList);
     const pressList = JSON.parse(req.body.pressList);
@@ -41,13 +41,13 @@ exports.createProject = async (req, res) => {
         const project = new Project({
           ... projectData,
           // description: projectDescriptionWithBr,
-          mainImageUrl: imageUrl,
           artistsList: artistsList,
           productionList: productionList,
           pressList: pressList,
           videoList: videoList,
           residenciesList: residenciesList,
-          showsList: showsList
+          showsList: showsList,
+          images: images
         });
   
         await project.save();

@@ -1,0 +1,26 @@
+.dndItem {
+
+    &:hover {
+        cursor:grab;
+    }
+
+    &_image {
+        width: 180px;
+        height: 120px;
+        object-fit: cover;
+    }
+    &_buttons {
+        z-index: 2;
+        &_supprButton, &_isMainButton {
+            z-index: 1;
+        }
+        &_isMainButton {
+            &--isWhite {
+                color: white;
+                }
+            &--isOrange {
+                color: white;
+            }
+        }
+    }
+}

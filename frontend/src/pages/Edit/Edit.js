@@ -1,5 +1,6 @@
 import './Edit.scss'
 import BioForm from '../../components/BioForm/BioForm'
+// import DNDGallery from '../../components/DNDGallery/DNDGallery'
 import ProjectForm from '../../components/ProjectForm/ProjectForm'
 import { API_URL } from '../../utils/constants'
 // import { Link } from 'react-router-dom'
@@ -59,6 +60,9 @@ function Edit() {
     const [residenciesList, setResidenciesList] = useState([]);
     const [showsList, setShowsList] = useState([]);
 
+    // const [imageFiles, setImageFiles] = useState([]);
+    // const [mainImageIndex, setMainImageIndex] = useState (0);
+
     useEffect(() => {
         fetch(`${API_URL}/api/projects`)
         .then((res) => res.json())
@@ -68,16 +72,17 @@ function Edit() {
         .catch((error)=>console.log(error.message))
     },[]);
 
-    function editProject(project) {
-        setProjectFormMode('edit');
-        setHandleDisplayProjectForm(true);
-        setProjectEdit(project);
+    async function editProject(project) {
+        // await setImageFiles(project.images);
         setArtistsList(project.artistsList);
         setProductionList(project.productionList);
         setPressList(project.pressList);
         setVideoList(project.videoList)
         setResidenciesList(project.residenciesList);
         setShowsList(project.showsList);
+        setProjectEdit(project);
+        setProjectFormMode('edit');
+        setHandleDisplayProjectForm(true);
     }
 
     function deleteProject() {
@@ -93,6 +98,7 @@ function Edit() {
         setVideoList([]);
         setResidenciesList([]);
         setShowsList([]);
+        // setMainImageIndex(0);
     }
 
     return  (      
@@ -124,6 +130,8 @@ function Edit() {
                 </ul>
                 <button onClick={() => addProject()}>+ AJOUTER UN PROJET</button>
                 <div className={handleDisplayProjectForm===false ? "--displayOff" : "--displayOn"}>
+                    {/* <DNDGallery  
+                    /> */}
                     <ProjectForm 
                         projectEdit={projectEdit} 
                         projectFormMode={projectFormMode} 
@@ -138,7 +146,8 @@ function Edit() {
                         residenciesList={residenciesList} 
                         setResidenciesList={setResidenciesList}
                         showsList={showsList} 
-                        setShowsList={setShowsList}/>
+                        setShowsList={setShowsList}
+                    />
                 </div>
             </div>
         </div>
