@@ -40,7 +40,7 @@ function DNDGallery ({ imageFiles, setImageFiles, mainImageIndex, setMainImageIn
   const [indexImageToDelete, setIndexImageToDelete] = useState(null);
     
   function openConfirmBox(index) {
-    setConfirmBoxState (true);
+    setConfirmBoxState(true);
     setIndexImageToDelete(index);
   }
 
@@ -48,7 +48,7 @@ function DNDGallery ({ imageFiles, setImageFiles, mainImageIndex, setMainImageIn
   ----- FERMETURE CONFIRMBOX -----
   ------------------------------------*/
   function closeConfirmBox() {
-    setConfirmBoxState (false);
+    setConfirmBoxState(false);
   }
 
   /*---------------------------
@@ -102,18 +102,18 @@ function DNDGallery ({ imageFiles, setImageFiles, mainImageIndex, setMainImageIn
         </SortableContext>
         <DragOverlay adjustScale={true}>
           {activeId ? (
-            <img  className='serieEditForm_overlayImage'
+            <img  className='projectForm_DNDGallery_overlayImage'
                   itemId={activeId} 
                   index={items.indexOf(activeId)} 
                   alt='' 
                   src={items.find(item => item._id === activeId).imageUrl}/>
           ) : null}
         </DragOverlay>
-        <div className={confirmBoxState===false ? 'serieEditForm_confirmBox serieEditForm_confirmBox--displayOff' : 'serieEditForm_confirmBox serieEditForm_confirmBox--displayOn'}>
-          <p className='serieEditForm_confirmBox_label'>Êtes-vous sûr ?</p>
-          <div className='serieEditForm_confirmBox_buttons'>
-            <button aria-label="Valider la suppression de l'image" onClick={() => deleteImage(indexImageToDelete)}>OUI</button>
-            <button aria-label="Annuler la suppression de l'image" onClick={() => closeConfirmBox () }>NON</button>
+        <div className={confirmBoxState===false ? 'projectForm_DNDGallery_confirmBox projectForm_DNDGallery_confirmBox--displayOff' : 'projectForm_DNDGallery_confirmBox projectForm_DNDGallery_confirmBox--displayOn'}>
+          <p className='projectForm_DNDGallery_confirmBox_label'>Êtes-vous sûr ?</p>
+          <div className='projectForm_DNDGallery_confirmBox_buttons'>
+            <button aria-label="Valider la suppression de l'image" type='button' onClick={() => deleteImage(indexImageToDelete)}>OUI</button>
+            <button aria-label="Annuler la suppression de l'image" type='button' onClick={() => closeConfirmBox () }>NON</button>
           </div>
         </div>
       </DndContext>

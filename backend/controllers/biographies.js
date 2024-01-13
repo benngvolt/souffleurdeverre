@@ -1,8 +1,65 @@
 const Biography = require('../models/biography')
+const { storage, bucket } = require('../config/storage');
+
+async function deleteImageFile(bioImageUrl) {
+  
+  // Obtenez la liste des URLs des images depuis Google Cloud Storage
+  async function getCloudImageUrls() {
+    const [files] = await bucket.getFiles();
+    return files.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
+  }
+    
+  // Obtenez la liste des URLs des images depuis MongoDB
+
+  try {
+    const cloudImageUrls = await getCloudImageUrls();
+    const dbImageUrl = bioImageUrl;
+    
+    // Suppression des images non référencées dans le cloud
+    const imagesToDelete = cloudImageUrls.filter((url) => !dbImageUrl.includes(url));
+
+    for (const imageUrl of imagesToDelete) {
+      // Divisez l'URL en parties en utilisant "/" comme séparateur
+      const parts = imageUrl.split('/');
+      // Récupérez la dernière partie qui contient le nom du fichier
+      const fileToDeleteName = parts.pop();
+      if (fileToDeleteName) {
+        await bucket.file(fileToDeleteName).delete();
+      }
+    }
+
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+/*------------------------------
+----- DELETE ONE BIOGRAPHY -----
+------------------------------*/
+
+exports.deleteOneBiography = async (req, res) => {
+  try {
+    const biography = await Biography.findOne ({ _id: req.params.id });
+    const bioImageUrl = biography.bioImageUrl; 
+    const deletedBiography = await Biography.findOneAndDelete({ _id: req.params.id });
+    if (!deletedBiography) {
+      return res.status(404).json({ message: 'Bio non trouvée' });
+    }
+
+    // Appeler la fonction de suppression d'images après avoir supprimé la série
+    await deleteImageFile(bioImageUrl);
+    
+    res.status(200).json({ message: 'Bio supprimée !' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur lors de la suppression de la série' });
+  }
+};
 
 /*--------------------------
 ----- CREATE BIOGRAPHY -----
 --------------------------*/
+
 
 exports.createBiography = async (req, res) => {
 

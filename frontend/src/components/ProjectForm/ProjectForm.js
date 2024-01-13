@@ -7,7 +7,27 @@ import DNDGallery from '../../components/DNDGallery/DNDGallery'
 // import { Context } from '../../utils/Context'
 // import { useNavigate } from 'react-router-dom'
 
-function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList, productionList, setProductionList, pressList, setPressList, videoList, setVideoList, residenciesList, setResidenciesList, showsList, setShowsList }) {
+function ProjectForm({ 
+        projectEdit, 
+        projectFormMode, 
+        setHandleDisplayProjectForm, 
+        artistsList, 
+        setArtistsList, 
+        productionList, 
+        setProductionList, 
+        pressList, 
+        setPressList, 
+        videoList, 
+        setVideoList, 
+        residenciesList, 
+        setResidenciesList, 
+        showsList, 
+        setShowsList, 
+        imageFiles, 
+        setImageFiles, 
+        mainImageIndex, 
+        setMainImageIndex 
+    }) {
 
     const inputProjectTitleRef = useRef(null);
     const inputProjectSubtitleRef = useRef(null);
@@ -16,14 +36,12 @@ function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList
     const inputProjectCreationDateRef = useRef(null);
     const inputProjectDescriptionRef = useRef(null);
     const inputProjectMoreInfosRef = useRef(null);
-
     const projectMainImageSampleRef = useRef (null);
     const inputProjectMainImageFileRef = useRef (null);
 
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [newImage, setNewImage] = useState(null);
-    const [imageFiles, setImageFiles] = useState([]);
-    const [mainImageIndex, setMainImageIndex]=  useState(0);
+   
      
     // const [isImageLoaded, setIsImageLoaded] = useState(false);
     
@@ -37,8 +55,6 @@ function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList
     const handleSupprArtist = (index) => {
         setArtistsList (artistsList.filter((_, i) => i !== index));
     }
-
-
     /* ------------------------
     ----- PROD LIST -----------
     -------------------------*/
@@ -112,6 +128,7 @@ function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList
         projectFormData.append('duration', inputProjectDurationRef.current.value);
         projectFormData.append('description', inputProjectDescriptionRef.current.value);
         projectFormData.append('moreInfos', inputProjectMoreInfosRef.current.value);
+        projectFormData.append('mainImageIndex', mainImageIndex);
         projectFormData.append('artistsList', JSON.stringify(artistsList));
         projectFormData.append('productionList', JSON.stringify(productionList));
         projectFormData.append('pressList', JSON.stringify(pressList));
@@ -154,7 +171,7 @@ function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList
                 .catch((error) => console.error(error));
         } else if (projectFormMode==='edit') {
             console.log('edit');
-            fetch(`${API_URL}/api/biographies/${projectEdit._id}`, {
+            fetch(`${API_URL}/api/projects/${projectEdit._id}`, {
                 method: "PUT",
                 headers: {
                     // 'Content-Type': 'application/json',
@@ -207,7 +224,7 @@ function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList
     // }
 
     function closeForm() {
-        
+        setHandleDisplayProjectForm(false);
     }
 
 
@@ -224,11 +241,6 @@ function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList
                 projectMainImageSampleRef.current.setAttribute("alt", "");
                 // projectMainImageSampleRef.current.setAttribute("class", "");
                 setIsImageLoaded(true);
-                if (newImage) {
-                    console.log('new')
-                } else {
-                    console.log('null')
-                }
                 
             } else {
                 setIsImageLoaded(false);
@@ -247,7 +259,6 @@ function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList
         }
         setIsImageLoaded(false);
         cancelAddFile();
-        
     }
 
     function cancelAddFile() {
@@ -261,21 +272,18 @@ function ProjectForm({ projectEdit, projectFormMode, artistsList, setArtistsList
     return  (      
         <form onSubmit={(event) => projectFormSubmit(event)} method="post" className='projectForm'>
 
-
             <DNDGallery imageFiles={imageFiles} setImageFiles={setImageFiles} mainImageIndex={mainImageIndex} setMainImageIndex={setMainImageIndex} />
             <div className='projectForm_projectImageFile'>
                 <label htmlFor='inputProjectImageFile'>{isImageLoaded ? 'CHANGER D\'IMAGE' : '+ AJOUTER UNE IMAGE'}</label>
                 <input type='file' id='inputProjectImageFile' name="images" ref={inputProjectMainImageFileRef} onChange={displaySample}></input>
-                <div  className="projectForm_sampleContainer">
-                    <img id='imageSample' ref={projectMainImageSampleRef} src='' className="projectForm_sampleContainer_img" alt=''/>
-                    <div>
+                <div  className="projectForm_projectImageFile_sampleContainer">
+                    <img id='imageSample' ref={projectMainImageSampleRef} src='' alt=''/>
+                    <div className={isImageLoaded ? "projectForm_projectImageFile_sampleContainer_buttonsSystem--displayOn" :  "projectForm_projectImageFile_sampleContainer_buttonsSystem--displayOff"}>
                         <button aria-label="Ajouter l'image" onClick={handleAddFile} type="button">AJOUTER</button>
                         <button aria-label="Annuler" onClick={cancelAddFile} type="button">ANNULER</button>
                     </div>
                 </div>
             </div>
-
-
 
             <div className='projectForm_projectTitle'>
                 <label htmlFor='inputProjectTitle'>TITRE*</label>

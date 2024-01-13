@@ -1,4 +1,5 @@
 const Project = require('../models/project')
+const { storage, bucket } = require('../config/storage');
 
 /*------------------------
 ----- GET ALL PROJECTS ---
@@ -13,6 +14,64 @@ exports.getAllProjects = (req, res) => {
 /*------------------------
 ----- GET ONE PROJECT ----
 -------------------------*/
+
+/*------------------------------------------------------------
+----- SUPPRESSION DES IMAGES NON UTILISÉES DANS LE CLOUD -----
+------------------------------------------------------------*/
+    
+async function deleteImageFiles(req, imageUrls) {
+  // Obtenez la liste des URLs des images depuis Google Cloud Storage
+  async function getCloudImageUrls() {
+    const [files] = await bucket.getFiles();
+    return files.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
+  }
+  console.log(imageUrls) 
+  // Obtenez la liste des URLs des images depuis MongoDB
+    
+      try {
+        const cloudImageUrls = await getCloudImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
+        const dbImageUrls = imageUrls; // Utilisez "await" pour attendre la résolution de la promesse
+        const imagesToDelete = cloudImageUrls.filter((url) => !dbImageUrls.includes(url));
+  
+        // Suppression des images non référencées dans le cloud
+        for (const imageUrl of imagesToDelete) {
+          // Divisez l'URL en parties en utilisant "/" comme séparateur
+          const parts = imageUrl.split('/');
+          // Récupérez la dernière partie qui contient le nom du fichier
+          const fileToDeleteName = parts.pop();
+          if (fileToDeleteName) {
+            await bucket.file(fileToDeleteName).delete();
+          }
+        }
+
+      } catch (error) {
+        console.error(error.message);
+      }
+  }
+
+/*--------------------------
+----- DELETE ONE SERIE -----
+--------------------------*/
+
+exports.deleteOneProject = async (req, res) => {
+  try {
+    const projects = await Project.find();
+    const imageUrls = projects.flatMap((project) => project.images.map((image) => image.imageUrl));
+    const deletedProject = await Project.findOneAndDelete({ _id: req.params.id });
+    if (!deletedProject) {
+      return res.status(404).json({ message: 'Projet non trouvée' });
+    }
+
+    // Appeler la fonction de suppression d'images après avoir supprimé la série
+    await deleteImageFiles(req, imageUrls);
+    
+    res.status(200).json({ message: 'Projet supprimé !' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur lors de la suppression du projet' });
+  }
+};
+
 
 /*------------------------
 ----- CREATE PROJECT -----
@@ -118,63 +177,77 @@ exports.createProject = async (req, res) => {
 //     }
 
 /*--------------------------
------ UPDATE ONE SERIE -----
+----- UPDATE ONE PROJECT -----
 --------------------------*/
 
-// exports.updateOneProject = async (req, res) => {
+exports.updateOneProject = async (req, res) => {
 
-//     // MODIFICATION DU PROJET
-//     try {
-//       // RÉCUPÉRATION DU PROJET CONCERNÉ VIA SON ID STOCKÉ EN PARAMÈTRES D'URL
-//       const project = await Project.findOne({ _id: req.params.id });
-//       const projectData = req.body;
-//       const projectDescriptionWithBr = projectData.description.replace(/(\r\n|\n|\r)/g, "<br>");
+    // MODIFICATION DU PROJET
+    try {
+      // RÉCUPÉRATION DU PROJET CONCERNÉ VIA SON ID STOCKÉ EN PARAMÈTRES D'URL
+      const project = await Project.findOne({ _id: req.params.id });
+      const projectData = req.body;
+      // const images = req.newImagesObjects;
+      const artistsList = JSON.parse(req.body.artistsList);
+      const productionList = JSON.parse(req.body.productionList);
+      const pressList = JSON.parse(req.body.pressList);
+      const videoList = JSON.parse(req.body.videoList);
+      const residenciesList = JSON.parse(req.body.residenciesList);
+      const showsList = JSON.parse(req.body.showsList);
+      // const projectDescriptionWithBr = projectData.description.replace(/(\r\n|\n|\r)/g, "<br>");
   
-//       // SI LA SÉRIE N'EXISTE PAS, ON RETOURNE UNE ERREUR 404
-//       if (!project) {
-//         return res.status(404).json({ error: 'Projet non trouvée' });
-//       }
+      // SI LE PROJET N'EXISTE PAS, ON RETOURNE UNE ERREUR 404
+      if (!project) {
+        return res.status(404).json({ error: 'Projet non trouvé' });
+      }
   
-//       // RÉCUPÉRATION DES IMAGES EXISTANTES DEPUIS LE FRONTEND, PARSE DES DONNÉES
-//       const existingImages = req.body.existingImages || [];
-//       const existingImagesObjects = existingImages.map((imageStr) => JSON.parse(imageStr));
+      // RÉCUPÉRATION DES IMAGES EXISTANTES DEPUIS LE FRONTEND, PARSE DES DONNÉES
+      const existingImages = req.body.existingImages || [];
+      const existingImagesObjects = existingImages.map((imageStr) => JSON.parse(imageStr));
   
-//       // TRI DES IMAGES PAR ORDRE D'INDEX ET MISE À JOUR DE MAINIMAGEINDEX ET CONSTRUCTION DU TABLEAU IMAGES AVEC LES NOUVELLES IMAGES ET LES EXISTANTES
-//       async function processAndSortImages(existingImagesObjects, newImagesObjects) {
-//         const allImages = existingImagesObjects.map((image, index) => ({
-//           imageUrl: image.imageUrl,
-//           index,
-//         })).concat(newImagesObjects);
-//         allImages.sort((a, b) => a.index - b.index);
-//         const updatedImages = allImages.filter((image) => image != null && image !== "empty");
-//         return updatedImages;
-//       }
+      // TRI DES IMAGES PAR ORDRE D'INDEX ET MISE À JOUR DE MAINIMAGEINDEX ET CONSTRUCTION DU TABLEAU IMAGES AVEC LES NOUVELLES IMAGES ET LES EXISTANTES
+      async function processAndSortImages(existingImagesObjects, newImagesObjects) {
+        const allImages = existingImagesObjects.map((image, index) => ({
+          imageUrl: image.imageUrl,
+          index,
+        })).concat(newImagesObjects);
+        allImages.sort((a, b) => a.index - b.index);
+        const updatedImages = allImages.filter((image) => image != null && image !== "empty");
+        return updatedImages;
+      }
   
-//       // MISE À JOUR DE LA SÉRIE DANS LA BASE DE DONNÉES
-//       async function updateProject(updatedImages) {
-//         const updatedMainImageIndex = req.body.mainImageIndex || 0;
-//         const projectObject = {
-//           ...projectData,
-//           description: projectDescriptionWithBr,
-//           mainImageIndex: updatedMainImageIndex,
-//           images: updatedImages
-//         };
+      // MISE À JOUR DE LA SÉRIE DANS LA BASE DE DONNÉES
+      async function updateProject(updatedImages) {
+        const updatedMainImageIndex = req.body.mainImageIndex || 0;
+
+        const projectObject = {
+          ...projectData,
+          artistsList: artistsList,
+          productionList: productionList,
+          pressList: pressList,
+          videoList: videoList,
+          residenciesList: residenciesList,
+          showsList: showsList,
+          // description: projectDescriptionWithBr,
+          mainImageIndex: updatedMainImageIndex,
+          images: updatedImages
+        };
   
-//         await Project.updateOne({ _id: req.params.id }, projectObject);
-//         console.log('Project updated successfully');
-//         res.status(200).json({ message: 'Projet modifiée' });
-//         // À ce stade, vous pouvez appeler d'autres fonctions si nécessaire
-//       }
+        await Project.updateOne({ _id: req.params.id }, projectObject);
+        console.log('Project updated successfully');
+        res.status(200).json({ message: 'Projet modifiée' });
+        // À ce stade, vous pouvez appeler d'autres fonctions si nécessaire
+      }
   
-//       // Appel de la fonction de tri des images et de mise à jour
-//       processAndSortImages(existingImagesObjects, req.newImagesObjects)
-//         .then((updatedImages) => updateProject(updatedImages))
-//         .catch((error) => {
-//           console.error(error);
-//           res.status(500).json({ error: 'Erreur lors de la mise à jour de la série.' });
-//         });
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ error: 'Erreur lors de la mise à jour de la série.' });
-//     }
-//   };
+      // Appel de la fonction de tri des images et de mise à jour
+      processAndSortImages(existingImagesObjects, req.newImagesObjects)
+        .then((updatedImages) => updateProject(updatedImages))
+        .catch((error) => {
+          console.error(error);
+          res.status(500).json({ error: 'Erreur lors de la mise à jour de la série.' });
+        });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erreur lors de la mise à jour de la série.' });
+    }
+  };

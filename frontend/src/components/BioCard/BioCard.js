@@ -8,11 +8,13 @@ import './BioCard.scss'
 function BioCard({biography}) {
 
     return  (      
-        <div>
-            <img src={biography.bioImageUrl} alt={biography.surname} />
-            <p>{biography.name}{biography.surname}</p>
-            <p>{biography.role}</p>
-        </div>
+        <figure className='bioCard'>
+            <img src={biography.bioImageUrl} alt={biography.surname} className='bioCard_image'/>
+            <figcaption className='bioCard_caption'>
+                <p className='bioCard_caption_name'>{biography.name}{biography.surname}</p>
+                <p className='bioCard_caption_role'>{biography.role}</p>
+            </figcaption>
+        </figure>
     )
 }
 

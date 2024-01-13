@@ -6,7 +6,7 @@ import {useRef, useState } from 'react'
 // import { useNavigate } from 'react-router-dom'
 
  
-function BioForm({biographyEdit, bioFormMode}) {
+function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm}) {
 
     const inputSurnameRef = useRef(null);
     const inputNameRef = useRef(null);
@@ -105,15 +105,15 @@ function BioForm({biographyEdit, bioFormMode}) {
     // }
 
     function closeForm() {
-        
+        setHandleDisplayBioForm(false);
     }
 
-    
-
-    return  (      
+    return  (    
         <form onSubmit={(event) => bioFormSubmit(event)} method="post" className='bioForm'>
-            <div  className="bioForm_sampleContainer">
-                <img id='imageSample' ref={bioImageSampleRef} src='' className="bioForm_sampleContainer_img" alt=''/>
+
+            <img id='biography image' src="" alt=''></img>
+            <div className="bioForm_sampleContainer">
+                <img id='imageSample' ref={bioImageSampleRef} src={bioFormMode === 'edit' ? biographyEdit.bioImageUrl : ''} className="bioForm_sampleContainer_img" alt=''/>
             </div>
             <div className='bioForm_bioImageFile'>
                 <label htmlFor='inputBioImageFile'>{isImageLoaded ? 'MODIFIER L\'IMAGE' : '+ AJOUTER UNE IMAGE'}</label>

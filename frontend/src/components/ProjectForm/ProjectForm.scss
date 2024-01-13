@@ -1,0 +1,27 @@
+.projectForm {
+    width: 60%;
+    height: 1000px;
+    margin: auto;
+    background-color: white;
+    overflow-y: scroll;
+
+    &_projectImageFile {
+
+        &_sampleContainer {
+
+            img {
+                width: 200px;
+            }
+
+            &_buttonsSystem {
+
+                &--displayOff{
+                    display: none;
+                }
+                &--displayOn {
+                    display: flex;
+                }
+            }
+        }
+    }
+}

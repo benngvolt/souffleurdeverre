@@ -1,0 +1,11 @@
+.compagnieSection {
+
+    &_image {
+        width: 50%;
+    }
+
+    &_biosList {
+        display: flex;
+        flex-direction: row;
+    } 
+}
