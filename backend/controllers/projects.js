@@ -70,7 +70,7 @@ async function deleteImageFiles(req, imageUrls, pdfLinks) {
       }
     });
 
-    await Promise.all([...deletePromises, ...deletePdfPromises]);
+    await Promise.all([...deleteImagesPromises, ...deletePdfPromises]);
 
 
   } catch (error) {
