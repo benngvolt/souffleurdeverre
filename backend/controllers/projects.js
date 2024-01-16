@@ -11,28 +11,34 @@ exports.getAllProjects = (req, res) => {
       .catch (error => res.status (400).json({error}))
   }
 
-/*------------------------
------ GET ONE PROJECT ----
--------------------------*/
-
 /*------------------------------------------------------------
 ----- SUPPRESSION DES IMAGES NON UTILISÉES DANS LE CLOUD -----
 ------------------------------------------------------------*/
     
-async function deleteImageFiles(req, imageUrls) {
+async function deleteImageFiles(req, imageUrls, pdfLinks) {
   // Obtenez la liste des URLs des images depuis Google Cloud Storage
   
   async function getCloudImageUrls() {
-    const [files] = await bucket.getFiles();
-    return files.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
+    const [imagesFiles] = await bucket.getFiles();
+    return imagesFiles.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
   }
+
+  async function getCloudPdfLinks() {
+    const [pdfFiles] = await bucket.getFiles({
+      prefix: 'pdfList/',
+    });
+    return pdfFiles.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
+  } 
+
   try {
     const [cloudImageUrls] = await Promise.all([getCloudImageUrls(), imageUrls]);
+    const [cloudPdfLinks] = await Promise.all([getCloudPdfLinks(), pdfLinks]);
     const dbImageUrls = new Set(imageUrls);
+    const dbPdfLinks = new Set(pdfLinks);
     const imagesToDelete = cloudImageUrls.filter((url) => !dbImageUrls.has(url));
-    console.log(imagesToDelete);
+    const pdfToDelete = cloudPdfLinks.filter((url) => !dbPdfLinks.has(url));
 
-    const deletePromises = imagesToDelete.map(async (imageUrl) => {
+    const deleteImagesPromises = imagesToDelete.map(async (imageUrl) => {
       const parts = imageUrl.split('/');
       const fileToDeleteName = parts.pop();
       if (fileToDeleteName) {
@@ -48,7 +54,24 @@ async function deleteImageFiles(req, imageUrls) {
       }
     });
 
-    await Promise.all(deletePromises);
+    const deletePdfPromises = pdfToDelete.map(async (pdfLink) => {
+      const parts = pdfLink.split('/');
+      const fileToDeleteName = parts.pop();
+      if (fileToDeleteName) {
+        const fileToDelete = bucket.file(`pdfList/${fileToDeleteName}`);
+        const [exists] = await fileToDelete.exists();
+        if (exists) {
+          try {
+            await fileToDelete.delete();
+          } catch (error) {
+            console.error(`Erreur lors de la suppression de ${fileToDeleteName}: ${error.message}`);
+          }
+        }
+      }
+    });
+
+    await Promise.all([...deletePromises, ...deletePdfPromises]);
+
 
   } catch (error) {
     console.error(error.message);
@@ -56,7 +79,7 @@ async function deleteImageFiles(req, imageUrls) {
 }
 
 /*--------------------------
------ DELETE ONE SERIE -----
+----- DELETE ONE PROJECT -----
 --------------------------*/
 
 exports.deleteOneProject = async (req, res) => {
@@ -67,8 +90,9 @@ exports.deleteOneProject = async (req, res) => {
     }
     const projects = await Project.find();
     const imageUrls = projects.flatMap((project) => project.images.map((image) => image.imageUrl));
+    const pdfLinks = projects.flatMap((project) => project.pdfList.map((pdf) => pdf.pdfLink));
     // Appeler la fonction de suppression d'images après avoir supprimé la série
-    await deleteImageFiles(req, imageUrls);
+    await deleteImageFiles(req, imageUrls, pdfLinks);
     
     res.status(200).json({ message: 'Projet supprimé !' });
   } catch (error) {
@@ -86,12 +110,15 @@ exports.createProject = async (req, res) => {
 
     const projectData = req.body;
     const images = req.newImagesObjects;
+    const pdfList = req.newPdfsObjects;
     const artistsList = JSON.parse(req.body.artistsList);
     const productionList = JSON.parse(req.body.productionList);
     const pressList = JSON.parse(req.body.pressList);
     const videoList = JSON.parse(req.body.videoList);
     const residenciesList = JSON.parse(req.body.residenciesList);
     const showsList = JSON.parse(req.body.showsList);
+
+    console.log(pdfList);
   
     // const projectDescriptionWithBr = projectData.description.replace(/(\r\n|\n|\r)/g, "<br>");
   
@@ -111,7 +138,8 @@ exports.createProject = async (req, res) => {
           videoList: videoList,
           residenciesList: residenciesList,
           showsList: showsList,
-          images: images
+          images: images,
+          pdfList: pdfList
         });
   
         await project.save();
@@ -122,64 +150,6 @@ exports.createProject = async (req, res) => {
       res.status(400).json({ error });
     }
   };
-
-// /*----------------------------
-// ----- DELETE ONE PROJECT -----
-// ----------------------------*/
-
-// exports.deleteOneProject = async (req, res) => {
-//     try {
-//       const deletedProject = await Project.findOneAndDelete({ _id: req.params.id });
-//       if (!deletedProject) {
-//         return res.status(404).json({ message: 'Projet non trouvé' });
-//       }
-  
-//       // Appeler la fonction de suppression d'images après avoir supprimé la série
-//       await deleteImageFiles(req);
-      
-//       res.status(200).json({ message: 'Projet supprimé !' });
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ error: 'Erreur lors de la suppression du projet' });
-//     }
-//   }
-    
-// async function deleteImageFiles(req) {
-//     // Obtenez la liste des URLs des images depuis Google Cloud Storage
-//     async function getCloudImageUrls() {
-//       const [files] = await bucket.getFiles({ prefix: 'projects_images/' });
-//       return files.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
-//     }
-      
-//     // Obtenez la liste des URLs des images depuis MongoDB
-//     async function getDbImageUrls() {
-  
-//       // Récupérez toutes les séries depuis MongoDB
-//       const projects = await Project.find();
-//       const imageUrls = projects.flatMap((project) => project.images.map((image) => image.imageUrl));
-//       return imageUrls;
-//     }
-      
-//         try {
-//           const cloudImageUrls = await getCloudImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
-//           const dbImageUrls = await getDbImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
-//           const imagesToDelete = cloudImageUrls.filter((url) => !dbImageUrls.includes(url));
-    
-//           // Suppression des images non référencées dans le cloud
-//           for (const imageUrl of imagesToDelete) {
-//             // Divisez l'URL en parties en utilisant "/" comme séparateur
-//             const parts = imageUrl.split('/');
-//             // Récupérez la dernière partie qui contient le nom du fichier
-//             const fileToDeleteName = parts.pop();
-//             if (fileToDeleteName) {
-//               await bucket.file('projects_images/' + fileToDeleteName).delete();
-//             }
-//           }
-  
-//         } catch (error) {
-//           console.error(error.message);
-//         }
-//     }
 
 /*--------------------------
 ----- UPDATE ONE PROJECT -----

@@ -70,7 +70,7 @@ function Edit() {
             console.log('biographies chargés'),
         )
         .catch((error)=>console.log(error.message))
-    },[]);
+    },[handleDisplayBioForm, confirmBoxState]);
 
 
     function editBio(biography) {
@@ -113,7 +113,7 @@ function Edit() {
             console.log('travaux chargés'),
         )
         .catch((error)=>console.log(error.message))
-    },[handleDisplayProjectForm]);
+    },[handleDisplayProjectForm, confirmBoxState]);
 
     async function editProject(project) {
         // await setImageFiles(project.images);
@@ -150,8 +150,7 @@ function Edit() {
     }
 
     function addProject() {
-        setProjectFormMode('add');
-        setHandleDisplayProjectForm(true);
+        console.log(projectFormMode)
         setArtistsList([]);
         setProductionList([]);
         setPressList([]);
@@ -160,7 +159,14 @@ function Edit() {
         setShowsList([]);
         setImageFiles([]);
         setPdfFiles([]);
+        setProjectFormMode('add');
+        setHandleDisplayProjectForm(true);
+        console.log(projectFormMode)
         // setMainImageIndex(0);
+    }
+
+    function resetFields() {
+        
     }
 
     return  (      

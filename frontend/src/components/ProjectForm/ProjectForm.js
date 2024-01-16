@@ -40,7 +40,7 @@ function ProjectForm({
     const inputProjectDescriptionRef = useRef(null);
     const inputProjectMoreInfosRef = useRef(null);
     const projectMainImageSampleRef = useRef (null);
-    const inputProjectMainImageFileRef = useRef (null);
+    const inputProjectImageFileRef = useRef (null);
     const inputProjectPdfFileRef = useRef (null);
     const projectPdfSampleRef = useRef (null);
 
@@ -117,6 +117,7 @@ function ProjectForm({
     const handleSupprShow = (index) => {
         setShowsList (showsList.filter((_, i) => i !== index));
     }
+    
 
 
     /* ------------------------
@@ -149,12 +150,13 @@ function ProjectForm({
 
         const pdfWithIndex = newPdfFiles.map((pdf, index) => ({
             index,
-            pdf
+            pdf,
         }));
         pdfWithIndex.forEach(({ index, pdf }) => {
             if (pdf instanceof File) {
                 projectFormData.append('pdfFiles', pdf);
-                projectFormData.append('pdfFileIndexes', index)
+                projectFormData.append('pdfFileIndexes', index);
+                projectFormData.append('pdfName', pdf.pdfName)
             } else {
                 projectFormData.append(`existingPdf[${index}]`, JSON.stringify(pdf));
             }
@@ -164,6 +166,8 @@ function ProjectForm({
             index,
             image
         }));
+
+        console.log(imagesWithIndex);
         imagesWithIndex.forEach(({ index, image }) => {
             if (image instanceof File) {
                 projectFormData.append('images', image);
@@ -254,7 +258,7 @@ function ProjectForm({
 
     function displaySample(event) {
 
-            const image = inputProjectMainImageFileRef.current.files[0];
+            const image = inputProjectImageFileRef.current.files[0];
             
             if (image) {
                 setNewImage (image);
@@ -305,9 +309,9 @@ function ProjectForm({
         const pdf = inputProjectPdfFileRef.current.files[0];
     
         if (pdf) {
-        setNewPdf(pdf);
         const id = uuidv4(); // Générez un identifiant unique
         pdf._id = id;
+        setNewPdf(pdf);
         // Générer l'aperçu de la première page du PDF
         const previewUrl = await generatePdfPreview(pdf);
     
@@ -320,35 +324,25 @@ function ProjectForm({
         }
     }
 
-    function handleAddFile() {
+    function handleAddImageFile() {
 
         if (newImage) {
             const updatedImageFiles = [...imageFiles, newImage];
             setImageFiles(updatedImageFiles);
-            // setSerieObject({
-            //     ...serieObject,
-            //     images: updatedImageFiles
-            // });
         }
         setIsImageLoaded(false);
         cancelAddFile();
     }
 
     function handleAddPdfFile() {
-
+        
         if (newPdf) {
             const updatedPdfFiles = [...pdfFiles, newPdf];
             setPdfFiles(updatedPdfFiles);
-            // setSerieObject({
-            //     ...serieObject,
-            //     images: updatedImageFiles
-            // });
         }
         setIsPdfLoaded(false);
         cancelAddPdfFile();
     }
-
-
 
 
     function cancelAddFile() {
@@ -358,11 +352,28 @@ function ProjectForm({
         projectMainImageSampleRef.current.setAttribute("alt", "");
     }
 
+    function handleSupprPdf(index) {
+        console.log(pdfFiles.length);
+        setPdfFiles(pdfFiles.splice(index, 1));
+        console.log(index);
+        console.log(pdfFiles);
+    }  
+
     function cancelAddPdfFile() {
         setNewPdf (null);
         setIsPdfLoaded(false);
         projectPdfSampleRef.current.setAttribute("src", "");
         projectPdfSampleRef.current.setAttribute("alt", "");
+    }
+
+    function resetFields() {
+        inputProjectTitleRef.current.value='';
+        inputProjectSubtitleRef.current.value='';
+        inputProjectStateRef.current.value='en création';
+        inputProjectDurationRef.current.value='';
+        inputProjectCreationDateRef.current.value='';
+        inputProjectDescriptionRef.current.value='';
+        inputProjectMoreInfosRef.current.value='';
     }
     
 
@@ -373,11 +384,11 @@ function ProjectForm({
             <div className='projectForm_projectImageFile'>
                 <p>IMAGES</p>
                 <label htmlFor='inputProjectImageFile'>{isImageLoaded ? 'CHANGER D\'IMAGE' : '+ AJOUTER UNE IMAGE'}</label>
-                <input type='file' id='inputProjectImageFile' name="images" ref={inputProjectMainImageFileRef} onChange={displaySample}></input>
+                <input type='file' id='inputProjectImageFile' name="images" ref={inputProjectImageFileRef} onChange={displaySample}></input>
                 <div  className="projectForm_projectImageFile_sampleContainer">
                     <img id='imageSample' ref={projectMainImageSampleRef} src='' alt=''/>
                     <div className={isImageLoaded ? "projectForm_projectImageFile_sampleContainer_buttonsSystem--displayOn" :  "projectForm_projectImageFile_sampleContainer_buttonsSystem--displayOff"}>
-                        <button aria-label="Ajouter l'image" onClick={handleAddFile} type="button">AJOUTER</button>
+                        <button aria-label="Ajouter l'image" onClick={handleAddImageFile} type="button">AJOUTER</button>
                         <button aria-label="Annuler" onClick={cancelAddFile} type="button">ANNULER</button>
                     </div>
                 </div>
@@ -731,11 +742,32 @@ function ProjectForm({
 
             <div className='projectForm_projectPdfFile'>
                 <p>DOSSIERS</p>
+                {pdfFiles.map((pdf, index) => ( 
+                    <div>
+                        <img id='imageSample' src={pdf.pdfLink} alt=''/>
+                        <label htmlFor='inputProjectPdfName'>NOM DU PDF</label>
+                        <input 
+                            type='text' 
+                            id='inputProjectPdfName' 
+                            name="pdfName" 
+                            defaultValue={projectFormMode==='edit'? (projectEdit.pdfList[index]?.pdfName || null) : null} 
+                            // onChange={(index) =>handleEditPdfFile(index)}
+                            onChange={(e) => {
+                                const updatedPdfFiles = [...pdfFiles];
+                                updatedPdfFiles[index].pdfName = e.target.value;
+                                setPdfFiles(updatedPdfFiles);
+                                console.log(pdfFiles);
+                            }}
+                            >
+                        </input>
+                        <button type='button' onClick={() => handleSupprPdf(index)}>SUPPRIMER</button>
+                    </div>
+                ))}
                 <label htmlFor='inputProjectPdfFile'>{isImageLoaded ? 'CHANGER DE FICHIER' : '+ AJOUTER UN FICHIER'}</label>
                 <input type='file' id='inputProjectPdfFile' name="pdfFiles" ref={inputProjectPdfFileRef} onChange={displayPdfSample}></input>
                 <div  className="projectForm_projectPdfFile_sampleContainer">
                     <img id='pdfSample' ref={projectPdfSampleRef} src='' alt=''/>
-                    <div className={isPdfLoaded ? "projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOn" :  "projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOff"}>
+                    <div className={isPdfLoaded ? "projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOn" : "projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOff"}>
                         <button aria-label="Ajouter le PDF" onClick={handleAddPdfFile} type="button">AJOUTER</button>
                         <button aria-label="Annuler" onClick={cancelAddPdfFile} type="button">ANNULER</button>
                     </div>

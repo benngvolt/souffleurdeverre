@@ -4,6 +4,7 @@ const router = express.Router();
 const multer = require('../middlewares/multer-config');
 // const auth = require('../middlewares/auth');
 const uploadImages = require('../middlewares/uploadImages').uploadImages;
+const uploadPdfs = require('../middlewares/uploadImages').uploadPdfs;
 // const uploadImage = require('../middlewares/uploadImages').uploadImage;
 
 // Cette partie du code définit un  **** MIDDLEWARE **** pour notre application Express. 
@@ -13,11 +14,11 @@ const uploadImages = require('../middlewares/uploadImages').uploadImages;
 // Dans cet exemple, il envoie une réponse JSON contenant le message "Votre requête a bien été reçue !" à chaque requête entrante.
 // l'argument next permet de passer au middleware suivant
 
-router.post('/', multer.array('images'), uploadImages, projectsCtrl.createProject);
+router.post('/', multer.fields([{ name: 'images' }, { name: 'pdfFiles' }]), uploadImages, uploadPdfs, projectsCtrl.createProject);
 router.get('/', projectsCtrl.getAllProjects);
 router.delete ('/:id', 
 // auth, 
 projectsCtrl.deleteOneProject);
-router.put ('/:id', multer.array('images'), uploadImages, projectsCtrl.updateOneProject);
+router.put ('/:id', multer.fields([{ name: 'images' }, { name: 'pdfFiles' }]), uploadImages, uploadPdfs, projectsCtrl.updateOneProject);
 
 module.exports = router;
