@@ -61,7 +61,6 @@ function Edit() {
     const [bioFormMode, setBioFormMode] = useState('add');
     const [biographyEdit, setBiographyEdit] = useState(null);
     const [handleDisplayBioForm, setHandleDisplayBioForm] = useState(false);
-    const [imageFiles, setImageFiles] = useState([]);
     const [mainImageIndex, setMainImageIndex]= useState(0);
 
     useEffect(() => {
@@ -101,6 +100,9 @@ function Edit() {
     const [residenciesList, setResidenciesList] = useState([]);
     const [showsList, setShowsList] = useState([]);
 
+    const [imageFiles, setImageFiles] = useState([]);
+    const [pdfFiles, setPdfFiles]= useState([]);
+
     // const [imageFiles, setImageFiles] = useState([]);
     // const [mainImageIndex, setMainImageIndex] = useState (0);
 
@@ -125,6 +127,7 @@ function Edit() {
         setProjectFormMode('edit');
         setHandleDisplayProjectForm(true);
         setImageFiles(project.images);
+        setPdfFiles(project.pdfList);
         setMainImageIndex(project.mainImageIndex);
     }
 
@@ -156,6 +159,7 @@ function Edit() {
         setResidenciesList([]);
         setShowsList([]);
         setImageFiles([]);
+        setPdfFiles([]);
         // setMainImageIndex(0);
     }
 
@@ -210,6 +214,8 @@ function Edit() {
                     setImageFiles = {setImageFiles}
                     mainImageIndex = {mainImageIndex}
                     setMainImageIndex = {setMainImageIndex}
+                    setPdfFiles = {setPdfFiles}
+                    pdfFiles = {pdfFiles}
                 />
             </div>
             <div className={handleDisplayBioForm===false ? "editSection_forms--displayOff" : "editSection_forms--displayOn"}>

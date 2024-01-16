@@ -2,6 +2,7 @@ import './ProjectForm.scss'
 import { API_URL } from '../../utils/constants'
 // import { Link } from 'react-router-dom'
 import {useRef, useState, useEffect } from 'react'
+import * as pdfjsLib from "pdfjs-dist/webpack"
 import { v4 as uuidv4 } from 'uuid'
 import DNDGallery from '../../components/DNDGallery/DNDGallery'
 // import { Context } from '../../utils/Context'
@@ -26,7 +27,9 @@ function ProjectForm({
         imageFiles, 
         setImageFiles, 
         mainImageIndex, 
-        setMainImageIndex 
+        setMainImageIndex,
+        pdfFiles,
+        setPdfFiles
     }) {
 
     const inputProjectTitleRef = useRef(null);
@@ -38,9 +41,14 @@ function ProjectForm({
     const inputProjectMoreInfosRef = useRef(null);
     const projectMainImageSampleRef = useRef (null);
     const inputProjectMainImageFileRef = useRef (null);
+    const inputProjectPdfFileRef = useRef (null);
+    const projectPdfSampleRef = useRef (null);
 
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [newImage, setNewImage] = useState(null);
+
+    const [isPdfLoaded, setIsPdfLoaded] = useState(false);
+    const [newPdf, setNewPdf] = useState(null);
    
      
     // const [isImageLoaded, setIsImageLoaded] = useState(false);
@@ -136,6 +144,22 @@ function ProjectForm({
         projectFormData.append('residenciesList', JSON.stringify(residenciesList));
         projectFormData.append('showsList', JSON.stringify(showsList));
         const newImageFiles = Array.from(imageFiles);
+        const newPdfFiles = Array.from(pdfFiles);
+
+
+        const pdfWithIndex = newPdfFiles.map((pdf, index) => ({
+            index,
+            pdf
+        }));
+        pdfWithIndex.forEach(({ index, pdf }) => {
+            if (pdf instanceof File) {
+                projectFormData.append('pdfFiles', pdf);
+                projectFormData.append('pdfFileIndexes', index)
+            } else {
+                projectFormData.append(`existingPdf[${index}]`, JSON.stringify(pdf));
+            }
+        });
+
         const imagesWithIndex = newImageFiles.map((image, index) => ({
             index,
             image
@@ -247,6 +271,55 @@ function ProjectForm({
             }    
     }
 
+    async function generatePdfPreview(pdf) {
+        const pdfData = new Uint8Array(await pdf.arrayBuffer());
+        
+        const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+        const pdfDocument = await loadingTask.promise;
+      
+        // Charger la première page
+        const pageNumber = 1;
+        const page = await pdfDocument.getPage(pageNumber);
+      
+        // Définir la taille de l'aperçu (facultatif)
+        const scale = 1.5;
+        const viewport = page.getViewport({ scale });
+      
+        // Créer un élément canvas pour le rendu de l'aperçu
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+      
+        // Rendu de la première page sur le canvas
+        await page.render({ canvasContext: context, viewport }).promise;
+      
+        // Convertir le canvas en data URL (image au format base64)
+        const dataUrl = canvas.toDataURL('image/jpeg');
+      
+        return dataUrl;
+    }
+
+    // Utilisation dans votre fonction displayPdfSample
+    async function displayPdfSample(event) {
+        const pdf = inputProjectPdfFileRef.current.files[0];
+    
+        if (pdf) {
+        setNewPdf(pdf);
+        const id = uuidv4(); // Générez un identifiant unique
+        pdf._id = id;
+        // Générer l'aperçu de la première page du PDF
+        const previewUrl = await generatePdfPreview(pdf);
+    
+        // Afficher l'aperçu
+        projectPdfSampleRef.current.setAttribute('src', previewUrl);
+        projectPdfSampleRef.current.setAttribute('alt', '');
+        setIsImageLoaded(true);
+        } else {
+        setIsImageLoaded(false);
+        }
+    }
+
     function handleAddFile() {
 
         if (newImage) {
@@ -261,11 +334,35 @@ function ProjectForm({
         cancelAddFile();
     }
 
+    function handleAddPdfFile() {
+
+        if (newPdf) {
+            const updatedPdfFiles = [...pdfFiles, newPdf];
+            setPdfFiles(updatedPdfFiles);
+            // setSerieObject({
+            //     ...serieObject,
+            //     images: updatedImageFiles
+            // });
+        }
+        setIsPdfLoaded(false);
+        cancelAddPdfFile();
+    }
+
+
+
+
     function cancelAddFile() {
         setNewImage (null);
         setIsImageLoaded(false);
         projectMainImageSampleRef.current.setAttribute("src", "");
         projectMainImageSampleRef.current.setAttribute("alt", "");
+    }
+
+    function cancelAddPdfFile() {
+        setNewPdf (null);
+        setIsPdfLoaded(false);
+        projectPdfSampleRef.current.setAttribute("src", "");
+        projectPdfSampleRef.current.setAttribute("alt", "");
     }
     
 
@@ -274,6 +371,7 @@ function ProjectForm({
 
             <DNDGallery imageFiles={imageFiles} setImageFiles={setImageFiles} mainImageIndex={mainImageIndex} setMainImageIndex={setMainImageIndex} />
             <div className='projectForm_projectImageFile'>
+                <p>IMAGES</p>
                 <label htmlFor='inputProjectImageFile'>{isImageLoaded ? 'CHANGER D\'IMAGE' : '+ AJOUTER UNE IMAGE'}</label>
                 <input type='file' id='inputProjectImageFile' name="images" ref={inputProjectMainImageFileRef} onChange={displaySample}></input>
                 <div  className="projectForm_projectImageFile_sampleContainer">
@@ -629,6 +727,19 @@ function ProjectForm({
                     </div>              
                 ))}
                 <button type='button' onClick={() =>handleAddShow()} >+ AJOUTER UNE REPRÉSENTATION</button>
+            </div>
+
+            <div className='projectForm_projectPdfFile'>
+                <p>DOSSIERS</p>
+                <label htmlFor='inputProjectPdfFile'>{isImageLoaded ? 'CHANGER DE FICHIER' : '+ AJOUTER UN FICHIER'}</label>
+                <input type='file' id='inputProjectPdfFile' name="pdfFiles" ref={inputProjectPdfFileRef} onChange={displayPdfSample}></input>
+                <div  className="projectForm_projectPdfFile_sampleContainer">
+                    <img id='pdfSample' ref={projectPdfSampleRef} src='' alt=''/>
+                    <div className={isPdfLoaded ? "projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOn" :  "projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOff"}>
+                        <button aria-label="Ajouter le PDF" onClick={handleAddPdfFile} type="button">AJOUTER</button>
+                        <button aria-label="Annuler" onClick={cancelAddPdfFile} type="button">ANNULER</button>
+                    </div>
+                </div>
             </div>
 
 
