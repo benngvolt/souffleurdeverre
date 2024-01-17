@@ -5,14 +5,15 @@ import './BioSheet.scss'
 // import { useNavigate } from 'react-router-dom'
 
 
-function BioSheet({biography}) {
+function BioSheet({biography, closeBioAside}) {
 
     return  (      
-        <aside>
-            <p>{biography.name}{biography.surname}</p>
-            <p>{biography.role}</p>
-            <img src={biography.bioImageUrl} alt={biography.surname} /> 
-            <p>{biography.biography}</p>
+        <aside className='biosheetAside'>
+            <button type='button' onClick={()=>closeBioAside()}>FERMER</button>
+            <p className='biosheetAside_name'>{biography.name}{biography.surname}</p>
+            <p className='biosheetAside_role'>{biography.role}</p>
+            <img className='biosheetAside_image' src={biography.bioImageUrl} alt={biography.surname} /> 
+            <p className='biosheetAside_bio'>{biography.biography}</p>
         </aside>
     )
 }

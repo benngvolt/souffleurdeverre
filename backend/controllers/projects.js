@@ -11,6 +11,17 @@ exports.getAllProjects = (req, res) => {
       .catch (error => res.status (400).json({error}))
   }
 
+/*------------------------
+----- GET ONE PROJECT ----
+-------------------------*/
+
+exports.getOneProject = (req, res) => {
+  console.log(req.params.id)
+  Project.findOne({_id: req.params.id})
+    .then (project =>res.status(200).json(project))
+    .catch (error => res.status (400).json({error}))
+}
+
 /*------------------------------------------------------------
 ----- SUPPRESSION DES IMAGES NON UTILISÉES DANS LE CLOUD -----
 ------------------------------------------------------------*/

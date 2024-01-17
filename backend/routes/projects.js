@@ -16,6 +16,7 @@ const uploadPdfs = require('../middlewares/uploadImages').uploadPdfs;
 
 router.post('/', multer.fields([{ name: 'images' }, { name: 'pdfFiles' }]), uploadImages, uploadPdfs, projectsCtrl.createProject);
 router.get('/', projectsCtrl.getAllProjects);
+router.get('/:id', projectsCtrl.getOneProject);
 router.delete ('/:id', 
 // auth, 
 projectsCtrl.deleteOneProject);

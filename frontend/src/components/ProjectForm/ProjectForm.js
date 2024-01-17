@@ -1,12 +1,9 @@
 import './ProjectForm.scss'
 import { API_URL } from '../../utils/constants'
-// import { Link } from 'react-router-dom'
 import {useRef, useState, useEffect } from 'react'
 import * as pdfjsLib from "pdfjs-dist/webpack"
 import { v4 as uuidv4 } from 'uuid'
 import DNDGallery from '../../components/DNDGallery/DNDGallery'
-// import { Context } from '../../utils/Context'
-// import { useNavigate } from 'react-router-dom'
 
 function ProjectForm({ 
         projectEdit, 
@@ -49,9 +46,6 @@ function ProjectForm({
 
     const [isPdfLoaded, setIsPdfLoaded] = useState(false);
     const [newPdf, setNewPdf] = useState(null);
-   
-     
-    // const [isImageLoaded, setIsImageLoaded] = useState(false);
     
     /* ---------------------------
     ----- ARTISTS LIST -----------
@@ -63,6 +57,7 @@ function ProjectForm({
     const handleSupprArtist = (index) => {
         setArtistsList (artistsList.filter((_, i) => i !== index));
     }
+    
     /* ------------------------
     ----- PROD LIST -----------
     -------------------------*/
@@ -117,23 +112,19 @@ function ProjectForm({
     const handleSupprShow = (index) => {
         setShowsList (showsList.filter((_, i) => i !== index));
     }
-    
-
 
     /* ------------------------
     ----- FORM FUNCTIONS ------
     -------------------------*/
 
-
     function projectFormSubmit(event) {
         event.preventDefault();
         // const token = window.sessionStorage.getItem('1');
         const projectFormData = new FormData();
-
-        
         projectFormData.append('title', inputProjectTitleRef.current.value);
         projectFormData.append('subtitle', inputProjectSubtitleRef.current.value);
         projectFormData.append('state', inputProjectStateRef.current.value);
+        projectFormData.append('creationDate', inputProjectCreationDateRef.current.value);
         projectFormData.append('duration', inputProjectDurationRef.current.value);
         projectFormData.append('description', inputProjectDescriptionRef.current.value);
         projectFormData.append('moreInfos', inputProjectMoreInfosRef.current.value);
@@ -146,8 +137,6 @@ function ProjectForm({
         projectFormData.append('showsList', JSON.stringify(showsList));
         const newImageFiles = Array.from(imageFiles);
         const newPdfFiles = Array.from(pdfFiles);
-
-
         const pdfWithIndex = newPdfFiles.map((pdf, index) => ({
             index,
             pdf,
@@ -161,13 +150,10 @@ function ProjectForm({
                 projectFormData.append(`existingPdf[${index}]`, JSON.stringify(pdf));
             }
         });
-
         const imagesWithIndex = newImageFiles.map((image, index) => ({
             index,
             image
         }));
-
-        console.log(imagesWithIndex);
         imagesWithIndex.forEach(({ index, image }) => {
             if (image instanceof File) {
                 projectFormData.append('images', image);
@@ -176,7 +162,6 @@ function ProjectForm({
                 projectFormData.append(`existingImages[${index}]`, JSON.stringify(image));
             }
         });
-        
         if (projectFormMode==='add') {
             fetch(`${API_URL}/api/projects`, {
                 method: "POST",
@@ -198,7 +183,6 @@ function ProjectForm({
                 })
                 .catch((error) => console.error(error));
         } else if (projectFormMode==='edit') {
-            console.log('edit');
             fetch(`${API_URL}/api/projects/${projectEdit._id}`, {
                 method: "PUT",
                 headers: {
@@ -220,46 +204,16 @@ function ProjectForm({
                 .catch((error) => console.error(error));
         }
     }
-
-
-    // function displaySample() {
-    //     if(!inputBioImageFileRef.current.files || inputBioImageFileRef.current.files.length === 0) {
-    //         setIsImageLoaded(false);
-    //         return
-    //     } else {
-    //         const file = inputBioImageFileRef.current.files[0]; // récupération du fichier image dans le formulaire
-    //         const reader = new FileReader(); // un objet FileReader est créé pour lire le contenu du fichier image sélectionné.
-    //         reader.readAsDataURL(file); // lecture du fichier image récupéré comme adresse url
-    //         reader.onload = function() { // création des attributs de l'image (src, alt, class)
-    //             bioImageSampleRef.current.setAttribute("src", reader.result);
-    //             bioImageSampleRef.current.setAttribute("alt", "");
-    //             bioImageSampleRef.current.setAttribute("class", "bioForm_sampleContainer_img--displayOn");
-    //         }
-    //         setIsImageLoaded(true);
-    //     }
-    // }
-
-    // function resetFields() {
-    //     inputBioImageFileRef.current.value = null;
-    //     inputSurnameRef.current.value = null;
-    //     inputNameRef.current.value = null;
-    //     inputRoleRef.current.value = null;
-    //     inputBioRef.current.value = null;
-    //     inputFieldRef.current.value = null;
-    //     bioImageSampleRef.current.setAttribute("src", "");
-    //     bioImageSampleRef.current.setAttribute("alt", "");
-    //     bioImageSampleRef.current.setAttribute("class", "bioForm_sampleContainer_img--displayOff");
-    // }
-
     function closeForm() {
         setHandleDisplayProjectForm(false);
     }
 
+    /* -----------------------
+    ----- IMAGES FIELDS ------
+    ------------------------*/
 
-    function displaySample(event) {
-
+    function displaySample() {
             const image = inputProjectImageFileRef.current.files[0];
-            
             if (image) {
                 setNewImage (image);
                 const id = uuidv4(); // Générez un identifiant unique
@@ -267,47 +221,57 @@ function ProjectForm({
                 image.sampleImageUrl= URL.createObjectURL(image);
                 projectMainImageSampleRef.current.setAttribute("src", image.sampleImageUrl);
                 projectMainImageSampleRef.current.setAttribute("alt", "");
-                // projectMainImageSampleRef.current.setAttribute("class", "");
                 setIsImageLoaded(true);
-                
             } else {
                 setIsImageLoaded(false);
             }    
     }
 
+    function cancelAddImageFile() {
+        setNewImage (null);
+        setIsImageLoaded(false);
+        projectMainImageSampleRef.current.setAttribute("src", "");
+        projectMainImageSampleRef.current.setAttribute("alt", "");
+    }
+
+    function handleAddImageFile() {
+        if (newImage) {
+            const updatedImageFiles = [...imageFiles, newImage];
+            setImageFiles(updatedImageFiles);
+        }
+        setIsImageLoaded(false);
+        cancelAddImageFile();
+    }
+
+    /* --------------------
+    ----- PDF FIELDS ------
+    ---------------------*/
+
     async function generatePdfPreview(pdf) {
         const pdfData = new Uint8Array(await pdf.arrayBuffer());
-        
         const loadingTask = pdfjsLib.getDocument({ data: pdfData });
         const pdfDocument = await loadingTask.promise;
-      
         // Charger la première page
         const pageNumber = 1;
         const page = await pdfDocument.getPage(pageNumber);
-      
         // Définir la taille de l'aperçu (facultatif)
         const scale = 1.5;
         const viewport = page.getViewport({ scale });
-      
         // Créer un élément canvas pour le rendu de l'aperçu
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         canvas.width = viewport.width;
         canvas.height = viewport.height;
-      
         // Rendu de la première page sur le canvas
         await page.render({ canvasContext: context, viewport }).promise;
-      
         // Convertir le canvas en data URL (image au format base64)
         const dataUrl = canvas.toDataURL('image/jpeg');
-      
         return dataUrl;
     }
 
-    // Utilisation dans votre fonction displayPdfSample
+    
     async function displayPdfSample(event) {
         const pdf = inputProjectPdfFileRef.current.files[0];
-    
         if (pdf) {
         const id = uuidv4(); // Générez un identifiant unique
         pdf._id = id;
@@ -324,32 +288,13 @@ function ProjectForm({
         }
     }
 
-    function handleAddImageFile() {
-
-        if (newImage) {
-            const updatedImageFiles = [...imageFiles, newImage];
-            setImageFiles(updatedImageFiles);
-        }
-        setIsImageLoaded(false);
-        cancelAddFile();
-    }
-
     function handleAddPdfFile() {
-        
         if (newPdf) {
             const updatedPdfFiles = [...pdfFiles, newPdf];
             setPdfFiles(updatedPdfFiles);
         }
         setIsPdfLoaded(false);
         cancelAddPdfFile();
-    }
-
-
-    function cancelAddFile() {
-        setNewImage (null);
-        setIsImageLoaded(false);
-        projectMainImageSampleRef.current.setAttribute("src", "");
-        projectMainImageSampleRef.current.setAttribute("alt", "");
     }
 
     function handleSupprPdf(index) {
@@ -366,17 +311,6 @@ function ProjectForm({
         projectPdfSampleRef.current.setAttribute("alt", "");
     }
 
-    function resetFields() {
-        inputProjectTitleRef.current.value='';
-        inputProjectSubtitleRef.current.value='';
-        inputProjectStateRef.current.value='en création';
-        inputProjectDurationRef.current.value='';
-        inputProjectCreationDateRef.current.value='';
-        inputProjectDescriptionRef.current.value='';
-        inputProjectMoreInfosRef.current.value='';
-    }
-    
-
     return  (      
         <form onSubmit={(event) => projectFormSubmit(event)} method="post" className='projectForm'>
 
@@ -389,7 +323,7 @@ function ProjectForm({
                     <img id='imageSample' ref={projectMainImageSampleRef} src='' alt=''/>
                     <div className={isImageLoaded ? "projectForm_projectImageFile_sampleContainer_buttonsSystem--displayOn" :  "projectForm_projectImageFile_sampleContainer_buttonsSystem--displayOff"}>
                         <button aria-label="Ajouter l'image" onClick={handleAddImageFile} type="button">AJOUTER</button>
-                        <button aria-label="Annuler" onClick={cancelAddFile} type="button">ANNULER</button>
+                        <button aria-label="Annuler" onClick={cancelAddImageFile} type="button">ANNULER</button>
                     </div>
                 </div>
             </div>

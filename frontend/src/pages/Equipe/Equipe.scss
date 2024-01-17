@@ -1,0 +1,8 @@
+.equipe {
+    &_bioSheetContainer--displayOff {
+        display: none;
+    }
+    &_bioSheetContainer--displayOn {
+        display: flex;
+    }
+}

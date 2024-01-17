@@ -1,14 +1,16 @@
 .bioCard {
-    &_image {
-        width: 300px;
-    }
-    &_caption {
-
-        &_name {
-
+    &_card {
+        &_image {
+            width: 300px;
         }
-        &_role {
-            
+        &_caption {
+
+            &_name {
+
+            }
+            &_role {
+                
+            }
         }
     }
 }

@@ -1,24 +1,88 @@
 import './Edit.scss'
 import BioForm from '../../components/BioForm/BioForm'
 import ConfirmBox from '../../components/ConfirmBox/ConfirmBox'
-// import DNDGallery from '../../components/DNDGallery/DNDGallery'
 import ProjectForm from '../../components/ProjectForm/ProjectForm'
 import { API_URL } from '../../utils/constants'
-// import { Link } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
-// import { Context } from '../../utils/Context'
-// import { useNavigate } from 'react-router-dom'
 
- 
+/*-----REFACT OK!-----*/
+
 function Edit() {
 
-    /*-------------------------------------
-    ---------- CONFIRMBOX ----------------
-    -------------------------------------*/
+    /*----- CONST CONFIRMBOX ----*/
     const [confirmBoxState, setConfirmBoxState] = useState(false);
     const [deleteMode, setDeleteMode] = useState('bio');
     const [projectToDelete, setProjectToDelete] = useState('');
     const [bioToDelete, setBioToDelete] = useState('');
+
+    /*----- CONST BIOS ----*/
+    const [biographies, setBiographies] = useState([]);
+    const [bioFormMode, setBioFormMode] = useState('add');
+    const [biographyEdit, setBiographyEdit] = useState(null);
+    const [handleDisplayBioForm, setHandleDisplayBioForm] = useState(false);
+    const [mainImageIndex, setMainImageIndex]= useState(0);
+
+    /*----- CONST PROJECTS ----*/
+    const [projects, setProjects] = useState([]);
+    const [projectFormMode, setProjectFormMode] = useState('add');
+    const [projectEdit, setProjectEdit] = useState('');
+    const [handleDisplayProjectForm, setHandleDisplayProjectForm] = useState(false);
+
+    const [artistsList, setArtistsList] = useState([]);
+    const [productionList, setProductionList] = useState([]);
+    const [pressList, setPressList] = useState([]);
+    const [videoList, setVideoList] = useState([]);
+    const [residenciesList, setResidenciesList] = useState([]);
+    const [showsList, setShowsList] = useState([]);
+
+    const [imageFiles, setImageFiles] = useState([]);
+    const [pdfFiles, setPdfFiles]= useState([]);
+
+    /*----------------------------------------------
+    ---------- GET ----- BIO /PROJECT -------------
+    ----------------------------------------------*/
+
+    useEffect(() => {
+        fetch(`${API_URL}/api/biographies`)
+        .then((res) => res.json())
+        .then((data) => setBiographies(data),
+            console.log('biographies chargés'),
+        )
+        .catch((error)=>console.log(error.message))
+    },[handleDisplayBioForm, confirmBoxState]);
+
+    useEffect(() => {
+        fetch(`${API_URL}/api/projects`)
+        .then((res) => res.json())
+        .then((data) => setProjects(data),
+            console.log('travaux chargés'),
+        )
+        .catch((error)=>console.log(error.message))
+    },[handleDisplayProjectForm, confirmBoxState]);
+
+    /*-------------------------------------
+    ---------- CONFIRMBOX -----------------
+    -------------------------------------*/
+
+    function closeConfirmBox () {
+        setConfirmBoxState(false);
+    }
+
+    /*----------------------------------------------
+    ---------- DELETE ----- BIO /PROJECT -----------
+    ----------------------------------------------*/
+
+    function handleBioDeleteMode (biography) {
+        setConfirmBoxState(true);
+        setDeleteMode('bio');
+        setBioToDelete (biography._id)
+    }
+
+    function handleProjectDeleteMode (project) {
+        setConfirmBoxState(true);
+        setDeleteMode('project');
+        setProjectToDelete (project)
+    }
 
     function deleteBio() {
         fetch(`${API_URL}/api/biographies/${bioToDelete}`, {
@@ -35,100 +99,6 @@ function Edit() {
             setConfirmBoxState (false);
         })
         .catch((error) => console.log(error.message))
-    }
-
-    function setProjectDeleteMode (project) {
-        setConfirmBoxState(true);
-        setDeleteMode('project');
-        setProjectToDelete (project)
-    }
-
-    function setBioDeleteMode (biography) {
-        setConfirmBoxState(true);
-        setDeleteMode('bio');
-        setBioToDelete (biography._id)
-    }
-
-    function closeConfirmBox () {
-        setConfirmBoxState(false);
-    }
-
-    /*-------------------------------------
-    ---------- BIOGRAPHIES ----------------
-    -------------------------------------*/
-
-    const [biographies, setBiographies] = useState([]);
-    const [bioFormMode, setBioFormMode] = useState('add');
-    const [biographyEdit, setBiographyEdit] = useState(null);
-    const [handleDisplayBioForm, setHandleDisplayBioForm] = useState(false);
-    const [mainImageIndex, setMainImageIndex]= useState(0);
-
-    useEffect(() => {
-        fetch(`${API_URL}/api/biographies`)
-        .then((res) => res.json())
-        .then((data) => setBiographies(data),
-            console.log('biographies chargés'),
-        )
-        .catch((error)=>console.log(error.message))
-    },[handleDisplayBioForm, confirmBoxState]);
-
-
-    function editBio(biography) {
-        setBioFormMode('edit');
-        setHandleDisplayBioForm(true);
-        setBiographyEdit(biography);
-    }
-
-
-    function addBio() {
-        setBioFormMode('add');
-        setHandleDisplayBioForm(true);
-    }
-
-    /*----------------------------------
-    ---------- PROJECTS ----------------
-    ----------------------------------*/
-    const [projects, setProjects] = useState([]);
-    const [projectFormMode, setProjectFormMode] = useState('add');
-    const [projectEdit, setProjectEdit] = useState('');
-    const [handleDisplayProjectForm, setHandleDisplayProjectForm] = useState(false);
-
-    const [artistsList, setArtistsList] = useState([]);
-    const [productionList, setProductionList] = useState([]);
-    const [pressList, setPressList] = useState([]);
-    const [videoList, setVideoList] = useState([]);
-    const [residenciesList, setResidenciesList] = useState([]);
-    const [showsList, setShowsList] = useState([]);
-
-    const [imageFiles, setImageFiles] = useState([]);
-    const [pdfFiles, setPdfFiles]= useState([]);
-
-    // const [imageFiles, setImageFiles] = useState([]);
-    // const [mainImageIndex, setMainImageIndex] = useState (0);
-
-    useEffect(() => {
-        fetch(`${API_URL}/api/projects`)
-        .then((res) => res.json())
-        .then((data) => setProjects(data),
-            console.log('travaux chargés'),
-        )
-        .catch((error)=>console.log(error.message))
-    },[handleDisplayProjectForm, confirmBoxState]);
-
-    async function editProject(project) {
-        // await setImageFiles(project.images);
-        setArtistsList(project.artistsList);
-        setProductionList(project.productionList);
-        setPressList(project.pressList);
-        setVideoList(project.videoList)
-        setResidenciesList(project.residenciesList);
-        setShowsList(project.showsList);
-        setProjectEdit(project);
-        setProjectFormMode('edit');
-        setHandleDisplayProjectForm(true);
-        setImageFiles(project.images);
-        setPdfFiles(project.pdfList);
-        setMainImageIndex(project.mainImageIndex);
     }
 
     function deleteProject() {
@@ -149,6 +119,15 @@ function Edit() {
         .catch ((error)=>console.log(error.message))
     }
 
+    /*----------------------------------------------
+    ---------- ADD ----- BIO /PROJECT --------------
+    ----------------------------------------------*/
+    
+    function addBio() {
+        setBioFormMode('add');
+        setHandleDisplayBioForm(true);
+    }
+
     function addProject() {
         console.log(projectFormMode)
         setArtistsList([]);
@@ -161,14 +140,34 @@ function Edit() {
         setPdfFiles([]);
         setProjectFormMode('add');
         setHandleDisplayProjectForm(true);
-        console.log(projectFormMode)
-        // setMainImageIndex(0);
     }
 
-    function resetFields() {
-        
+    /*----------------------------------------------
+    ---------- EDIT ----- BIO /PROJECT -------------
+    ----------------------------------------------*/
+
+    function editBio(biography) {
+        setBioFormMode('edit');
+        setHandleDisplayBioForm(true);
+        setBiographyEdit(biography);
     }
 
+    async function editProject(project) {
+        // await setImageFiles(project.images);
+        setArtistsList(project.artistsList);
+        setProductionList(project.productionList);
+        setPressList(project.pressList);
+        setVideoList(project.videoList)
+        setResidenciesList(project.residenciesList);
+        setShowsList(project.showsList);
+        setProjectEdit(project);
+        setProjectFormMode('edit');
+        setHandleDisplayProjectForm(true);
+        setImageFiles(project.images);
+        setPdfFiles(project.pdfList);
+        setMainImageIndex(project.mainImageIndex);
+    }
+    
     return  (      
         <div className='editSection'>
             <div className='editSection_mainContainer'>
@@ -179,7 +178,7 @@ function Edit() {
                             <li className='editSection_mainContainer_projects_projectsList_item'>
                                 <p>{project.title}</p>
                                 <button onClick={() => editProject(project)}>MODIFIER</button>
-                                <button onClick={() => setProjectDeleteMode (project)}>SUPPRIMER</button>
+                                <button onClick={() => handleProjectDeleteMode (project)}>SUPPRIMER</button>
                             </li>
                         ))}
                     </ul>
@@ -192,7 +191,7 @@ function Edit() {
                             <li className='editSection_mainContainer_bios_biosList_item'>
                                 <p> {biography.name}{biography.surname}</p>
                                 <button onClick={() => editBio(biography)}>MODIFIER</button>
-                                <button onClick={() => setBioDeleteMode(biography)}>SUPPRIMER</button>
+                                <button onClick={() => handleBioDeleteMode(biography)}>SUPPRIMER</button>
                             </li>
                         ))}
                     </ul>
@@ -237,7 +236,7 @@ function Edit() {
                 deleteBio={deleteBio} 
                 confirmBoxState={confirmBoxState}
                 closeConfirmBox={closeConfirmBox}
-                />
+            />
         </div>
     )
 }
