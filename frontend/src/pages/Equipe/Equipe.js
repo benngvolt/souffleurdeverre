@@ -46,7 +46,6 @@ function Equipe() {
 
     return  (      
         <section className='equipe'>
-            <p className='equipe_title'>Equipe</p>
             <div className='equipe_buttons'>
                 <button type='button' onClick={()=>displayEveryBios(biographies)}className='equipe_buttons_all'>TOU.TE.S</button>
                 <button type='button' onClick={()=>displayArtistsBios(biographies)} className='equipe_buttons_artists'>ARTISTES</button>

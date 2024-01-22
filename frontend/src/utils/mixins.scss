@@ -1,0 +1,82 @@
+/*---------------
+----- FONTS -----
+---------------*/
+
+@font-face {
+    font-family: 'MainFont_light';
+    src: url('../../public/assets/fonts/ProximaNova-Light.ttf') format('truetype');
+    /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
+}
+
+@font-face {
+    font-family: 'MainFont_lightItalic';
+    src: url('../../public/assets/fonts/ProximaNova-LightIt.ttf') format('truetype');
+    /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
+}
+
+@font-face {
+    font-family: 'MainFont_bold';
+    src: url('../../public/assets/fonts/ProximaNova-Bold.ttf') format('truetype');
+    /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
+}
+
+@font-face {
+    font-family: 'SpecialFont_regular';
+    src: url('../../public/assets/fonts/Shakeout.ttf') format('truetype');
+    /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
+}
+
+
+@mixin Button {
+    display: inline-block;
+    font-family: 'SpecialFont_regular';
+    font-size: 40px;
+    color: $colorDarkGrey;
+    border: solid 3px $colorDarkGrey;
+    border-radius: 50rem;
+    height: 50px;
+    padding: 0px 40px;
+    line-height: 1.3;
+    &:hover {
+        cursor: pointer;
+        border: solid 3px $colorMediumGrey;
+        color: $colorMediumGrey;
+    }
+}
+
+@mixin Title {
+    font-family: 'SpecialFont_regular';
+    font-size: 120px;
+}
+
+@mixin TextBloc {
+    font-family: 'MainFont_light';
+    font-size: 18px;
+    text-align: justify;
+}
+
+$colorDarkGrey: #232323;
+$colorMediumGrey: #535353;
+$colorLightGrey: #E9E9E9;
+
+$mobileMaxWidth: 480px;
+$padMinWidth: 481px;
+$padMaxWidth: 991px;
+
+
+
+/*-------------------
+----- KEYFRAMES -----
+-------------------*/
+
+@keyframes float {
+	0% {
+		transform: translatey(0px);
+	}
+	50% {
+		transform: translatey(-20px);
+	}
+	100% {
+		transform: translatey(0px);
+	}
+}

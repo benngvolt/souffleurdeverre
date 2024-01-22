@@ -46,13 +46,19 @@ function ProjectForm({
 
     const [isPdfLoaded, setIsPdfLoaded] = useState(false);
     const [newPdf, setNewPdf] = useState(null);
-    
+
+    const handleSelectChange = (index, value) => {
+        const updatedResidenciesList = [...residenciesList];
+        updatedResidenciesList[index].residencyType = value;
+        setResidenciesList(updatedResidenciesList);
+      };
+
     /* ---------------------------
     ----- ARTISTS LIST -----------
     ----------------------------*/
 
     const handleAddArtist = () => {
-        setArtistsList([...artistsList, { artistFunction: '', artistName: '', artistSurname: '' }]);
+        setArtistsList([...artistsList, { artistFunction: '', artistName: '' }]);
     };
     const handleSupprArtist = (index) => {
         setArtistsList (artistsList.filter((_, i) => i !== index));
@@ -63,7 +69,7 @@ function ProjectForm({
     -------------------------*/
 
     const handleAddProduction = () => {
-        setProductionList([...productionList, { productionFunction: '', productionName: '', productionSurname: '' }]);
+        setProductionList([...productionList, { productionFunction: '', productionName: '' }]);
     };
     const handleSupprProduction = (index) => {
         setProductionList (productionList.filter((_, i) => i !== index));
@@ -118,12 +124,13 @@ function ProjectForm({
     -------------------------*/
 
     function projectFormSubmit(event) {
+
         event.preventDefault();
         // const token = window.sessionStorage.getItem('1');
         const projectFormData = new FormData();
         projectFormData.append('title', inputProjectTitleRef.current.value);
         projectFormData.append('subtitle', inputProjectSubtitleRef.current.value);
-        projectFormData.append('state', inputProjectStateRef.current.value);
+        projectFormData.append('projectState', inputProjectStateRef.current.value);
         projectFormData.append('creationDate', inputProjectCreationDateRef.current.value);
         projectFormData.append('duration', inputProjectDurationRef.current.value);
         projectFormData.append('description', inputProjectDescriptionRef.current.value);
@@ -135,6 +142,9 @@ function ProjectForm({
         projectFormData.append('videoList', JSON.stringify(videoList));
         projectFormData.append('residenciesList', JSON.stringify(residenciesList));
         projectFormData.append('showsList', JSON.stringify(showsList));
+
+        console.log (inputProjectStateRef.current.value);
+        
         const newImageFiles = Array.from(imageFiles);
         const newPdfFiles = Array.from(pdfFiles);
         const pdfWithIndex = newPdfFiles.map((pdf, index) => ({
@@ -338,7 +348,11 @@ function ProjectForm({
             </div>
             <div className='projectForm_projectState'>
                 <label htmlFor='inputProjectState'>ÉTAT*</label>
-                <select id='inputProjectState' ref={inputProjectStateRef} name="projectState" defaultValue={projectFormMode==='edit'? projectEdit.projectState : 'en création'} >
+                <select id='inputProjectState' 
+                        ref={inputProjectStateRef} 
+                        name="projectState"
+                        defaultValue={projectFormMode==='edit'? projectEdit.projectState : ""}>
+                    <option value=""></option>
                     <option value="en création">En création</option>
                     <option value="en tournée">En tournée</option>
                     <option value="archivé">Archivé</option>
@@ -381,20 +395,7 @@ function ProjectForm({
                             ></input>
                         </div>
                         <div>
-                            <label htmlFor={`inputProjectArtistSurname${index}`}>NOM</label>
-                            <input
-                                type='text'
-                                id={`inputProjectArtistSurname${index}`}
-                                value={artist.artistSurname}
-                                onChange={(e) => {
-                                    const updatedArtistsList = [...artistsList];
-                                    updatedArtistsList[index].artistSurname = e.target.value;
-                                    setArtistsList(updatedArtistsList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectArtistName${index}`}>PRÉNOM</label>
+                            <label htmlFor={`inputProjectArtistName${index}`}>NOMS</label>
                             <input
                                 type='text'
                                 id={`inputProjectArtistName${index}`}
@@ -432,20 +433,7 @@ function ProjectForm({
                             ></input>
                         </div>
                         <div>
-                            <label htmlFor={`inputProjectProductionSurname${index}`}>NOM</label>
-                            <input
-                                type='text'
-                                id={`inputProjectProductionSurname${index}`}
-                                value={production.productionSurname}
-                                onChange={(e) => {
-                                    const updatedProductionList = [...productionList];
-                                    updatedProductionList[index].productionSurname = e.target.value;
-                                    setProductionList(updatedProductionList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectProductionName${index}`}>PRÉNOM</label>
+                            <label htmlFor={`inputProjectProductionName${index}`}>NOMS</label>
                             <input
                                 type='text'
                                 id={`inputProjectProductionName${index}`}
@@ -541,16 +529,14 @@ function ProjectForm({
                     <div key={index}>
                         <div>
                             <label htmlFor={`inputProjectResidencyType${index}`}>TYPE DE RÉSIDENCE</label>
-                            <input
-                                type='text'
-                                id={`inputProjectResidencyType${index}`}
-                                value={residency.residencyType}
-                                onChange={(e) => {
-                                    const updatedResidenciesList = [...residenciesList];
-                                    updatedResidenciesList[index].residencyType = e.target.value;
-                                    setResidenciesList(updatedResidenciesList);
-                                }}
-                            ></input>
+                            <select value={residency.residencyType}
+                                    onChange={(e) => handleSelectChange(index, e.target.value)}>
+                                <option value=""></option>
+                                <option value="laboratoire">Laboratoire</option>
+                                <option value="écriture">Écriture</option>
+                                <option value="création">Création</option>
+                                <option value="répétitions">Répétitions</option>
+                            </select>
                         </div>
                         <div>
                             <label htmlFor={`inputProjectResidencyDates${index}`}>DATES DE LA RÉSIDENCE</label>

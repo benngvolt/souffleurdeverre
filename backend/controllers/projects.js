@@ -16,7 +16,6 @@ exports.getAllProjects = (req, res) => {
 -------------------------*/
 
 exports.getOneProject = (req, res) => {
-  console.log(req.params.id)
   Project.findOne({_id: req.params.id})
     .then (project =>res.status(200).json(project))
     .catch (error => res.status (400).json({error}))
@@ -128,8 +127,6 @@ exports.createProject = async (req, res) => {
     const videoList = JSON.parse(req.body.videoList);
     const residenciesList = JSON.parse(req.body.residenciesList);
     const showsList = JSON.parse(req.body.showsList);
-
-    console.log(pdfList);
   
     // const projectDescriptionWithBr = projectData.description.replace(/(\r\n|\n|\r)/g, "<br>");
   

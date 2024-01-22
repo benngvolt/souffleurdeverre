@@ -1,3 +1,5 @@
+@import '../../utils/mixins';
+
 .biosheetAside {
     z-index: 1;
         position: fixed;
@@ -9,16 +11,53 @@
         height: 100%;
         background:rgba(0, 0, 0, 0.8);
         overflow-y: scroll;
-    &_name {
 
-    }
-    &_role {
+    &_mainContainer {
+        margin: 50px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        column-gap: 0;
+        background-color: $colorLightGrey;
+        position: relative;
 
-    }
-    &_image {
+        &_image {
+            width: 665px;
+            height: 814px;
+            object-fit: cover;
+        }
+        &_texts {
+            padding: 300px 67px 67px 67px;
+            width: 100%;
 
+            &_name {
+                @include Title;
+            }
+            &_role {
+                font-family: 'MainFont_bold';
+                font-size: 18px;
+                margin-bottom: 40px;
+            }
+            &_bio {
+                @include TextBloc;
+            }
+        }
     }
-    &_bio {
+    &_button {
+            background: none;
+            border: none;
+            position: absolute;
+            top: 60px;
+            right: 60px;
+            &:hover {
+                cursor: pointer;
+            }
+        &_icon {
+            color: $colorDarkGrey;
+            font-size: 30px;
+        }
+    }
 
-    }
+   
+    
 }

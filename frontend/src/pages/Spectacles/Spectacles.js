@@ -22,27 +22,38 @@ function Spectacles() {
             .catch((error) => console.log(error.message));
     }, []);
 
+    function handleFilterProjects (state) {
+        const newSortedPorjects = projects.filter((project)=> (project.projectState === state));
+        setSortedProjects (newSortedPorjects);
+    }
+
+    function displayAllProjects () {
+        setSortedProjects (projects);
+    }
+
+
+
     return  (      
         <section className='spectacles'>
             <p>Spectacles</p>
             <ul>
                 <li>
-                    <button type='button'>
+                    <button type='button' onClick={() => displayAllProjects()}>
                     TOUS LES SPECTACLES
                     </button>
                 </li>
                 <li>
-                    <button type='button'>
+                    <button type='button' onClick={() => handleFilterProjects("en tournée")}>
                     EN TOURNEE    
                     </button>
                 </li>
                 <li>
-                    <button type='button'>
+                    <button type='button' onClick={() => handleFilterProjects("en création")}>
                     EN CRÉATION  
                     </button>
                 </li>
                 <li>
-                    <button type='button'>
+                    <button type='button' onClick={() => handleFilterProjects("archives")}>
                     ARCHIVES  
                     </button>
                 </li>

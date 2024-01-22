@@ -1,8 +1,37 @@
+@import '../../utils/mixins';
+
 .equipe {
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 185px;
+
+
+    &_buttons {
+        width: auto;
+        display: flex;
+        flex-direction: row;
+        column-gap: 60px;
+        margin: auto;
+        justify-content: center;
+
+        &_all, &_artists, &_admin {
+            @include Button;
+        }
+    }
+    
     &_bioSheetContainer--displayOff {
         display: none;
     }
+
     &_bioSheetContainer--displayOn {
         display: flex;
+    }
+
+    &_biosList {
+        margin: 0 50px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 59px;
     }
 }

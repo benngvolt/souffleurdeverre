@@ -18,7 +18,7 @@ function BioCard({biography, setDisplayBioAside, setBioAside}) {
             <button onClick={() => openBioAside()} className='bioCard_card'>
                 <img src={biography.bioImageUrl} alt={biography.surname} className='bioCard_card_image'/>
                 <figcaption className='bioCard_card_caption'>
-                    <p className='bioCard_card_caption_name'>{biography.name}{biography.surname}</p>
+                    <p className='bioCard_card_caption_name'>{biography.name} {biography.surname}</p>
                     <p className='bioCard_card_caption_role'>{biography.role}</p>
                 </figcaption>
             </button>

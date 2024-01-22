@@ -14,14 +14,12 @@ const projectSchema = mongoose.Schema({
         {
         artistFunction: {type: String, required: false},
         artistName: {type: String, required: false},
-        artistSurname: {type: String, required: false},
         }
     ],
     productionList: [
         {
         productionFunction: {type: String, required: false},
         productionName: {type: String, required: false},
-        productionSurname: {type: String, required: false},
         }
     ],
     pressList: [
