@@ -35,39 +35,37 @@ function Spectacles() {
 
     return  (      
         <section className='spectacles'>
-            <p>Spectacles</p>
-            <ul>
-                <li>
+            <ul className='spectacles_filtersContainer'>
+                <li className='spectacles_filtersContainer_item'>
                     <button type='button' onClick={() => displayAllProjects()}>
                     TOUS LES SPECTACLES
                     </button>
                 </li>
-                <li>
+                <li className='spectacles_filtersContainer_item'>
                     <button type='button' onClick={() => handleFilterProjects("en tournée")}>
                     EN TOURNEE    
                     </button>
                 </li>
-                <li>
+                <li className='spectacles_filtersContainer_item'>
                     <button type='button' onClick={() => handleFilterProjects("en création")}>
-                    EN CRÉATION  
+                    EN CREATION  
                     </button>
                 </li>
-                <li>
+                <li className='spectacles_filtersContainer_item'>
                     <button type='button' onClick={() => handleFilterProjects("archives")}>
                     ARCHIVES  
                     </button>
                 </li>
             </ul>
-            <ul>
+            <ul className='spectacles_projectsList' >
                 {sortedProjects.map((project) => (
                     <li>
-                        <Link to={`/spectacles/${project._id}`}>
-                            <img src={project.images[project.mainImageIndex].imageUrl} alt={project.title} />
-                            <div>
-                                <p>{project.title}</p>
-                                <p>Création {project.creationDate}</p>
-                                <p>{project.moreInfos}</p>
-                                <p>{project.projectState}</p>
+                        <Link to={`/spectacles/${project._id}`} className='spectacles_projectsList_projectItem'>
+                            <img src={project.images[project.mainImageIndex].imageUrl} alt={project.title} className='spectacles_projectsList_projectItem_img' />
+                            <div className='spectacles_projectsList_projectItem_mainDatas'>
+                                <p className='spectacles_projectsList_projectItem_mainDatas_title'>{project.title}</p>
+                                <p className='spectacles_projectsList_projectItem_mainDatas_creationDate'>Création {project.creationDate}</p>
+                                <p className='spectacles_projectsList_projectItem_mainDatas_state'>{project.projectState}</p>
                             </div>
                         </Link>
                     </li>

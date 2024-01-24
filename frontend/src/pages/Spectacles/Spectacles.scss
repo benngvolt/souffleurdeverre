@@ -1,0 +1,66 @@
+@import '../../utils/mixins';
+
+.spectacles {
+
+    &_filtersContainer {
+        width: 100%;
+        margin: auto auto 180px auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        column-gap: 60px;
+
+        &_item {
+            button {
+                @include Button;
+
+            }
+        }
+    }
+
+    &_projectsList {
+        
+        display: flex;
+        flex-direction: column;
+        row-gap: 70px;
+
+        &_projectItem {
+            padding: 0 50px;
+            width: 100%;
+            height: 272px;
+            display: flex;
+            flex-direction: row;
+            column-gap: 55px;
+
+            &:hover {
+                cursor: pointer;
+                background-color: $colorHover;
+            }
+
+            &_img {
+                width: 408px;
+                height: 272;
+            } 
+
+            &_mainDatas {
+
+                &_title {
+                    font-family: 'SpecialFont_regular';
+                    font-size: 70px;
+                    color: $colorDarkGrey;
+                    margin-top: 10px;
+                }
+                &_creationDate {
+                    font-family: 'MainFont_light';
+                    font-size: 18px;
+                    color: $colorDarkGrey;
+                }
+                &_state {
+                    font-family: 'MainFont_lightItalic';
+                    font-size: 18px;
+                    color: $colorDarkGrey;
+                }
+            }
+        }
+    }
+}

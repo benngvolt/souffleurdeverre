@@ -11,6 +11,7 @@ function OneSpectacle() {
     const [project, setProject] = useState([]);
     // const [sortedProjects, setSortedProjects] = useState([]);
     const { id } = useParams();
+   
     
     useEffect(() => {
         fetch(`${API_URL}/api/projects/${id}`)
@@ -23,61 +24,72 @@ function OneSpectacle() {
     }, []);
 
     return  (      
-        <section className='spectacles'>
-            <div>
-                <p>{project.title}</p>
-                <p>{project.description}</p>
-                <p>durée {project.duration}</p>
-                <p>date de création {project.creationDate}</p>
-                <div>
-                    <ul>
+        <section className='oneSpectacle'>
+            <div className='oneSpectacle_mainDatas'>
+                <p className='oneSpectacle_mainDatas_title'>{project.title}</p>
+                <p className='oneSpectacle_mainDatas_subtitle'>{project.subtitle}</p>
+                <p className='oneSpectacle_mainDatas_description'>{project.description}</p>
+                <p className='oneSpectacle_mainDatas_duration'>durée {project.duration}</p>
+                <p className='oneSpectacle_mainDatas_creationDate'> date de création {project.creationDate}</p>
+                <div className='oneSpectacle_mainDatas_teamList'>
+                    <ul className='oneSpectacle_mainDatas_teamList_artistsList'>
                         {project.artistsList?.map((artist) => (
-                            <p key={artist._id}>{artist.artistFunction} {artist.artistName}</p>
+                            <li key={artist._id} className='oneSpectacle_mainDatas_teamList_artistsList_item'>
+                                <p className='oneSpectacle_mainDatas_teamList_artistsList_item_names'> 
+                                <span className='oneSpectacle_mainDatas_teamList_artistsList_item_function'>{artist.artistFunction}</span>
+                                {artist.artistName}</p>
+                            </li>
                         ))}
                     </ul>
-                    <ul>
+                    <ul className='oneSpectacle_mainDatas_teamList_prodList'>
                         {project.productionList?.map((prod) => (
-                            <p key={prod._id}>{prod.productionFunction} {prod.productionName}</p>
-                        ))}
-                    </ul>
-                </div>
-            </div>
-            <ul>
-                {project.images?.map((image) => (
-                    <li>
-                        <img key={image._id} alt={project.title + image._id} src={image.imageUrl}/>
-                    </li>
-                ))}
-            </ul>
-            <div>
-                <div>
-                    <p>LABORATOIRES</p>
-                    <ul>
-                        {project.residenciesList
-                        ?.filter((residency) => residency.residencyType === 'laboratoire')
-                        .map((residency) => (
-                            <li key={residency.id}>
-                            <p>{residency.dates}</p>
-                            <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer'>
-                                {residency.placeName}
-                            </a>
-                            <p>{`/ ${residency.city ? residency.city : ""}`}</p>
+                            <li key={prod._id} className='oneSpectacle_mainDatas_teamList_prodList_item'> 
+                                <p className='oneSpectacle_mainDatas_teamList_prodList_item_names'>
+                                <span className='oneSpectacle_mainDatas_teamList_prodList_item_function'>{prod.productionFunction}</span> 
+                                {prod.productionName}</p>
                             </li>
                         ))}
                     </ul>
                 </div>
-                <div>
-                    <p>RÉSIDENCES D'ÉCRITURE</p>
-                    <ul>
+            </div>
+            <ul className={`oneSpectacle_imagesGrid oneSpectacle_imagesGrid_${project.images?.length}`}>
+                {project.images?.map((image, index) => (
+                    <li className={`oneSpectacle_imagesGrid_item oneSpectacle_imagesGrid_${project.images?.length}_item_${index}`}>
+                        <img key={image._id} alt={project.title + image._id} src={image.imageUrl}/>
+                    </li>
+                ))}
+            </ul>
+            <div className='oneSpectacle_residenciesList'>
+                <div className='oneSpectacle_residenciesList_labos'>
+                    <p className='oneSpectacle_residenciesList_labos_title'>LABORATOIRES</p>
+                    <ul className='oneSpectacle_residenciesList_labos_list'>
+                        {project.residenciesList
+                        ?.filter((residency) => residency.residencyType === 'laboratoire')
+                        .map((residency) => (
+                            <li key={residency.id} className='oneSpectacle_residenciesList_labos_list_item'>
+                                <p className='oneSpectacle_residenciesList_labos_list_item_text'>
+                                    <span className='oneSpectacle_residenciesList_labos_list_item_dates'>{residency.dates}</span>
+                                    <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_labos_list_item_link'>
+                                        {residency.placeName}
+                                    </a>{`/ ${residency.city ? residency.city : ""}`}
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div className='oneSpectacle_residenciesList_writing'>
+                    <p className='oneSpectacle_residenciesList_writing_title'>RÉSIDENCES D'ÉCRITURE</p>
+                    <ul className='oneSpectacle_residenciesList_writing_list'>
                         {project.residenciesList
                         ?.filter((residency) => residency.residencyType === 'écriture')
                         .map((residency) => (
-                            <li key={residency.id}>
-                            <p>{residency.dates}</p>
-                            <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer'>
-                                {residency.placeName}
-                            </a>
-                            <p>{`/ ${residency.city ? residency.city : ""}`}</p>
+                            <li key={residency.id} className='oneSpectacle_residenciesList_writing_list_item'>
+                                <p className='oneSpectacle_residenciesList_writing_list_item_text'>
+                                    <span className='oneSpectacle_residenciesList_writing_list_item_dates'>{residency.dates}</span>
+                                    <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_writing_list_item_link'>
+                                        {residency.placeName}
+                                    </a>{`/ ${residency.city ? residency.city : ""}`}
+                                </p>
                             </li>
                         ))}
                     </ul>
