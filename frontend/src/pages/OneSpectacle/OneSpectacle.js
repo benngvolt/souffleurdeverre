@@ -59,97 +59,102 @@ function OneSpectacle() {
                     </li>
                 ))}
             </ul>
-            <div className='oneSpectacle_residenciesList'>
-                <div className='oneSpectacle_residenciesList_labos'>
-                    <p className='oneSpectacle_residenciesList_labos_title'>LABORATOIRES</p>
-                    <ul className='oneSpectacle_residenciesList_labos_list'>
-                        {project.residenciesList
-                        ?.filter((residency) => residency.residencyType === 'laboratoire')
-                        .map((residency) => (
-                            <li key={residency.id} className='oneSpectacle_residenciesList_labos_list_item'>
-                                <p className='oneSpectacle_residenciesList_labos_list_item_text'>
-                                    <span className='oneSpectacle_residenciesList_labos_list_item_dates'>{residency.dates}</span>
-                                    <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_labos_list_item_link'>
-                                        {residency.placeName}
-                                    </a>{`/ ${residency.city ? residency.city : ""}`}
-                                </p>
-                            </li>
-                        ))}
-                    </ul>
+            <div className='oneSpectacle_residenciesDatasContainer'>
+                <div className='oneSpectacle_residenciesList'>
+                    <div className='oneSpectacle_residenciesList_labos'>
+                        <p className='oneSpectacle_residenciesList_labos_title'>LABORATOIRES</p>
+                        <ul className='oneSpectacle_residenciesList_labos_list'>
+                            {project.residenciesList
+                            ?.filter((residency) => residency.residencyType === 'laboratoire')
+                            .map((residency) => (
+                                <li key={residency.id} className='oneSpectacle_residenciesList_labos_list_item'>
+                                    <p className='oneSpectacle_residenciesList_labos_list_item_text'>
+                                        <span className='oneSpectacle_residenciesList_labos_list_item_dates'>{residency.dates}</span>
+                                        <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_labos_list_item_link'>
+                                            {residency.placeName}
+                                        </a>{`/ ${residency.city ? residency.city : ""}`}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className='oneSpectacle_residenciesList_writing'>
+                        <p className='oneSpectacle_residenciesList_writing_title'>RÉSIDENCES D'ÉCRITURE</p>
+                        <ul className='oneSpectacle_residenciesList_writing_list'>
+                            {project.residenciesList
+                            ?.filter((residency) => residency.residencyType === 'écriture')
+                            .map((residency) => (
+                                <li key={residency.id} className='oneSpectacle_residenciesList_writing_list_item'>
+                                    <p className='oneSpectacle_residenciesList_writing_list_item_text'>
+                                        <span className='oneSpectacle_residenciesList_writing_list_item_dates'>{residency.dates}</span>
+                                        <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_writing_list_item_link'>
+                                            {residency.placeName}
+                                        </a>{`/ ${residency.city ? residency.city : ""}`}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className='oneSpectacle_residenciesList_creation'>
+                        <p className='oneSpectacle_residenciesList_creation_title'>RÉSIDENCES DE CRÉATION</p>
+                        <ul className='oneSpectacle_residenciesList_creation_list'>
+                            {project.residenciesList
+                            ?.filter((residency) => residency.residencyType === 'création')
+                            .map((residency) => (
+                                <li key={residency.id} className='oneSpectacle_residenciesList_creation_list_item'>
+                                    <p className='oneSpectacle_residenciesList_creation_list_item_text'>
+                                        <span className='oneSpectacle_residenciesList_creation_list_item_dates'>{residency.dates}</span>
+                                        <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_creation_list_item_link'>
+                                            {residency.placeName}
+                                        </a>
+                                        {`/ ${residency.city ? residency.city : ""}`}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
-                <div className='oneSpectacle_residenciesList_writing'>
-                    <p className='oneSpectacle_residenciesList_writing_title'>RÉSIDENCES D'ÉCRITURE</p>
-                    <ul className='oneSpectacle_residenciesList_writing_list'>
-                        {project.residenciesList
-                        ?.filter((residency) => residency.residencyType === 'écriture')
-                        .map((residency) => (
-                            <li key={residency.id} className='oneSpectacle_residenciesList_writing_list_item'>
-                                <p className='oneSpectacle_residenciesList_writing_list_item_text'>
-                                    <span className='oneSpectacle_residenciesList_writing_list_item_dates'>{residency.dates}</span>
-                                    <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_writing_list_item_link'>
-                                        {residency.placeName}
-                                    </a>{`/ ${residency.city ? residency.city : ""}`}
-                                </p>
-                            </li>
-                        ))}
-                    </ul>
+                <div className='oneSpectacle_residenciesList'>
+                    <div className='oneSpectacle_residenciesList_rehearsals'>
+                        <p className='oneSpectacle_residenciesList_rehearsals_title'>RÉPÉTITIONS</p>
+                        <ul className='oneSpectacle_residenciesList_rehearsals_list'>
+                            {project.residenciesList
+                            ?.filter((residency) => residency.residencyType === 'répétitions')
+                            .map((residency) => (
+                                <li key={residency.id} className='oneSpectacle_residenciesList_rehearsals_list_item'>
+                                    <p className='oneSpectacle_residenciesList_rehearsals_list_item_text'>
+                                        <span className='oneSpectacle_residenciesList_rehearsals_list_item_dates'>{residency.dates}</span>
+                                        <a href={residency.placeLink?residency.placeLink:""} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_rehearsals_list_item_link'>
+                                            {residency.placeName}
+                                        </a>
+                                   {`/ ${residency.city ? residency.city : ""}`}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className='oneSpectacle_residenciesList_firstShows'>
+                        <p className='oneSpectacle_residenciesList_firstShows_title'>PREMIÈRES REPRÉSENTATIONS</p>
+                        <ul className='oneSpectacle_residenciesList_firstShows_list'>
+                            {project.showsList?.map((show) => (
+                                <li key={show.id} className='oneSpectacle_residenciesList_firstShows_list_item'>
+                                    <p className='oneSpectacle_residenciesList_firstShows_list_item_text'>
+                                        <span className='oneSpectacle_residenciesList_firstShows_list_item_dates'>{show.dates}</span>
+                                        <a href={show.placeLink?show.placeLink:""} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_firstShows_list_item_link'>
+                                            {show.placeName}
+                                        </a>
+                                    {`/ ${show.city ? show.city : ""}`}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
                 <div>
-                    <p>RÉSIDENCES DE CRÉATION</p>
-                    <ul>
-                        {project.residenciesList
-                        ?.filter((residency) => residency.residencyType === 'création')
-                        .map((residency) => (
-                            <li key={residency.id}>
-                            <p>{residency.dates}</p>
-                            <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer'>
-                                {residency.placeName}
-                            </a>
-                            <p>{`/ ${residency.city ? residency.city : ""}`}</p>
-                            </li>
-                        ))}
-                    </ul>
+                    {project.videoList?.map((video) => (
+                        <a key={video._id} href={video.videoLink?video.videoLink:""} target='_blank' rel='noreferrer'>{video.videoName}</a>
+                    ))}
+                    {project.pdfList?.map((pdf) => (
+                        <a key={pdf._id} href={pdf.pdfLink?pdf.pdfLink:""} target='_blank' rel='noreferrer'>{pdf.pdfName}</a>
+                    ))}
                 </div>
-            </div>
-            <div>
-                <div>
-                    <p>RÉPÉTITIONS</p>
-                    <ul>
-                        {project.residenciesList
-                        ?.filter((residency) => residency.residencyType === 'répétitions')
-                        .map((residency) => (
-                            <li key={residency.id}>
-                                <p>{residency.dates}</p>
-                                <a href={residency.placeLink?residency.placeLink:""} target='_blank' rel='noreferrer'>
-                                    {residency.placeName}
-                                </a>
-                                <p>{`/ ${residency.city ? residency.city : ""}`}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div>
-                    <p>PREMIÈRES REPRÉSENTATIONS</p>
-                    <ul>
-                        {project.showsList?.map((show) => (
-                            <li>
-                                <p>{show.dates}</p>
-                                <a href={show.placeLink?show.placeLink:""} target='_blank' rel='noreferrer'>
-                                    {show.placeName}
-                                </a>
-                                <p>{`/ ${show.city ? show.city : ""}`}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
-            <div>
-                {project.videoList?.map((video) => (
-                    <a key={video._id} href={video.videoLink?video.videoLink:""} target='_blank' rel='noreferrer'>{video.videoName}</a>
-                ))}
-                {project.pdfList?.map((pdf) => (
-                    <a key={pdf._id} href={pdf.pdfLink?pdf.pdfLink:""} target='_blank' rel='noreferrer'>{pdf.pdfName}</a>
-                ))}
             </div>
         </section>
     )

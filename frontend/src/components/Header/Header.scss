@@ -4,6 +4,22 @@
     margin-bottom: 50px;
     height: 70px;
     position: relative;
+    display: flex;
+    flex-direction: row;
+
+    &:hover {
+        cursor: pointer;
+    
+        #top-line {
+            animation: down-rotate 0.6s ease-out both;
+        }
+        #bottom-line {
+            animation: up-rotate 0.6s ease-out both;
+        }
+        #middle-line {
+            animation: hide 0.6s ease-out forwards;
+        }
+    }
 
     svg {
         width: 120px;
@@ -19,24 +35,12 @@
 
     &_icon {
         position: absolute;
-        top: 13px;
+        top: 8px;
         left: 13px;
         background: none;
         border: none;
 
-        &:hover {
-            cursor: pointer;
         
-            #top-line {
-                animation: down-rotate 0.6s ease-out both;
-            }
-            #bottom-line {
-                animation: up-rotate 0.6s ease-out both;
-            }
-            #middle-line {
-                animation: hide 0.6s ease-out forwards;
-            }
-        }
     }
     
     &_nav {
@@ -44,14 +48,17 @@
             width: 100%;
             background-color: $colorHover;
             flex-direction: row;
+            
 
             &_menu {
+
                 margin: auto;
                 width: 40%;
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
                 column-gap: 50px;
+                
             
                 &_item {
                     background: none;
@@ -62,6 +69,7 @@
                     display: flex;
                     text-align: center;
                     vertical-align: middle;
+                    
                     &:hover {
                         cursor: pointer;
                         font-family:'MainFont_lightItalic';

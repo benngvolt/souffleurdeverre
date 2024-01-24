@@ -4,7 +4,7 @@
 
     &_mainDatas {
 
-        margin: auto 50px;
+        margin: 30px 50px;
 
         &_title {
             @include Title;
@@ -219,15 +219,29 @@
             }
         }
     }
-
-    &_residenciesList {
+    &_residenciesDatasContainer {
+        width: 100%;
         display: flex;
         flex-direction: row;
-        margin: 0 50px;
+        justify-content: space-between;
+    }
 
-        &_labos, &_writing {
+    &_residenciesList {
+        width: 49%;
+        display: flex;
+        flex-direction: column;
+        margin: 50px;
+
+        &_labos, &_writing, &_creation, &_rehearsals, &_firstShows {
+
+            &--displayOff {
+                display: none;
+            }
+
             display: flex;
             flex-direction: column;
+            margin: 20px 0;
+
 
             &_title {
                 font-family: 'MainFont_light';
@@ -245,6 +259,7 @@
 
                     &_text {
                         font-family: 'MainFont_light';
+                        color: $colorDarkGrey;
                         text-align: justify;
                         font-size: 18px;
                         margin: 0; 
@@ -254,6 +269,7 @@
                         width: auto;
                         font-family: 'MainFont_bold';
                         text-align: justify;
+                        color: $colorDarkGrey;
                         font-size: 18px;
                         margin-right: 10px;
                     }

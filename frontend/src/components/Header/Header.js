@@ -19,8 +19,8 @@ function Header() {
 }
 
     return  (      
-        <header className='header' onMouseLeave={()=>hideMenu()} >
-            <button className='header_icon' onMouseOver={()=>showMenu()} onClick={()=>hideMenu()}>
+        <header className='header' onMouseOver={()=>showMenu()} onMouseLeave={()=>hideMenu()} >
+            <button className='header_icon' >
                 <svg id="hamburger" className={displayMenu===true? 'header_icon header_icon--opened':'header_icon header_icon--closed'} viewbox="0 0 60 30">
                     <g stroke="#232323" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path id="top-line" d="M10,10 L50,10 Z"></path>
