@@ -44,6 +44,23 @@
     }
 }
 
+@mixin Button2 {
+    display: inline-block;
+    font-family: 'MainFont_light';
+    font-size: 20px;
+    color: $colorDarkGrey;
+    border: solid 1px $colorDarkGrey;
+    border-radius: 50rem;
+    height: 40px;
+    padding: 0px 40px;
+    line-height: 1.3;
+    &:hover {
+        cursor: pointer;
+        background-color: $colorHover;
+        color: $colorMediumGrey;
+    }
+}
+
 @mixin Title {
     font-family: 'SpecialFont_regular';
     font-size: 120px;

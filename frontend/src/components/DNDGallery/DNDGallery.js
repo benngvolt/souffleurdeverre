@@ -84,6 +84,7 @@ function DNDGallery ({ imageFiles, setImageFiles, mainImageIndex, setMainImageIn
           {items && items.length > 0 ? (
             items.map((item, index) => (
               <DNDSortableSingleItem 
+                itemsNumber={items.length}
                 item={item} 
                 key={item._id} 
                 itemId={item._id} 

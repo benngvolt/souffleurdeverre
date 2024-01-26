@@ -176,26 +176,30 @@ function Edit() {
                     <ul className='editSection_mainContainer_projects_projectsList'>
                         {projects.map((project)=>(
                             <li className='editSection_mainContainer_projects_projectsList_item'>
-                                <p>{project.title}</p>
-                                <button onClick={() => editProject(project)}>MODIFIER</button>
-                                <button onClick={() => handleProjectDeleteMode (project)}>SUPPRIMER</button>
+                                <p className='editSection_mainContainer_projects_projectsList_item_name'>{project.title}</p>
+                                <div className='editSection_mainContainer_projects_projectsList_item_buttons'>
+                                    <button onClick={() => editProject(project)}>MODIFIER</button>
+                                    <button onClick={() => handleProjectDeleteMode (project)}>SUPPRIMER</button>
+                                </div>
                             </li>
                         ))}
                     </ul>
-                    <button onClick={() => addProject()}>+ AJOUTER UN PROJET</button>
+                    <button className='editSection_mainContainer_projects_addButton' onClick={() => addProject()}>AJOUTER UN PROJET</button>
                 </div>
                 <div className='editSection_mainContainer_bios'>
                     <p className='editSection_mainContainer_bios_title'>BIOGRAPHIES</p>
                     <ul className='editSection_mainContainer_bios_biosList'>
                         {biographies.map((biography)=>(
                             <li className='editSection_mainContainer_bios_biosList_item'>
-                                <p> {biography.name}{biography.surname}</p>
-                                <button onClick={() => editBio(biography)}>MODIFIER</button>
-                                <button onClick={() => handleBioDeleteMode(biography)}>SUPPRIMER</button>
+                                <p className='editSection_mainContainer_bios_biosList_item_name'> {biography.name}{biography.surname}</p>
+                                <div className='editSection_mainContainer_bios_biosList_item_buttons'>
+                                    <button onClick={() => editBio(biography)}>MODIFIER</button>
+                                    <button onClick={() => handleBioDeleteMode(biography)}>SUPPRIMER</button>
+                                </div>
                             </li>
                         ))}
                     </ul>
-                    <button onClick={() => addBio()} className='editSection_mainContainer_bios_addButton'>+ AJOUTER UN.E COLLABORA.TEUR.TRICE</button>
+                    <button onClick={() => addBio()} className='editSection_mainContainer_bios_addButton'>AJOUTER UN.E COLLABORA.TEUR.TRICE</button>
                 </div>            
             </div>
             <div className={handleDisplayProjectForm===false ? "editSection_forms--displayOff" : "editSection_forms--displayOn"}>

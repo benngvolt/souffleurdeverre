@@ -32,7 +32,7 @@ async function handleMainImage(index) {
 
 
   return (
-    <div className='dndItem' ref={setNodeRef}
+    <div className={`dndItem dndItem_${props.itemsNumber}_item_${props.index}`} ref={setNodeRef}
       style={style}
       {...props}
       {...attributes}

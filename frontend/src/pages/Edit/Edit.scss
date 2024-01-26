@@ -1,32 +1,70 @@
+@import '../../utils/mixins';
+
 .editSection {
 
     &_mainContainer {
+        display: flex;
+        flex-direction: column;
 
         &_bios, &_projects {
+
+            margin: 50px;
+            // display: flex;
+            // flex-direction: column;
             
-            p {
-                background: none;
-                border: none;
-                font-size: 30px;
+
+
+
+            &_title {
+                font-family: 'SpecialFont_regular';
+                font-size: 50px;
+                margin-bottom: 20px;
             }
 
             &_biosList, &_projectsList {
-
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+                
                 &_item {
+                    height: 90px;
                     display: flex;
-                    flex-direction: row;
-                    column-gap: 30px;
+                    flex-direction: column;
+                    row-gap: 5px;
+                    margin-bottom: 20px;
 
-                    p {
+                    &_name {
+                        font-family: 'MainFont_light';
+                        font-size: 30px;
+                        background: none;
+                        border: none;
+                        
+                    }
+                    &_buttons {
+                        display: flex;
+                        flex-direction: row;
+                        column-gap: 15px;
+                        
+                        button {
+                            
+                            border: none;
+                            border-radius: 20%;
+                            padding: 0;
+                            &:hover {
+                                cursor: pointer;
+                                color: $colorHover;
+                            }
+                        }             
 
                     }
 
-                    button {
-                        border: none;
-                        border-radius: 20%;
-                    }                
+                       
                 }
 
+            }
+            &_addButton {
+                width: auto;
+                margin: 40px auto;
+                @include Button2;
             }
         }
 
