@@ -11,7 +11,7 @@ function Header() {
     const [displayMenu, setDisplayMenu] = useState (false)
 
     function showMenu() {
-            setDisplayMenu(true)
+        setDisplayMenu(true)
     }
 
     function hideMenu() {
@@ -35,8 +35,6 @@ function Header() {
                     <Link to="/compagnie" className='header_nav_menu_item'><h2>COMPAGNIE</h2></Link>
                     <Link to="/actualite" className='header_nav_menu_item'><h2>ACTUALITÉ</h2></Link>
                     <Link to="/spectacles" className='header_nav_menu_item'><h2>SPECTACLES</h2></Link>
-                    <Link to="/equipe" className='header_nav_menu_item'><h2>ÉQUIPE</h2></Link>
-                    <Link to="/mediation" className='header_nav_menu_item'><h2>MÉDIATION</h2></Link>
                     <button className='header_nav_menu_item'>CONTACT</button>
                     <Link to="/edit" className='header_nav_menu_item'><p>EDIT</p></Link>
                 </div>

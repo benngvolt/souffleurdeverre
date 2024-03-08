@@ -128,9 +128,10 @@ exports.createProject = async (req, res) => {
     const residenciesList = JSON.parse(req.body.residenciesList);
     const showsList = JSON.parse(req.body.showsList);
   
+    const descriptionWithBr = req.body.description.replace(/(\r\n|\n|\r)/g, "<br>");
     // const projectDescriptionWithBr = projectData.description.replace(/(\r\n|\n|\r)/g, "<br>");
   
-    if (!projectData.title || !projectData.state) {
+    if (!projectData.title || !projectData.projectState) {
       return res.status(400).json({ error: 'Le champ "title" ou "state" est manquant dans la demande.' });
     }
   
@@ -139,7 +140,7 @@ exports.createProject = async (req, res) => {
         // Si toutes les images ont été traitées, créez une nouvelle instance du modèle Serie
         const project = new Project({
           ... projectData,
-          // description: projectDescriptionWithBr,
+          description: descriptionWithBr,
           artistsList: artistsList,
           productionList: productionList,
           pressList: pressList,
@@ -149,7 +150,7 @@ exports.createProject = async (req, res) => {
           images: images,
           pdfList: pdfList
         });
-  
+        console.log(project);
         await project.save();
         res.status(201).json({ message: 'Projet enregistrée !' });
       // }
@@ -170,6 +171,7 @@ exports.updateOneProject = async (req, res) => {
       // RÉCUPÉRATION DU PROJET CONCERNÉ VIA SON ID STOCKÉ EN PARAMÈTRES D'URL
       const project = await Project.findOne({ _id: req.params.id });
       const projectData = req.body;
+      const descriptionWithBr = req.body.description.replace(/(\r\n|\n|\r)/g, "<br>");
       // const images = req.newImagesObjects;
       const artistsList = JSON.parse(req.body.artistsList);
       const productionList = JSON.parse(req.body.productionList);
@@ -203,8 +205,13 @@ exports.updateOneProject = async (req, res) => {
       async function updateProject(updatedImages) {
         const updatedMainImageIndex = req.body.mainImageIndex || 0;
 
+        if (!projectData.title || !projectData.projectState) {
+          return res.status(400).json({ error: 'Le champ "title" ou "state" est manquant dans la demande.' });
+        }
+        
         const projectObject = {
           ...projectData,
+          description: descriptionWithBr,
           artistsList: artistsList,
           productionList: productionList,
           pressList: pressList,

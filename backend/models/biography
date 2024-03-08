@@ -6,7 +6,8 @@ const biographySchema = mongoose.Schema({
     name: {type: String, required: true},
     role: {type: String, required: true},
     field: {type: String, required: true},
-    biography: {type: String, required: true},
+    biography: {type: String, required: false},
+    linkUrl: {type: String, required: false},
     bioImageUrl: {type: String, required: true},
 });
 

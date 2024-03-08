@@ -1,4 +1,7 @@
+@import '../../utils/mixins';
+
 .dndItem {
+    position: relative;
 
     &_6 {
         &_item_0 {
@@ -138,14 +141,25 @@
     }
 
     &_image {
+        z-index: 1;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        
     }
+
     &_buttons {
-        z-index: 2;
+        position: absolute;
+        bottom: 0;
+        
         &_supprButton, &_isMainButton {
-            z-index: 1;
+            background-color: black;
+            border: none;
+            color: white;
+            z-index: 2;
+            &:hover {
+                cursor: pointer;
+            }
         }
         &_isMainButton {
             &--isWhite {

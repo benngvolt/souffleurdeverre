@@ -63,6 +63,7 @@ exports.deleteOneBiography = async (req, res) => {
 
 exports.createBiography = async (req, res) => {
 
+    const biographyWithBr = req.body.biography.replace(/(\r\n|\n|\r)/g, "<br>");
     const biographyData = req.body;
     const imageUrl = req.imageUrl;
     // const biographyWithBr = biographyData.biography.replace(/(\r\n|\n|\r)/g, "<br>");
@@ -77,7 +78,8 @@ exports.createBiography = async (req, res) => {
         // Si toutes les images ont été traitées, créez une nouvelle instance du modèle Serie
         const biography = new Biography({
           ... biographyData,
-        bioImageUrl: imageUrl,
+          biography: biographyWithBr,
+          bioImageUrl: imageUrl,
         });
   
         await biography.save();
@@ -117,8 +119,10 @@ exports.createBiography = async (req, res) => {
 
   exports.updateOneBiography = (req, res) => {
 
+    const biographyWithBr = req.body.biography.replace(/(\r\n|\n|\r)/g, "<br>");
     const biographyData = {
       ... req.body,
+      biography: biographyWithBr,
       bioImageUrl: req.imageUrl,
     }
 

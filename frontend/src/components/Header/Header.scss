@@ -9,20 +9,15 @@
 
     &:hover {
         cursor: pointer;
-    
-        #top-line {
-            animation: down-rotate 0.6s ease-out both;
+
+        svg {
+            animation: hide ease 0.5s forwards;
         }
-        #bottom-line {
-            animation: up-rotate 0.6s ease-out both;
-        }
-        #middle-line {
-            animation: hide 0.6s ease-out forwards;
-        }
+        
     }
 
     svg {
-        width: 120px;
+        width: auto;
         height: 60px;
     }
     
@@ -34,9 +29,10 @@
     }
 
     &_icon {
+        width: 40px;
         position: absolute;
         top: 8px;
-        left: 13px;
+        left: calc(50% - 20px);
         background: none;
         border: none;
 

@@ -6,7 +6,6 @@
     flex-direction: column;
     row-gap: 185px;
 
-
     &_buttons {
         width: auto;
         display: flex;
@@ -16,7 +15,15 @@
         justify-content: center;
 
         &_all, &_artists, &_admin {
-            @include Button;
+
+            &--notSelected {
+                @include Button;
+            }
+
+            &--selected {
+                @include Button;
+                background-color: $colorHover;
+            }
 
         }
     }

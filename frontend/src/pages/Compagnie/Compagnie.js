@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import Footer from '../../components/Footer/Footer'
 import BioCard from '../../components/BioCard/BioCard'
 import BioSheet from '../../components/BioSheet/BioSheet'
+import Equipe from '../../components/Equipe/Equipe'
 // import React, { useContext, useEffect } from 'react'
 // import { Context } from '../../utils/Context'
 // import { useNavigate } from 'react-router-dom'
@@ -60,16 +61,17 @@ function Compagnie() {
             <img src="assets/Julien_Rocha_Julien_Bruhat.jpg" alt="logo souffleur de verre" className='compagnieSection_image'/>
             <ul className='compagnieSection_biosList' >
                 <li className='compagnieSection_biosList_bioItem'>
-                        <BioCard biography={bioRocha} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
+                    <BioCard biography={bioRocha} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
                 </li>
                 <li className='compagnieSection_biosList_bioItem'>
-                        <BioCard biography={bioVeschambre} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
+                    <BioCard biography={bioVeschambre} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
                 </li>
             </ul>
             <div className={displayBioAside=== true ? 'compagnieSection_bioSheetContainer--displayOn' : 'compagnieSection_bioSheetContainer--displayOff'}>
                 <BioSheet biography={bioAside} closeBioAside={closeBioAside} />
             </div>
             <Link to="/equipe" className='compagnieSection_teamButton'><h2>+ COLLABS</h2></Link>
+            <Equipe/>
             <div className='compagnieSection_AA'>
                 <h3 className='compagnieSection_AA_title'>Artiste Associe</h3>
                 <p className='compagnieSection_AA_text'> La compagnie Le Souffleur de Verre a vu le jour en 2003 en Auvergne et est implantée à Clermont-Ferrand. Ces projets artistiques et ces envies de travail sur les territoires que compte la région Auvergne-Rhône-Aples l’a mené à s’impliquer dans le Puy-de-Dôme (8 ans de résidence dite « association », menant à la fois créations et projets de médiation artistique, en vue du développement des publics à Cournon d’Auvergne), en Haute-Loire (3 ans résidence de territoire avec la municipalité et les établissements scolaires et associatifs de Monistrol-sur-Loire), et la Loire (3 ans comme compagnie associée au projet d’Arnaud Meunier, directeur de La Comédie de Saint-Étienne – Centre Dramatique National et 5 ans comme membres de l’ensemble artistique).<br/>

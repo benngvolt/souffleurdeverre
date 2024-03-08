@@ -1,25 +1,21 @@
 import './Spectacles.scss'
 import { Link } from 'react-router-dom'
-import React, { useState, useEffect } from 'react'
-import { API_URL } from '../../utils/constants'
-// import { Context } from '../../utils/Context'
+import React, { useState, useEffect, useContext } from 'react'
+
+import { Context } from '../../utils/Context'
 // import { useNavigate } from 'react-router-dom'
 
  
 function Spectacles() {
 
-    const [projects, setProjects] = useState([]);
+    // const [projects, setProjects] = useState([]);
     const [sortedProjects, setSortedProjects] = useState([]);
+    const { projects } = useContext(Context);
 
     useEffect(() => {
-        fetch(`${API_URL}/api/projects`)
-            .then((res) => res.json())
-            .then((data) => {
-                setProjects(data);
-                setSortedProjects(data); // Assurez-vous que sortedProjects est initialisé avec les données chargées
-                console.log('Projets chargés');
-            })
-            .catch((error) => console.log(error.message));
+        
+        setSortedProjects(projects); // Assurez-vous que sortedProjects est initialisé avec les données chargées
+                
     }, []);
 
     function handleFilterProjects (state) {

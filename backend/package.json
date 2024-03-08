@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "env-cmd -f ./env/.env node server.js"
+    "start": "env-cmd -f ./env/.env nodemon server.js"
   },
   "author": "benjamin gibert",
   "license": "ISC",
@@ -13,7 +13,7 @@
     "@google-cloud/storage": "^7.3.1",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
-    "dompurify": "^3.0.6",
+    "dompurify": "^3.0.8",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^5.6.0",

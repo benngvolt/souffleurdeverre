@@ -5,6 +5,7 @@ const projectSchema = mongoose.Schema({
     title: {type: String, required: true},
     subtitle: {type: String, required: false},
     projectState: {type: String, required: false},
+    projectType: {type: String, required: true},
     duration: {type: String, required: false},
     creationDate: {type: String, required: false},
     description: {type: String, required: false},

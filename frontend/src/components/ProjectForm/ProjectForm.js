@@ -1,8 +1,10 @@
 import './ProjectForm.scss'
 import { API_URL } from '../../utils/constants'
-import {useRef, useState, useEffect } from 'react'
+import {useRef, useState, useEffect, useContext } from 'react'
+import { Context } from '../../utils/Context'
 import * as pdfjsLib from "pdfjs-dist/webpack"
 import { v4 as uuidv4 } from 'uuid'
+import DOMPurify from 'dompurify';
 import DNDGallery from '../../components/DNDGallery/DNDGallery'
 
 function ProjectForm({ 
@@ -29,9 +31,14 @@ function ProjectForm({
         setPdfFiles
     }) {
 
+    const { projectStates, projectTypes, handleLoadProjects } = useContext(Context);
+
+    console.log(projectEdit);
+
     const inputProjectTitleRef = useRef(null);
     const inputProjectSubtitleRef = useRef(null);
     const inputProjectStateRef = useRef(null);
+    const inputProjectTypeRef = useRef(null);
     const inputProjectDurationRef = useRef(null);
     const inputProjectCreationDateRef = useRef(null);
     const inputProjectDescriptionRef = useRef(null);
@@ -40,6 +47,39 @@ function ProjectForm({
     const inputProjectImageFileRef = useRef (null);
     const inputProjectPdfFileRef = useRef (null);
     const projectPdfSampleRef = useRef (null);
+
+    useEffect(() => {
+        if (projectFormMode === 'edit' && projectEdit) {
+            setProjectTitle(projectEdit.title);
+            setProjectSubtitle(projectEdit.subtitle);
+            setProjectState(projectEdit.projectState);
+            setProjectType(projectEdit.projectType);
+            setProjectDuration(projectEdit.duration);
+            setProjectCreationDate(projectEdit.creationDate);
+            setProjectDescription(cleanedDescription);
+            setProjectMoreInfos(projectEdit.moreInfos);
+        } else if (projectFormMode === 'add') {
+            setProjectTitle('');
+            setProjectSubtitle('');
+            setProjectState('');
+            setProjectType('');
+            setProjectDuration('');
+            setProjectCreationDate('');
+            setProjectDescription('');
+            setProjectMoreInfos('');
+        }
+    }, [projectFormMode, projectEdit]);
+
+    const cleanedDescription = DOMPurify.sanitize(projectEdit?.description);
+
+    const [projectTitle, setProjectTitle] = useState('')
+    const [projectSubtitle, setProjectSubtitle] = useState('')
+    const [projectState, setProjectState] = useState('')
+    const [projectType, setProjectType] = useState('')
+    const [projectDuration, setProjectDuration] = useState('')
+    const [projectCreationDate, setProjectCreationDate] = useState('')
+    const [projectDescription, setProjectDescription] = useState('')
+    const [projectMoreInfos, setProjectMoreInfos] = useState('')
 
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [newImage, setNewImage] = useState(null);
@@ -131,6 +171,7 @@ function ProjectForm({
         projectFormData.append('title', inputProjectTitleRef.current.value);
         projectFormData.append('subtitle', inputProjectSubtitleRef.current.value);
         projectFormData.append('projectState', inputProjectStateRef.current.value);
+        projectFormData.append('projectType', inputProjectTypeRef.current.value);
         projectFormData.append('creationDate', inputProjectCreationDateRef.current.value);
         projectFormData.append('duration', inputProjectDurationRef.current.value);
         projectFormData.append('description', inputProjectDescriptionRef.current.value);
@@ -142,8 +183,6 @@ function ProjectForm({
         projectFormData.append('videoList', JSON.stringify(videoList));
         projectFormData.append('residenciesList', JSON.stringify(residenciesList));
         projectFormData.append('showsList', JSON.stringify(showsList));
-
-        console.log (inputProjectStateRef.current.value);
         
         const newImageFiles = Array.from(imageFiles);
         const newPdfFiles = Array.from(pdfFiles);
@@ -216,6 +255,7 @@ function ProjectForm({
     }
     function closeForm() {
         setHandleDisplayProjectForm(false);
+        handleLoadProjects();
     }
 
     /* -----------------------
@@ -324,63 +364,78 @@ function ProjectForm({
     return  (      
         <form onSubmit={(event) => projectFormSubmit(event)} method="post" className='projectForm'>
 
-            <DNDGallery imageFiles={imageFiles} setImageFiles={setImageFiles} mainImageIndex={mainImageIndex} setMainImageIndex={setMainImageIndex} />
-            <div className='projectForm_projectImageFile'>
-                <p>IMAGES</p>
-                <label htmlFor='inputProjectImageFile'>{isImageLoaded ? 'CHANGER D\'IMAGE' : '+ AJOUTER UNE IMAGE'}</label>
-                <input type='file' id='inputProjectImageFile' name="images" ref={inputProjectImageFileRef} onChange={displaySample}></input>
-                <div  className="projectForm_projectImageFile_sampleContainer">
-                    <img id='imageSample' ref={projectMainImageSampleRef} src='' alt=''/>
-                    <div className={isImageLoaded ? "projectForm_projectImageFile_sampleContainer_buttonsSystem--displayOn" :  "projectForm_projectImageFile_sampleContainer_buttonsSystem--displayOff"}>
-                        <button aria-label="Ajouter l'image" onClick={handleAddImageFile} type="button">AJOUTER</button>
-                        <button aria-label="Annuler" onClick={cancelAddImageFile} type="button">ANNULER</button>
+            <div className='projectForm_projectImageField'>
+                <DNDGallery imageFiles={imageFiles} setImageFiles={setImageFiles} mainImageIndex={mainImageIndex} setMainImageIndex={setMainImageIndex} />
+                <div className='projectForm_projectImageField_imageFile'>
+                    <label htmlFor='inputProjectImageFile'>{isImageLoaded ? 'CHANGER D\'IMAGE' : '+ AJOUTER UNE IMAGE'}</label>
+                    <input type='file' id='inputProjectImageFile' name="images" ref={inputProjectImageFileRef} onChange={displaySample} style={{ display: 'none' }}></input>
+                    <div  className="projectForm_projectImageField_imageFile_sampleContainer">
+                        <img id='imageSample' ref={projectMainImageSampleRef} src='' alt=''/>
+                        <div className={isImageLoaded ? "projectForm_projectImageField_imageFile_sampleContainer_buttonsSystem--displayOn" :  "projectForm_projectImageField_imageFile_sampleContainer_buttonsSystem--displayOff"}>
+                            <button aria-label="Ajouter l'image" onClick={handleAddImageFile} type="button">AJOUTER</button>
+                            <button aria-label="Annuler" onClick={cancelAddImageFile} type="button">ANNULER</button>
+                        </div>
                     </div>
                 </div>
             </div>
-
+            
             <div className='projectForm_projectTitle'>
                 <label htmlFor='inputProjectTitle'>TITRE*</label>
-                <input type='text' id='inputProjectTitle' ref={inputProjectTitleRef} defaultValue={projectFormMode==='edit'? projectEdit.title : null}></input>
+                <input type='text' id='inputProjectTitle' ref={inputProjectTitleRef} value={projectTitle} onChange={(e) =>setProjectTitle(e.target.value)}></input>
             </div>
             <div className='projectForm_projectSubtitle'>
                 <label htmlFor='inputProjectSubtitle'>SOUS-TITRE</label>
-                <input type='text' id='inputProjectSubtitle' ref={inputProjectSubtitleRef} defaultValue={projectFormMode==='edit'? projectEdit.subtitle : null}></input>
+                <input type='text' id='inputProjectSubtitle' ref={inputProjectSubtitleRef} value={projectSubtitle} onChange={(e) =>setProjectSubtitle(e.target.value)}></input>
             </div>
             <div className='projectForm_projectState'>
                 <label htmlFor='inputProjectState'>ÉTAT*</label>
                 <select id='inputProjectState' 
                         ref={inputProjectStateRef} 
                         name="projectState"
-                        defaultValue={projectFormMode==='edit'? projectEdit.projectState : ""}>
+                        value={projectState}
+                        onChange={(e) =>setProjectState(e.target.value)}>
                     <option value=""></option>
-                    <option value="en création">En création</option>
-                    <option value="en tournée">En tournée</option>
-                    <option value="archivé">Archivé</option>
+                    {projectStates.map((projectState)=>(
+                        <option value={projectState}>{projectState}</option>
+                    ))}
+                </select>
+            </div>
+            <div className='projectForm_projectType'>
+                <label htmlFor='inputProjectType'>TYPE DE PROJET*</label>
+                <select id='inputProjectType' 
+                        ref={inputProjectTypeRef} 
+                        name="projectType"
+                        value={projectType}
+                        onChange={(e) =>setProjectType(e.target.value)}>
+                    <option value=""></option>
+                    {projectTypes.map((projectType)=>(
+                        <option value={projectType}>{projectType}</option>
+                    ))}
                 </select>
             </div>
             <div className='projectForm_projectDuration'>
                 <label htmlFor='inputProjectDuration'>DURÉE</label>
-                <input type='text' id='inputProjectDuration' ref={inputProjectDurationRef} defaultValue={projectFormMode==='edit'? projectEdit.duration : null}></input>
+                <input type='text' id='inputProjectDuration' ref={inputProjectDurationRef} value={projectDuration} onChange={(e) =>setProjectDuration(e.target.value)}></input>
             </div>
             <div className='projectForm_projectCreationDate'>
                 <label htmlFor='inputProjectCreationDate'>DATE DE CRÉATION</label>
-                <input type='text' id='inputProjectCreationDate' ref={inputProjectCreationDateRef} defaultValue={projectFormMode==='edit'? projectEdit.creationDate : null}></input>
+                <input type='text' id='inputProjectCreationDate' ref={inputProjectCreationDateRef} value={projectCreationDate} onChange={(e) =>setProjectCreationDate(e.target.value)}></input>
             </div>
             <div className='projectForm_projectDescription'>
                 <label htmlFor='inputProjectDescription'>DESCRIPTION</label>
-                <input type='textarea' id='inputProjectDescription' ref={inputProjectDescriptionRef} defaultValue={projectFormMode==='edit'? projectEdit.description : null}></input>
+                <textarea type='textarea' id='inputProjectDescription' ref={inputProjectDescriptionRef} value={projectDescription?.replace(/<br>/g, "\n")} onChange={(e) =>setProjectDescription(e.target.value)}></textarea>
             </div>
             <div className='projectForm_projectMoreInfos'>
                 <label htmlFor='inputProjectMoreInfos'>PLUS D'INFOS</label>
-                <input type='text' id='inputProjectMoreInfos' ref={inputProjectMoreInfosRef} defaultValue={projectFormMode==='edit'? projectEdit.moreInfos : null}></input>
+                <input type='text' id='inputProjectMoreInfos' ref={inputProjectMoreInfosRef} value={projectMoreInfos} onChange={(e) =>setProjectMoreInfos(e.target.value)}></input>
             </div>
-
+            
             {/* -----CRÉATION D'UN TABLEAU D'OBJETS  */}
 
             <div className='projectForm_projectArtistsList'>
                 <p> ARTISTES </p>
                 {artistsList.map((artist, index) => (
-                    <div key={index}>
+                    <div key={index} className='projectForm_projectArtistsList_line'>
                         <div>
                             <label htmlFor={`inputProjectArtistFunction${index}`}>FONCTION</label>
                             <input
@@ -413,12 +468,10 @@ function ProjectForm({
                 <button type='button' onClick={() =>handleAddArtist()} >+ AJOUTER UN ARTISTE</button>
             </div>
 
-
-
             <div className='projectForm_projectProductionList'>
                 <p> PRODUCTION </p>
                 {productionList.map((production, index) => (
-                    <div key={index}>
+                    <div key={index} className='projectForm_projectProductionList_line'>
                         <div>
                             <label htmlFor={`inputProjectProductionFunction${index}`}>FONCTION</label>
                             <input
@@ -454,7 +507,7 @@ function ProjectForm({
             <div className='projectForm_projectPressList'>
                 <p> PRESSE </p>
                 {pressList.map((press, index) => (
-                    <div key={index}>
+                    <div key={index} className='projectForm_projectPressList_line'>
                         <div>
                             <label htmlFor={`inputProjectPressQuote${index}`}>EXTRAIT</label>
                             <input
@@ -490,7 +543,7 @@ function ProjectForm({
             <div className='projectForm_projectVideoList'>
                 <p> EXTRAITS VIDEO </p>
                 {videoList.map((video, index) => (
-                    <div key={index}>
+                    <div key={index} className='projectForm_projectVideoList_line'>
                         <div>
                             <label htmlFor={`inputProjectVideoName${index}`}>NOM DE LA VIDEO</label>
                             <input
@@ -526,7 +579,7 @@ function ProjectForm({
             <div className='projectForm_projectResidenciesList'>
                 <p> RÉSIDENCES </p>
                 {residenciesList.map((residency, index) => (
-                    <div key={index}>
+                    <div key={index} className='projectForm_projectResidenciesList_line'>
                         <div>
                             <label htmlFor={`inputProjectResidencyType${index}`}>TYPE DE RÉSIDENCE</label>
                             <select value={residency.residencyType}
@@ -590,7 +643,6 @@ function ProjectForm({
                                 }}
                             ></input>
                         </div>
-                        
                         <button type='button' onClick={() => handleSupprResidency(index)}>SUPPRIMER</button>
                     </div>              
                 ))}
@@ -600,11 +652,11 @@ function ProjectForm({
             <div className='projectForm_projectResidenciesList'>
                 <p> REPRÉSENTATIONS </p>
                 {showsList.map((show, index) => (
-                    <div key={index}>
+                    <div key={index} className='projectForm_projectResidenciesList_line'>
                         <div>
                             <label htmlFor={`inputProjectShowDates${index}`}>DATES DE REPRÉSENTATION</label>
                             <input
-                                type='text'
+                                type='datetime-local'
                                 id={`inputProjectShowDates${index}`}
                                 value={show.dates}
                                 onChange={(e) => {
@@ -663,7 +715,7 @@ function ProjectForm({
             <div className='projectForm_projectPdfFile'>
                 <p>DOSSIERS</p>
                 {pdfFiles.map((pdf, index) => ( 
-                    <div>
+                    <div className='projectForm_projectPdfFile'>
                         <img id='imageSample' src={pdf.pdfLink} alt=''/>
                         <label htmlFor='inputProjectPdfName'>NOM DU PDF</label>
                         <input 

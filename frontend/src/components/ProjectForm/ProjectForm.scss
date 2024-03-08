@@ -1,27 +1,114 @@
+@import '../../utils/mixins';
+
 .projectForm {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    row-gap: 9px;
     width: 60%;
-    height: 1000px;
+    overflow: scroll;
     margin: auto;
     background-color: white;
-    overflow-y: scroll;
 
-    &_projectImageFile {
-
-        &_sampleContainer {
-
-            img {
-                width: 200px;
+    &_projectImageField {
+        display: flex;
+        flex-direction: column;
+        row-gap: 98px;
+        width: 60%;
+        margin: 54px auto;
+        &_imageFile {
+            margin: auto;
+            label {
+                margin: auto;
             }
-
-            &_buttonsSystem {
-
-                &--displayOff{
-                    display: none;
+            &_sampleContainer {
+                
+                img {
+                    width: 200px;
                 }
-                &--displayOn {
-                    display: flex;
+
+                &_buttonsSystem {
+
+                    &--displayOff{
+                        display: none;
+                    }
+                    &--displayOn {
+                        display: flex;
+
+                        button {
+                            font-family: 'MainFont_light';
+                            background: none;
+                            border: none;
+                            font-size: 19px;
+                        }
+                    }
                 }
             }
         }
     }
+
+    &_projectTitle, 
+    &_projectSubtitle, 
+    &_projectState, 
+    &_projectDuration, 
+    &_projectCreationDate, 
+    &_projectDescription, 
+    &_projectMoreInfos {
+
+        width: 60%;
+        margin: auto;
+        display: flex;
+        flex-direction: row;
+        column-gap: 19px;
+        label {
+            width: 50%;
+        }
+        input, select {
+            width: 50%;
+            border: none;
+            background-color: $colorHover;
+        }
+    }
+
+    &_projectArtistsList,
+    &_projectProductionList,
+    &_projectPressList,
+    &_projectVideoList,
+    &_projectResidenciesList,
+    &_projectPdfFile {
+
+        width: 60%;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        row-gap: 19px;
+
+        input, select {
+            width: 40%;
+            border: none;
+            background-color: $colorHover;
+        }
+
+        &_line {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            column-gap: 9px;
+            input {
+                width: 60%;
+            }
+
+            div {
+                display: flex;
+                flex-direction: row;
+                column-gap: 9px;
+            }
+
+            button {
+                background: none;
+                border: none;
+            }
+        }
+    }
+
 }

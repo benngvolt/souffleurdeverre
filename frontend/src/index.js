@@ -8,8 +8,6 @@ import Compagnie from './pages/Compagnie/Compagnie';
 import Actualite from './pages/Actualite/Actualite';
 import Spectacles from './pages/Spectacles/Spectacles';
 import OneSpectacle from './pages/OneSpectacle/OneSpectacle';
-import Mediation from './pages/Mediation/Mediation';
-import Equipe from './pages/Equipe/Equipe';
 import Edit from './pages/Edit/Edit';
 import Header from './components/Header/Header';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
@@ -26,8 +24,6 @@ root.render(
           <Route path="/actualite" element={<Actualite/>} />
           <Route path="/spectacles" element={<Spectacles/>} />
           <Route path="/spectacles/:id" element={<OneSpectacle/>} />
-          <Route path="/mediation" element={<Mediation/>} />
-          <Route path="/equipe" element={<Equipe/>} />
           <Route path="/edit" element={<Edit/>} />
         </Routes>
       </Router>

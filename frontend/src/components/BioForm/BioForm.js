@@ -1,23 +1,54 @@
 import './BioForm.scss'
 import { API_URL } from '../../utils/constants'
 // import { Link } from 'react-router-dom'
-import {useRef, useState } from 'react'
-// import { Context } from '../../utils/Context'
+import {useRef, useEffect, useState, useContext } from 'react'
+import { Context } from '../../utils/Context'
+import DOMPurify from 'dompurify';
 // import { useNavigate } from 'react-router-dom'
 
  
-function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm}) {
+function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDisplayBioForm}) {
+
+    const { bioFields, handleLoadBiographies } = useContext(Context);
 
     const inputSurnameRef = useRef(null);
     const inputNameRef = useRef(null);
     const inputRoleRef = useRef(null);
+    const inputLinkUrlRef = useRef(null);
     const inputBioRef = useRef(null);
     const inputBioImageFileRef = useRef(null);
     const inputFieldRef = useRef(null);
     const bioImageSampleRef = useRef (null);
 
+    const cleanedBiography = DOMPurify.sanitize(biographyEdit?.biography);
+
     const [isImageLoaded, setIsImageLoaded] = useState(false);
 
+    const [bioSurname, setBioSurname] = useState(bioFormMode === 'edit' ? biographyEdit.surname : '');
+    const [bioName, setBioName] = useState(bioFormMode === 'edit' ? biographyEdit.name : '');
+    const [bioRole, setBioRole] = useState(bioFormMode === 'edit' ? biographyEdit.role : '');
+    const [bioField, setBioField] = useState(bioFormMode === 'edit' ? biographyEdit.field : '');
+    const [bioLinkUrl, setBioLinkUrl] = useState(bioFormMode === 'edit' ? biographyEdit.linkUrl : '');
+    const [bioBiography, setBioBiography] = useState(bioFormMode === 'edit' ? cleanedBiography : '');
+
+    // Réinitialisation des valuers input lorsque le formulaire s'ouvre / se ferme.
+    useEffect(() => {
+        if (bioFormMode === 'edit') {
+            setBioSurname(biographyEdit.surname);
+            setBioName(biographyEdit.name);
+            setBioRole(biographyEdit.role);
+            setBioField(biographyEdit.field);
+            setBioLinkUrl(biographyEdit.linkUrl);
+            setBioBiography(biographyEdit.biography);
+        } else {
+            setBioSurname('');
+            setBioName('');
+            setBioRole('');
+            setBioField('');
+            setBioLinkUrl('');
+            setBioBiography('');
+        }
+      }, [bioFormMode, handleDisplayBioForm]);
 
     function bioFormSubmit(event) {
         event.preventDefault();
@@ -28,6 +59,7 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm}) {
         bioFormData.append('surname', inputSurnameRef.current.value);
         bioFormData.append('name', inputNameRef.current.value);
         bioFormData.append('role', inputRoleRef.current.value);
+        bioFormData.append('linkUrl', inputLinkUrlRef.current.value);
         bioFormData.append('biography', inputBioRef.current.value);
         bioFormData.append('field', inputFieldRef.current.value);
         
@@ -92,20 +124,9 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm}) {
         }
     }
 
-    // function resetFields() {
-    //     inputBioImageFileRef.current.value = null;
-    //     inputSurnameRef.current.value = null;
-    //     inputNameRef.current.value = null;
-    //     inputRoleRef.current.value = null;
-    //     inputBioRef.current.value = null;
-    //     inputFieldRef.current.value = null;
-    //     bioImageSampleRef.current.setAttribute("src", "");
-    //     bioImageSampleRef.current.setAttribute("alt", "");
-    //     bioImageSampleRef.current.setAttribute("class", "bioForm_sampleContainer_img--displayOff");
-    // }
-
     function closeForm() {
         setHandleDisplayBioForm(false);
+        handleLoadBiographies();
     }
 
     return  (    
@@ -120,27 +141,33 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm}) {
                 <input type='file' id='inputBioImageFile' name="image" ref={inputBioImageFileRef} onChange={displaySample}></input>
             </div>
             <div className='bioForm_surname'>
-                <label htmlFor='inputSurname'>NOM</label>
-                <input type='text' id='inputSurname' ref={inputSurnameRef} defaultValue={bioFormMode==='edit'? biographyEdit.surname : null}></input>
+                <label htmlFor='inputSurname'>NOM*</label>
+                <input type='text' id='inputSurname' ref={inputSurnameRef} value={bioSurname} onChange={(e) =>setBioSurname(e.target.value)}></input>
             </div>
             <div className='bioForm_name'>
-                <label htmlFor='inputName'>PRENOM</label>
-                <input type='text' id='inputName' ref={inputNameRef} defaultValue={bioFormMode==='edit'? biographyEdit.name : null}></input>
+                <label htmlFor='inputName'>PRENOM*</label>
+                <input type='text' id='inputName' ref={inputNameRef} value={bioName} onChange={(e) =>setBioName(e.target.value)}></input>
             </div>
             <div className='bioForm_role'>
-                <label htmlFor='inputRole'>ROLE</label>
-                <input type='text' id='inputRole' ref={inputRoleRef} defaultValue={bioFormMode==='edit'? biographyEdit.role : null}></input>
+                <label htmlFor='inputRole'>ROLE*</label>
+                <input type='text' id='inputRole' ref={inputRoleRef} value={bioRole} onChange={(e) =>setBioRole(e.target.value)}></input>
             </div>
             <div className='bioForm_field'>
-                <label htmlFor='inputField'>CHAMPS</label>
-                <select id='inputField' ref={inputFieldRef} name="field" defaultValue={bioFormMode==='edit'? biographyEdit.field : 'artiste'} >
-                    <option value="artiste">Artiste</option>
-                    <option value="administration">Administration</option>
+                <label htmlFor='inputField'>CHAMPS*</label>
+                <select id='inputField' ref={inputFieldRef} name="field" value={bioField} onChange={(e) =>setBioField(e.target.value)}>
+                    <option value=''></option>
+                    {bioFields.map((bioField)=>(
+                        <option value={bioField}>{bioField}</option>
+                    ))}
                 </select>
+            </div>
+            <div className='bioForm_linkUrl'>
+                <label htmlFor='inputLinkUrl'>LIEN URL</label>
+                <input type='text' id='inputLinkUrl' ref={inputLinkUrlRef} value={bioLinkUrl} onChange={(e) =>setBioLinkUrl(e.target.value)}></input>
             </div>
             <div className='bioForm_bio'>
                 <label htmlFor='inputBio'>BIOGRAPHIE</label>
-                <input type='textarea' id='inputBio' ref={inputBioRef} defaultValue={bioFormMode==='edit'? biographyEdit.biography : null}></input>
+                <textarea type='textarea' id='inputBio' ref={inputBioRef} value={bioBiography?.replace(/<br>/g, "\n")} onChange={(e) =>setBioBiography(e.target.value)}></textarea>
             </div>
             <div className='bioForm_buttons'>
                 <button type='submit'>VALIDER</button>

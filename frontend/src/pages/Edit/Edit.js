@@ -3,9 +3,8 @@ import BioForm from '../../components/BioForm/BioForm'
 import ConfirmBox from '../../components/ConfirmBox/ConfirmBox'
 import ProjectForm from '../../components/ProjectForm/ProjectForm'
 import { API_URL } from '../../utils/constants'
-import React, { useEffect, useState } from 'react'
-
-/*-----REFACT OK!-----*/
+import { Context } from '../../utils/Context'
+import React, { useEffect, useState, useContext } from 'react'
 
 function Edit() {
 
@@ -16,14 +15,12 @@ function Edit() {
     const [bioToDelete, setBioToDelete] = useState('');
 
     /*----- CONST BIOS ----*/
-    const [biographies, setBiographies] = useState([]);
     const [bioFormMode, setBioFormMode] = useState('add');
     const [biographyEdit, setBiographyEdit] = useState(null);
     const [handleDisplayBioForm, setHandleDisplayBioForm] = useState(false);
     const [mainImageIndex, setMainImageIndex]= useState(0);
 
     /*----- CONST PROJECTS ----*/
-    const [projects, setProjects] = useState([]);
     const [projectFormMode, setProjectFormMode] = useState('add');
     const [projectEdit, setProjectEdit] = useState('');
     const [handleDisplayProjectForm, setHandleDisplayProjectForm] = useState(false);
@@ -38,27 +35,7 @@ function Edit() {
     const [imageFiles, setImageFiles] = useState([]);
     const [pdfFiles, setPdfFiles]= useState([]);
 
-    /*----------------------------------------------
-    ---------- GET ----- BIO /PROJECT -------------
-    ----------------------------------------------*/
-
-    useEffect(() => {
-        fetch(`${API_URL}/api/biographies`)
-        .then((res) => res.json())
-        .then((data) => setBiographies(data),
-            console.log('biographies chargés'),
-        )
-        .catch((error)=>console.log(error.message))
-    },[handleDisplayBioForm, confirmBoxState]);
-
-    useEffect(() => {
-        fetch(`${API_URL}/api/projects`)
-        .then((res) => res.json())
-        .then((data) => setProjects(data),
-            console.log('travaux chargés'),
-        )
-        .catch((error)=>console.log(error.message))
-    },[handleDisplayProjectForm, confirmBoxState]);
+    const { projects, biographies, handleLoadBiographies, handleLoadProjects } = useContext(Context);
 
     /*-------------------------------------
     ---------- CONFIRMBOX -----------------
@@ -97,6 +74,7 @@ function Edit() {
             }
             setHandleDisplayBioForm(false);
             setConfirmBoxState (false);
+            handleLoadBiographies();
         })
         .catch((error) => console.log(error.message))
     }
@@ -115,6 +93,7 @@ function Edit() {
             }
             setHandleDisplayProjectForm(false);
             setConfirmBoxState (false);
+            handleLoadProjects();
         })
         .catch ((error)=>console.log(error.message))
     }
@@ -154,14 +133,14 @@ function Edit() {
 
     async function editProject(project) {
         // await setImageFiles(project.images);
+        setProjectFormMode('edit');
+        setProjectEdit(project);
         setArtistsList(project.artistsList);
         setProductionList(project.productionList);
         setPressList(project.pressList);
         setVideoList(project.videoList)
         setResidenciesList(project.residenciesList);
         setShowsList(project.showsList);
-        setProjectEdit(project);
-        setProjectFormMode('edit');
         setHandleDisplayProjectForm(true);
         setImageFiles(project.images);
         setPdfFiles(project.pdfList);
@@ -232,6 +211,7 @@ function Edit() {
                     biographyEdit={biographyEdit} 
                     bioFormMode={bioFormMode}
                     setHandleDisplayBioForm = {setHandleDisplayBioForm}
+                    handleDisplayBioForm={handleDisplayBioForm}
                 />
             </div>
             <ConfirmBox 

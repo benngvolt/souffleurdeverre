@@ -5,8 +5,11 @@ import './BioSheet.scss'
 // import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faXmark } from '@fortawesome/free-solid-svg-icons'
+import DOMPurify from 'dompurify';
 
 function BioSheet({biography, closeBioAside}) {
+
+    const cleanedBiography = DOMPurify.sanitize(biography.biography);
 
     return  (      
         <aside className='biosheetAside'>
@@ -15,7 +18,9 @@ function BioSheet({biography, closeBioAside}) {
                 <div className='biosheetAside_mainContainer_texts'>
                     <p className='biosheetAside_mainContainer_texts_name'>{biography.name} {biography.surname}</p>
                     <p className='biosheetAside_mainContainer_texts_role'>{biography.role}</p>
-                    <p className='biosheetAside_mainContainer_texts_bio'>{biography.biography}</p>
+                    {cleanedBiography &&
+                    <p className='biosheetAside_mainContainer_texts_bio' dangerouslySetInnerHTML={{__html:cleanedBiography}}></p>
+                    }
                 </div>
             </div>  
             <button className='biosheetAside_button' type='button' onClick={()=>closeBioAside()}>

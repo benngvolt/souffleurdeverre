@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { API_URL } from '../../utils/constants'
 // import { Context } from '../../utils/Context'
 import { useParams } from 'react-router-dom'
+import DOMPurify from 'dompurify';
 
  
 function OneSpectacle() {
@@ -11,7 +12,8 @@ function OneSpectacle() {
     const [project, setProject] = useState([]);
     // const [sortedProjects, setSortedProjects] = useState([]);
     const { id } = useParams();
-   
+
+    const cleanedDescription = DOMPurify.sanitize(project.description);
     
     useEffect(() => {
         fetch(`${API_URL}/api/projects/${id}`)
@@ -28,7 +30,7 @@ function OneSpectacle() {
             <div className='oneSpectacle_mainDatas'>
                 <p className='oneSpectacle_mainDatas_title'>{project.title}</p>
                 <p className='oneSpectacle_mainDatas_subtitle'>{project.subtitle}</p>
-                <p className='oneSpectacle_mainDatas_description'>{project.description}</p>
+                <p className='oneSpectacle_mainDatas_description' dangerouslySetInnerHTML={{__html:cleanedDescription}}></p>
                 <p className='oneSpectacle_mainDatas_duration'>durée {project.duration}</p>
                 <p className='oneSpectacle_mainDatas_creationDate'> date de création {project.creationDate}</p>
                 <div className='oneSpectacle_mainDatas_teamList'>

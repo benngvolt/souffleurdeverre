@@ -1,9 +1,11 @@
+@import '../../utils/mixins';
+
 .projectForm {
     &_DNDGallery {
-
+        
         &_overlayImage {
             opacity: 0.5;
-            width: 180px;
+            width: auto;
             height: 120px;        
         }
 
@@ -39,8 +41,6 @@
                 margin: 10px auto;
                 
                 button {
-
-                    
                     font-size: 18px;
                     border: none;
                     background: none;
