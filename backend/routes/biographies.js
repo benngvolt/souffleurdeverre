@@ -2,6 +2,7 @@ const express = require ('express');
 const router = express.Router();
 const biographiesCtrl = require ('../controllers/biographies');
 const multer = require('../middlewares/multer-config');
+const deleteBiographyImageFiles = require('../middlewares/deleteImages').deleteBiographyImageFiles;
 // const auth = require('../middlewares/auth');
 // const uploadImages = require('../middlewares/uploadImages').uploadImages;
 const uploadImage = require('../middlewares/uploadImages').uploadImage;
@@ -13,12 +14,22 @@ const uploadImage = require('../middlewares/uploadImages').uploadImage;
 // Dans cet exemple, il envoie une réponse JSON contenant le message "Votre requête a bien été reçue !" à chaque requête entrante.
 // l'argument next permet de passer au middleware suivant
 
-router.post('/', multer.single('image'), uploadImage, biographiesCtrl.createBiography);
-router.get('/', biographiesCtrl.getAllBiographies);
-router.get('/:id', biographiesCtrl.getOneBiography);
-router.delete ('/:id', 
-// auth, 
-biographiesCtrl.deleteOneBiography);
-router.put ('/:id', multer.single('image'), uploadImage, biographiesCtrl.updateOneBiography);
+router.post('/', 
+    multer.single('image'), 
+    uploadImage, 
+    biographiesCtrl.createBiography);
+router.get('/', 
+    biographiesCtrl.getAllBiographies);
+router.get('/:id', 
+    biographiesCtrl.getOneBiography);
+router.delete ('/:id',
+    // auth, 
+    biographiesCtrl.deleteOneBiography,
+    deleteBiographyImageFiles);
+router.put ('/:id', 
+    multer.single('image'), 
+    uploadImage, 
+    biographiesCtrl.updateOneBiography,
+    deleteBiographyImageFiles);
 
 module.exports = router;

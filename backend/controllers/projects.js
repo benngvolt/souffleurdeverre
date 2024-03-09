@@ -21,78 +21,12 @@ exports.getOneProject = (req, res) => {
     .catch (error => res.status (400).json({error}))
 }
 
-/*------------------------------------------------------------
------ SUPPRESSION DES IMAGES NON UTILISÉES DANS LE CLOUD -----
-------------------------------------------------------------*/
-    
-async function deleteImageFiles(req, imageUrls, pdfLinks) {
-  // Obtenez la liste des URLs des images depuis Google Cloud Storage
-  
-  async function getCloudImageUrls() {
-    const [imagesFiles] = await bucket.getFiles();
-    return imagesFiles.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
-  }
-
-  async function getCloudPdfLinks() {
-    const [pdfFiles] = await bucket.getFiles({
-      prefix: 'pdfList/',
-    });
-    return pdfFiles.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
-  } 
-
-  try {
-    const [cloudImageUrls] = await Promise.all([getCloudImageUrls(), imageUrls]);
-    const [cloudPdfLinks] = await Promise.all([getCloudPdfLinks(), pdfLinks]);
-    const dbImageUrls = new Set(imageUrls);
-    const dbPdfLinks = new Set(pdfLinks);
-    const imagesToDelete = cloudImageUrls.filter((url) => !dbImageUrls.has(url));
-    const pdfToDelete = cloudPdfLinks.filter((url) => !dbPdfLinks.has(url));
-
-    const deleteImagesPromises = imagesToDelete.map(async (imageUrl) => {
-      const parts = imageUrl.split('/');
-      const fileToDeleteName = parts.pop();
-      if (fileToDeleteName) {
-        const fileToDelete = bucket.file(fileToDeleteName);
-        const [exists] = await fileToDelete.exists();
-        if (exists) {
-          try {
-            await fileToDelete.delete();
-          } catch (error) {
-            console.error(`Erreur lors de la suppression de ${fileToDeleteName}: ${error.message}`);
-          }
-        }
-      }
-    });
-
-    const deletePdfPromises = pdfToDelete.map(async (pdfLink) => {
-      const parts = pdfLink.split('/');
-      const fileToDeleteName = parts.pop();
-      if (fileToDeleteName) {
-        const fileToDelete = bucket.file(`pdfList/${fileToDeleteName}`);
-        const [exists] = await fileToDelete.exists();
-        if (exists) {
-          try {
-            await fileToDelete.delete();
-          } catch (error) {
-            console.error(`Erreur lors de la suppression de ${fileToDeleteName}: ${error.message}`);
-          }
-        }
-      }
-    });
-
-    await Promise.all([...deleteImagesPromises, ...deletePdfPromises]);
-
-
-  } catch (error) {
-    console.error(error.message);
-  }
-}
 
 /*--------------------------
 ----- DELETE ONE PROJECT -----
 --------------------------*/
 
-exports.deleteOneProject = async (req, res) => {
+exports.deleteOneProject = async (req, res, next) => {
   try {
     const deletedProject = await Project.findOneAndDelete({ _id: req.params.id });
     if (!deletedProject) {
@@ -102,9 +36,8 @@ exports.deleteOneProject = async (req, res) => {
     const imageUrls = projects.flatMap((project) => project.images.map((image) => image.imageUrl));
     const pdfLinks = projects.flatMap((project) => project.pdfList.map((pdf) => pdf.pdfLink));
     // Appeler la fonction de suppression d'images après avoir supprimé la série
-    await deleteImageFiles(req, imageUrls, pdfLinks);
-    
     res.status(200).json({ message: 'Projet supprimé !' });
+    next();
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erreur lors de la suppression du projet' });
@@ -150,7 +83,6 @@ exports.createProject = async (req, res) => {
           images: images,
           pdfList: pdfList
         });
-        console.log(project);
         await project.save();
         res.status(201).json({ message: 'Projet enregistrée !' });
       // }
@@ -164,7 +96,7 @@ exports.createProject = async (req, res) => {
 ----- UPDATE ONE PROJECT -----
 --------------------------*/
 
-exports.updateOneProject = async (req, res) => {
+exports.updateOneProject = async (req, res, next) => {
 
     // MODIFICATION DU PROJET
     try {
@@ -226,6 +158,7 @@ exports.updateOneProject = async (req, res) => {
         await Project.updateOne({ _id: req.params.id }, projectObject);
         console.log('Project updated successfully');
         res.status(200).json({ message: 'Projet modifiée' });
+        next();
         // À ce stade, vous pouvez appeler d'autres fonctions si nécessaire
       }
   

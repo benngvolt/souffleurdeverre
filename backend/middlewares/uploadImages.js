@@ -31,7 +31,7 @@ function uploadImages(req, res, next) {
             .toBuffer();
     
           // Créez un blob dans le stockage Google Cloud Storage
-          const blob = bucket.file('project_images/'+originalname);
+          const blob = bucket.file('projects_images/' + originalname);
           const blobStream = blob.createWriteStream({
             resumable: false
           });
@@ -105,7 +105,6 @@ function uploadImages(req, res, next) {
           });
   
           blobStream.on('finish', () => {
-            console.log('étape ok');
             const publicUrl = format(
               `https://storage.googleapis.com/${bucket.name}/${blob.name}`
             );
@@ -124,9 +123,6 @@ function uploadImages(req, res, next) {
                 pdfName: pdfName[index],
               });
             }
-
-            console.log(newPdfsObjects);
-  
             // Continuer avec la prochaine promesse
             resolve(publicUrl);
           }).on('error', () => {
@@ -173,7 +169,7 @@ function uploadImages(req, res, next) {
           .toBuffer()
           .then((resizedImageBuffer) => {
             // Créez un blob dans le stockage Google Cloud Storage
-            const blob = bucket.file('project_images/' + originalname);
+            const blob = bucket.file('biographies_images/' + originalname);
             const blobStream = blob.createWriteStream({
               resumable: false
             });
