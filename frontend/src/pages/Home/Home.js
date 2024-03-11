@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom'
 // import React, { useContext, useEffect } from 'react'
 // import { Context } from '../../utils/Context'
 // import { useNavigate } from 'react-router-dom'
+import facebookLogo from '../../assets/facebook_black.png'
+import xLogo from '../../assets/x_black.png'
+import youtubeLogo from '../../assets/youtube_black.png'
+import instagramLogo from '../../assets/instagram_black.png'
+import logoSouffleur from '../../assets/logoSouffleur.svg'
 
  
 function Home() {
@@ -10,7 +15,7 @@ function Home() {
     return  (      
         <section className='home'>
             <div className='home_title'>
-                <img className='home_title_logo' src="assets/logoSouffleur.svg" alt="logo souffleur de verre"/>
+                <img className='home_title_logo' src={logoSouffleur} alt="logo souffleur de verre"/>
                 <h1 className='home_title_text'> LE SOUFFLEUR DE VERRE</h1>
             </div>
             <nav className='home_nav'>
@@ -25,16 +30,16 @@ function Home() {
                 </div> */}
                 <div className='home_nav_socials'>
                     <a href="https://www.facebook.com" target="_blank" rel="noreferrer" className='home_nav_socials_item'>
-                        <img src="assets/facebook_black.png" alt="lien facebook"/>
+                        <img src={facebookLogo} alt="lien facebook"/>
                     </a>
                     <a href="https://www.twitter.com" target="_blank" rel="noreferrer" className='home_nav_socials_item'>
-                        <img src="assets/x_black.png" alt="lien x"/>
+                        <img src={xLogo} alt="lien x"/>
                     </a>
                     <a href="https://www.youtube.com" target="_blank" rel="noreferrer" className='home_nav_socials_item'>
-                        <img src="assets/youtube_black.png" alt="lien youtube"/>
+                        <img src={youtubeLogo} alt="lien youtube"/>
                     </a>
                     <a href="https://www.instagram.com" target="_blank" rel="noreferrer" className='home_nav_socials_item'>
-                        <img src="assets/instagram_black.png" alt="lien instagram"/>
+                        <img src={instagramLogo} alt="lien instagram"/>
                     </a>
                 </div>
             </nav>

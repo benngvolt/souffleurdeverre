@@ -6,6 +6,8 @@ import Footer from '../../components/Footer/Footer'
 import BioCard from '../../components/BioCard/BioCard'
 import BioSheet from '../../components/BioSheet/BioSheet'
 import Equipe from '../../components/Equipe/Equipe'
+
+import julienRocha from '../../assets/Julien_Rocha_Julien_Bruhat.jpg'
 // import React, { useContext, useEffect } from 'react'
 // import { Context } from '../../utils/Context'
 // import { useNavigate } from 'react-router-dom'
@@ -58,7 +60,7 @@ function Compagnie() {
                 Julien Rocha & Cédric Veschambre
                 </p>
             </div>
-            <img src="assets/Julien_Rocha_Julien_Bruhat.jpg" alt="logo souffleur de verre" className='compagnieSection_image'/>
+            <img src={julienRocha} alt="logo souffleur de verre" className='compagnieSection_image'/>
             <ul className='compagnieSection_biosList' >
                 <li className='compagnieSection_biosList_bioItem'>
                     <BioCard biography={bioRocha} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
