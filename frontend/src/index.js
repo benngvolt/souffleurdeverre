@@ -10,7 +10,7 @@ import Spectacles from './pages/Spectacles/Spectacles';
 import OneSpectacle from './pages/OneSpectacle/OneSpectacle';
 import Edit from './pages/Edit/Edit';
 import Header from './components/Header/Header';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { HashRouter as Router, Route, Routes } from 'react-router-dom'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
