@@ -10,10 +10,17 @@
         justify-content: center;
         column-gap: 60px;
 
+        
+
         &_item {
             button {
                 @include Button;
 
+            }
+            &--displayOn {
+                button {
+                    background-color: $colorHover;
+                }
             }
         }
     }
