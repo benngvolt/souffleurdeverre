@@ -71,7 +71,7 @@ function OneSpectacle() {
                             .map((residency) => (
                                 <li key={residency.id} className='oneSpectacle_residenciesList_labos_list_item'>
                                     <p className='oneSpectacle_residenciesList_labos_list_item_text'>
-                                        <span className='oneSpectacle_residenciesList_labos_list_item_dates'>{residency.dates}</span>
+                                        <span className='oneSpectacle_residenciesList_labos_list_item_dates'>du {residency.startDates} au {residency.endDates}</span>
                                         <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_labos_list_item_link'>
                                             {residency.placeName}
                                         </a>{`/ ${residency.city ? residency.city : ""}`}
@@ -88,7 +88,7 @@ function OneSpectacle() {
                             .map((residency) => (
                                 <li key={residency.id} className='oneSpectacle_residenciesList_writing_list_item'>
                                     <p className='oneSpectacle_residenciesList_writing_list_item_text'>
-                                        <span className='oneSpectacle_residenciesList_writing_list_item_dates'>{residency.dates}</span>
+                                        <span className='oneSpectacle_residenciesList_writing_list_item_dates'>du {residency.startDates} au {residency.endDates}</span>
                                         <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_writing_list_item_link'>
                                             {residency.placeName}
                                         </a>{`/ ${residency.city ? residency.city : ""}`}
@@ -105,7 +105,7 @@ function OneSpectacle() {
                             .map((residency) => (
                                 <li key={residency.id} className='oneSpectacle_residenciesList_creation_list_item'>
                                     <p className='oneSpectacle_residenciesList_creation_list_item_text'>
-                                        <span className='oneSpectacle_residenciesList_creation_list_item_dates'>{residency.dates}</span>
+                                        <span className='oneSpectacle_residenciesList_creation_list_item_dates'>du {residency.startDates} au {residency.endDates}</span>
                                         <a href={`${residency.placeLink}`} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_creation_list_item_link'>
                                             {residency.placeName}
                                         </a>
@@ -124,7 +124,7 @@ function OneSpectacle() {
                             .map((residency) => (
                                 <li key={residency.id} className='oneSpectacle_residenciesList_rehearsals_list_item'>
                                     <p className='oneSpectacle_residenciesList_rehearsals_list_item_text'>
-                                        <span className='oneSpectacle_residenciesList_rehearsals_list_item_dates'>{residency.dates}</span>
+                                        <span className='oneSpectacle_residenciesList_rehearsals_list_item_dates'>du {residency.startDates} au {residency.endDates}</span>
                                         <a href={residency.placeLink?residency.placeLink:""} target='_blank' rel='noreferrer' className='oneSpectacle_residenciesList_rehearsals_list_item_link'>
                                             {residency.placeName}
                                         </a>

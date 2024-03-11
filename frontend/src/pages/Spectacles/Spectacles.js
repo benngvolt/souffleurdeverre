@@ -9,10 +9,10 @@ import { Context } from '../../utils/Context'
 function Spectacles() {
 
     // const [projects, setProjects] = useState([]);
-    const { projects, projectTypes, projectStates } = useContext(Context);
+    const { projects, projectTypes, projectStates, fullCurrentDate } = useContext(Context);
     const [sortedProjects, setSortedProjects] = useState(projects);
-    const [sortedProjectsByState, setSortedProjectsByState] = useState([]);
-    const [sortedProjectsByType, setSortedProjectsByType] = useState([]);
+    const [sortedProjectsByState, setSortedProjectsByState] = useState(projects);
+    const [sortedProjectsByType, setSortedProjectsByType] = useState(projects);
     const [displayStateFilter, setDisplayStateFilter] = useState('tous');
     const [displayTypeFilter, setDisplayTypeFilter] = useState('tous');
     
@@ -61,7 +61,9 @@ function Spectacles() {
                         TOUS LES SPECTACLES
                         </button>
                     </li>
-                    {projectStates.map((projectState)=>(
+                    {projectStates
+                        .filter(projectState => projects.some(project => project.projectState === projectState))
+                        .map((projectState)=>(
                         <li className={displayStateFilter===`${projectState}`?'spectacles_filtersHandler_filtersStateContainer_item spectacles_filtersHandler_filtersStateContainer_item--displayOn':'spectacles_filtersHandler_filtersStateContainer_item'}>
                             <button type='button' onClick={() => handleFilterProjectState(`${projectState}`)}>
                             {projectState}  
@@ -75,7 +77,9 @@ function Spectacles() {
                         TOUS LES PUBLICS
                         </button>
                     </li>
-                    {projectTypes.map((projectType)=>(
+                    {projectTypes
+                        .filter(projectType => projects.some(project => project.projectType === projectType))
+                        .map((projectType)=>(
                         <li className={displayTypeFilter===`${projectType}`?'spectacles_filtersHandler_filtersTypeContainer_item spectacles_filtersHandler_filtersTypeContainer_item--displayOn':'spectacles_filtersHandler_filtersTypeContainer_item'}>
                             <button type='button' onClick={() => handleFilterProjectType(`${projectType}`)}>
                             {projectType}  
@@ -84,6 +88,9 @@ function Spectacles() {
                     ))}
                 </ul>
             </div>
+            {sortedProjects.length === 0 &&
+                <p>Aucun projet à afficher</p>
+            }
             <ul className='spectacles_projectsList' >
                 {sortedProjects.map((project) => (
                     <li>
@@ -98,6 +105,7 @@ function Spectacles() {
                     </li>
                 ))}
             </ul>
+            
             
         </section>
     )

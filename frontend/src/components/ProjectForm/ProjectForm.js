@@ -142,7 +142,7 @@ function ProjectForm({
     -------------------------*/
 
     const handleAddResidency = () => {
-        setResidenciesList([...residenciesList, { residencyType: '', dates: '', city: '', placeName: '', placeLink: ''}]);
+        setResidenciesList([...residenciesList, { residencyType: '', startDates: '', endDates: '', city: '', placeName: '', placeLink: ''}]);
     };
     const handleSupprResidency = (index) => {
         setResidenciesList (residenciesList.filter((_, i) => i !== index));
@@ -592,14 +592,27 @@ function ProjectForm({
                             </select>
                         </div>
                         <div>
-                            <label htmlFor={`inputProjectResidencyDates${index}`}>DATES DE LA RÉSIDENCE</label>
+                            <label htmlFor={`inputProjectResidencyStartDates${index}`}>DÉBUT RÉSIDENCE</label>
                             <input
-                                type='text'
-                                id={`inputProjectResidencyDates${index}`}
-                                value={residency.dates}
+                                type='datetime-local'
+                                id={`inputProjectResidencyStartDates${index}`}
+                                value={residency.startDates}
                                 onChange={(e) => {
                                     const updatedResidenciesList = [...residenciesList];
-                                    updatedResidenciesList[index].dates = e.target.value;
+                                    updatedResidenciesList[index].startDates = e.target.value;
+                                    setResidenciesList(updatedResidenciesList);
+                                }}
+                            ></input>
+                        </div>
+                        <div>
+                            <label htmlFor={`inputProjectResidencyEndDates${index}`}>FIN RÉSIDENCE</label>
+                            <input
+                                type='datetime-local'
+                                id={`inputProjectResidencyEndDates${index}`}
+                                value={residency.endDates}
+                                onChange={(e) => {
+                                    const updatedResidenciesList = [...residenciesList];
+                                    updatedResidenciesList[index].endDates = e.target.value;
                                     setResidenciesList(updatedResidenciesList);
                                 }}
                             ></input>

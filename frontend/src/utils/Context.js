@@ -10,6 +10,7 @@ export const Provider = ({ children }) => {
     const [projects, setProjects] = useState([]);
     const [biographies, setBiographies] = useState([]);
     const [loaderDisplay, setLoaderDisplay] = useState(false);
+    const [fullCurrentDate, setFullCurrentDate] = useState ([]);
 
     const bioFields = ['technique', 'artistique', 'administration'];
     const projectTypes = ['tout public', 'jeune public', 'public adolescent', 'lecture-spectacle', 'lecture', 'médiation'];
@@ -21,6 +22,7 @@ export const Provider = ({ children }) => {
     ---------------------------------------------*/
     useEffect(() => {
         displayLoader();
+        setFullCurrentDate (formattedDate);
         fetch(`${API_URL}/api/projects`)
             .then((res) => res.json())
             .then((data) => {
@@ -44,6 +46,16 @@ export const Provider = ({ children }) => {
         .catch((error)=>console.log(error.message))
     },[loadBiographies]);
 
+    const date = new Date();
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+
     const handleLoadProjects = () => { 
         setLoadProjects(loadProjects === false ? true : false);
     };
@@ -66,7 +78,7 @@ export const Provider = ({ children }) => {
 
     
     return (
-        <Context.Provider value={{ projects, setProjects, biographies, setBiographies, handleLoadProjects, handleLoadBiographies, loadProjects, loaderDisplay, setLoaderDisplay, bioFields, projectTypes, projectStates}}>
+        <Context.Provider value={{ projects, setProjects, biographies, setBiographies, handleLoadProjects, handleLoadBiographies, loadProjects, loaderDisplay, setLoaderDisplay, bioFields, projectTypes, projectStates, fullCurrentDate}}>
             {children}
         </Context.Provider>
     )

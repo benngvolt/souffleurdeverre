@@ -22,6 +22,7 @@
             column-gap: 60px;
 
             &_item {
+                list-style-type: none;
                 button {
                     @include FilterButton;
 
@@ -40,8 +41,10 @@
         display: flex;
         flex-direction: column;
         row-gap: 70px;
+        list-style-type: none;
 
         &_projectItem {
+            
             padding: 0 50px;
             width: 100%;
             height: 272px;
@@ -67,6 +70,7 @@
                     font-size: 70px;
                     color: $colorDarkGrey;
                     margin-top: 10px;
+                    
                 }
                 &_creationDate {
                     font-family: 'MainFont_light';

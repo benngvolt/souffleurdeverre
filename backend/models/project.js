@@ -38,7 +38,8 @@ const projectSchema = mongoose.Schema({
     residenciesList: [
         {
         residencyType : {type: String, required: false},
-        dates: {type: String, required: false},
+        startDates: {type: String, required: false},
+        endDates: {type: String, required: false},
         city: {type: String, required: false},
         placeName: {type: String, required: false},
         placeLink: {type: String, required: false},
