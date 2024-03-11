@@ -1,6 +1,6 @@
 import './Spectacles.scss'
 import { Link } from 'react-router-dom'
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useLayoutEffect } from 'react'
 
 import { Context } from '../../utils/Context'
 // import { useNavigate } from 'react-router-dom'
@@ -9,21 +9,21 @@ import { Context } from '../../utils/Context'
 function Spectacles() {
 
     // const [projects, setProjects] = useState([]);
-    const [sortedProjects, setSortedProjects] = useState([]);
+    const { projects, projectTypes, projectStates } = useContext(Context);
+    const [sortedProjects, setSortedProjects] = useState(projects);
     const [sortedProjectsByState, setSortedProjectsByState] = useState([]);
     const [sortedProjectsByType, setSortedProjectsByType] = useState([]);
-    const [displayStateFilter, setDisplayStateFilter] = useState("tous");
-    const [displayTypeFilter, setDisplayTypeFilter] = useState("tous");
-    const { projects, projectTypes, projectStates } = useContext(Context);
-
-    useEffect(() => {
-        setSortedProjects (projects);
-        // Assurez-vous que sortedProjects est initialisé avec les données chargées           
+    const [displayStateFilter, setDisplayStateFilter] = useState('tous');
+    const [displayTypeFilter, setDisplayTypeFilter] = useState('tous');
+    
+    useLayoutEffect(()=> {
+        setSortedProjects(projects);
     }, []);
 
-    useEffect(()=> {
+    useLayoutEffect(()=> {
         const updatedSortedProjects = projects.filter ((project) => (sortedProjectsByState.includes(project)) && (sortedProjectsByType.includes(project)))
         setSortedProjects (updatedSortedProjects);
+        console.log(sortedProjects);
     }, [sortedProjectsByState, sortedProjectsByType]);
 
     function handleFilterProjectState (state) {
@@ -54,34 +54,36 @@ function Spectacles() {
 
     return  (      
         <section className='spectacles'>
-            <ul className='spectacles_filtersContainer'>
-                <li className={displayStateFilter==='tous'? 'spectacles_filtersContainer_item spectacles_filtersContainer_item--displayOn':'spectacles_filtersContainer_item'}>
-                    <button type='button' onClick={() => displayAllProjectsStates()}>
-                    TOUS LES SPECTACLES
-                    </button>
-                </li>
-                {projectStates.map((projectState)=>(
-                    <li className={displayStateFilter===`${projectState}`?'spectacles_filtersContainer_item spectacles_filtersContainer_item--displayOn':'spectacles_filtersContainer_item'}>
-                        <button type='button' onClick={() => handleFilterProjectState(`${projectState}`)}>
-                        {projectState}  
+            <div className='spectacles_filtersHandler'>
+                <ul className='spectacles_filtersHandler_filtersStateContainer'>
+                    <li className={displayStateFilter==='tous'? 'spectacles_filtersHandler_filtersStateContainer_item spectacles_filtersHandler_filtersStateContainer_item--displayOn':'spectacles_filtersHandler_filtersStateContainer_item'}>
+                        <button type='button' onClick={() => displayAllProjectsStates()}>
+                        TOUS LES SPECTACLES
                         </button>
                     </li>
-                ))}
-            </ul>
-            <ul className='spectacles_filtersContainer'>
-                <li className={displayTypeFilter==='tous'? 'spectacles_filtersContainer_item spectacles_filtersContainer_item--displayOn':'spectacles_filtersContainer_item'}>
-                    <button type='button' onClick={() => displayAllProjectsTypes()}>
-                    TOUS LES PUBLICS
-                    </button>
-                </li>
-                {projectTypes.map((projectType)=>(
-                    <li className={displayTypeFilter===`${projectType}`?'spectacles_filtersContainer_item spectacles_filtersContainer_item--displayOn':'spectacles_filtersContainer_item'}>
-                        <button type='button' onClick={() => handleFilterProjectType(`${projectType}`)}>
-                        {projectType}  
+                    {projectStates.map((projectState)=>(
+                        <li className={displayStateFilter===`${projectState}`?'spectacles_filtersHandler_filtersStateContainer_item spectacles_filtersHandler_filtersStateContainer_item--displayOn':'spectacles_filtersHandler_filtersStateContainer_item'}>
+                            <button type='button' onClick={() => handleFilterProjectState(`${projectState}`)}>
+                            {projectState}  
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+                <ul className='spectacles_filtersHandler_filtersTypeContainer'>
+                    <li className={displayTypeFilter==='tous'? 'spectacles_filtersHandler_filtersTypeContainer_item spectacles_filtersHandler_filtersTypeContainer_item--displayOn':'spectacles_filtersHandler_filtersTypeContainer_item'}>
+                        <button type='button' onClick={() => displayAllProjectsTypes()}>
+                        TOUS LES PUBLICS
                         </button>
                     </li>
-                ))}
-            </ul>
+                    {projectTypes.map((projectType)=>(
+                        <li className={displayTypeFilter===`${projectType}`?'spectacles_filtersHandler_filtersTypeContainer_item spectacles_filtersHandler_filtersTypeContainer_item--displayOn':'spectacles_filtersHandler_filtersTypeContainer_item'}>
+                            <button type='button' onClick={() => handleFilterProjectType(`${projectType}`)}>
+                            {projectType}  
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
             <ul className='spectacles_projectsList' >
                 {sortedProjects.map((project) => (
                     <li>

@@ -2,24 +2,34 @@
 
 .spectacles {
 
-    &_filtersContainer {
-        width: 100%;
-        margin: auto auto 180px auto;
+    &_filtersHandler {
+        
         display: flex;
         flex-direction: row;
         justify-content: center;
-        column-gap: 60px;
+        width: 100%;
 
-        
+        &_filtersStateContainer {
+            text-align: end;
+        }
 
-        &_item {
-            button {
-                @include Button;
+        &_filtersStateContainer, &_filtersTypeContainer {
+            width: 100%;
+            // margin: auto auto 180px auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            column-gap: 60px;
 
-            }
-            &--displayOn {
+            &_item {
                 button {
-                    background-color: $colorHover;
+                    @include FilterButton;
+
+                }
+                &--displayOn {
+                    button {
+                        background-color: $colorHover;
+                    }
                 }
             }
         }
