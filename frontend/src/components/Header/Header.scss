@@ -59,17 +59,33 @@
                 &_item {
                     background: none;
                     border: none;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    text-align: center;
+                    vertical-align: middle;
+                    text-decoration: none;
                     color: $colorDarkGrey;
                     font-family: 'MainFont_light';
                     font-size: 25px;
-                    display: flex;
-                    text-align: center;
-                    vertical-align: middle;
-                    
+
+                    h2, p {
+                        font-weight: 200;
+                        font-family: 'MainFont_light';
+                        font-size: 25px;
+                        color: $colorDarkGrey;
+                        
+                        &:hover {
+                            cursor: pointer;
+                            font-family:'MainFont_lightItalic';
+                        }
+                    }
                     &:hover {
                         cursor: pointer;
                         font-family:'MainFont_lightItalic';
                     }
+                    
+                    
                 }
             }
 

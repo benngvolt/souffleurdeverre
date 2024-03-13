@@ -51,6 +51,7 @@
             display: flex;
             flex-direction: row;
             column-gap: 55px;
+            text-decoration: none;
 
             &:hover {
                 cursor: pointer;
@@ -61,15 +62,17 @@
                 width: 408px;
                 height: 272;
                 object-fit: cover;
+                filter: grayscale(1) sepia(30%) hue-rotate(150deg) invert(20%) saturate(700%) contrast(70%);
             } 
 
             &_mainDatas {
-
+                
                 &_title {
                     font-family: 'SpecialFont_regular';
                     font-size: 70px;
                     color: $colorDarkGrey;
                     margin-top: 10px;
+
                     
                 }
                 &_creationDate {

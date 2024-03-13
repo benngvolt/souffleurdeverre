@@ -31,7 +31,7 @@ function ProjectForm({
         setPdfFiles
     }) {
 
-    const { projectStates, projectTypes, handleLoadProjects } = useContext(Context);
+    const { projectStates, projectTypes, handleLoadProjects, productionFunctions, residencyTypes } = useContext(Context);
 
     console.log(projectEdit);
 
@@ -93,6 +93,12 @@ function ProjectForm({
         setResidenciesList(updatedResidenciesList);
       };
 
+    const handleSelectProductionFunctionChange = (index, value) => {
+    const updatedProductionList = [...productionList];
+    updatedProductionList[index].productionFunction = value;
+    setProductionList(updatedProductionList);
+    };
+
     /* ---------------------------
     ----- ARTISTS LIST -----------
     ----------------------------*/
@@ -153,11 +159,30 @@ function ProjectForm({
     -------------------------*/
 
     const handleAddShow = () => {
-        setShowsList([...showsList, { dates: '', city: '', placeName: '', placeLink: '', showsNumber:''}]);
+        setShowsList([...showsList, { dates: [''], city: '', placeName: '', placeLink: '', showsNumber:''}]);
     };
     const handleSupprShow = (index) => {
         setShowsList (showsList.filter((_, i) => i !== index));
     }
+
+    const handleAddSameShowDate = (index) => {
+        const updatedShowsList = [...showsList];
+        if (!updatedShowsList[index].dates) {
+            updatedShowsList[index].dates = ['']; // Si show.dates n'existe pas encore, créez-le comme un tableau avec une date vide
+        } else {
+            updatedShowsList[index].dates.push(''); // Sinon, ajoutez simplement une date vide
+        }
+        setShowsList(updatedShowsList);
+    };
+
+    const handleSupprSameShowDate = (index, dateIndex) => {
+        
+        const updatedShowsList = [...showsList];
+        if (updatedShowsList[index].dates) {
+            updatedShowsList[index].dates = updatedShowsList[index].dates.filter((_, i) => i !== dateIndex);
+        }
+        setShowsList(updatedShowsList);
+    };
 
     /* ------------------------
     ----- FORM FUNCTIONS ------
@@ -166,6 +191,24 @@ function ProjectForm({
     function projectFormSubmit(event) {
 
         event.preventDefault();
+
+        const sortedResidenciesList = residenciesList.sort((a, b) => {
+            const dateA = new Date(a.startDates);
+            const dateB = new Date(b.startDates);
+            return dateA - dateB;
+        });
+
+        const cleanedShowsList = showsList.map(show => ({
+            ...show,
+            dates: show.dates.filter(date => date && date !== '')
+        }));
+
+        const sortedShowsList = cleanedShowsList.sort((a, b) => {
+            const dateA = new Date(a.dates[0]);
+            const dateB = new Date(b.dates[0]);
+            return dateA - dateB;
+         });
+
         // const token = window.sessionStorage.getItem('1');
         const projectFormData = new FormData();
         projectFormData.append('title', inputProjectTitleRef.current.value);
@@ -181,8 +224,8 @@ function ProjectForm({
         projectFormData.append('productionList', JSON.stringify(productionList));
         projectFormData.append('pressList', JSON.stringify(pressList));
         projectFormData.append('videoList', JSON.stringify(videoList));
-        projectFormData.append('residenciesList', JSON.stringify(residenciesList));
-        projectFormData.append('showsList', JSON.stringify(showsList));
+        projectFormData.append('residenciesList', JSON.stringify(sortedResidenciesList));
+        projectFormData.append('showsList', JSON.stringify(sortedShowsList));
         
         const newImageFiles = Array.from(imageFiles);
         const newPdfFiles = Array.from(pdfFiles);
@@ -419,7 +462,7 @@ function ProjectForm({
             </div>
             <div className='projectForm_projectCreationDate'>
                 <label htmlFor='inputProjectCreationDate'>DATE DE CRÉATION</label>
-                <input type='text' id='inputProjectCreationDate' ref={inputProjectCreationDateRef} value={projectCreationDate} onChange={(e) =>setProjectCreationDate(e.target.value)}></input>
+                <input type='month' id='inputProjectCreationDate' ref={inputProjectCreationDateRef} value={projectCreationDate} onChange={(e) =>setProjectCreationDate(e.target.value)}></input>
             </div>
             <div className='projectForm_projectDescription'>
                 <label htmlFor='inputProjectDescription'>DESCRIPTION</label>
@@ -474,16 +517,13 @@ function ProjectForm({
                     <div key={index} className='projectForm_projectProductionList_line'>
                         <div>
                             <label htmlFor={`inputProjectProductionFunction${index}`}>FONCTION</label>
-                            <input
-                                type='text'
-                                id={`inputProjectProductionFunction${index}`}
-                                value={production.productionFunction}
-                                onChange={(e) => {
-                                    const updatedProductionList = [...productionList];
-                                    updatedProductionList[index].productionFunction = e.target.value;
-                                    setProductionList(updatedProductionList);
-                                }}
-                            ></input>
+                            <select value={production.productionFunction}
+                                    onChange={(e) => handleSelectProductionFunctionChange(index, e.target.value)}>
+                                <option value=""></option>
+                                {productionFunctions.map((productionFunction) => (
+                                    <option value={productionFunction}>{productionFunction}</option>
+                                ))}
+                            </select>
                         </div>
                         <div>
                             <label htmlFor={`inputProjectProductionName${index}`}>NOMS</label>
@@ -585,21 +625,26 @@ function ProjectForm({
                             <select value={residency.residencyType}
                                     onChange={(e) => handleSelectChange(index, e.target.value)}>
                                 <option value=""></option>
-                                <option value="laboratoire">Laboratoire</option>
-                                <option value="écriture">Écriture</option>
-                                <option value="création">Création</option>
-                                <option value="répétitions">Répétitions</option>
+                                {residencyTypes.map((residencyType)=>(
+                                    <option value={residencyType}>{residencyType}</option>
+                                ))}
                             </select>
                         </div>
                         <div>
                             <label htmlFor={`inputProjectResidencyStartDates${index}`}>DÉBUT RÉSIDENCE</label>
                             <input
-                                type='datetime-local'
+                                type='date'
                                 id={`inputProjectResidencyStartDates${index}`}
                                 value={residency.startDates}
                                 onChange={(e) => {
                                     const updatedResidenciesList = [...residenciesList];
                                     updatedResidenciesList[index].startDates = e.target.value;
+
+                                    // Mettre à jour la date de fin de résidence avec le jour suivant
+                                    const nextDay = new Date(e.target.value);
+                                    nextDay.setDate(nextDay.getDate() + 1);
+                                    updatedResidenciesList[index].endDates = nextDay.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
+
                                     setResidenciesList(updatedResidenciesList);
                                 }}
                             ></input>
@@ -607,9 +652,10 @@ function ProjectForm({
                         <div>
                             <label htmlFor={`inputProjectResidencyEndDates${index}`}>FIN RÉSIDENCE</label>
                             <input
-                                type='datetime-local'
+                                type='date'
                                 id={`inputProjectResidencyEndDates${index}`}
                                 value={residency.endDates}
+                                min={residency.startDates}
                                 onChange={(e) => {
                                     const updatedResidenciesList = [...residenciesList];
                                     updatedResidenciesList[index].endDates = e.target.value;
@@ -664,20 +710,27 @@ function ProjectForm({
 
             <div className='projectForm_projectResidenciesList'>
                 <p> REPRÉSENTATIONS </p>
-                {showsList.map((show, index) => (
+                {showsList?.map((show, index) => (
                     <div key={index} className='projectForm_projectResidenciesList_line'>
                         <div>
                             <label htmlFor={`inputProjectShowDates${index}`}>DATES DE REPRÉSENTATION</label>
-                            <input
-                                type='datetime-local'
-                                id={`inputProjectShowDates${index}`}
-                                value={show.dates}
-                                onChange={(e) => {
-                                    const updatedShowsList = [...showsList];
-                                    updatedShowsList[index].dates = e.target.value;
-                                    setShowsList(updatedShowsList);
-                                }}
-                            ></input>
+                            {show.dates.map((date, dateIndex)=>(
+                                <div> 
+                                    <input
+                                        key={dateIndex}
+                                        type='datetime-local'
+                                        id={`inputProjectShowDates${index}`}
+                                        value={date}
+                                        onChange={(e) => {
+                                            const updatedShowsList = [...showsList];
+                                            updatedShowsList[index].dates[dateIndex] = e.target.value;
+                                            setShowsList(updatedShowsList);
+                                        }}
+                                    />
+                                    <button type="button" onClick={() =>handleSupprSameShowDate(index, dateIndex)} >SUPPR</button>
+                                </div>
+                            ))}
+                            <button type="button" onClick={() =>handleAddSameShowDate(index)} >+</button>
                         </div>
                         <div>
                             <label htmlFor={`inputProjectShowCity${index}`}>COMMUNE DE REPRÉSENTATION</label>
@@ -741,7 +794,6 @@ function ProjectForm({
                                 const updatedPdfFiles = [...pdfFiles];
                                 updatedPdfFiles[index].pdfName = e.target.value;
                                 setPdfFiles(updatedPdfFiles);
-                                console.log(pdfFiles);
                             }}
                             >
                         </input>

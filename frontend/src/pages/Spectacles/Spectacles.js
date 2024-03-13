@@ -1,6 +1,6 @@
 import './Spectacles.scss'
 import { Link } from 'react-router-dom'
-import React, { useState, useEffect, useContext, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 import { Context } from '../../utils/Context'
 // import { useNavigate } from 'react-router-dom'
@@ -16,11 +16,11 @@ function Spectacles() {
     const [displayStateFilter, setDisplayStateFilter] = useState('tous');
     const [displayTypeFilter, setDisplayTypeFilter] = useState('tous');
     
-    useLayoutEffect(()=> {
+    useEffect(()=> {
         setSortedProjects(projects);
     }, []);
 
-    useLayoutEffect(()=> {
+    useEffect(()=> {
         const updatedSortedProjects = projects.filter ((project) => (sortedProjectsByState.includes(project)) && (sortedProjectsByType.includes(project)))
         setSortedProjects (updatedSortedProjects);
         console.log(sortedProjects);

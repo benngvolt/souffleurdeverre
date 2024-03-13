@@ -15,6 +15,8 @@ export const Provider = ({ children }) => {
     const bioFields = ['technique', 'artistique', 'administration'];
     const projectTypes = ['tout public', 'jeune public', 'public adolescent', 'lecture-spectacle', 'lecture', 'médiation'];
     const projectStates = ['en tournée', 'en création', 'archivé'];
+    const productionFunctions = ['Production','Co-production','Soutien','Remerciements', 'Aide à la création', 'Partenariat', 'Aide à la résidence d’écriture'];
+    const residencyTypes = ['Laboratoires','Résidences d\'écriture','Résidences de création', 'Répétitions'];
 
 
     /*---------------------------------------------
@@ -78,7 +80,7 @@ export const Provider = ({ children }) => {
 
     
     return (
-        <Context.Provider value={{ projects, setProjects, biographies, setBiographies, handleLoadProjects, handleLoadBiographies, loadProjects, loaderDisplay, setLoaderDisplay, bioFields, projectTypes, projectStates, fullCurrentDate}}>
+        <Context.Provider value={{ projects, setProjects, biographies, setBiographies, handleLoadProjects, handleLoadBiographies, loadProjects, loaderDisplay, setLoaderDisplay, bioFields, projectTypes, projectStates, fullCurrentDate, productionFunctions, residencyTypes}}>
             {children}
         </Context.Provider>
     )

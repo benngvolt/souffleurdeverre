@@ -274,7 +274,7 @@
                         margin-right: 10px;
                     }
 
-                    &_link {
+                    &_link, &_noLink {
                         font-family: 'MainFont_light';
                         text-align: justify;
                         font-size: 18px;
@@ -282,10 +282,21 @@
                         color: $colorMediumGrey;
                         margin: 0;
                         padding-right: 10px;
+                    }
 
+                    &_link {
+
+                        &_icon {
+                            color: $colorDarkGrey;
+                            font-size: 13px;
+                            margin: 0;
+                        }
                         &:hover {
+
                             cursor: pointer;
                             color: $colorHover;
+
+    
                         }
                     }
                 }
