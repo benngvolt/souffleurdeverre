@@ -42,7 +42,6 @@ async function deleteProjectPdfFiles(req) {
   
   async function getCloudPdfUrls() {
     const [files] = await bucket.getFiles({ prefix: 'pdfList/' });
-    console.log(files.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`));
     return files.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
   }
     
@@ -57,6 +56,8 @@ async function deleteProjectPdfFiles(req) {
   try {
     const cloudPdfUrls = await getCloudPdfUrls(); // Utilisez "await" pour attendre la résolution de la promesse
     const dbPdfUrls = await getDbPdfUrls(); // Utilisez "await" pour attendre la résolution de la promesse
+    console.log(cloudPdfUrls);
+    console.log(dbPdfUrls);
     const pdfToDelete = cloudPdfUrls.filter((url) => !dbPdfUrls.includes(url));
     // Suppression des images non référencées dans le cloud
     for (const pdfUrl of pdfToDelete) {
@@ -68,6 +69,7 @@ async function deleteProjectPdfFiles(req) {
         await bucket.file('pdfList/' + fileToDeleteName).delete();
       }
     }
+    console.log(pdfToDelete)
 
   } catch (error) {
     console.error(error.message);

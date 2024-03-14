@@ -57,12 +57,28 @@ exports.createProject = async (req, res) => {
     const artistsList = JSON.parse(req.body.artistsList);
     const productionList = JSON.parse(req.body.productionList);
     const pressList = JSON.parse(req.body.pressList);
+    const paragraphList = JSON.parse(req.body.paragraphList);
     const videoList = JSON.parse(req.body.videoList);
     const residenciesList = JSON.parse(req.body.residenciesList);
     const showsList = JSON.parse(req.body.showsList);
   
     const descriptionWithBr = req.body.description.replace(/(\r\n|\n|\r)/g, "<br>");
-    // const projectDescriptionWithBr = projectData.description.replace(/(\r\n|\n|\r)/g, "<br>");
+
+    const paragraphListWithBr = paragraphList.map((paragraph) => {
+      const paragraphTextWithBr = paragraph.paragraphText.replace(/(\r\n|\n|\r)/g, "<br>");
+      return {
+          ...paragraph, // Spread des propriétés de paragraph
+          paragraphText: paragraphTextWithBr // Modification de la propriété paragraphText
+      };
+    });
+
+    const pressListWithBr = pressList.map((press) => {
+      const quoteTextWithBr = press.quote.replace(/(\r\n|\n|\r)/g, "<br>");
+      return {
+          ...press, // Spread des propriétés de paragraph
+          quote: quoteTextWithBr // Modification de la propriété paragraphText
+      };
+    });
   
     if (!projectData.title || !projectData.projectState) {
       return res.status(400).json({ error: 'Le champ "title" ou "state" est manquant dans la demande.' });
@@ -76,7 +92,8 @@ exports.createProject = async (req, res) => {
           description: descriptionWithBr,
           artistsList: artistsList,
           productionList: productionList,
-          pressList: pressList,
+          pressList: pressListWithBr,
+          paragraphList: paragraphListWithBr,
           videoList: videoList,
           residenciesList: residenciesList,
           showsList: showsList,
@@ -102,27 +119,45 @@ exports.updateOneProject = async (req, res, next) => {
     try {
       // RÉCUPÉRATION DU PROJET CONCERNÉ VIA SON ID STOCKÉ EN PARAMÈTRES D'URL
       const project = await Project.findOne({ _id: req.params.id });
-      const projectData = req.body;
-      const descriptionWithBr = req.body.description.replace(/(\r\n|\n|\r)/g, "<br>");
-      // const images = req.newImagesObjects;
-      const artistsList = JSON.parse(req.body.artistsList);
-      const productionList = JSON.parse(req.body.productionList);
-      const pressList = JSON.parse(req.body.pressList);
-      const videoList = JSON.parse(req.body.videoList);
-      const residenciesList = JSON.parse(req.body.residenciesList);
-      const showsList = JSON.parse(req.body.showsList);
-      // const projectDescriptionWithBr = projectData.description.replace(/(\r\n|\n|\r)/g, "<br>");
-  
+
       // SI LE PROJET N'EXISTE PAS, ON RETOURNE UNE ERREUR 404
       if (!project) {
         return res.status(404).json({ error: 'Projet non trouvé' });
       }
+
+      const projectData = req.body;
+      const descriptionWithBr = req.body.description.replace(/(\r\n|\n|\r)/g, "<br>");
+      const artistsList = JSON.parse(req.body.artistsList);
+      const productionList = JSON.parse(req.body.productionList);
+      const pressList = JSON.parse(req.body.pressList);
+      const paragraphList = JSON.parse(req.body.paragraphList);
+      const videoList = JSON.parse(req.body.videoList);
+      const residenciesList = JSON.parse(req.body.residenciesList);
+      const showsList = JSON.parse(req.body.showsList);
+      
+      const paragraphListWithBr = paragraphList.map((paragraph) => {
+        const paragraphTextWithBr = paragraph.paragraphText.replace(/(\r\n|\n|\r)/g, "<br>");
+        return {
+            ...paragraph, // Spread des propriétés de paragraph
+            paragraphText: paragraphTextWithBr // Modification de la propriété paragraphText
+        };
+      });
   
+      const pressListWithBr = pressList.map((press) => {
+        const quoteTextWithBr = press.quote.replace(/(\r\n|\n|\r)/g, "<br>");
+        return {
+            ...press, // Spread des propriétés de paragraph
+            quote: quoteTextWithBr // Modification de la propriété paragraphText
+        };
+      });
       // RÉCUPÉRATION DES IMAGES EXISTANTES DEPUIS LE FRONTEND, PARSE DES DONNÉES
       const existingImages = req.body.existingImages || [];
       const existingImagesObjects = existingImages.map((imageStr) => JSON.parse(imageStr));
+      
+      // RÉCUPÉRATION DES PDFS EXISTANTES DEPUIS LE FRONTEND, PARSE DES DONNÉES
+      const existingPdfs = req.body.existingPdfs || [];
+      const existingPdfsObjects = existingPdfs.map((pdfStr) => JSON.parse(pdfStr));
   
-      // TRI DES IMAGES PAR ORDRE D'INDEX ET MISE À JOUR DE MAINIMAGEINDEX ET CONSTRUCTION DU TABLEAU IMAGES AVEC LES NOUVELLES IMAGES ET LES EXISTANTES
       async function processAndSortImages(existingImagesObjects, newImagesObjects) {
         const allImages = existingImagesObjects.map((image, index) => ({
           imageUrl: image.imageUrl,
@@ -131,6 +166,12 @@ exports.updateOneProject = async (req, res, next) => {
         allImages.sort((a, b) => a.index - b.index);
         const updatedImages = allImages.filter((image) => image != null && image !== "empty");
         return updatedImages;
+      }
+  
+      async function processAndSortPdfs(existingPdfsObjects, newPdfsObjects) {
+        const allPdfs = existingPdfsObjects.concat(newPdfsObjects);
+        const updatedPdfs = allPdfs.filter((pdf) => pdf != null && pdf !== "");
+        return updatedPdfs;
       }
   
       // MISE À JOUR DE LA SÉRIE DANS LA BASE DE DONNÉES
@@ -146,13 +187,14 @@ exports.updateOneProject = async (req, res, next) => {
           description: descriptionWithBr,
           artistsList: artistsList,
           productionList: productionList,
-          pressList: pressList,
+          pressList: pressListWithBr,
+          paragraphList: paragraphListWithBr,
           videoList: videoList,
           residenciesList: residenciesList,
           showsList: showsList,
-          // description: projectDescriptionWithBr,
           mainImageIndex: updatedMainImageIndex,
-          images: updatedImages
+          images: updatedImages,
+          pdfList: updatedPdfs
         };
   
         await Project.updateOne({ _id: req.params.id }, projectObject);
@@ -162,13 +204,14 @@ exports.updateOneProject = async (req, res, next) => {
         // À ce stade, vous pouvez appeler d'autres fonctions si nécessaire
       }
   
-      // Appel de la fonction de tri des images et de mise à jour
-      processAndSortImages(existingImagesObjects, req.newImagesObjects)
-        .then((updatedImages) => updateProject(updatedImages))
-        .catch((error) => {
-          console.error(error);
-          res.status(500).json({ error: 'Erreur lors de la mise à jour de la série.' });
-        });
+      const newImagesObjects = req.newImagesObjects || [];
+      const newPdfsObjects = req.newPdfsObjects || [];
+
+      const updatedImages = await processAndSortImages(existingImagesObjects, newImagesObjects);
+      const updatedPdfs = await processAndSortPdfs(existingPdfsObjects, newPdfsObjects);
+
+      await updateProject(updatedImages, updatedPdfs);
+
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Erreur lors de la mise à jour de la série.' });

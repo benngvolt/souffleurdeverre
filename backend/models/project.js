@@ -11,6 +11,12 @@ const projectSchema = mongoose.Schema({
     description: {type: String, required: false},
     moreInfos: {type: String, required: false},
     mainImageIndex: { type: Number, required: false },
+    paragraphList: [
+        {
+        paragraphText: {type: String, required: false},
+        paragraphTitle: {type: String, required: false},
+        }
+    ],
     artistsList: [
         {
         artistFunction: {type: String, required: false},

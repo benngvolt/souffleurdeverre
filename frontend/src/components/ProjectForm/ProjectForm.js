@@ -6,6 +6,7 @@ import * as pdfjsLib from "pdfjs-dist/webpack"
 import { v4 as uuidv4 } from 'uuid'
 import DOMPurify from 'dompurify';
 import DNDGallery from '../../components/DNDGallery/DNDGallery'
+import TitleAndParagraphInput from '../TitleAndParagraphInput/TitleAndParagraphInput'
 
 function ProjectForm({ 
         projectEdit, 
@@ -16,7 +17,9 @@ function ProjectForm({
         productionList, 
         setProductionList, 
         pressList, 
-        setPressList, 
+        setPressList,
+        paragraphList,
+        setParagraphList,
         videoList, 
         setVideoList, 
         residenciesList, 
@@ -31,10 +34,19 @@ function ProjectForm({
         setPdfFiles
     }) {
 
-    const { projectStates, projectTypes, handleLoadProjects, productionFunctions, residencyTypes } = useContext(Context);
+    /* ---------------------------
+    ----- RÉCUPÉRATION CONTEXT ---
+    ----------------------------*/
+    const { projectStates, 
+            projectTypes, 
+            handleLoadProjects, 
+            productionFunctions, 
+            residencyTypes } 
+            = useContext(Context);
 
-    console.log(projectEdit);
-
+    /* ---------------------------
+    ----- DÉFINITION USEREF ------
+    ----------------------------*/
     const inputProjectTitleRef = useRef(null);
     const inputProjectSubtitleRef = useRef(null);
     const inputProjectStateRef = useRef(null);
@@ -47,7 +59,10 @@ function ProjectForm({
     const inputProjectImageFileRef = useRef (null);
     const inputProjectPdfFileRef = useRef (null);
     const projectPdfSampleRef = useRef (null);
-
+    
+    /* -----------------------------------------
+    ----- AFFICHAGE FORMULAIRE SELON ETAT ------
+    ------------------------------------------*/
     useEffect(() => {
         if (projectFormMode === 'edit' && projectEdit) {
             setProjectTitle(projectEdit.title);
@@ -72,6 +87,9 @@ function ProjectForm({
 
     const cleanedDescription = DOMPurify.sanitize(projectEdit?.description);
 
+    /* ------------------------
+    ----- CHAMPS SIMPLES ------
+    -------------------------*/
     const [projectTitle, setProjectTitle] = useState('')
     const [projectSubtitle, setProjectSubtitle] = useState('')
     const [projectState, setProjectState] = useState('')
@@ -81,28 +99,9 @@ function ProjectForm({
     const [projectDescription, setProjectDescription] = useState('')
     const [projectMoreInfos, setProjectMoreInfos] = useState('')
 
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
-    const [newImage, setNewImage] = useState(null);
-
-    const [isPdfLoaded, setIsPdfLoaded] = useState(false);
-    const [newPdf, setNewPdf] = useState(null);
-
-    const handleSelectChange = (index, value) => {
-        const updatedResidenciesList = [...residenciesList];
-        updatedResidenciesList[index].residencyType = value;
-        setResidenciesList(updatedResidenciesList);
-      };
-
-    const handleSelectProductionFunctionChange = (index, value) => {
-    const updatedProductionList = [...productionList];
-    updatedProductionList[index].productionFunction = value;
-    setProductionList(updatedProductionList);
-    };
-
     /* ---------------------------
     ----- ARTISTS LIST -----------
     ----------------------------*/
-
     const handleAddArtist = () => {
         setArtistsList([...artistsList, { artistFunction: '', artistName: '' }]);
     };
@@ -113,7 +112,6 @@ function ProjectForm({
     /* ------------------------
     ----- PROD LIST -----------
     -------------------------*/
-
     const handleAddProduction = () => {
         setProductionList([...productionList, { productionFunction: '', productionName: '' }]);
     };
@@ -122,20 +120,8 @@ function ProjectForm({
     }
 
     /* ------------------------
-    ----- PRESS LIST -----------
-    -------------------------*/
-
-    const handleAddPress = () => {
-        setPressList([...pressList, { quote: '', mediaName: ''}]);
-    };
-    const handleSupprPress = (index) => {
-        setPressList (pressList.filter((_, i) => i !== index));
-    }
-
-    /* ------------------------
     ----- VIDEOS LIST -----------
     -------------------------*/
-
     const handleAddVideo = () => {
         setVideoList([...videoList, { videoName: '', videoLink: ''}]);
     };
@@ -146,7 +132,6 @@ function ProjectForm({
     /* ------------------------
     ----- RESIDENCIES LIST -----------
     -------------------------*/
-
     const handleAddResidency = () => {
         setResidenciesList([...residenciesList, { residencyType: '', startDates: '', endDates: '', city: '', placeName: '', placeLink: ''}]);
     };
@@ -157,14 +142,12 @@ function ProjectForm({
     /* ------------------------
     ----- SHOWS LIST -----------
     -------------------------*/
-
     const handleAddShow = () => {
         setShowsList([...showsList, { dates: [''], city: '', placeName: '', placeLink: '', showsNumber:''}]);
     };
     const handleSupprShow = (index) => {
         setShowsList (showsList.filter((_, i) => i !== index));
     }
-
     const handleAddSameShowDate = (index) => {
         const updatedShowsList = [...showsList];
         if (!updatedShowsList[index].dates) {
@@ -174,9 +157,7 @@ function ProjectForm({
         }
         setShowsList(updatedShowsList);
     };
-
     const handleSupprSameShowDate = (index, dateIndex) => {
-        
         const updatedShowsList = [...showsList];
         if (updatedShowsList[index].dates) {
             updatedShowsList[index].dates = updatedShowsList[index].dates.filter((_, i) => i !== dateIndex);
@@ -184,31 +165,149 @@ function ProjectForm({
         setShowsList(updatedShowsList);
     };
 
+    /* --------------------
+    ----- PDF FIELDS ------
+    ---------------------*/
+    const [isPdfLoaded, setIsPdfLoaded] = useState(false);
+    const [newPdf, setNewPdf] = useState(null);
+    async function generatePdfPreview(pdf) {
+        const pdfData = new Uint8Array(await pdf.arrayBuffer());
+        const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+        const pdfDocument = await loadingTask.promise;
+        // Charger la première page
+        const pageNumber = 1;
+        const page = await pdfDocument.getPage(pageNumber);
+        // Définir la taille de l'aperçu (facultatif)
+        const scale = 1.5;
+        const viewport = page.getViewport({ scale });
+        // Créer un élément canvas pour le rendu de l'aperçu
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        // Rendu de la première page sur le canvas
+        await page.render({ canvasContext: context, viewport }).promise;
+        // Convertir le canvas en data URL (image au format base64)
+        const dataUrl = canvas.toDataURL('image/jpeg');
+        return dataUrl;
+    }
+    async function displayPdfSample(event) {
+        const pdf = inputProjectPdfFileRef.current.files[0];
+        if (pdf) {
+        const id = uuidv4(); // Générez un identifiant unique
+        pdf._id = id;
+        setNewPdf(pdf);
+        // Générer l'aperçu de la première page du PDF
+        const previewUrl = await generatePdfPreview(pdf);
+    
+        // Afficher l'aperçu
+        projectPdfSampleRef.current.setAttribute('src', previewUrl);
+        projectPdfSampleRef.current.setAttribute('alt', '');
+        setIsImageLoaded(true);
+        } else {
+        setIsImageLoaded(false);
+        }
+    }
+    function handleAddPdfFile() {
+        if (newPdf) {
+            const updatedAddPdfFiles = [...pdfFiles, newPdf];
+            setPdfFiles(updatedAddPdfFiles);
+        }
+        setIsPdfLoaded(false);
+        cancelAddPdfFile();
+        console.log(pdfFiles);
+    }
+
+    function handleSupprPdf(index) {
+        // Créer une copie du tableau pdfFiles sans l'élément à l'index spécifié
+        const updatedSupprPdfFiles = pdfFiles.filter((_, i) => i !== index);
+        console.log(updatedSupprPdfFiles); // Vérifiez si les éléments supprimés sont corrects
+        // Mettre à jour l'état avec le nouveau tableau sans l'élément supprimé
+        setPdfFiles(updatedSupprPdfFiles);
+    }
+
+    function cancelAddPdfFile() {
+        setNewPdf (null);
+        setIsPdfLoaded(false);
+        projectPdfSampleRef.current.setAttribute("src", "");
+        projectPdfSampleRef.current.setAttribute("alt", "");
+    }
+
+    const newPdfFiles = Array.from(pdfFiles);
+    const pdfWithIndex = newPdfFiles.map((pdf, index) => ({
+        index,
+        pdf,
+    }));
+    
+
+    /* -----------------------
+    ----- IMAGES FIELDS ------
+    ------------------------*/
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
+    const [newImage, setNewImage] = useState(null);
+    
+    //CHARGEMENT DE L'IMAGE
+    function displaySample() {
+            const image = inputProjectImageFileRef.current.files[0];
+            if (image) {
+                setNewImage (image);
+                const id = uuidv4(); // Générez un identifiant unique
+                image._id = id;
+                image.sampleImageUrl= URL.createObjectURL(image);
+                projectMainImageSampleRef.current.setAttribute("src", image.sampleImageUrl);
+                projectMainImageSampleRef.current.setAttribute("alt", "");
+                setIsImageLoaded(true);
+            } else {
+                setIsImageLoaded(false);
+            }
+    }
+    function cancelAddImageFile() {
+        setNewImage (null);
+        setIsImageLoaded(false);
+        projectMainImageSampleRef.current.setAttribute("src", "");
+        projectMainImageSampleRef.current.setAttribute("alt", "");
+    }
+    function handleAddImageFile() {
+        if (newImage) {
+            const updatedImageFiles = [...imageFiles, newImage];
+            setImageFiles(updatedImageFiles);
+        }
+        //ON SE RETROUVE AVEC UN TABLEAU IMAGEFILES COMPRENANT DES IMAGES EN INSTANCES DE FILES ET DES IMAGES AVEC URL
+        setIsImageLoaded(false);
+        cancelAddImageFile();
+    }
+
+    //TRAITEMENT DU TABLEAU IMAGEFILES POUR ENVOI EN BACKEND
+    // ON RÉCUPÈRE D'ABORD IMAGEFILES EN UN NOOUVEAU TABLEAU
+    const newImageFiles = Array.from(imageFiles);
+    // ON CRÉE UN NOUVEAU TABLEAU EN DONNANT À CHAQUE IMAGE UN INDEX
+    const imagesWithIndex = newImageFiles.map((image, index) => ({
+        index,
+        image
+    }));
+
     /* ------------------------
     ----- FORM FUNCTIONS ------
     -------------------------*/
-
     function projectFormSubmit(event) {
-
         event.preventDefault();
-
+        //RÉORGANISATION DES ELEMENTS 'RESIDENCY' PAR ORDRE CHRONOLOGIQUE
         const sortedResidenciesList = residenciesList.sort((a, b) => {
             const dateA = new Date(a.startDates);
             const dateB = new Date(b.startDates);
             return dateA - dateB;
         });
-
+        //NETTOYAGE DU TABLEAU DES DATES 'REPRÉSENTATIONS' POUR EVITER LES CHAMPS ""
         const cleanedShowsList = showsList.map(show => ({
             ...show,
             dates: show.dates.filter(date => date && date !== '')
         }));
-
+        //RÉORGANISATION DES ELEMENTS REPRÉSENTATIONS' PAR ORDRE CHRONOLOGIQUE
         const sortedShowsList = cleanedShowsList.sort((a, b) => {
             const dateA = new Date(a.dates[0]);
             const dateB = new Date(b.dates[0]);
             return dateA - dateB;
          });
-
         // const token = window.sessionStorage.getItem('1');
         const projectFormData = new FormData();
         projectFormData.append('title', inputProjectTitleRef.current.value);
@@ -223,29 +322,21 @@ function ProjectForm({
         projectFormData.append('artistsList', JSON.stringify(artistsList));
         projectFormData.append('productionList', JSON.stringify(productionList));
         projectFormData.append('pressList', JSON.stringify(pressList));
+        projectFormData.append('paragraphList', JSON.stringify(paragraphList));
         projectFormData.append('videoList', JSON.stringify(videoList));
         projectFormData.append('residenciesList', JSON.stringify(sortedResidenciesList));
         projectFormData.append('showsList', JSON.stringify(sortedShowsList));
         
-        const newImageFiles = Array.from(imageFiles);
-        const newPdfFiles = Array.from(pdfFiles);
-        const pdfWithIndex = newPdfFiles.map((pdf, index) => ({
-            index,
-            pdf,
-        }));
         pdfWithIndex.forEach(({ index, pdf }) => {
             if (pdf instanceof File) {
                 projectFormData.append('pdfFiles', pdf);
                 projectFormData.append('pdfFileIndexes', index);
                 projectFormData.append('pdfName', pdf.pdfName)
             } else {
-                projectFormData.append(`existingPdf[${index}]`, JSON.stringify(pdf));
+                projectFormData.append(`existingPdfs[${index}]`, JSON.stringify(pdf));
             }
         });
-        const imagesWithIndex = newImageFiles.map((image, index) => ({
-            index,
-            image
-        }));
+ 
         imagesWithIndex.forEach(({ index, image }) => {
             if (image instanceof File) {
                 projectFormData.append('images', image);
@@ -301,108 +392,7 @@ function ProjectForm({
         handleLoadProjects();
     }
 
-    /* -----------------------
-    ----- IMAGES FIELDS ------
-    ------------------------*/
-
-    function displaySample() {
-            const image = inputProjectImageFileRef.current.files[0];
-            if (image) {
-                setNewImage (image);
-                const id = uuidv4(); // Générez un identifiant unique
-                image._id = id;
-                image.sampleImageUrl= URL.createObjectURL(image);
-                projectMainImageSampleRef.current.setAttribute("src", image.sampleImageUrl);
-                projectMainImageSampleRef.current.setAttribute("alt", "");
-                setIsImageLoaded(true);
-            } else {
-                setIsImageLoaded(false);
-            }    
-    }
-
-    function cancelAddImageFile() {
-        setNewImage (null);
-        setIsImageLoaded(false);
-        projectMainImageSampleRef.current.setAttribute("src", "");
-        projectMainImageSampleRef.current.setAttribute("alt", "");
-    }
-
-    function handleAddImageFile() {
-        if (newImage) {
-            const updatedImageFiles = [...imageFiles, newImage];
-            setImageFiles(updatedImageFiles);
-        }
-        setIsImageLoaded(false);
-        cancelAddImageFile();
-    }
-
-    /* --------------------
-    ----- PDF FIELDS ------
-    ---------------------*/
-
-    async function generatePdfPreview(pdf) {
-        const pdfData = new Uint8Array(await pdf.arrayBuffer());
-        const loadingTask = pdfjsLib.getDocument({ data: pdfData });
-        const pdfDocument = await loadingTask.promise;
-        // Charger la première page
-        const pageNumber = 1;
-        const page = await pdfDocument.getPage(pageNumber);
-        // Définir la taille de l'aperçu (facultatif)
-        const scale = 1.5;
-        const viewport = page.getViewport({ scale });
-        // Créer un élément canvas pour le rendu de l'aperçu
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        // Rendu de la première page sur le canvas
-        await page.render({ canvasContext: context, viewport }).promise;
-        // Convertir le canvas en data URL (image au format base64)
-        const dataUrl = canvas.toDataURL('image/jpeg');
-        return dataUrl;
-    }
-
     
-    async function displayPdfSample(event) {
-        const pdf = inputProjectPdfFileRef.current.files[0];
-        if (pdf) {
-        const id = uuidv4(); // Générez un identifiant unique
-        pdf._id = id;
-        setNewPdf(pdf);
-        // Générer l'aperçu de la première page du PDF
-        const previewUrl = await generatePdfPreview(pdf);
-    
-        // Afficher l'aperçu
-        projectPdfSampleRef.current.setAttribute('src', previewUrl);
-        projectPdfSampleRef.current.setAttribute('alt', '');
-        setIsImageLoaded(true);
-        } else {
-        setIsImageLoaded(false);
-        }
-    }
-
-    function handleAddPdfFile() {
-        if (newPdf) {
-            const updatedPdfFiles = [...pdfFiles, newPdf];
-            setPdfFiles(updatedPdfFiles);
-        }
-        setIsPdfLoaded(false);
-        cancelAddPdfFile();
-    }
-
-    function handleSupprPdf(index) {
-        console.log(pdfFiles.length);
-        setPdfFiles(pdfFiles.splice(index, 1));
-        console.log(index);
-        console.log(pdfFiles);
-    }  
-
-    function cancelAddPdfFile() {
-        setNewPdf (null);
-        setIsPdfLoaded(false);
-        projectPdfSampleRef.current.setAttribute("src", "");
-        projectPdfSampleRef.current.setAttribute("alt", "");
-    }
 
     return  (      
         <form onSubmit={(event) => projectFormSubmit(event)} method="post" className='projectForm'>
@@ -465,9 +455,18 @@ function ProjectForm({
                 <input type='month' id='inputProjectCreationDate' ref={inputProjectCreationDateRef} value={projectCreationDate} onChange={(e) =>setProjectCreationDate(e.target.value)}></input>
             </div>
             <div className='projectForm_projectDescription'>
-                <label htmlFor='inputProjectDescription'>DESCRIPTION</label>
+                <label htmlFor='inputProjectDescription'>RÉSUMÉ</label>
                 <textarea type='textarea' id='inputProjectDescription' ref={inputProjectDescriptionRef} value={projectDescription?.replace(/<br>/g, "\n")} onChange={(e) =>setProjectDescription(e.target.value)}></textarea>
             </div>
+            <TitleAndParagraphInput 
+                setList={setParagraphList} 
+                topic="DESCRIPTION"
+                paragraphTopic="PARAGRAPHE"
+                titleTopic="TITRE DU PARAGRAPHE"
+                list={paragraphList}
+                paragraphProp="paragraphText"
+                titleProp="paragraphTitle"
+            />
             <div className='projectForm_projectMoreInfos'>
                 <label htmlFor='inputProjectMoreInfos'>PLUS D'INFOS</label>
                 <input type='text' id='inputProjectMoreInfos' ref={inputProjectMoreInfosRef} value={projectMoreInfos} onChange={(e) =>setProjectMoreInfos(e.target.value)}></input>
@@ -518,7 +517,11 @@ function ProjectForm({
                         <div>
                             <label htmlFor={`inputProjectProductionFunction${index}`}>FONCTION</label>
                             <select value={production.productionFunction}
-                                    onChange={(e) => handleSelectProductionFunctionChange(index, e.target.value)}>
+                                    onChange={(e) => {
+                                        const updatedProductionList = [...productionList];
+                                        updatedProductionList[index].productionFunction = e.target.value;
+                                        setProductionList(updatedProductionList);
+                                    }}>
                                 <option value=""></option>
                                 {productionFunctions.map((productionFunction) => (
                                     <option value={productionFunction}>{productionFunction}</option>
@@ -544,42 +547,15 @@ function ProjectForm({
                 <button type='button' onClick={() =>handleAddProduction()} >+ AJOUTER UN MEMBRE DE L'EQUIPE DE PROD</button>
             </div>
             
-            <div className='projectForm_projectPressList'>
-                <p> PRESSE </p>
-                {pressList.map((press, index) => (
-                    <div key={index} className='projectForm_projectPressList_line'>
-                        <div>
-                            <label htmlFor={`inputProjectPressQuote${index}`}>EXTRAIT</label>
-                            <input
-                                type='textarea'
-                                id={`inputProjectPressQuote${index}`}
-                                value={press.quote}
-                                onChange={(e) => {
-                                    const updatedPressList = [...pressList];
-                                    updatedPressList[index].quote = e.target.value;
-                                    setPressList(updatedPressList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectPressMediaName${index}`}>NOM DU MEDIA</label>
-                            <input
-                                type='text'
-                                id={`inputProjectPressMediaName${index}`}
-                                value={press.mediaName}
-                                onChange={(e) => {
-                                    const updatedPressList = [...pressList];
-                                    updatedPressList[index].mediaName = e.target.value;
-                                    setPressList(updatedPressList);
-                                }}
-                            ></input>
-                        </div>
-                        <button type='button' onClick={() => handleSupprPress(index)}>SUPPRIMER</button>
-                    </div>              
-                ))}
-                <button type='button' onClick={() =>handleAddPress()} >+ AJOUTER UN ARTICLE DE PRESSE</button>
-            </div>
-
+            <TitleAndParagraphInput 
+                setList={setPressList} 
+                topic="PRESSE"
+                paragraphTopic="EXTRAIT"
+                titleTopic="NOM DU MEDIA"
+                list={pressList}
+                paragraphProp="quote"
+                titleProp="mediaName"
+            />
             <div className='projectForm_projectVideoList'>
                 <p> EXTRAITS VIDEO </p>
                 {videoList.map((video, index) => (
@@ -623,10 +599,14 @@ function ProjectForm({
                         <div>
                             <label htmlFor={`inputProjectResidencyType${index}`}>TYPE DE RÉSIDENCE</label>
                             <select value={residency.residencyType}
-                                    onChange={(e) => handleSelectChange(index, e.target.value)}>
+                                onChange={(e) => {
+                                    const updatedResidenciesList = [...residenciesList];
+                                    updatedResidenciesList[index].residencyType = e.target.value;
+                                    setResidenciesList(updatedResidenciesList);
+                                }}>
                                 <option value=""></option>
                                 {residencyTypes.map((residencyType)=>(
-                                    <option value={residencyType}>{residencyType}</option>
+                                <option value={residencyType}>{residencyType}</option>
                                 ))}
                             </select>
                         </div>
@@ -780,23 +760,28 @@ function ProjectForm({
 
             <div className='projectForm_projectPdfFile'>
                 <p>DOSSIERS</p>
-                {pdfFiles.map((pdf, index) => ( 
-                    <div className='projectForm_projectPdfFile'>
-                        <img id='imageSample' src={pdf.pdfLink} alt=''/>
+                {pdfFiles.map((pdf, index) => (
+                    <div className='projectForm_projectPdfFile' key={index}>
+                        <p>{pdf.pdfName}</p>
                         <label htmlFor='inputProjectPdfName'>NOM DU PDF</label>
                         <input 
                             type='text' 
                             id='inputProjectPdfName' 
-                            name="pdfName" 
-                            defaultValue={projectFormMode==='edit'? (projectEdit.pdfList[index]?.pdfName || null) : null} 
-                            // onChange={(index) =>handleEditPdfFile(index)}
+                            name="pdfName"
+                            /* defaultValue est utilisé pour définir la valeur initiale d'un champ contrôlé, 
+                            c'est-à-dire un champ dont la valeur est contrôlée par React plutôt que par le DOM.
+                            Lorsqu'on utilise defaultValue, React ne met pas à jour la valeur du champ si elle a 
+                            été modifiée par React après le rendu initial. C'est pourquoi on ne voit pas 
+                            les mises à jour de pdf.pdfName dans le champ input.
+                            Pour résoudre ce problème, utiliser value au lieu de defaultValue, 
+                            car value est utilisé pour les champs contrôlés, où la valeur est contrôlée par React*/
+                            value={projectFormMode === 'edit' ? (pdf.pdfName || null) : null} 
                             onChange={(e) => {
-                                const updatedPdfFiles = [...pdfFiles];
-                                updatedPdfFiles[index].pdfName = e.target.value;
-                                setPdfFiles(updatedPdfFiles);
+                                const updatedChangedPdfFiles = [...pdfFiles];
+                                updatedChangedPdfFiles[index].pdfName = e.target.value;
+                                setPdfFiles(updatedChangedPdfFiles);
                             }}
-                            >
-                        </input>
+                        />
                         <button type='button' onClick={() => handleSupprPdf(index)}>SUPPRIMER</button>
                     </div>
                 ))}
@@ -810,8 +795,6 @@ function ProjectForm({
                     </div>
                 </div>
             </div>
-
-
             <div className='projectForm_buttons'>
                 <button type='submit'>VALIDER</button>
                 <button type='button' onClick={() => closeForm()}>ANNULER</button>

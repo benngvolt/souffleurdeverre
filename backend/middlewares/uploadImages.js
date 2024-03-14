@@ -9,7 +9,7 @@ function uploadImages(req, res, next) {
     const newImagesObjects = [];
     const fileIndexes = req.body.fileIndexes;
     const files = req.files.images;
-
+    
     if (!files || files.length === 0) {
       // Aucune image n'a été téléchargée, appeler next() et sortir de la fonction
       return next();
@@ -86,7 +86,7 @@ function uploadImages(req, res, next) {
     const pdfFileIndexes = req.body.pdfFileIndexes;
     const files = req.files.pdfFiles;
     const pdfName = req.body.pdfName;
-  
+    console.log('on atteint uploadPdfs')
     if (!files || files.length === 0) {
       // Aucune image n'a été téléchargée, appeler next() et sortir de la fonction
       return next();

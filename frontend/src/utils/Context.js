@@ -18,7 +18,6 @@ export const Provider = ({ children }) => {
     const productionFunctions = ['Production','Co-production','Soutien','Remerciements', 'Aide à la création', 'Partenariat', 'Aide à la résidence d’écriture'];
     const residencyTypes = ['Laboratoires','Résidences d\'écriture','Résidences de création', 'Répétitions'];
 
-
     /*---------------------------------------------
     ----- Chargement des projets et stockage ------
     ---------------------------------------------*/

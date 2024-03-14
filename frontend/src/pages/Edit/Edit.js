@@ -28,6 +28,7 @@ function Edit() {
     const [artistsList, setArtistsList] = useState([]);
     const [productionList, setProductionList] = useState([]);
     const [pressList, setPressList] = useState([]);
+    const [paragraphList, setParagraphList] = useState([]);
     const [videoList, setVideoList] = useState([]);
     const [residenciesList, setResidenciesList] = useState([]);
     const [showsList, setShowsList] = useState([]);
@@ -112,6 +113,7 @@ function Edit() {
         setArtistsList([]);
         setProductionList([]);
         setPressList([]);
+        setParagraphList([]);
         setVideoList([]);
         setResidenciesList([]);
         setShowsList([]);
@@ -138,6 +140,7 @@ function Edit() {
         setArtistsList(project.artistsList);
         setProductionList(project.productionList);
         setPressList(project.pressList);
+        setParagraphList(project.paragraphList);
         setVideoList(project.videoList)
         setResidenciesList(project.residenciesList);
         setShowsList(project.showsList);
@@ -192,6 +195,8 @@ function Edit() {
                     setProductionList={setProductionList} 
                     pressList={pressList} 
                     setPressList={setPressList} 
+                    paragraphList={paragraphList}
+                    setParagraphList={setParagraphList}
                     videoList={videoList} 
                     setVideoList={setVideoList} 
                     residenciesList={residenciesList} 

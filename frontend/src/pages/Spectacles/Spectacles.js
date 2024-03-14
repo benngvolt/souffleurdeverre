@@ -62,7 +62,7 @@ function Spectacles() {
                         </button>
                     </li>
                     {projectStates
-                        .filter(projectState => projects.some(project => project.projectState === projectState))
+                        ?.filter(projectState => projects.some(project => project.projectState === projectState))
                         .map((projectState)=>(
                         <li className={displayStateFilter===`${projectState}`?'spectacles_filtersHandler_filtersStateContainer_item spectacles_filtersHandler_filtersStateContainer_item--displayOn':'spectacles_filtersHandler_filtersStateContainer_item'}>
                             <button type='button' onClick={() => handleFilterProjectState(`${projectState}`)}>
@@ -78,7 +78,7 @@ function Spectacles() {
                         </button>
                     </li>
                     {projectTypes
-                        .filter(projectType => projects.some(project => project.projectType === projectType))
+                        ?.filter(projectType => projects.some(project => project.projectType === projectType))
                         .map((projectType)=>(
                         <li className={displayTypeFilter===`${projectType}`?'spectacles_filtersHandler_filtersTypeContainer_item spectacles_filtersHandler_filtersTypeContainer_item--displayOn':'spectacles_filtersHandler_filtersTypeContainer_item'}>
                             <button type='button' onClick={() => handleFilterProjectType(`${projectType}`)}>
@@ -92,10 +92,10 @@ function Spectacles() {
                 <p>Aucun projet à afficher</p>
             }
             <ul className='spectacles_projectsList' >
-                {sortedProjects.map((project) => (
+                {sortedProjects?.map((project) => (
                     <li>
                         <Link to={`/spectacles/${project._id}`} className='spectacles_projectsList_projectItem'>
-                            <img src={project.images[project.mainImageIndex].imageUrl} alt={project.title} className='spectacles_projectsList_projectItem_img' />
+                            <img src={project.images[project.mainImageIndex]?.imageUrl} alt={project.title} className='spectacles_projectsList_projectItem_img' />
                             <div className='spectacles_projectsList_projectItem_mainDatas'>
                                 <p className='spectacles_projectsList_projectItem_mainDatas_title'>{project.title}</p>
                                 <p className='spectacles_projectsList_projectItem_mainDatas_creationDate'>Création {project.creationDate}</p>

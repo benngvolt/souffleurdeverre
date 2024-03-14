@@ -19,6 +19,7 @@ function OneSpectacle() {
     const { productionFunctions, residencyTypes } = useContext(Context);
     const cleanedDescription = DOMPurify.sanitize(project.description);
     
+    
     useEffect(() => {
         fetch(`${API_URL}/api/projects/${id}`)
             .then((res) => res.json())
@@ -35,7 +36,15 @@ function OneSpectacle() {
                 <p className='oneSpectacle_mainDatas_title'>{project.title}</p>
                 <p className='oneSpectacle_mainDatas_subtitle'>{project.subtitle}</p>
                 <p className='oneSpectacle_mainDatas_description' dangerouslySetInnerHTML={{__html:cleanedDescription}}></p>
-                <p className='oneSpectacle_mainDatas_duration'>durée {project.duration}</p>
+                {project.paragraphList?.map((paragraph) => (
+                    <div>
+                        {paragraph.paragraphTitle &&
+                            <p>{paragraph.paragraphTitle}</p>
+                        }
+                        <p dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(paragraph.paragraphText)}}></p>
+                    </div>
+                ))}
+                <p className='oneSpectacle_mainDatas_duration'> durée {project.duration}</p>
                 <p className='oneSpectacle_mainDatas_creationDate'> date de création {project.creationDate}</p>
                 <div className='oneSpectacle_mainDatas_teamList'>
                     <ul className='oneSpectacle_mainDatas_teamList_artistsList'>
@@ -47,22 +56,27 @@ function OneSpectacle() {
                             </li>
                         ))}
                     </ul>
-                    {productionFunctions.map((productionFunction) => (
-                        <div>
-                            <p className='oneSpectacle_mainDatas_teamList_prodList_item_names'>{productionFunction}</p>
-                            <ul className='oneSpectacle_mainDatas_teamList_prodList'>
-                                {project.productionList
-                                    ?.filter((prod) => prod.productionFunction === productionFunction) // Retirez les accolades ici
-                                    .map((prod) => (
-                                        <li key={prod.id} className='oneSpectacle_residenciesList_labos_list_item'> {/* Utilisez prod.id ici au lieu de residency.id */}
-                                            <p>{prod.productionName}</p>
-                                        </li>
-                                    ))}
-                            </ul>
-                        </div>
-                    ))}
+                    <div className='oneSpectacle_mainDatas_teamList_prodListContainer'>
+                        {productionFunctions.map((productionFunction) => (
+                            project.productionList?.some(productionList => productionList.productionFunction===productionFunction) && (
+                            <div className='oneSpectacle_mainDatas_teamList_prodList_container'>
+                                <p className='oneSpectacle_mainDatas_teamList_prodList_item_names'>{productionFunction}</p>
+                                <ul className='oneSpectacle_mainDatas_teamList_prodList'>
+                                    {project.productionList
+                                        ?.filter((prod) => prod.productionFunction === productionFunction) 
+                                        .map((prod) => (
+                                            <li key={prod.id} className='oneSpectacle_residenciesList_labos_list_item'> 
+                                                <p>{prod.productionName}</p>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )
+                        ))}
+                    </div>
                 </div>
             </div>
+            
             <ul className={`oneSpectacle_imagesGrid oneSpectacle_imagesGrid_${project.images?.length}`}>
                 {project.images?.map((image, index) => (
                     <li className={`oneSpectacle_imagesGrid_item oneSpectacle_imagesGrid_${project.images?.length}_item_${index}`}>

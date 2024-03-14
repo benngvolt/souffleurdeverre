@@ -34,6 +34,7 @@ router.put ('/:id',
     uploadImages, 
     uploadPdfs, 
     projectsCtrl.updateOneProject,
-    deleteProjectFiles);
+    deleteProjectFiles
+    );
 
 module.exports = router;

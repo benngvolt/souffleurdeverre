@@ -155,7 +155,6 @@ function DNDGallery ({ imageFiles, setImageFiles, mainImageIndex, setMainImageIn
       setActiveId(null);
       setMainImageId(null);
     }
-  console.log(imageFiles);
   }
 
   function handleDragCancel() {
