@@ -133,7 +133,7 @@ function ProjectForm({
     ----- RESIDENCIES LIST -----------
     -------------------------*/
     const handleAddResidency = () => {
-        setResidenciesList([...residenciesList, { residencyType: '', startDates: '', endDates: '', city: '', placeName: '', placeLink: ''}]);
+        setResidenciesList([...residenciesList, { residencyType: '', startDates: '', endDates: '', city: '', placeName: '', placeLink: '', moreInfos:''}]);
     };
     const handleSupprResidency = (index) => {
         setResidenciesList (residenciesList.filter((_, i) => i !== index));
@@ -143,7 +143,7 @@ function ProjectForm({
     ----- SHOWS LIST -----------
     -------------------------*/
     const handleAddShow = () => {
-        setShowsList([...showsList, { dates: [''], city: '', placeName: '', placeLink: '', showsNumber:''}]);
+        setShowsList([...showsList, { dates: [''], city: '', placeName: '', placeLink: '', showsNumber:'', moreInfos:''}]);
     };
     const handleSupprShow = (index) => {
         setShowsList (showsList.filter((_, i) => i !== index));
@@ -151,16 +151,35 @@ function ProjectForm({
     const handleAddSameShowDate = (index) => {
         const updatedShowsList = [...showsList];
         if (!updatedShowsList[index].dates) {
-            updatedShowsList[index].dates = ['']; // Si show.dates n'existe pas encore, créez-le comme un tableau avec une date vide
+            updatedShowsList[index].dates = [{ day: '', times: [{ time: '', timeInfos: '' }] }]; // Créez un tableau contenant un objet vide avec les propriétés appropriées
         } else {
-            updatedShowsList[index].dates.push(''); // Sinon, ajoutez simplement une date vide
+            updatedShowsList[index].dates.push({ day: '', times: [{ time: '', timeInfos: '' }] }); // Ajoutez un nouvel objet vide avec les propriétés appropriées
         }
         setShowsList(updatedShowsList);
     };
+
+    const handleAddSameDateTime = (index, dateIndex) => {
+        const updatedShowsList = [...showsList];
+        if (!updatedShowsList[index].dates[dateIndex].times) {
+            updatedShowsList[index].dates[dateIndex].times = ['']; // Si show.dates n'existe pas encore, créez-le comme un tableau avec une date vide
+        } else {
+            updatedShowsList[index].dates[dateIndex].times.push({ time: '', timeInfos: '' }); // Sinon, ajoutez simplement une date vide
+        }
+        setShowsList(updatedShowsList);
+    };
+
     const handleSupprSameShowDate = (index, dateIndex) => {
         const updatedShowsList = [...showsList];
         if (updatedShowsList[index].dates) {
             updatedShowsList[index].dates = updatedShowsList[index].dates.filter((_, i) => i !== dateIndex);
+        }
+        setShowsList(updatedShowsList);
+    };
+
+    const handleSupprSameDateTime = (index, dateIndex, timeIndex) => {
+        const updatedShowsList = [...showsList];
+        if (updatedShowsList[index].dates[dateIndex].times) {
+            updatedShowsList[index].dates[dateIndex].times = updatedShowsList[index].dates[dateIndex].times.filter((_, i) => i !== timeIndex);
         }
         setShowsList(updatedShowsList);
     };
@@ -657,6 +676,19 @@ function ProjectForm({
                             ></input>
                         </div>
                         <div>
+                            <label htmlFor={`inputProjectResidencyInfos${index}`}>INFOS+</label>
+                            <input
+                                type='text'
+                                id={`inputProjectResidencyInfos${index}`}
+                                value={residency.moreInfos}
+                                onChange={(e) => {
+                                    const updatedResidenciesList = [...residenciesList];
+                                    updatedResidenciesList[index].moreInfos = e.target.value;
+                                    setResidenciesList(updatedResidenciesList);
+                                }}
+                            ></input>
+                        </div>
+                        <div>
                             <label htmlFor={`inputProjectResidencyPlaceName${index}`}>SALLE, LIEU</label>
                             <input
                                 type='text'
@@ -692,25 +724,54 @@ function ProjectForm({
                 <p> REPRÉSENTATIONS </p>
                 {showsList?.map((show, index) => (
                     <div key={index} className='projectForm_projectResidenciesList_line'>
-                        <div>
+                        <div className='projectForm_projectResidenciesList_line_field'>
                             <label htmlFor={`inputProjectShowDates${index}`}>DATES DE REPRÉSENTATION</label>
-                            {show.dates.map((date, dateIndex)=>(
-                                <div> 
+                            {show.dates?.map((date, dateIndex)=>(
+                            <div className='projectForm_projectResidenciesList_line_field_container'> 
+                                <input
+                                    key={dateIndex}
+                                    type='date'
+                                    id={`inputProjectShowDates${index}`}
+                                    value={date.day}
+                                    onChange={(e) => {
+                                        const updatedShowsList = [...showsList];
+                                        updatedShowsList[index].dates[dateIndex].day = e.target.value;
+                                        setShowsList(updatedShowsList);
+                                    }}
+                                />
+                                {date.times?.map((time, timeIndex) => (
+                                <div>
                                     <input
-                                        key={dateIndex}
-                                        type='datetime-local'
-                                        id={`inputProjectShowDates${index}`}
-                                        value={date}
+                                        key={`inputProjectShowDatesTimesTime${timeIndex}`}
+                                        type='time'
+                                        id={`inputProjectShowDatesTimesTime${timeIndex}`}
+                                        value={time.time}
                                         onChange={(e) => {
                                             const updatedShowsList = [...showsList];
-                                            updatedShowsList[index].dates[dateIndex] = e.target.value;
+                                            updatedShowsList[index].dates[dateIndex].times[timeIndex].time = e.target.value;
                                             setShowsList(updatedShowsList);
                                         }}
                                     />
-                                    <button type="button" onClick={() =>handleSupprSameShowDate(index, dateIndex)} >SUPPR</button>
+                                    <label>INFOS SUPPLÉMENTAIRES</label>
+                                    <input
+                                        key={`inputProjectShowDatesTimesInfos${timeIndex}`}
+                                        type='text'
+                                        id={`inputProjectShowDatesTimesInfos${timeIndex}`}
+                                        value={time.timeInfos}
+                                        onChange={(e) => {
+                                            const updatedShowsList = [...showsList];
+                                            updatedShowsList[index].dates[dateIndex].times[timeIndex].timeInfos = e.target.value;
+                                            setShowsList(updatedShowsList);
+                                        }}
+                                    />
+                                    <button type="button" onClick={() =>handleSupprSameDateTime(index, dateIndex, timeIndex)} >SUPPR HORAIRE</button>
                                 </div>
+                                ))}
+                                <button type="button" onClick={() =>handleAddSameDateTime(index, dateIndex)} >+HORAIRE</button>
+                                <button type="button" onClick={() =>handleSupprSameShowDate(index, dateIndex)} >SUPPR DATE</button>
+                            </div>
                             ))}
-                            <button type="button" onClick={() =>handleAddSameShowDate(index)} >+</button>
+                            <button type="button" onClick={() =>handleAddSameShowDate(index)} >+DATE</button>
                         </div>
                         <div>
                             <label htmlFor={`inputProjectShowCity${index}`}>COMMUNE DE REPRÉSENTATION</label>
@@ -721,6 +782,19 @@ function ProjectForm({
                                 onChange={(e) => {
                                     const updatedShowsList = [...showsList];
                                     updatedShowsList[index].city = e.target.value;
+                                    setShowsList(updatedShowsList);
+                                }}
+                            ></input>
+                        </div>
+                        <div>
+                            <label htmlFor={`inputProjectShowInfos${index}`}>INFOS+</label>
+                            <input
+                                type='text'
+                                id={`inputProjectShowInfos${index}`}
+                                value={show.moreInfos}
+                                onChange={(e) => {
+                                    const updatedShowsList = [...showsList];
+                                    updatedShowsList[index].moreInfos = e.target.value;
                                     setShowsList(updatedShowsList);
                                 }}
                             ></input>

@@ -16,7 +16,7 @@ export const Provider = ({ children }) => {
     const projectTypes = ['tout public', 'jeune public', 'public adolescent', 'lecture-spectacle', 'lecture', 'médiation'];
     const projectStates = ['en tournée', 'en création', 'archivé'];
     const productionFunctions = ['Production','Co-production','Soutien','Remerciements', 'Aide à la création', 'Partenariat', 'Aide à la résidence d’écriture'];
-    const residencyTypes = ['Laboratoires','Résidences d\'écriture','Résidences de création', 'Répétitions'];
+    const residencyTypes = ['Laboratoires','Résidences d\'écriture','Résidences de création', 'Répétitions', "Lectures et rencontres"];
 
     /*---------------------------------------------
     ----- Chargement des projets et stockage ------

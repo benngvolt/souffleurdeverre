@@ -49,17 +49,27 @@ const projectSchema = mongoose.Schema({
         city: {type: String, required: false},
         placeName: {type: String, required: false},
         placeLink: {type: String, required: false},
+        moreInfos: {type: String, required: false}
         }
     ],
     showsList: [
         {
-        dates: [
-            {type: String, required: false},
+        dates: [ 
+            {
+            day: {type: String, required: false},
+                times: [
+                    {
+                        time: {type: String, required: false},
+                        timeInfos: {type: String, required: false}
+                    }
+                ]
+            }
         ],
         city: {type: String, required: false},
         placeName: {type: String, required: false},
         placeLink: {type: String, required: false},
         showsNumber: {type: Number, required: false},
+        moreInfos: {type: String, required: false}
         }
     ],
     pdfList : [

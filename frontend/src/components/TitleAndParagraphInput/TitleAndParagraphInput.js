@@ -15,20 +15,7 @@ function TitleAndParagraphInput({setList, topic, list, paragraphTopic, titleTopi
             <p>{topic}</p>
             {list.map((item, index) => (
                 <div key={index} className='projectForm_projectPressList_line'>
-                    <div>
-                        <label htmlFor={`inputProjectPressQuote${index}`}>{paragraphTopic}</label>
-                        <textarea
-                            type='textarea'
-                            id={`inputProjectPressQuote${index}`}
-                            value= {item[paragraphProp].replace(/<br>/g, "\n")}
-                            onChange={(e) => {
-                                const updatedList = [...list];
-                                updatedList[index][paragraphProp] = e.target.value;
-                                setList(updatedList);
-                            }}
-                        ></textarea>
-                    </div>
-                    <div>
+                    <div className='projectForm_projectPressList_line_title'>
                         <label htmlFor={`inputProjectPressMediaName${index}`}>{titleTopic}</label>
                         <input
                             type='text'
@@ -41,10 +28,23 @@ function TitleAndParagraphInput({setList, topic, list, paragraphTopic, titleTopi
                             }}
                         ></input>
                     </div>
+                    <div className='projectForm_projectPressList_line_paragraph'>
+                        <label htmlFor={`inputProjectPressQuote${index}`}>{paragraphTopic}</label>
+                        <textarea
+                            type='textarea'
+                            id={`inputProjectPressQuote${index}`}
+                            value= {item[paragraphProp].replace(/<br>/g, "\n")}
+                            onChange={(e) => {
+                                const updatedList = [...list];
+                                updatedList[index][paragraphProp] = e.target.value;
+                                setList(updatedList);
+                            }}
+                        ></textarea>
+                    </div>
                     <button type='button' onClick={() => handleSupprItem(index)}>SUPPRIMER</button>
                 </div>              
             ))}
-            <button type='button' onClick={() =>handleAddItem()} >+ AJOUTER UN ARTICLE DE PRESSE</button>
+            <button type='button' onClick={() =>handleAddItem()} >+ AJOUTER</button>
         </div>
     )
 }

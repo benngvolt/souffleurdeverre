@@ -78,7 +78,6 @@
 
     &_projectArtistsList,
     &_projectProductionList,
-    &_projectPressList,
     &_projectVideoList,
     &_projectResidenciesList,
     &_projectPdfFile {
@@ -119,6 +118,80 @@
             button {
                 background: none;
                 border: none;
+            }
+        } 
+    }
+
+    &_projectPressList {
+        width: 80%;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        row-gap: 19px;
+
+        input, select {
+            width: 40%;
+            border: none;
+            background-color: $colorHover;
+        }
+        &_line {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            column-gap: 9px;
+            width: 100%;
+
+            label {
+                font-size: 13px;
+                
+            }
+            input {
+                width: 100%;
+            }
+
+            div {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                column-gap: 15px;
+                width: 100%;
+            }
+
+            button {
+                background: none;
+                border: none;
+            }
+            &_title {
+                input {
+                    height: auto;
+                    width: 100%;
+                    padding: 5px 10px;
+                    box-sizing: border-box;
+            }
+            }
+
+            &_paragraph {
+
+                textarea {
+                    background-color: $colorHover;
+                    border: none;
+                    @include paddingArea;
+                    width: 100%;
+                    min-height: 150px; 
+                }
+            }
+
+
+        }
+    }
+
+    &_projectResidenciesList {
+        &_line {
+            &_field {
+                &_container {
+                    display: flex;
+                    flex-direction: row;
+                }
             }
         }
     }

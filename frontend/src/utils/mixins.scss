@@ -90,6 +90,11 @@
     text-align: justify;
 }
 
+@mixin paddingArea {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
 $colorDarkGrey: #232323;
 $colorMediumGrey: #535353;
 $colorLightGrey: #E9E9E9;
