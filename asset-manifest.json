@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/souffleurdeverre/static/css/main.47a11a5d.css",
-    "main.js": "/souffleurdeverre/static/js/main.a4999b20.js",
+    "main.css": "/souffleurdeverre/static/css/main.bb2397be.css",
+    "main.js": "/souffleurdeverre/static/js/main.efc08667.js",
     "static/js/655.5e62bcaf.chunk.js": "/souffleurdeverre/static/js/655.5e62bcaf.chunk.js",
     "static/js/787.9e9f4ffd.chunk.js": "/souffleurdeverre/static/js/787.9e9f4ffd.chunk.js",
     "static/media/Julien_Rocha_Julien_Bruhat.jpg": "/souffleurdeverre/static/media/Julien_Rocha_Julien_Bruhat.cdaf9d3c9f466e68e07a.jpg",
     "static/media/ProximaNova-LightIt.ttf": "/souffleurdeverre/static/media/ProximaNova-LightIt.5a76d7bf8d6b966c72a6.ttf",
     "static/media/ProximaNova-Light.ttf": "/souffleurdeverre/static/media/ProximaNova-Light.4e6430d1b1cdd53aab1d.ttf",
     "static/media/ProximaNova-Bold.ttf": "/souffleurdeverre/static/media/ProximaNova-Bold.f3c7fec78a9f7f598801.ttf",
-    "static/media/Shakeout.ttf": "/souffleurdeverre/static/media/Shakeout.abb710ab0c177f7b9a5a.ttf",
+    "static/media/WarsawGothic.otf": "/souffleurdeverre/static/media/WarsawGothic.6f0a07fe7cb1bf37e7b0.otf",
+    "static/media/logoSouffleur.svg": "/souffleurdeverre/static/media/logoSouffleur.f9f69a7e72f5a5846240d543697f7755.svg",
     "index.html": "/souffleurdeverre/index.html",
-    "static/media/logoSouffleur.svg": "/souffleurdeverre/static/media/logoSouffleur.797c877fe96e58cd83e322139df1af0a.svg",
-    "main.47a11a5d.css.map": "/souffleurdeverre/static/css/main.47a11a5d.css.map",
-    "main.a4999b20.js.map": "/souffleurdeverre/static/js/main.a4999b20.js.map",
+    "main.bb2397be.css.map": "/souffleurdeverre/static/css/main.bb2397be.css.map",
+    "main.efc08667.js.map": "/souffleurdeverre/static/js/main.efc08667.js.map",
     "655.5e62bcaf.chunk.js.map": "/souffleurdeverre/static/js/655.5e62bcaf.chunk.js.map",
     "787.9e9f4ffd.chunk.js.map": "/souffleurdeverre/static/js/787.9e9f4ffd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.47a11a5d.css",
-    "static/js/main.a4999b20.js"
+    "static/css/main.bb2397be.css",
+    "static/js/main.efc08667.js"
   ]
 }
