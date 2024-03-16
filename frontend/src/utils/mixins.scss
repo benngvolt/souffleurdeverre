@@ -22,10 +22,51 @@
 
 @font-face {
     font-family: 'SpecialFont_regular';
-    src: url('../../public/assets/fonts/Shakeout.ttf') format('truetype');
+    src: url('../../public/assets/fonts/WarsawGothic/WarsawGothic.otf') format('truetype');
     /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 
+
+
+@mixin Title {
+    font-family: 'SpecialFont_regular';
+}
+
+@mixin TextBloc {
+    font-family: 'MainFont_light';
+    font-size: 16px;
+    text-align: justify;
+}
+
+@mixin TextTitle {
+    font-family: 'MainFont_bold';
+    font-size: 16px;
+    text-align: justify;
+}
+
+@mixin BoldType {
+    font-family: 'MainFont_bold';
+    font-size: 18px;
+}
+
+@mixin LightType {
+    font-family: 'MainFont_light';
+    font-size: 18px;
+}
+
+@mixin SidePaddings {
+    padding: 0 98px;
+    box-sizing: border-box;
+}
+
+@mixin DropColorFilter {
+    filter: drop-shadow(5px 5px 1px $colorTwo) drop-shadow(-5px -5px 1px $colorThree) ;
+}
+
+
+
+
+//A CLEANER:
 
 @mixin Button {
     display: inline-block;
@@ -79,17 +120,6 @@
     }
 }
 
-@mixin Title {
-    font-family: 'SpecialFont_regular';
-    font-size: 120px;
-}
-
-@mixin TextBloc {
-    font-family: 'MainFont_light';
-    font-size: 18px;
-    text-align: justify;
-}
-
 @mixin paddingArea {
     padding: 10px;
     box-sizing: border-box;
@@ -101,8 +131,8 @@ $colorLightGrey: #E9E9E9;
 $colorHover: pink;
 
 $colorOne: rgba(255, 0, 0, 0.8);
-$colorTwo: rgba(0, 51, 255, 0.8);
-$colorThree: rgba(4, 255, 0, 0.8);
+$colorThree: rgba(0, 255, 0, 0.8);
+$colorTwo: rgba(255, 0, 255, 0.8);
 
 
 
@@ -118,12 +148,15 @@ $padMaxWidth: 991px;
 @keyframes float {
 	0% {
 		transform: translatey(0px);
+        
 	}
 	50% {
 		transform: translatey(-20px);
+        
 	}
 	100% {
 		transform: translatey(0px);
+        
 	}
 }
 

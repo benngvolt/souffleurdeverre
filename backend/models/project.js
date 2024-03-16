@@ -56,7 +56,7 @@ const projectSchema = mongoose.Schema({
         {
         dates: [ 
             {
-            day: {type: String, required: false},
+                day: {type: String, required: false},
                 times: [
                     {
                         time: {type: String, required: false},

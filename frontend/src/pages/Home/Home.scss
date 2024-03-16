@@ -21,7 +21,7 @@
             width: 300px;
             margin: auto;
             animation: float 6s ease-in-out infinite;
-            filter: drop-shadow(15px 5px 1px $colorTwo) drop-shadow(-15px -5px 1px $colorThree) ;
+            filter: drop-shadow(5px 5px 1px $colorTwo) drop-shadow(-5px -5px 1px $colorThree) ;
         }
         &_text {
             font-family: 'MainFont_light';
