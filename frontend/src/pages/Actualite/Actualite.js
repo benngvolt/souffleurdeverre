@@ -17,7 +17,7 @@ function Actualite() {
         project.showsList && project.showsList.length > 0 &&
         project.showsList.some(show => 
             show.dates && show.dates.length > 0 && 
-            show.dates.some(date => new Date(date) > currentDate)
+            show.dates.some(date => new Date(date.day) > currentDate)
         )
     );
 
@@ -27,12 +27,13 @@ function Actualite() {
                 <article>
                     <p>{project.title}</p>
                     <p>{project.projectType}</p>
-                    {project.showsList.map(show => (
+
+                    {project.showsList.filter(show => show.dates.some(date => new Date(date.day) > currentDate)).map(show => (
                         <div>
                             <FullPonctualDates 
                                 key={show._id} 
                                 datesArray={show.dates.filter(date =>
-                                    new Date(date) > currentDate
+                                    new Date(date.day) > currentDate
                                 )} 
                             />
                             <p>{show.placeName}</p>

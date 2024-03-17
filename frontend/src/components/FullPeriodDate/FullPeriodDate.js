@@ -1,4 +1,5 @@
 import './FullPeriodDate.scss'
+import '../../pages/OneSpectacle/OneSpectacle.scss'
  
 function FullPeriodDate({startISODate, endISODate}) {
 
@@ -39,7 +40,7 @@ let fullEndDateString = (endDay < 10 ? '0' : '') + endDay + ' ' + monthNames[end
 
 
     return  (      
-        <span className='oneSpectacle_residenciesList_rehearsals_list_item_dates'>du {fullStartDateString()} au {fullEndDateString} </span>
+        <span className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text_date'>du {fullStartDateString()} au {fullEndDateString} </span>
     )
 }
 

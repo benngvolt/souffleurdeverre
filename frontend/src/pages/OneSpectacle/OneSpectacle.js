@@ -76,38 +76,20 @@ function OneSpectacle() {
                     </li>
                 ))}
             </ul>
-            <div className='oneSpectacle_mainDatas_teamList_prodListContainer'>
-                {productionFunctions.map((productionFunction) => (
-                    project.productionList?.some(productionList => productionList.productionFunction===productionFunction) && (
-                    <div className='oneSpectacle_mainDatas_teamList_prodListContainer_prodTypeContainer'>
-                        <p className='oneSpectacle_mainDatas_teamList_prodListContainer_prodTypeContainer_prodType'>{productionFunction}</p>
-                        <ul className='oneSpectacle_mainDatas_teamList_prodListContainer_prodTypeContainer_list'>
-                            {project.productionList
-                            ?.filter((prod) => prod.productionFunction === productionFunction) 
-                            .map((prod) => (
-                                <li key={prod.id} className='oneSpectacle_mainDatas_teamList_prodListContainer_prodTypeContainer_list_item'> 
-                                    <p className='oneSpectacle_mainDatas_teamList_prodListContainer_prodTypeContainer_list_item_name'>{prod.productionName}</p>
-                                </li>
-                            ))}
-                        </ul>
-                        </div>
-                    )
-                ))}
-            </div>
-            <div className='oneSpectacle_residenciesDatasContainer'>
-                <div className='oneSpectacle_residenciesList'>
+            <div className='oneSpectacle_mainDatas_residenciesAndShows'>
+                <div className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList'>
                     {residencyTypes?.map((residencyType) => (
                     project.residenciesList?.some(residency => residency.residencyType === residencyType) && (
-                        <div className='oneSpectacle_residenciesList_labos' key={residencyType}>
-                            <p className='oneSpectacle_residenciesList_labos_title'>{residencyType}</p>
-                            <ul className='oneSpectacle_residenciesList_labos_list'>
+                        <div className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer' key={residencyType}>
+                            <p className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_title'>{residencyType}</p>
+                            <ul className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list'>
                                 {project.residenciesList
                                 ?.filter(residency => residency.residencyType === residencyType)
                                 .map(residency => (
-                                    <li key={residency.id} className='oneSpectacle_residenciesList_labos_list_item'>
-                                        <p className='oneSpectacle_residenciesList_labos_list_item_text'>
+                                    <li key={residency.id} className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item'>
+                                        <p className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text'>
                                             {residency.startDates && residency.endDates && (
-                                                <FullPeriodDate startISODate={residency.startDates} endISODate={residency.endDates}/>
+                                            <FullPeriodDate startISODate={residency.startDates} endISODate={residency.endDates}/>
                                             )}
                                             <IsALink link={residency.placeLink} name={residency.placeName}/>
                                             {`/ ${residency.city ? residency.city : ""}`}
@@ -118,20 +100,41 @@ function OneSpectacle() {
                         </div>
                     )
                     ))}
-                    <div className='oneSpectacle_residenciesList_firstShows'>
-                        <p className='oneSpectacle_residenciesList_firstShows_title'>PREMIÈRES REPRÉSENTATIONS</p>
-                        <ul className='oneSpectacle_residenciesList_firstShows_list'>
+                </div>
+                <div>
+                    <div className='oneSpectacle_mainDatas_residenciesAndShows_showsList'>
+                        <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_title'>PREMIÈRES REPRÉSENTATIONS</p>
+                        <ul className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list'>
                             {project.showsList?.map((show) => (
-                                <li key={show.id} className='oneSpectacle_residenciesList_firstShows_list_item'>
-                                    <p className='oneSpectacle_residenciesList_firstShows_list_item_text'>
+                                <li key={show.id} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item'>
+                                    <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text'>
                                     <FullPonctualDates datesArray={show.dates}/>
                                     <IsALink link={show.placeLink} name={show.placeName}/>   
-                                    {`/ ${show.city ? show.city : ""}`}</p>
+                                    {`/ ${show.city ? show.city : ""}`}
+                                    </p>
                                 </li>
                             ))}
                         </ul>
                     </div>
                 </div>
+            </div>
+            <div className='oneSpectacle_mainDatas_prodList'>
+                {productionFunctions.map((productionFunction) => (
+                    project.productionList?.some(productionList => productionList.productionFunction===productionFunction) && (
+                    <div className='oneSpectacle_mainDatas_prodList_prodTypeContainer'>
+                        <p className='oneSpectacle_mainDatas_prodList_prodTypeContainer_prodType'>{productionFunction}</p>
+                        <ul className='oneSpectacle_mainDatas_prodList_prodTypeContainer_list'>
+                            {project.productionList
+                            ?.filter((prod) => prod.productionFunction === productionFunction) 
+                            .map((prod) => (
+                                <li key={prod.id} className='oneSpectacle_mainDatas_prodList_prodTypeContainer_list_item'> 
+                                    <p className='oneSpectacle_mainDatas_prodList_prodTypeContainer_list_item_name'>{prod.productionName}</p>
+                                </li>
+                            ))}
+                        </ul>
+                        </div>
+                    )
+                ))}
             </div>
         </section>
     )

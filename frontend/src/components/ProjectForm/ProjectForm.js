@@ -143,7 +143,7 @@ function ProjectForm({
     ----- SHOWS LIST -----------
     -------------------------*/
     const handleAddShow = () => {
-        setShowsList([...showsList, { dates: [''], city: '', placeName: '', placeLink: '', showsNumber:'', moreInfos:''}]);
+        setShowsList([...showsList, { dates: [{day:'', times:[{time: '', timeInfos: ''}] }], city: '', placeName: '', placeLink: '', showsNumber:'', moreInfos:''}]);
     };
     const handleSupprShow = (index) => {
         setShowsList (showsList.filter((_, i) => i !== index));
@@ -323,8 +323,8 @@ function ProjectForm({
         }));
         //RÉORGANISATION DES ELEMENTS REPRÉSENTATIONS' PAR ORDRE CHRONOLOGIQUE
         const sortedShowsList = cleanedShowsList.sort((a, b) => {
-            const dateA = new Date(a.dates[0]);
-            const dateB = new Date(b.dates[0]);
+            const dateA = new Date(a.dates[0].day);
+            const dateB = new Date(b.dates[0].day);
             return dateA - dateB;
          });
         // const token = window.sessionStorage.getItem('1');

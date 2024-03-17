@@ -32,6 +32,12 @@
     font-family: 'SpecialFont_regular';
 }
 
+@mixin SecondTitle {
+    font-family: 'SpecialFont_regular';
+    font-size: 30px;
+    text-transform: uppercase;
+}
+
 @mixin TextBloc {
     font-family: 'MainFont_light';
     font-size: 16px;
@@ -46,12 +52,12 @@
 
 @mixin BoldType {
     font-family: 'MainFont_bold';
-    font-size: 18px;
+    font-size: 16px;
 }
 
 @mixin LightType {
     font-family: 'MainFont_light';
-    font-size: 18px;
+    font-size: 16px;
 }
 
 @mixin SidePaddings {

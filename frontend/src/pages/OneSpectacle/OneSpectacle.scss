@@ -146,6 +146,147 @@
             }
             
         }
+
+        &_prodList {
+            display: flex;
+            flex-direction: column;
+            @include SidePaddings;
+            width: 100%;
+            padding: 73px 0;
+            background-color: $colorThree;
+            
+            &_prodTypeContainer {
+                
+                margin: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                &_prodType {
+                    @include BoldType;  
+                }
+                &_list {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 0;
+                    
+                    &_item {
+                        list-style-type: none;
+                        
+                        &_name {
+                            margin: 0 auto;
+                            @include LightType;
+                        }
+                    } 
+                }
+            }
+        }
+
+        &_residenciesAndShows {
+                display: flex;
+                flex-direction: column;
+                @include SidePaddings;
+                width: 100%;
+            &_residenciesList {
+                width: 100%;
+                margin: auto;
+                display: flex;
+                justify-content: center;
+                flex-direction: row;
+                flex-wrap: wrap;
+                column-gap: 45px;
+                padding: 73px 0;
+                &_typeContainer {
+                    width: auto;
+                    display: flex;
+                    flex-direction: column;
+                    &_title {
+                        @include SecondTitle;
+                    }
+                    &_list {
+                        display: flex;
+                        flex-direction: column;
+                        list-style-type: none;
+                        padding: 0;
+                        
+                        &_item {
+                            
+                            &_text {
+                                @include LightType;
+                                
+                                &_date {
+                                    @include BoldType;  
+                                }
+                                &_link {
+                                    text-decoration: none;
+                                    color: $colorDarkGrey;
+                                    margin: 0;
+                                    &:hover {
+                                        color: $colorTwo;
+                                        cursor: pointer;
+                                    }
+                                    &_icon {
+                                        margin-left: 9px;
+                                        height: 10px;
+                                        padding-bottom: 2px;
+                                    }
+                                    
+                                }
+
+                                &_noLink {
+                                    color: $colorDarkGrey;
+                                    margin: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            &_showsList {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                margin: auto;
+                &_title {
+                    @include SecondTitle;
+                    margin: 30px auto;
+                }
+                &_list {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    list-style-type: none;
+                    padding: 0;
+                    &_item {
+                        &_text { 
+                            @include LightType;
+                            
+                            &_dates {
+                                display: flex;
+                                flex-direction: row;
+                                column-gap: 5px;
+                                margin: auto;
+                                &_singleDate {
+                                    display: flex;
+                                    flex-direction: row;
+                                    column-gap: 5px;
+                                    margin: auto;
+                                    &_day {
+                                        @include BoldType;
+                                        margin: 0;
+                                        
+                                    }
+                                    &_time {
+                                        @include LightType;
+                                        margin: 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     &_imagesGrid {
@@ -298,90 +439,6 @@
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-            }
-        }
-    }
-    &_residenciesDatasContainer {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-    &_residenciesList {
-        width: 49%;
-        display: flex;
-        flex-direction: column;
-        margin: 50px;
-
-        &_labos, &_writing, &_creation, &_rehearsals, &_firstShows {
-
-            &--displayOff {
-                display: none;
-            }
-
-            display: flex;
-            flex-direction: column;
-            margin: 20px 0;
-
-
-            &_title {
-                font-family: 'MainFont_light';
-                font-size: 36px;
-                margin: 0 0 20px 0;
-            }
-            &_list {
-                display: flex;
-                flex-direction: column;
-                padding: 0;
-                margin: 0;
-
-                &_item {
-                    list-style-type: none;
-
-                    &_text {
-                        font-family: 'MainFont_light';
-                        color: $colorDarkGrey;
-                        text-align: justify;
-                        font-size: 18px;
-                        margin: 0; 
-                    }
-
-                    &_dates {
-                        width: auto;
-                        font-family: 'MainFont_bold';
-                        text-align: justify;
-                        color: $colorDarkGrey;
-                        font-size: 18px;
-                        margin-right: 10px;
-                    }
-
-                    &_link, &_noLink {
-                        font-family: 'MainFont_light';
-                        text-align: justify;
-                        font-size: 18px;
-                        text-decoration: none;
-                        color: $colorMediumGrey;
-                        margin: 0;
-                        padding-right: 10px;
-                    }
-
-                    &_link {
-
-                        &_icon {
-                            color: $colorDarkGrey;
-                            font-size: 13px;
-                            margin: 0;
-                        }
-                        &:hover {
-
-                            cursor: pointer;
-                            color: $colorHover;
-
-    
-                        }
-                    }
-                }
             }
         }
     }
