@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 24.3.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 310.7 219.4" style="enable-background:new 0 0 310.7 219.4;" xml:space="preserve">
+	 viewBox="0 0 374.1 251.7" style="enable-background:new 0 0 374.1 251.7;" xml:space="preserve">
 <style type="text/css">
 	.st0{display:none;}
 	.st1{display:inline;fill:#00FF00;}
 </style>
 <g class="st0">
-	<path class="st1" d="M118.3,98.6L41.9,175c21.1,21.1,55.3,21.1,76.4,0S139.4,119.7,118.3,98.6z"/>
-	<path class="st1" d="M155.5,42.9l-76.3,76.4c-21.1-21.1-21.1-55.3,0-76.4S134.4,21.8,155.5,42.9z"/>
-	<path class="st1" d="M151.7,82.8v108c29.8,0,54-24.2,54-54S181.5,82.8,151.7,82.8z"/>
-	<polyline class="st1" points="204.1,82.8 244.6,190.8 285.1,82.8 	"/>
+	<path class="st1" d="M226.7,164.6L150.3,241c21.1,21.1,55.3,21.1,76.4,0S247.8,185.7,226.7,164.6z"/>
+	<path class="st1" d="M263.9,108.9l-76.3,76.4c-21.1-21.1-21.1-55.3,0-76.4S242.8,87.8,263.9,108.9z"/>
+	<path class="st1" d="M260.1,148.8v108c29.8,0,54-24.2,54-54S289.9,148.8,260.1,148.8z"/>
+	<polyline class="st1" points="312.5,148.8 353,256.8 393.5,148.8 	"/>
 </g>
 <g>
 	
-		<image style="overflow:visible;" width="317" height="237" xlink:href="2CAF650DDF1E2A3A.png"  transform="matrix(1 0 0 1 -5.0552 -6.5299)">
+		<image style="overflow:visible;enable-background:new    ;" width="317" height="237" xlink:href="2CAF650DDF1E2A3A.png"  transform="matrix(1.4052 0 0 1.4052 -25.0931 -36.5852)">
 	</image>
 </g>
 <g>
 	
-		<image style="overflow:visible;" width="317" height="237" xlink:href="2CAF650DDF1E2A3E.png"  transform="matrix(1 0 0 1 -17.0552 -10.5299)">
+		<image style="overflow:visible;enable-background:new    ;" width="317" height="237" xlink:href="2CAF650DDF1E2A3E.png"  transform="matrix(1.4052 0 0 1.4052 -41.9553 -42.2059)">
 	</image>
 </g>
 <g>
-	<path d="M102.2,99.3l-76.4,76.4c21.1,21.1,55.3,21.1,76.4,0S123.3,120.4,102.2,99.3z"/>
-	<path d="M139.4,43.6L63.1,120C42,98.9,42,64.7,63.1,43.6S118.3,22.5,139.4,43.6z"/>
-	<path d="M135.6,83.5v108c29.8,0,54-24.2,54-54S165.4,83.5,135.6,83.5z"/>
-	<polyline points="188,83.5 228.5,191.5 269,83.5 	"/>
+	<path d="M125.6,112.1L18.3,219.5c29.6,29.6,77.7,29.6,107.4,0S155.3,141.8,125.6,112.1z"/>
+	<path d="M177.9,33.9L70.7,141.2C41,111.6,41,63.5,70.7,33.9S148.2,4.2,177.9,33.9z"/>
+	<path d="M172.6,89.9v151.8c41.9,0,75.9-34,75.9-75.9S214.4,89.9,172.6,89.9z"/>
+	<polyline points="246.2,89.9 303.1,241.7 360,89.9 	"/>
 </g>
-<path class="st0" d="M119.7-33.5"/>
+<path class="st0" d="M228.1,32.5"/>
 </svg>

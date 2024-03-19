@@ -1,7 +1,8 @@
 import '../../pages/OneSpectacle/OneSpectacle.scss'
+import '../../pages/Actualite/Actualite.scss'
 
 
-function FullPonctualDates({datesArray}) {
+function FullPonctualDates({datesArray, className}) {
 
     const monthNames = [
         "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
@@ -36,12 +37,12 @@ function FullPonctualDates({datesArray}) {
     const totalDates = datesArray.length;
 
     return  ( 
-        <div className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text_dates'>
+        <div className={`${className}_dates`}>
             {datesArray.map((date, index) => (
-                <div className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text_dates_singleDate' key={index}>
-                    <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text_dates_singleDate_day'> {`${formatDay(date.day, index, totalDates)}`} </p>
+                <div className={`${className}_dates_singleDate`} key={index}>
+                    <p className={`${className}_dates_singleDate_day`}> {`${formatDay(date.day, index, totalDates)}`} </p>
                     {date.times.length > 0 && (
-                    <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text_dates_singleDate_time'>{formatTimes(date.times)}</p>
+                    <p className={`${className}_dates_singleDate_time`}>{formatTimes(date.times)}</p>
                     )}
                 </div>
             ))}

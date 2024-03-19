@@ -56,8 +56,6 @@ async function deleteProjectPdfFiles(req) {
   try {
     const cloudPdfUrls = await getCloudPdfUrls(); // Utilisez "await" pour attendre la résolution de la promesse
     const dbPdfUrls = await getDbPdfUrls(); // Utilisez "await" pour attendre la résolution de la promesse
-    console.log(cloudPdfUrls);
-    console.log(dbPdfUrls);
     const pdfToDelete = cloudPdfUrls.filter((url) => !dbPdfUrls.includes(url));
     // Suppression des images non référencées dans le cloud
     for (const pdfUrl of pdfToDelete) {
@@ -88,7 +86,8 @@ async function deleteBiographyImageFiles(req) {
 
     // Récupérez toutes les séries depuis MongoDB
     const biographies = await Biography.find();
-    const imageUrls = biographies.flatMap((biography) => biography.bioImageUrl.replace(/\+/g, ' '));
+    
+    const imageUrls = biographies.flatMap((biography) => decodeURIComponent(biography.bioImageUrl.replace(/\+/g, ' ')));
     return imageUrls;
   }
     
@@ -96,7 +95,9 @@ async function deleteBiographyImageFiles(req) {
     const cloudImageUrls = await getCloudImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
     const dbImageUrls = await getDbImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
     const imagesToDelete = cloudImageUrls.filter((url) => !dbImageUrls.includes(url));
-  
+    console.log(cloudImageUrls)
+    console.log(dbImageUrls)
+    console.log(imagesToDelete)
     // Suppression des images non référencées dans le cloud
     for (const imageUrl of imagesToDelete) {
       // Divisez l'URL en parties en utilisant "/" comme séparateur

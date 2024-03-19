@@ -65,7 +65,7 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
-                width: 30%;
+                width: 47%;
                 
                 @include TextBloc;
                 margin: 30px auto;
@@ -128,14 +128,7 @@
                 row-gap: 10px;
 
                 &_video, &_pdf {
-                    padding: 10px;
-                    box-sizing: border-box;
-                    font-family: 'SpecialFont_regular';
-                    font-size: 30px;
-                    width: 12em;
-                    text-transform: uppercase;
-                    color: $colorDarkGrey;
-                    text-decoration: none;
+                    @include ButtonType;
                 }
                 &_video {
                     background-color: $colorThree;

@@ -10,8 +10,9 @@
         column-gap: 60px;
         border: none;
         background: none;
-        padding: 0 100px 0 0;
+        padding: 0 54px 0 0;
         box-sizing: border-box;
+        height: 272px;
         &:hover {
             cursor: pointer;
             background-color: $colorHover;
@@ -26,16 +27,18 @@
 
             display: flex;
             flex-direction: column;
+
             text-align: left;
 
             &_name {
                 font-family: 'SpecialFont_regular';
-                font-size: 70px;
-
+                font-size: 54px;
+                text-transform: uppercase;
+                margin: 0;
             }
             &_role {
-                font-family: 'MainFont_bold';
-                font-size: 18px;
+                font-family: 'MainFont_light';
+                font-size: 19px;
             }
         }
     }

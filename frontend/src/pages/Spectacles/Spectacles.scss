@@ -56,6 +56,7 @@
             &:hover {
                 cursor: pointer;
                 background-color: $colorHover;
+
             }
 
             &_img {
@@ -66,13 +67,14 @@
             } 
 
             &_mainDatas {
-                
+            
                 &_title {
                     font-family: 'SpecialFont_regular';
                     font-size: 70px;
                     color: $colorDarkGrey;
                     margin-top: 10px;
-
+                    text-transform: uppercase;
+                    @include DropColorFilter2;
                     
                 }
                 &_creationDate {

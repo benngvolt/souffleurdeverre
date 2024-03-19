@@ -91,7 +91,7 @@ function OneSpectacle() {
                                             {residency.startDates && residency.endDates && (
                                             <FullPeriodDate startISODate={residency.startDates} endISODate={residency.endDates}/>
                                             )}
-                                            <IsALink link={residency.placeLink} name={residency.placeName}/>
+                                            <IsALink className="oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text" link={residency.placeLink} name={residency.placeName}/>
                                             {`/ ${residency.city ? residency.city : ""}`}
                                         </p>
                                     </li>
@@ -108,8 +108,8 @@ function OneSpectacle() {
                             {project.showsList?.map((show) => (
                                 <li key={show.id} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item'>
                                     <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text'>
-                                    <FullPonctualDates datesArray={show.dates}/>
-                                    <IsALink link={show.placeLink} name={show.placeName}/>   
+                                    <FullPonctualDates datesArray={show.dates} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text'/>
+                                    <IsALink className="oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text" link={show.placeLink} name={show.placeName}/>   
                                     {`/ ${show.city ? show.city : ""}`}
                                     </p>
                                 </li>

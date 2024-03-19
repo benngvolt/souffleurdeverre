@@ -69,6 +69,40 @@
     filter: drop-shadow(5px 5px 1px $colorTwo) drop-shadow(-5px -5px 1px $colorThree) ;
 }
 
+@mixin DropColorFilter2 {
+    filter: drop-shadow(2px 2px 1px $colorTwo) drop-shadow(-2px -2px 1px $colorThree) ;
+}
+
+@mixin ButtonType {
+    padding: 10px;
+    box-sizing: border-box;
+    font-family: 'SpecialFont_regular';
+    font-size: 30px;
+    width: 12em;
+    text-transform: uppercase;
+    color: $colorDarkGrey;
+    text-decoration: none;
+    border: none;
+}
+
+@mixin FilterButton {
+    display: inline-block;
+    font-family: 'MainFont_bold';
+	text-transform: uppercase;
+    font-size: 16px;
+    color: $colorDarkGrey;
+	background: none;
+    border: none;
+    height: 30px;
+    padding: 0px 40px;
+    line-height: 1.3;
+    &:hover {
+        cursor: pointer;
+        background-color: $colorHover;
+        color: $colorLightGrey;
+    }
+}
+
 
 
 
@@ -91,23 +125,7 @@
     }
 }
 
-@mixin FilterButton {
-    display: inline-block;
-    font-family: 'MainFont_bold';
-	text-transform: uppercase;
-    font-size: 16px;
-    color: $colorDarkGrey;
-	background: none;
-    border: none;
-    height: 30px;
-    padding: 0px 40px;
-    line-height: 1.3;
-    &:hover {
-        cursor: pointer;
-        background-color: $colorHover;
-        color: $colorLightGrey;
-    }
-}
+
 
 @mixin Button2 {
     display: inline-block;
@@ -231,3 +249,12 @@ $padMaxWidth: 991px;
 		opacity: 0%;
     }
 }
+
+@keyframes scrollBanner {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }

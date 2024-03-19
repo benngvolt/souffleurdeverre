@@ -1,5 +1,6 @@
 import './IsALink.scss'
 import '../../pages/OneSpectacle/OneSpectacle.scss'
+import '../../pages/Actualite/Actualite.scss'
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
@@ -8,25 +9,25 @@ import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 
 
  
-function IsALink({link, name}) {
+function IsALink({link, name, className}) {
 
     
     return  (      
-        <div className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text'>
+        <div className={`${className}`}>
         {link && link !== "" ? (
             <div>
                 <a
                     href={link}
                     target='_blank'
                     rel='noreferrer'
-                    className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text_link'
+                    className={`${className}_link`}
                 >
                     {name}
-                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text_link_icon' />
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} className={`${className}_link_icon`} />
                 </a>
             </div>
         ) : (
-            <p className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text_noLink'>
+            <p className={`${className}_noLink`}>
                 {name}
             </p>
         )}

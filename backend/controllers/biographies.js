@@ -24,15 +24,14 @@ exports.deleteOneBiography = async (req, res, next) => {
 --------------------------*/
 
 
-exports.createBiography = async (req, res) => {
+exports.createBiography = async (req, res, next) => {
 
-    const biographyWithBr = req.body.biography.replace(/(\r\n|\n|\r)/g, "<br>");
+    const biographyWithBr = req.body.biography?.replace(/(\r\n|\n|\r)/g, "<br>");
     const biographyData = req.body;
     const imageUrl = req.imageUrl;
     // const biographyWithBr = biographyData.biography.replace(/(\r\n|\n|\r)/g, "<br>");
     
-
-    if (!biographyData.surname || !biographyData.name || !biographyData.role || !biographyData.biography) {
+    if (!biographyData.surname || !biographyData.name || !biographyData.role || !biographyData.field ) {
       return res.status(400).json({ error: 'Tous les champs ne sont pas remplis' });
     }
   
@@ -41,12 +40,13 @@ exports.createBiography = async (req, res) => {
         // Si toutes les images ont été traitées, créez une nouvelle instance du modèle Serie
         const biography = new Biography({
           ... biographyData,
-          biography: biographyWithBr,
-          bioImageUrl: imageUrl,
+          biography: biographyWithBr || null ,
+          bioImageUrl: imageUrl || null
         });
   
         await biography.save();
         res.status(201).json({ message: 'Biographie enregistrée !' });
+        next();
       // }
     } catch (error) {
       console.error(error);

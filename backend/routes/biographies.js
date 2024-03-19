@@ -17,7 +17,9 @@ const uploadImage = require('../middlewares/uploadImages').uploadImage;
 router.post('/', 
     multer.single('image'), 
     uploadImage, 
-    biographiesCtrl.createBiography);
+    biographiesCtrl.createBiography,
+    deleteBiographyImageFiles
+    );
 router.get('/', 
     biographiesCtrl.getAllBiographies);
 router.get('/:id', 
@@ -30,6 +32,7 @@ router.put ('/:id',
     multer.single('image'), 
     uploadImage, 
     biographiesCtrl.updateOneBiography,
-    deleteBiographyImageFiles);
+    deleteBiographyImageFiles
+    );
 
 module.exports = router;

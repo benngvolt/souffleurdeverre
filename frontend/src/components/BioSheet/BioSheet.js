@@ -7,24 +7,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faXmark } from '@fortawesome/free-solid-svg-icons'
 import DOMPurify from 'dompurify';
 
-function BioSheet({biography, closeBioAside}) {
+function BioSheet({biography, closeBioAside, className}) {
 
     const cleanedBiography = DOMPurify.sanitize(biography.biography);
 
     return  (      
-        <aside className='biosheetAside'>
-            <div className='biosheetAside_mainContainer'>
-                <img className='biosheetAside_mainContainer_image' src={biography.bioImageUrl} alt={biography.surname} /> 
-                <div className='biosheetAside_mainContainer_texts'>
-                    <p className='biosheetAside_mainContainer_texts_name'>{biography.name} {biography.surname}</p>
-                    <p className='biosheetAside_mainContainer_texts_role'>{biography.role}</p>
+        <aside className={`${className}`}>
+            <div className={`${className}_mainContainer`}>
+                <img className={`${className}_mainContainer_image`} src={biography.bioImageUrl} alt={biography.surname} /> 
+                <div className={`${className}_mainContainer_texts`}>
+                    <p className={`${className}_mainContainer_texts_name`}>{biography.name} {biography.surname}</p>
+                    <p className={`${className}_mainContainer_texts_role`}>{biography.role}</p>
                     {cleanedBiography &&
-                    <p className='biosheetAside_mainContainer_texts_bio' dangerouslySetInnerHTML={{__html:cleanedBiography}}></p>
+                    <p className={`${className}_mainContainer_texts_bio`} dangerouslySetInnerHTML={{__html:cleanedBiography}}></p>
                     }
                 </div>
             </div>  
-            <button className='biosheetAside_button' type='button' onClick={()=>closeBioAside()}>
-                <FontAwesomeIcon className='biosheetAside_button_icon' icon={faXmark}/>
+            <button className={`${className}_button`} type='button' onClick={()=>closeBioAside()}>
+                <FontAwesomeIcon className={`${className}_button_icon`} icon={faXmark}/>
             </button>
         </aside>
     )

@@ -2,20 +2,21 @@
 
 .compagnieSection {
 
-    
     &_title {
+        @include SidePaddings;
         font-weight: 200;
         font-family: 'SpecialFont_regular';
         font-size: 120px;
-        margin: 0 50px 40px 50px;
+        margin-bottom: 40px;
+        text-transform: uppercase;
     }
 
     &_intro {
-
+        @include SidePaddings;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        margin: 0 50px 60px 50px;
+        margin-bottom: 60px;
 
         &_rightbloc {
             padding-top: 120px;
@@ -35,23 +36,147 @@
     }
 
     &_biosList {
+       
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        margin: 105px 80px 0 80px;
+        margin: 105px 0;
 
         &_bioItem {
+            list-style-type: none;
+            padding: 0;
             width: auto;
         }
 
-    } 
+    }
+    
+    &_bioSheetContainer--displayOff {
+        display: none;
+    }
 
-    &_teamButton {
-        @include Button;
-        margin: 105px 50px 0 50px;
+    &_bioSheetContainer--displayOn {
+        display: flex;
+    }
+
+    &_teamCollapse {
+        display: flex;
+        flex-direction: column;
+        @include SidePaddings;
+        padding-top: 98px;
+        width: 100%;
+        margin: auto;
+
+        &_teamButton {
+            margin: auto;
+            @include ButtonType;
+            border: none;
+            margin: auto;
+            background-color: $colorThree;
+
+        }
+    
+        &_team {
+
+            display: flex;
+            flex-direction: column;
+            row-gap: 185px;
+            &_biosList {
+                list-style: none;
+                padding: 0;
+            }
+            &_buttons {
+                width: auto;
+                display: flex;
+                flex-direction: row;
+                column-gap: 60px;
+                margin: auto;
+                justify-content: center;
+        
+                &_button {
+                    
+                    &--notSelected {
+                        @include FilterButton;
+                    }
+        
+                    &--selected {
+                        @include FilterButton;
+                        background-color: $colorHover;
+                    }
+        
+                }
+            }
+            
+           
+        
+            &_biosList {
+                margin: 0 50px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                row-gap: 59px;
+            }
+        }
     }
 
     &_bioSheetContainer {
+
+        
+            z-index: 1;
+                position: fixed;
+                align-items: center;
+                justify-content: center;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background:rgba(0, 0, 0, 0.8);
+                overflow-y: scroll;
+        
+            &_mainContainer {
+                margin: 50px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                column-gap: 0;
+                background-color: $colorLightGrey;
+                position: relative;
+        
+                &_image {
+                    width: 665px;
+                    height: 814px;
+                    object-fit: cover;
+                }
+                &_texts {
+                    padding: 300px 67px 67px 67px;
+                    width: 100%;
+        
+                    &_name {
+                        @include Title;
+                    }
+                    &_role {
+                        font-family: 'MainFont_bold';
+                        font-size: 18px;
+                        margin-bottom: 40px;
+                    }
+                    &_bio {
+                        @include TextBloc;
+                    }
+                }
+            }
+            &_button {
+                
+                    background: none;
+                    border: none;
+                    position: absolute;
+                    top: 60px;
+                    right: 60px;
+                    &:hover {
+                        cursor: pointer;
+                    }
+                &_icon {
+                    color: $colorDarkGrey;
+                    font-size: 30px;
+                }
+            }
         
         &--displayOn {
             display: flex;

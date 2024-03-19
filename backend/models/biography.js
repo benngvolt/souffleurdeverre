@@ -8,7 +8,7 @@ const biographySchema = mongoose.Schema({
     field: {type: String, required: true},
     biography: {type: String, required: false},
     linkUrl: {type: String, required: false},
-    bioImageUrl: {type: String, required: true},
+    bioImageUrl: {type: String, required: false},
 });
 
 

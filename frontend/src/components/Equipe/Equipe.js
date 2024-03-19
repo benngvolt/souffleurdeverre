@@ -1,4 +1,5 @@
 import './Equipe.scss'
+import '../../pages/Compagnie/Compagnie.scss'
 import { API_URL } from '../../utils/constants'
 import BioCard from '../BioCard/BioCard';
 import BioSheet from '../BioSheet/BioSheet';
@@ -9,7 +10,7 @@ import { Context } from '../../utils/Context'
 // import { Context } from '../../utils/Context'
 // import { useNavigate } from 'react-router-dom'
 
-function Equipe() {
+function Equipe({className}) {
 
     
     const [sortedBiographies, setSortedBiographies] = useState([]);
@@ -31,16 +32,17 @@ function Equipe() {
     }
 
     return  (      
-        <section className='equipe'>
-            <div className='equipe_buttons'>
+        <section className={`${className}_team`}>
+            <div className={`${className}_team_buttons`}>
                 {bioFields.map((bioField) => (
-                    <button type='button' onClick={()=>displayBios(biographies, bioField)} className={categoryBios==={bioField}?'equipe_buttons_button--selected':'equipe_buttons_button--notSelected'}>{bioField}</button>
+                    <button type='button' onClick={()=>displayBios(biographies, bioField)} className={categoryBios==={bioField}? `${className}_team_buttons_button--selected` :`${className}_team_buttons_button--notSelected`}>{bioField}</button>
                 ))}
             </div>
-            <ul className='equipe_biosList'>
-                {sortedBiographies.map((biography) => (
+            <ul className={`${className}_team_biosList`}>
+                {sortedBiographies.filter(bio => bio.surname !=='Veschambre' && bio.surname !=='Rocha').map((biography) => (
                     <li>
-                        <BioCard biography={biography} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
+                        <p>{biography.name}</p>
+                        <p>{biography.surname}</p>
                     </li>
                 ))}
             </ul>
