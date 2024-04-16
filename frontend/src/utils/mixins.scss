@@ -9,8 +9,9 @@
 }
 
 @font-face {
-    font-family: 'MainFont_lightItalic';
+    font-family: 'MainFont_light';
     src: url('../../public/assets/fonts/ProximaNova-LightIt.ttf') format('truetype');
+    font-style: italic;
     /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 
@@ -132,8 +133,7 @@
     font-family: 'MainFont_light';
     font-size: 20px;
     color: $colorDarkGrey;
-    border: solid 1px $colorDarkGrey;
-    border-radius: 50rem;
+    border: none;
     height: 40px;
     padding: 0px 40px;
     line-height: 1.3;

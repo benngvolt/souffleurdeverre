@@ -720,14 +720,14 @@ function ProjectForm({
                 <button type='button' onClick={() =>handleAddResidency()} >+ AJOUTER UNE RÉSIDENCE</button>
             </div>
 
-            <div className='projectForm_projectResidenciesList'>
+            <div className='projectForm_projectShowsList'>
                 <p> REPRÉSENTATIONS </p>
                 {showsList?.map((show, index) => (
-                    <div key={index} className='projectForm_projectResidenciesList_line'>
-                        <div className='projectForm_projectResidenciesList_line_field'>
+                    <div key={index} className='projectForm_projectShowsList_line'>
+                        <div className='projectForm_projectShowsList_line_field'>
                             <label htmlFor={`inputProjectShowDates${index}`}>DATES DE REPRÉSENTATION</label>
                             {show.dates?.map((date, dateIndex)=>(
-                            <div className='projectForm_projectResidenciesList_line_field_container'> 
+                            <div className='projectForm_projectShowsList_line_field_container'> 
                                 <input
                                     key={dateIndex}
                                     type='date'

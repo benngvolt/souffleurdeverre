@@ -173,7 +173,7 @@ function Edit() {
                     <ul className='editSection_mainContainer_bios_biosList'>
                         {biographies.map((biography)=>(
                             <li className='editSection_mainContainer_bios_biosList_item'>
-                                <p className='editSection_mainContainer_bios_biosList_item_name'> {biography.name}{biography.surname}</p>
+                                <p className='editSection_mainContainer_bios_biosList_item_name'> {biography.name} {biography.surname}</p>
                                 <div className='editSection_mainContainer_bios_biosList_item_buttons'>
                                     <button onClick={() => editBio(biography)}>MODIFIER</button>
                                     <button onClick={() => handleBioDeleteMode(biography)}>SUPPRIMER</button>

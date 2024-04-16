@@ -1,3 +1,5 @@
+@import '../../utils/mixins';
+
 .bioForm {
     &_sampleContainer {
             
@@ -6,4 +8,11 @@
             width: 300px;
         }
     }
+}
+#inputBio {
+    font-family: 'MainFont_light';
+    text-align: justify;
+    padding: 35px;
+    height: 400px;
+    overflow: scroll;
 }

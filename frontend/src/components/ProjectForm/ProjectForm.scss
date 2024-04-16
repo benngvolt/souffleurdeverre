@@ -20,6 +20,10 @@
             margin: auto;
             label {
                 margin: auto;
+                &:hover {
+                    color: $colorHover;
+                    cursor: pointer;
+                }
             }
             &_sampleContainer {
                 
@@ -81,6 +85,46 @@
     &_projectVideoList,
     &_projectResidenciesList,
     &_projectPdfFile {
+        width: 80%;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        row-gap: 19px;
+
+        input, select {
+            width: 40%;
+            border: none;
+            background-color: $colorHover;
+        }
+
+        &_line {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            column-gap: 9px;
+            width: 100%;
+            label {
+                font-size: 13px;
+            }
+            input {
+                width: 100%;
+            }
+
+            div {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                column-gap: 15px;
+                width: 100%;
+            }
+
+            button {
+                background: none;
+                border: none;
+            }
+        } 
+    }
+    &_projectShowsList {
 
         width: 80%;
         margin: auto;
@@ -118,6 +162,12 @@
             button {
                 background: none;
                 border: none;
+            }
+            &_field {
+                &_container {
+                    display: flex;
+                    flex-direction: row;
+                }
             }
         } 
     }
@@ -187,6 +237,8 @@
 
     &_projectResidenciesList {
         &_line {
+            display: flex;
+            flex-direction: column;
             &_field {
                 &_container {
                     display: flex;

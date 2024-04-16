@@ -1,12 +1,11 @@
 import './BioForm.scss'
 import { API_URL } from '../../utils/constants'
-// import { Link } from 'react-router-dom'
 import {useRef, useEffect, useState, useContext } from 'react'
 import { Context } from '../../utils/Context'
-import DOMPurify from 'dompurify';
-// import { useNavigate } from 'react-router-dom'
+import 'trix';
+// import 'trix/dist/trix.css';
+import '../../utils/trix.scss'
 
- 
 function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDisplayBioForm}) {
 
     const { bioFields, handleLoadBiographies } = useContext(Context);
@@ -19,8 +18,9 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
     const inputBioImageFileRef = useRef(null);
     const inputFieldRef = useRef(null);
     const bioImageSampleRef = useRef (null);
+    // let content = useRef();
 
-    const cleanedBiography = DOMPurify.sanitize(biographyEdit?.biography);
+    // const cleanedBiography = DOMPurify.sanitize(biographyEdit?.biography);
 
     const [isImageLoaded, setIsImageLoaded] = useState(false);
 
@@ -29,7 +29,8 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
     const [bioRole, setBioRole] = useState(bioFormMode === 'edit' ? biographyEdit.role : '');
     const [bioField, setBioField] = useState(bioFormMode === 'edit' ? biographyEdit.field : '');
     const [bioLinkUrl, setBioLinkUrl] = useState(bioFormMode === 'edit' ? biographyEdit.linkUrl : '');
-    const [bioBiography, setBioBiography] = useState(bioFormMode === 'edit' ? cleanedBiography : '');
+    const [bioBiography, setBioBiography] = useState(bioFormMode === 'edit' ? biographyEdit.biography : '');
+    
 
     // Réinitialisation des valuers input lorsque le formulaire s'ouvre / se ferme.
     useEffect(() => {
@@ -39,7 +40,7 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
             setBioRole(biographyEdit.role);
             setBioField(biographyEdit.field);
             setBioLinkUrl(biographyEdit.linkUrl);
-            setBioBiography(biographyEdit.biography);
+            setBioBiography(biographyEdit.biography); // is a Trix.Editor instance
         } else {
             setBioSurname('');
             setBioName('');
@@ -47,8 +48,17 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
             setBioField('');
             setBioLinkUrl('');
             setBioBiography('');
+            clearTrixEditor()
         }
-      }, [bioFormMode, handleDisplayBioForm]);
+    }, [bioFormMode, handleDisplayBioForm]);
+
+    useEffect(() => {
+        const element = document.querySelector("trix-editor");
+        if (element) {
+            element.editor.setSelectedRange([0, 0]);
+            element.editor.loadHTML(bioBiography); 
+        }
+    }, [bioBiography, handleDisplayBioForm]);
 
     function bioFormSubmit(event) {
         event.preventDefault();
@@ -62,7 +72,7 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
         bioFormData.append('linkUrl', inputLinkUrlRef.current.value);
         bioFormData.append('biography', inputBioRef.current.value);
         bioFormData.append('field', inputFieldRef.current.value);
-        
+
         if (bioFormMode==='add') {
             fetch(`${API_URL}/api/biographies`, {
                 method: "POST",
@@ -124,9 +134,16 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
         }
     }
 
+    function clearTrixEditor() {
+        const element = document.querySelector("trix-editor");
+        element.editor.setSelectedRange([0, 0]);
+        element.editor.loadHTML(''); 
+    }
+
     function closeForm() {
         setHandleDisplayBioForm(false);
         handleLoadBiographies();
+        clearTrixEditor()
     }
 
     return  (    
@@ -167,7 +184,8 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
             </div>
             <div className='bioForm_bio'>
                 <label htmlFor='inputBio'>BIOGRAPHIE</label>
-                <textarea type='textarea' id='inputBio' ref={inputBioRef} value={bioBiography?.replace(/<br>/g, "\n")} onChange={(e) =>setBioBiography(e.target.value)}></textarea>
+                <input id="trix" type="hidden" name="content" defaultValue={bioBiography} ref={inputBioRef}></input>
+                <trix-editor id='inputBio' input="trix"/>
             </div>
             <div className='bioForm_buttons'>
                 <button type='submit'>VALIDER</button>
