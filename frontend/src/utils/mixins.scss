@@ -99,7 +99,7 @@
     line-height: 1.3;
     &:hover {
         cursor: pointer;
-        background-color: $colorHover;
+        background-color: $colorSix;
         color: $colorLightGrey;
     }
 }
@@ -139,7 +139,7 @@
     line-height: 1.3;
     &:hover {
         cursor: pointer;
-        background-color: $colorHover;
+        background-color: $colorSix;
         color: $colorMediumGrey;
     }
 }
@@ -152,11 +152,13 @@
 $colorDarkGrey: #232323;
 $colorMediumGrey: #535353;
 $colorLightGrey: #E9E9E9;
-$colorHover: pink;
 
-$colorOne: rgba(255, 0, 0, 0.8);
-$colorThree: rgba(0, 255, 0, 0.8);
-$colorTwo: rgba(255, 0, 255, 0.8);
+$colorOne: #ff0030;
+$colorTwo: #00f0ff;
+$colorThree: rgba(255, 0, 255, 0.8);
+$colorFour: rgba(0, 255, 0, 0.8);
+$colorFive: #fea201;
+$colorSix: #019cff;
 
 
 
@@ -164,6 +166,17 @@ $mobileMaxWidth: 480px;
 $padMinWidth: 481px;
 $padMaxWidth: 991px;
 
+@mixin colorDuo1 {
+    filter: drop-shadow(5px 5px 1px $colorOne) drop-shadow(-5px -5px 1px $colorTwo) ;
+}
+
+@mixin colorDuo2 {
+    filter: drop-shadow(5px 5px 1px $colorThree) drop-shadow(-5px -5px 1px $colorFour) ;
+}
+
+@mixin colorDuo3 {
+    filter: drop-shadow(5px 5px 1px $colorFive) drop-shadow(-5px -5px 1px $colorSix) ;
+}
 
 /*-------------------
 ----- KEYFRAMES -----
@@ -247,6 +260,24 @@ $padMaxWidth: 991px;
 	100% {
 		height: 0;
 		opacity: 0%;
+    }
+}
+
+@keyframes moveDown {
+	0% {
+		padding-top: 0;
+	}
+	100% {
+		padding-top: 19px;
+    }
+}
+
+@keyframes reverseMoveDown {
+	0% {
+		padding-top: 19px;
+	}
+	100% {
+		padding-top: 0;
     }
 }
 

@@ -1,12 +1,20 @@
 @import '../../utils/mixins';
 
 .bioForm {
+    height: 100%;
     &_sampleContainer {
-            
         img {
             object-fit: contain;
             width: 300px;
         }
+    }
+    &_sampleContainer {
+        img {
+            height: 100px;
+        }
+    }
+    &_bio {
+        
     }
 }
 #inputBio {

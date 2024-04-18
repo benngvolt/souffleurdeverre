@@ -323,8 +323,8 @@ function ProjectForm({
         }));
         //RÉORGANISATION DES ELEMENTS REPRÉSENTATIONS' PAR ORDRE CHRONOLOGIQUE
         const sortedShowsList = cleanedShowsList.sort((a, b) => {
-            const dateA = new Date(a.dates[0].day);
-            const dateB = new Date(b.dates[0].day);
+            const dateA = new Date(a.dates[0]?.day);
+            const dateB = new Date(b.dates[0]?.day);
             return dateA - dateB;
          });
         // const token = window.sessionStorage.getItem('1');

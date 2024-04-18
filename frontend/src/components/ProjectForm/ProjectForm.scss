@@ -21,7 +21,7 @@
             label {
                 margin: auto;
                 &:hover {
-                    color: $colorHover;
+                    color: $colorSix;
                     cursor: pointer;
                 }
             }
@@ -71,7 +71,7 @@
         input, select, textarea {
             width: 100%;
             border: none;
-            background-color: $colorHover;
+            background-color: $colorSix;
         }
         textarea{
             max-width: 100%;
@@ -94,7 +94,7 @@
         input, select {
             width: 40%;
             border: none;
-            background-color: $colorHover;
+            background-color: $colorSix;
         }
 
         &_line {
@@ -135,7 +135,7 @@
         input, select {
             width: 40%;
             border: none;
-            background-color: $colorHover;
+            background-color: $colorSix;
         }
 
         &_line {
@@ -182,7 +182,7 @@
         input, select {
             width: 40%;
             border: none;
-            background-color: $colorHover;
+            background-color: $colorSix;
         }
         &_line {
             display: flex;
@@ -223,7 +223,7 @@
             &_paragraph {
 
                 textarea {
-                    background-color: $colorHover;
+                    background-color: $colorSix;
                     border: none;
                     @include paddingArea;
                     width: 100%;

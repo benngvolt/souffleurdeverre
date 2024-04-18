@@ -47,7 +47,17 @@ function Equipe({className}) {
                 ))}
             </div>
             <ul className={`${className}_team_biosList`}>
-                {sortedBiographies.filter(bio => bio.surname !=='Veschambre' && bio.surname !=='Rocha').map((biography) => (
+                {sortedBiographies
+                    .filter(bio => bio.surname !=='Veschambre' && bio.surname !=='Rocha')
+                    .sort((a, b) => {
+                        // Comparaison des noms (ou prénoms) pour le tri
+                        const nameA = a.surname.toLowerCase(); // Convertit en minuscules pour trier sans distinction de casse
+                        const nameB = b.surname.toLowerCase(); // Convertit en minuscules pour trier sans distinction de casse
+                        if (nameA < nameB) return -1;
+                        if (nameA > nameB) return 1;
+                        return 0; // Les noms sont égaux
+                    })
+                    .map((biography) => (
                     <li className={`${className}_team_biosList_item`}>
                         <img src={biography.bioImageUrl} alt={biography.surname} className={`${className}_team_biosList_item_img`}/> 
                         <p className={`${className}_team_biosList_item_name`}>{biography.name} {biography.surname}</p>

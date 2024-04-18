@@ -13,7 +13,6 @@
 
     &:hover {
         cursor: pointer;
-
         svg {
             animation: hide ease 0.5s forwards;
         }
@@ -46,7 +45,7 @@
     &_nav {
             height: 70px;
             width: 100%;
-            background-color: $colorHover;
+            background-color: $colorSix;
             flex-direction: row;
             
 
@@ -81,12 +80,12 @@
                         
                         &:hover {
                             cursor: pointer;
-                            font-family:'MainFont_lightItalic';
+                            font-style: italic;
                         }
                     }
                     &:hover {
                         cursor: pointer;
-                        font-family:'MainFont_lightItalic';
+                        font-style: italic;
                     }
                     
                     

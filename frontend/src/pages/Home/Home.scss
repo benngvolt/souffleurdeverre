@@ -21,7 +21,7 @@
             width: 300px;
             margin: auto;
             animation: float 6s ease-in-out infinite;
-            filter: drop-shadow(5px 5px 1px $colorTwo) drop-shadow(-5px -5px 1px $colorThree) ;
+            @include colorDuo3;
         }
         &_text {
             font-family: 'MainFont_light';
@@ -72,7 +72,7 @@
                 font-family: 'MainFont_lightItalic';
                 // color: $colorMediumGrey;
                 // background-color: pink;
-                filter: drop-shadow(5px 5px 1px $colorTwo) drop-shadow(-5px -5px 1px $colorThree) ;
+                @include colorDuo3;
             }
         }
     }

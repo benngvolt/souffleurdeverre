@@ -2,7 +2,7 @@
 
 .bioCard {
 
-    
+    width: auto;
 
     &_card {
         display: flex;
@@ -13,9 +13,14 @@
         padding: 0 54px 0 0;
         box-sizing: border-box;
         height: 272px;
+        width: 100%;
+        
         &:hover {
             cursor: pointer;
-            background-color: $colorHover;
+            background-color: $colorThree;
+            .bioCard_card_caption {
+                animation: moveDown ease 1s forwards;
+            }
         }
 
         &_image {
@@ -27,8 +32,9 @@
 
             display: flex;
             flex-direction: column;
-
             text-align: left;
+            width: 100%;
+            animation: reverseMoveDown ease 1s forwards;
 
             &_name {
                 font-family: 'SpecialFont_regular';

@@ -75,11 +75,11 @@ function Compagnie() {
                 <BioSheet biography={bioAside} closeBioAside={closeBioAside} className='compagnieSection_bioSheetContainer'/>
             </div>
             <div className='compagnieSection_teamCollapse'>
-                <button to="/equipe" className='compagnieSection_teamCollapse_teamButton'>+ COLLABS</button>
+                <button to="/equipe" className='compagnieSection_teamCollapse_teamButton'>COLLABORATIONS</button>
                 <Equipe className='compagnieSection_teamCollapse'/>
             </div>
             <div className='compagnieSection_AA'>
-                <h3 className='compagnieSection_AA_title'>Artiste Associe</h3>
+                <h3 className='compagnieSection_AA_title'>Artiste Associé</h3>
                 <p className='compagnieSection_AA_text'> La compagnie Le Souffleur de Verre a vu le jour en 2003 en Auvergne et est implantée à Clermont-Ferrand. Ces projets artistiques et ces envies de travail sur les territoires que compte la région Auvergne-Rhône-Aples l’a mené à s’impliquer dans le Puy-de-Dôme (8 ans de résidence dite « association », menant à la fois créations et projets de médiation artistique, en vue du développement des publics à Cournon d’Auvergne), en Haute-Loire (3 ans résidence de territoire avec la municipalité et les établissements scolaires et associatifs de Monistrol-sur-Loire), et la Loire (3 ans comme compagnie associée au projet d’Arnaud Meunier, directeur de La Comédie de Saint-Étienne – Centre Dramatique National et 5 ans comme membres de l’ensemble artistique).<br/>
                     Elle a été Artiste Associée au Caméléon, scène labellisée pour l’émergence et la création en Auvergne-Rhône-Alpes pour 3 ans (2020-2023).
                 </p>
