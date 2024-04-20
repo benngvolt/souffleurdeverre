@@ -62,10 +62,10 @@ exports.createProject = async (req, res) => {
     const residenciesList = JSON.parse(req.body.residenciesList);
     const showsList = JSON.parse(req.body.showsList);
   
-    const descriptionWithBr = req.body.description.replace(/(\r\n|\n|\r)/g, "<br>");
+    const descriptionWithBr = req.body.description;
 
     const paragraphListWithBr = paragraphList.map((paragraph) => {
-      const paragraphTextWithBr = paragraph.paragraphText.replace(/(\r\n|\n|\r)/g, "<br>");
+      const paragraphTextWithBr = paragraph.paragraphText;
       return {
           ...paragraph, // Spread des propriétés de paragraph
           paragraphText: paragraphTextWithBr // Modification de la propriété paragraphText
@@ -73,7 +73,7 @@ exports.createProject = async (req, res) => {
     });
 
     const pressListWithBr = pressList.map((press) => {
-      const quoteTextWithBr = press.quote.replace(/(\r\n|\n|\r)/g, "<br>");
+      const quoteTextWithBr = press.quote;
       return {
           ...press, // Spread des propriétés de paragraph
           quote: quoteTextWithBr // Modification de la propriété paragraphText
@@ -126,7 +126,7 @@ exports.updateOneProject = async (req, res, next) => {
       }
 
       const projectData = req.body;
-      const descriptionWithBr = req.body.description.replace(/(\r\n|\n|\r)/g, "<br>");
+      const descriptionWithBr = req.body.description;
       const artistsList = JSON.parse(req.body.artistsList);
       const productionList = JSON.parse(req.body.productionList);
       const pressList = JSON.parse(req.body.pressList);
@@ -136,7 +136,7 @@ exports.updateOneProject = async (req, res, next) => {
       const showsList = JSON.parse(req.body.showsList);
       
       const paragraphListWithBr = paragraphList.map((paragraph) => {
-        const paragraphTextWithBr = paragraph.paragraphText.replace(/(\r\n|\n|\r)/g, "<br>");
+        const paragraphTextWithBr = paragraph.paragraphText;
         return {
             ...paragraph, // Spread des propriétés de paragraph
             paragraphText: paragraphTextWithBr // Modification de la propriété paragraphText
@@ -144,7 +144,7 @@ exports.updateOneProject = async (req, res, next) => {
       });
   
       const pressListWithBr = pressList.map((press) => {
-        const quoteTextWithBr = press.quote.replace(/(\r\n|\n|\r)/g, "<br>");
+        const quoteTextWithBr = press.quote;
         return {
             ...press, // Spread des propriétés de paragraph
             quote: quoteTextWithBr // Modification de la propriété paragraphText

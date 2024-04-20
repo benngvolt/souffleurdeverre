@@ -86,6 +86,19 @@
     border: none;
 }
 
+@mixin FormButtonType {
+    font-family: 'MainFont_light';
+    border: 1px solid $colorDarkGrey;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    &:hover {
+        color: $colorSix;
+        cursor: pointer;
+    }
+}
+
 @mixin FilterButton {
     display: inline-block;
     font-family: 'MainFont_bold';
@@ -197,6 +210,24 @@ $padMaxWidth: 991px;
 	}
 }
 
+@keyframes openHeader {
+    0% {
+        height: 50px;
+    }
+    100% {
+		height: 70px;    
+	}
+}
+
+@keyframes closeHeader {
+    0% {
+        height: 70px;
+    }
+    100% {
+		height: 50px;    
+	}
+}
+
 @keyframes up-rotate {
 	0% {
 		animation-timing-function: cubic-bezier(0.16, -0.88, 0.97, 0.53);
@@ -289,3 +320,14 @@ $padMaxWidth: 991px;
       transform: translateX(-100%);
     }
   }
+
+@keyframes focusShow {
+    0% {
+        filter: contrast(100%);
+        
+    }
+    100% {
+        filter: contrast(80%);
+        
+    }
+}

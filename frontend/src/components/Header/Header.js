@@ -19,16 +19,15 @@ function Header() {
 }
 
     return  (      
-        <header className='header' onMouseOver={()=>showMenu()} onMouseLeave={()=>hideMenu()} >
-            <button className='header_icon' >
-                <svg id="hamburger" className={displayMenu===true? 'header_icon header_icon--opened':'header_icon header_icon--closed'} viewbox="0 0 60 30">
-                    <g stroke="#232323" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path id="top-line" d="M10,10 L50,10 Z"></path>
-                        <path id="middle-line" d="M10,20 L50,20 Z"></path>
-                        <path id="bottom-line" d="M10,30 L50,30 Z"></path>
-                    </g>
-                </svg>
-            </button>
+        <header className={displayMenu===true ? 'header header--opened' : 'header header--closed'} onMouseOver={()=>showMenu()} onMouseLeave={()=>hideMenu()} >
+            
+            <svg id="hamburger" className={displayMenu===true? 'header_icon header_icon--opened':'header_icon header_icon--closed'} viewbox="0 0 60 30">
+                <g stroke="#232323" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path id="top-line" d="M10,10 L50,10 Z"></path>
+                    <path id="middle-line" d="M10,20 L50,20 Z"></path>
+                    <path id="bottom-line" d="M10,30 L50,30 Z"></path>
+                </g>
+            </svg>
             <nav className={displayMenu===false?'header_nav header_nav--displayOff':'header_nav header_nav--displayOn'}>
                 <div className='header_nav_menu'>
                     <Link to="/" className='header_nav_menu_item'><h2>ACCUEIL</h2></Link>

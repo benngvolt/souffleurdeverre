@@ -37,7 +37,8 @@
 
         &_duration {
             @include SidePaddings;
-            font-family: 'MainFont_lightItalic';
+            font-family: 'MainFont_light';
+            font-style: italic;
             font-size: 18px;
             margin-top: 0;
         }
@@ -46,9 +47,8 @@
             padding: 73px 25%;
             box-sizing: border-box;
             @include TextBloc;
-            margin: 98px auto;
+            margin: 54px auto;
             width: 100%;
-            background-color: $colorThree;
         }
 
         &_paragraphs {
@@ -56,28 +56,32 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            align-items: center;
+            // align-items: flex-start;
             flex-wrap: wrap;
             width: 90%;
-            margin: 0 auto 98px auto;
+            margin: 0 auto 22px auto;
 
             &_paragraphContainer {
+
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
+                justify-content: flex-start;
                 width: 47%;
-                
+                height: auto;
+                margin: 30px auto 0 auto;
                 @include TextBloc;
-                margin: 30px auto;
 
                 &_paragraphTitle {
                     @include TextTitle
                 };
+
                 &_paragraphText {
                     @include TextBloc;
+                    margin-bottom: 0;
                 }
             }
         }
+
         &_teamList {
             width: 100%;
             padding: 73px 0; 
@@ -116,25 +120,39 @@
 
         &_mediaLinks {
             @include SidePaddings;
-            margin-bottom: 98px;
+            margin: 98px 0;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             column-gap: 10px;
-            row-gap: 10px;
+            row-gap: 4px;
 
             &_videosContainer, &_pdfsContainer {
                 display: flex;
-                flex-direction: column;
-                row-gap: 10px;
+                flex-direction: row;
+                justify-content: center;
+                column-gap: 4px;
+                flex-wrap: wrap;
+                row-gap: 4px;
+
 
                 &_video, &_pdf {
                     @include ButtonType;
                 }
                 &_video {
                     background-color: $colorThree;
+                    &:hover {
+                        background-color: $colorFive;
+                        color: $colorLightGrey;
+                        cursor: pointer;
+                    }
                 };
                 &_pdf {
                     background-color: $colorTwo;
+                    &:hover {
+                        background-color: $colorFour;
+                        color: $colorLightGrey;
+                        cursor: pointer;
+                    }
                 };
             }
             
@@ -146,7 +164,7 @@
             @include SidePaddings;
             width: 100%;
             padding: 73px 0;
-            background-color: $colorThree;
+            // background-color: $colorThree;
             
             &_prodTypeContainer {
                 
@@ -175,10 +193,56 @@
             }
         }
 
+        &_press {
+         
+            &_pressList {
+                display: flex;
+                flex-direction: column;
+                width: 70%;
+                margin: auto;
+                &_title {
+                    @include SecondTitle;
+                    margin: 30px auto;
+                }
+                &_listContainer {
+                    
+                }
+                &_list {
+                    
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    list-style-type: none;
+                    row-gap: 35px;
+                    padding: 0;
+                    margin: 0 auto 22px auto;
+
+                    &_item {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        &_mediaName {
+                            text-align: justify;
+                            font-family: 'MainFont_bold';
+                            font-size: 16px;
+                            margin: auto;
+                        }
+
+                        &_quote {
+                            text-align: justify;
+                            font-family: 'MainFont_light';
+                            font-style: italic;
+                            font-size: 16px;
+                        }
+                    }
+                }
+            }
+        }
+
         &_residenciesAndShows {
                 display: flex;
                 flex-direction: column;
-                @include SidePaddings;
+                // @include SidePaddings;
                 width: 100%;
             &_residenciesList {
                 width: 100%;
@@ -236,18 +300,25 @@
                 }
             }
             &_showsList {
+                background-color: $colorFive;
                 display: flex;
                 flex-direction: column;
                 width: 100%;
                 margin: auto;
+
                 &_title {
                     @include SecondTitle;
                     margin: 30px auto;
                 }
+                &_listContainer {
+                    width: 70%;
+                    margin: auto;
+                }
                 &_list {
-                    display: flex;
-                    flex-direction: column;
+                    display: grid;
+                    // flex-direction: column;
                     align-items: center;
+                    grid-template-columns: 1fr 1fr 1fr 1fr;
                     list-style-type: none;
                     padding: 0;
                     &_item {
@@ -256,14 +327,15 @@
                             
                             &_dates {
                                 display: flex;
-                                flex-direction: row;
+                                flex-direction: column;
                                 column-gap: 5px;
-                                margin: auto;
+                                margin: 0;
+
                                 &_singleDate {
                                     display: flex;
                                     flex-direction: row;
                                     column-gap: 5px;
-                                    margin: auto;
+                                    margin: 0;
                                     &_day {
                                         @include BoldType;
                                         margin: 0;

@@ -36,6 +36,21 @@ function OneSpectacle() {
                 <FullUniqueDate creationDate={project.creationDate}/>
                 <p className='oneSpectacle_mainDatas_duration'> durée {project.duration}</p>
                 <p className='oneSpectacle_mainDatas_description' dangerouslySetInnerHTML={{__html:cleanedDescription}}></p>
+                {project.images &&
+                    <li className={`oneSpectacle_imagesGrid_item oneSpectacle_imagesGrid_${project.images?.length}_item_0`}>
+                        <img key={project.images[0]._id} alt={project.title + project.images[0]._id} src={project.images[0].imageUrl}/>
+                    </li>
+                }
+                <div className='oneSpectacle_mainDatas_teamList'>
+                    <ul className='oneSpectacle_mainDatas_teamList_artistsList'>
+                        {project.artistsList?.map((artist) => (
+                            <li key={artist._id} className='oneSpectacle_mainDatas_teamList_artistsList_item'>
+                                <p className='oneSpectacle_mainDatas_teamList_artistsList_item_function'> {artist.artistFunction} </p>
+                                <p className='oneSpectacle_mainDatas_teamList_artistsList_item_names'>{artist.artistName} </p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
                 <div className='oneSpectacle_mainDatas_paragraphs'>
                     {project.paragraphList?.map((paragraph) => (
                         <div className='oneSpectacle_mainDatas_paragraphs_paragraphContainer'>
@@ -58,25 +73,35 @@ function OneSpectacle() {
                         ))}
                     </div>
                 </div>
-                <div className='oneSpectacle_mainDatas_teamList'>
-                    <ul className='oneSpectacle_mainDatas_teamList_artistsList'>
-                        {project.artistsList?.map((artist) => (
-                            <li key={artist._id} className='oneSpectacle_mainDatas_teamList_artistsList_item'>
-                                <p className='oneSpectacle_mainDatas_teamList_artistsList_item_function'> {artist.artistFunction} </p>
-                                <p className='oneSpectacle_mainDatas_teamList_artistsList_item_names'>{artist.artistName} </p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
             </div>
             <ul className={`oneSpectacle_imagesGrid oneSpectacle_imagesGrid_${project.images?.length}`}>
-                {project.images?.map((image, index) => (
-                    <li className={`oneSpectacle_imagesGrid_item oneSpectacle_imagesGrid_${project.images?.length}_item_${index}`}>
+                {project.images
+                    ?.filter((image, index) => index > 0)
+                    .map((image, index) => (
+                    <li className={`oneSpectacle_imagesGrid_item oneSpectacle_imagesGrid_${project.images?.length + 1}_item_${index + 1}`}>
                         <img key={image._id} alt={project.title + image._id} src={image.imageUrl}/>
                     </li>
                 ))}
             </ul>
             <div className='oneSpectacle_mainDatas_residenciesAndShows'>
+                <div>
+                    <div className='oneSpectacle_mainDatas_residenciesAndShows_showsList'> 
+                        <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_title'>DIFFUSION</p>
+                        <div className='oneSpectacle_mainDatas_residenciesAndShows_showsList_listContainer'>
+                            <ul className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list'>
+                                {project.showsList?.map((show) => (
+                                    <li key={show.id} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item'>
+                                        <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text'>
+                                        <FullPonctualDates datesArray={show.dates} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text'/>
+                                        <IsALink className="oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text" link={show.placeLink} name={show.placeName}/>   
+                                        {`/ ${show.city ? show.city : ""}`}
+                                        </p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <div className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList'>
                     {residencyTypes?.map((residencyType) => (
                     project.residenciesList?.some(residency => residency.residencyType === residencyType) && (
@@ -101,16 +126,19 @@ function OneSpectacle() {
                     )
                     ))}
                 </div>
-                <div>
-                    <div className='oneSpectacle_mainDatas_residenciesAndShows_showsList'>
-                        <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_title'>PREMIÈRES REPRÉSENTATIONS</p>
-                        <ul className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list'>
-                            {project.showsList?.map((show) => (
-                                <li key={show.id} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item'>
-                                    <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text'>
-                                    <FullPonctualDates datesArray={show.dates} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text'/>
-                                    <IsALink className="oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text" link={show.placeLink} name={show.placeName}/>   
-                                    {`/ ${show.city ? show.city : ""}`}
+            </div>
+            <div className='oneSpectacle_mainDatas_press'>
+                <div className='oneSpectacle_mainDatas_press_pressList'> 
+                    <p className='oneSpectacle_mainDatas_press_pressList_title'>PRESSE</p>
+                    <div className='oneSpectacle_mainDatas_press_pressList_listContainer'>
+                        <ul className='oneSpectacle_mainDatas_press_pressList_list'>
+                            {project.pressList?.map((press) => (
+                                <li key={press.id} className='oneSpectacle_mainDatas_press_pressList_list_item'>
+                                    <p className='oneSpectacle_mainDatas_press_pressList_list_item_mediaName'>
+                                        {press.mediaName}
+                                    </p>
+                                    <p className='oneSpectacle_mainDatas_press_pressList_list_item_quote'>
+                                        {press.quote}
                                     </p>
                                 </li>
                             ))}

@@ -189,6 +189,7 @@ function Edit() {
                     projectEdit={projectEdit} 
                     projectFormMode={projectFormMode}
                     setHandleDisplayProjectForm = {setHandleDisplayProjectForm}
+                    handleDisplayProjectForm = {handleDisplayProjectForm}
                     artistsList={artistsList} 
                     setArtistsList={setArtistsList} 
                     productionList={productionList} 

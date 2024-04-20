@@ -9,7 +9,9 @@
 .trix-button--icon-increase-nesting-level,
 .trix-button--icon-heading-1,
 .trix-button--icon-quote,
-.trix-button--icon-attach
+.trix-button--icon-attach,
+.trix-button--icon-link,
+.trix-dialogs
  {
     display: none;
 }
@@ -35,12 +37,14 @@
 
 
 trix-editor {
-    border: 1px solid #bbb;
-    border-radius: 3px;
+
     margin: 0;
     padding: 0.4em 0.6em;
+    background-color: $colorTwo;
     min-height: 5em;
-    outline: none; }
+    outline: none;
+    font-family: 'MainFont_light';
+    text-align: justify ; }
   
   trix-toolbar * {
     box-sizing: border-box; }

@@ -2,7 +2,10 @@
 
 .projectForm {
     &_DNDGallery {
-        
+        &_noImageText {
+            font-family: 'MainFont_light';
+            font-style: italic;
+        }
         &_overlayImage {
             opacity: 0.5;
             width: auto;

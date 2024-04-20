@@ -97,7 +97,7 @@ function DNDGallery ({ imageFiles, setImageFiles, mainImageIndex, setMainImageIn
                 />
               ))
             ) : (
-                <p className="">Aucune image à afficher</p>
+                <p className="projectForm_DNDGallery_noImageText">Aucune image à afficher</p>
             )}
           </DNDGrid>
         </SortableContext>

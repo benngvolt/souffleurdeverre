@@ -4,14 +4,18 @@ import {useRef, useState, useEffect, useContext } from 'react'
 import { Context } from '../../utils/Context'
 import * as pdfjsLib from "pdfjs-dist/webpack"
 import { v4 as uuidv4 } from 'uuid'
-import DOMPurify from 'dompurify';
+// import DOMPurify from 'dompurify';
 import DNDGallery from '../../components/DNDGallery/DNDGallery'
 import TitleAndParagraphInput from '../TitleAndParagraphInput/TitleAndParagraphInput'
+import 'trix';
+// import 'trix/dist/trix.css';
+import '../../utils/trix.scss'
 
 function ProjectForm({ 
         projectEdit, 
         projectFormMode, 
-        setHandleDisplayProjectForm, 
+        setHandleDisplayProjectForm,
+        handleDisplayProjectForm, 
         artistsList, 
         setArtistsList, 
         productionList, 
@@ -71,7 +75,7 @@ function ProjectForm({
             setProjectType(projectEdit.projectType);
             setProjectDuration(projectEdit.duration);
             setProjectCreationDate(projectEdit.creationDate);
-            setProjectDescription(cleanedDescription);
+            setProjectDescription(projectEdit.description);
             setProjectMoreInfos(projectEdit.moreInfos);
         } else if (projectFormMode === 'add') {
             setProjectTitle('');
@@ -85,7 +89,7 @@ function ProjectForm({
         }
     }, [projectFormMode, projectEdit]);
 
-    const cleanedDescription = DOMPurify.sanitize(projectEdit?.description);
+    // const cleanedDescription = DOMPurify.sanitize(projectEdit?.description);
 
     /* ------------------------
     ----- CHAMPS SIMPLES ------
@@ -409,6 +413,25 @@ function ProjectForm({
     function closeForm() {
         setHandleDisplayProjectForm(false);
         handleLoadProjects();
+        clearTrixEditor();
+    }
+    /* ------------------------
+    ----- TRIX  EDITOR ------
+    -------------------------*/
+    useEffect(() => {
+        const elementDescription = document.getElementById("inputProjectDescription");
+        if (elementDescription) {
+            elementDescription.editor.setSelectedRange([0, 0]);
+            elementDescription.editor.loadHTML(projectDescription); 
+        }
+    }, [projectDescription, handleDisplayProjectForm]);
+    
+    function clearTrixEditor() {
+        const elements = document.querySelectorAll("trix-editor");
+        elements.forEach(element => {
+            element.editor.setSelectedRange([0, 0]);
+            element.editor.loadHTML(''); 
+        });
     }
 
     
@@ -418,8 +441,8 @@ function ProjectForm({
 
             <div className='projectForm_projectImageField'>
                 <DNDGallery imageFiles={imageFiles} setImageFiles={setImageFiles} mainImageIndex={mainImageIndex} setMainImageIndex={setMainImageIndex} />
-                <div className='projectForm_projectImageField_imageFile'>
-                    <label htmlFor='inputProjectImageFile'>{isImageLoaded ? 'CHANGER D\'IMAGE' : '+ AJOUTER UNE IMAGE'}</label>
+                <div className={imageFiles.length < 6 ? 'projectForm_projectImageField_imageFile' : 'projectForm_projectImageField_imageFile--displayOff'}>
+                    <label htmlFor='inputProjectImageFile'>{ isImageLoaded ? 'CHANGER D\'IMAGE' : '+ AJOUTER UNE IMAGE' }</label>
                     <input type='file' id='inputProjectImageFile' name="images" ref={inputProjectImageFileRef} onChange={displaySample} style={{ display: 'none' }}></input>
                     <div  className="projectForm_projectImageField_imageFile_sampleContainer">
                         <img id='imageSample' ref={projectMainImageSampleRef} src='' alt=''/>
@@ -473,31 +496,32 @@ function ProjectForm({
                 <label htmlFor='inputProjectCreationDate'>DATE DE CRÉATION</label>
                 <input type='month' id='inputProjectCreationDate' ref={inputProjectCreationDateRef} value={projectCreationDate} onChange={(e) =>setProjectCreationDate(e.target.value)}></input>
             </div>
+            <div className='projectForm_projectMoreInfos'>
+                <label htmlFor='inputProjectMoreInfos'>PLUS D'INFOS</label>
+                <input type='text' id='inputProjectMoreInfos' ref={inputProjectMoreInfosRef} value={projectMoreInfos} onChange={(e) =>setProjectMoreInfos(e.target.value)}></input>
+            </div>
             <div className='projectForm_projectDescription'>
                 <label htmlFor='inputProjectDescription'>RÉSUMÉ</label>
-                <textarea type='textarea' id='inputProjectDescription' ref={inputProjectDescriptionRef} value={projectDescription?.replace(/<br>/g, "\n")} onChange={(e) =>setProjectDescription(e.target.value)}></textarea>
+                <input id='trix-description' type="hidden" name="content" defaultValue={projectDescription} ref={inputProjectDescriptionRef}></input>
+                <trix-editor id='inputProjectDescription' input="trix-description"/>
             </div>
             <TitleAndParagraphInput 
                 setList={setParagraphList} 
-                topic="DESCRIPTION"
+                topic="PARAGRAPHES"
                 paragraphTopic="PARAGRAPHE"
                 titleTopic="TITRE DU PARAGRAPHE"
                 list={paragraphList}
                 paragraphProp="paragraphText"
                 titleProp="paragraphTitle"
             />
-            <div className='projectForm_projectMoreInfos'>
-                <label htmlFor='inputProjectMoreInfos'>PLUS D'INFOS</label>
-                <input type='text' id='inputProjectMoreInfos' ref={inputProjectMoreInfosRef} value={projectMoreInfos} onChange={(e) =>setProjectMoreInfos(e.target.value)}></input>
-            </div>
             
             {/* -----CRÉATION D'UN TABLEAU D'OBJETS  */}
 
             <div className='projectForm_projectArtistsList'>
-                <p> ARTISTES </p>
+                <p className='projectForm_projectArtistsList_title'> ARTISTES </p>
                 {artistsList.map((artist, index) => (
                     <div key={index} className='projectForm_projectArtistsList_line'>
-                        <div>
+                        <div className='projectForm_projectArtistsList_line_artistFunction'>
                             <label htmlFor={`inputProjectArtistFunction${index}`}>FONCTION</label>
                             <input
                                 type='text'
@@ -510,7 +534,7 @@ function ProjectForm({
                                 }}
                             ></input>
                         </div>
-                        <div>
+                        <div className='projectForm_projectArtistsList_line_artistName'>
                             <label htmlFor={`inputProjectArtistName${index}`}>NOMS</label>
                             <input
                                 type='text'
@@ -526,14 +550,14 @@ function ProjectForm({
                         <button type='button' onClick={() => handleSupprArtist(index)}>SUPPRIMER</button>
                     </div>              
                 ))}
-                <button type='button' onClick={() =>handleAddArtist()} >+ AJOUTER UN ARTISTE</button>
+                <button className='projectForm_projectArtistsList_addButton' type='button' onClick={() =>handleAddArtist()} >+ AJOUTER UN ARTISTE</button>
             </div>
 
             <div className='projectForm_projectProductionList'>
-                <p> PRODUCTION </p>
+                <p className='projectForm_projectProductionList_title'> PRODUCTION </p>
                 {productionList.map((production, index) => (
                     <div key={index} className='projectForm_projectProductionList_line'>
-                        <div>
+                        <div className='projectForm_projectProductionList_line_prodFunction'>
                             <label htmlFor={`inputProjectProductionFunction${index}`}>FONCTION</label>
                             <select value={production.productionFunction}
                                     onChange={(e) => {
@@ -547,7 +571,7 @@ function ProjectForm({
                                 ))}
                             </select>
                         </div>
-                        <div>
+                        <div className='projectForm_projectProductionList_line_prodName'>
                             <label htmlFor={`inputProjectProductionName${index}`}>NOMS</label>
                             <input
                                 type='text'
@@ -563,7 +587,7 @@ function ProjectForm({
                         <button type='button' onClick={() => handleSupprProduction(index)}>SUPPRIMER</button>
                     </div>              
                 ))}
-                <button type='button' onClick={() =>handleAddProduction()} >+ AJOUTER UN MEMBRE DE L'EQUIPE DE PROD</button>
+                <button className='projectForm_projectProductionList_addButton' type='button' onClick={() =>handleAddProduction()} >+ AJOUTER PRODUCTION</button>
             </div>
             
             <TitleAndParagraphInput 
@@ -576,7 +600,7 @@ function ProjectForm({
                 titleProp="mediaName"
             />
             <div className='projectForm_projectVideoList'>
-                <p> EXTRAITS VIDEO </p>
+                <p className='projectForm_projectVideoList_title'> EXTRAITS VIDEO </p>
                 {videoList.map((video, index) => (
                     <div key={index} className='projectForm_projectVideoList_line'>
                         <div>
@@ -608,11 +632,12 @@ function ProjectForm({
                         <button type='button' onClick={() => handleSupprVideo(index)}>SUPPRIMER</button>
                     </div>              
                 ))}
-                <button type='button' onClick={() =>handleAddVideo()} >+ AJOUTER UN EXTRAIT VIDEO</button>
+                <button className='projectForm_projectVideoList_addButton' type='button' onClick={() =>handleAddVideo()} >+ AJOUTER EXTRAIT VIDEO</button>
             </div>
 
             <div className='projectForm_projectResidenciesList'>
-                <p> RÉSIDENCES </p>
+                <p className='projectForm_projectResidenciesList_title'> RÉSIDENCES </p>
+                <div className='projectForm_projectResidenciesList_container'>
                 {residenciesList.map((residency, index) => (
                     <div key={index} className='projectForm_projectResidenciesList_line'>
                         <div>
@@ -714,67 +739,20 @@ function ProjectForm({
                                 }}
                             ></input>
                         </div>
-                        <button type='button' onClick={() => handleSupprResidency(index)}>SUPPRIMER</button>
+                        <button className='projectForm_projectResidenciesList_line_supprButton' type='button' onClick={() => handleSupprResidency(index)}>SUPPRIMER</button>
                     </div>              
                 ))}
-                <button type='button' onClick={() =>handleAddResidency()} >+ AJOUTER UNE RÉSIDENCE</button>
+                </div>
+                <button className='projectForm_projectResidenciesList_addButton' type='button' onClick={() =>handleAddResidency()} >+ AJOUTER UNE RÉSIDENCE</button>
             </div>
 
             <div className='projectForm_projectShowsList'>
-                <p> REPRÉSENTATIONS </p>
+                <p className='projectForm_projectShowsList_title'> REPRÉSENTATIONS </p>
                 {showsList?.map((show, index) => (
-                    <div key={index} className='projectForm_projectShowsList_line'>
-                        <div className='projectForm_projectShowsList_line_field'>
-                            <label htmlFor={`inputProjectShowDates${index}`}>DATES DE REPRÉSENTATION</label>
-                            {show.dates?.map((date, dateIndex)=>(
-                            <div className='projectForm_projectShowsList_line_field_container'> 
-                                <input
-                                    key={dateIndex}
-                                    type='date'
-                                    id={`inputProjectShowDates${index}`}
-                                    value={date.day}
-                                    onChange={(e) => {
-                                        const updatedShowsList = [...showsList];
-                                        updatedShowsList[index].dates[dateIndex].day = e.target.value;
-                                        setShowsList(updatedShowsList);
-                                    }}
-                                />
-                                {date.times?.map((time, timeIndex) => (
-                                <div>
-                                    <input
-                                        key={`inputProjectShowDatesTimesTime${timeIndex}`}
-                                        type='time'
-                                        id={`inputProjectShowDatesTimesTime${timeIndex}`}
-                                        value={time.time}
-                                        onChange={(e) => {
-                                            const updatedShowsList = [...showsList];
-                                            updatedShowsList[index].dates[dateIndex].times[timeIndex].time = e.target.value;
-                                            setShowsList(updatedShowsList);
-                                        }}
-                                    />
-                                    <label>INFOS SUPPLÉMENTAIRES</label>
-                                    <input
-                                        key={`inputProjectShowDatesTimesInfos${timeIndex}`}
-                                        type='text'
-                                        id={`inputProjectShowDatesTimesInfos${timeIndex}`}
-                                        value={time.timeInfos}
-                                        onChange={(e) => {
-                                            const updatedShowsList = [...showsList];
-                                            updatedShowsList[index].dates[dateIndex].times[timeIndex].timeInfos = e.target.value;
-                                            setShowsList(updatedShowsList);
-                                        }}
-                                    />
-                                    <button type="button" onClick={() =>handleSupprSameDateTime(index, dateIndex, timeIndex)} >SUPPR HORAIRE</button>
-                                </div>
-                                ))}
-                                <button type="button" onClick={() =>handleAddSameDateTime(index, dateIndex)} >+HORAIRE</button>
-                                <button type="button" onClick={() =>handleSupprSameShowDate(index, dateIndex)} >SUPPR DATE</button>
-                            </div>
-                            ))}
-                            <button type="button" onClick={() =>handleAddSameShowDate(index)} >+DATE</button>
-                        </div>
+                <div key={index} className='projectForm_projectShowsList_container'>
+                    <div className='projectForm_projectShowsList_container_infos'>
                         <div>
-                            <label htmlFor={`inputProjectShowCity${index}`}>COMMUNE DE REPRÉSENTATION</label>
+                            <label htmlFor={`inputProjectShowCity${index}`}>COMMUNE DE REPRÉSENTATION:</label>
                             <input
                                 type='text'
                                 id={`inputProjectShowCity${index}`}
@@ -825,30 +803,80 @@ function ProjectForm({
                                 }}
                             ></input>
                         </div>
-                        
-                        <button type='button' onClick={() => handleSupprShow(index)}>SUPPRIMER</button>
-                    </div>              
+                    </div>
+                    <div className='projectForm_projectShowsList_container_dates'>
+                        <label htmlFor={`inputProjectShowDates${index}`}>DATES DE REPRÉSENTATION:</label>
+                        <div className='projectForm_projectShowsList_container_dates_gridDisplay'>
+                            {show.dates?.map((date, dateIndex)=>(
+                            <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay'> 
+                                <input
+                                    className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_date'
+                                    key={dateIndex}
+                                    type='date'
+                                    id={`inputProjectShowDates${index}`}
+                                    value={date.day}
+                                    onChange={(e) => {
+                                        const updatedShowsList = [...showsList];
+                                        updatedShowsList[index].dates[dateIndex].day = e.target.value;
+                                        setShowsList(updatedShowsList);
+                                    }}
+                                />
+                                <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times'>
+                                    {date.times?.map((time, timeIndex) => (
+                                    <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer'>
+                                        <input
+                                            className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer_singleTime'
+                                            key={`inputProjectShowDatesTimesTime${timeIndex}`}
+                                            type='time'
+                                            id={`inputProjectShowDatesTimesTime${timeIndex}`}
+                                            value={time.time}
+                                            onChange={(e) => {
+                                                const updatedShowsList = [...showsList];
+                                                updatedShowsList[index].dates[dateIndex].times[timeIndex].time = e.target.value;
+                                                setShowsList(updatedShowsList);
+                                            }}
+                                        />
+                                        <label>INFOS SUPP.:</label>
+                                        <input
+                                            className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer_moreInfosInput'
+                                            key={`inputProjectShowDatesTimesInfos${timeIndex}`}
+                                            type='text'
+                                            id={`inputProjectShowDatesTimesInfos${timeIndex}`}
+                                            value={time.timeInfos}
+                                            onChange={(e) => {
+                                                const updatedShowsList = [...showsList];
+                                                updatedShowsList[index].dates[dateIndex].times[timeIndex].timeInfos = e.target.value;
+                                                setShowsList(updatedShowsList);
+                                            }}
+                                        />
+                                        <button className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer_supprButton' type="button" onClick={() =>handleSupprSameDateTime(index, dateIndex, timeIndex)} >SUPPR HORAIRE</button>
+                                    </div>
+                                    ))}
+                                    <button className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_addButton' type="button" onClick={() =>handleAddSameDateTime(index, dateIndex)} >+HORAIRE</button>
+                                </div>
+                                <button className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_supprButton' type="button" onClick={() =>handleSupprSameShowDate(index, dateIndex)} >SUPPRIMER DATE</button>
+                            </div>
+                            ))}
+                            <button className='projectForm_projectShowsList_container_dates_gridDisplay_addButton' type="button" onClick={() =>handleAddSameShowDate(index)} >+AJOUTER UNE DATE</button>
+                        </div>
+                    </div>
+                    <button className='projectForm_projectShowsList_container_supprButton' type='button' onClick={() => handleSupprShow(index)}>SUPPRIMER LIEU</button>
+                </div>              
                 ))}
-                <button type='button' onClick={() =>handleAddShow()} >+ AJOUTER UNE REPRÉSENTATION</button>
+                <button className='projectForm_projectShowsList_addButton' type='button' onClick={() =>handleAddShow()} >+ AJOUTER UN LIEU</button>
             </div>
 
             <div className='projectForm_projectPdfFile'>
-                <p>DOSSIERS</p>
+                <p className='projectForm_projectPdfFile_title'>DOSSIERS</p>
+                <div className='projectForm_projectPdfFile_pdfContainer'>
                 {pdfFiles.map((pdf, index) => (
-                    <div className='projectForm_projectPdfFile' key={index}>
+                    <div  key={index}>
                         <p>{pdf.pdfName}</p>
                         <label htmlFor='inputProjectPdfName'>NOM DU PDF</label>
                         <input 
                             type='text' 
                             id='inputProjectPdfName' 
                             name="pdfName"
-                            /* defaultValue est utilisé pour définir la valeur initiale d'un champ contrôlé, 
-                            c'est-à-dire un champ dont la valeur est contrôlée par React plutôt que par le DOM.
-                            Lorsqu'on utilise defaultValue, React ne met pas à jour la valeur du champ si elle a 
-                            été modifiée par React après le rendu initial. C'est pourquoi on ne voit pas 
-                            les mises à jour de pdf.pdfName dans le champ input.
-                            Pour résoudre ce problème, utiliser value au lieu de defaultValue, 
-                            car value est utilisé pour les champs contrôlés, où la valeur est contrôlée par React*/
                             value={projectFormMode === 'edit' ? (pdf.pdfName || null) : null} 
                             onChange={(e) => {
                                 const updatedChangedPdfFiles = [...pdfFiles];
@@ -859,7 +887,8 @@ function ProjectForm({
                         <button type='button' onClick={() => handleSupprPdf(index)}>SUPPRIMER</button>
                     </div>
                 ))}
-                <label htmlFor='inputProjectPdfFile'>{isImageLoaded ? 'CHANGER DE FICHIER' : '+ AJOUTER UN FICHIER'}</label>
+                </div>
+                <label className='projectForm_projectPdfFile_addButton' htmlFor='inputProjectPdfFile'>{isImageLoaded ? 'CHANGER DE FICHIER' : '+ AJOUTER UN FICHIER'}</label>
                 <input type='file' id='inputProjectPdfFile' name="pdfFiles" ref={inputProjectPdfFileRef} onChange={displayPdfSample}></input>
                 <div  className="projectForm_projectPdfFile_sampleContainer">
                     <img id='pdfSample' ref={projectPdfSampleRef} src='' alt=''/>

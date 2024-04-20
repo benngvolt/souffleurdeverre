@@ -148,7 +148,6 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
 
     return  (    
         <form onSubmit={(event) => bioFormSubmit(event)} method="post" className='bioForm'>
-
             <img id='biography image' src="" alt=''></img>
             <div className="bioForm_sampleContainer">
                 <img id='imageSample' ref={bioImageSampleRef} src={bioFormMode === 'edit' ? biographyEdit.bioImageUrl : ''} className="bioForm_sampleContainer_img" alt=''/>

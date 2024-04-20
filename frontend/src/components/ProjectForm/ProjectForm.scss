@@ -19,11 +19,10 @@
         &_imageFile {
             margin: auto;
             label {
-                margin: auto;
-                &:hover {
-                    color: $colorSix;
-                    cursor: pointer;
-                }
+               @include FormButtonType;
+            }
+            &--displayOff {
+                display: none;
             }
             &_sampleContainer {
                 
@@ -61,17 +60,22 @@
     &_projectMoreInfos {
 
         width: 80%;
-        margin: auto;
+        margin: 0 auto 10px auto;
         display: flex;
         flex-direction: column;
         column-gap: 19px;
+
         label {
             width: 50%;
+            font-size: 19px;
+            font-family: 'MainFont_light'
         }
         input, select, textarea {
             width: 100%;
             border: none;
-            background-color: $colorSix;
+            background-color: $colorTwo;
+            font-size: 16px;
+            font-family: 'MainFont_light'
         }
         textarea{
             max-width: 100%;
@@ -91,10 +95,17 @@
         flex-direction: column;
         row-gap: 19px;
 
+        &_title {
+            font-family: 'MainFont_bold';
+            font-size: 19px;
+        }
+
         input, select {
+            font-family: 'MainFont_light';
+            font-size: 16px;
             width: 40%;
             border: none;
-            background-color: $colorSix;
+            background-color: $colorTwo;
         }
 
         &_line {
@@ -104,7 +115,8 @@
             column-gap: 9px;
             width: 100%;
             label {
-                font-size: 13px;
+                font-size: 16px;
+                font-family: 'MainFont_light';
             }
             input {
                 width: 100%;
@@ -119,10 +131,31 @@
             }
 
             button {
+                @include FormButtonType;
                 background: none;
                 border: none;
+                padding:0; 
+            }
+
+            &_prodFunction {
+                    select {
+                    width: 100%;
+                    font-family: 'MainFont_bold';
+                }
+            }
+
+            &_artistFunction {
+                input {
+                    font-family: 'MainFont_bold';
+                }
             }
         } 
+        &_addButton {
+            @include FormButtonType;
+            background: none;
+            width: 300px;
+            margin: auto;
+        }
     }
     &_projectShowsList {
 
@@ -132,37 +165,161 @@
         flex-direction: column;
         row-gap: 19px;
 
-        input, select {
-            width: 40%;
-            border: none;
-            background-color: $colorSix;
+        &_title {
+            font-family: 'MainFont_bold';
+            font-size: 19px;
         }
 
-        &_line {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            column-gap: 9px;
+        input, select {
             width: 100%;
-            label {
-                font-size: 13px;
-            }
-            input {
-                width: 100%;
-            }
+            border: none;
+            background-color: $colorTwo;
+        }
 
-            div {
+        &_container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
+            
+            &_infos {
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
-                column-gap: 15px;
                 width: 100%;
+                
+
+                label {
+                    font-size: 16px;
+                    font-family: 'MainFont_light';
+                    margin: 22px 0;
+                }
+                input {
+                    font-family: 'MainFont_light';
+                    font-size: 16px;
+                    width: 100%;
+                }
+            }
+            
+            &_dates {
+                display: flex;
+                flex-direction: column;
+
+                label {
+                    font-size: 16px;
+                    font-family: 'MainFont_light';
+                    margin: 22px 0 0 0;
+                }
+
+                &_gridDisplay {
+                    display: flex;
+                    flex-direction: column;
+                    width: 100%;
+
+                    &_singleDay {
+                        display: flex;
+                        flex-direction: column;
+                        row-gap: 10px;
+                        margin-top: 35px;
+
+                        &_date {
+                            width: 100%;
+                            font-family: 'MainFont_bold';
+                            font-size: 14px;
+                            margin-bottom: 9px;
+                        }
+
+                        &_times {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+                            row-gap: 35px;
+                            column-gap: 9px;
+
+                            &_timeContainer {
+                                display: flex;
+                                flex-direction: column;
+                                
+                                input {
+                                    width: auto;
+                                    font-family: 'MainFont_light';
+                                    font-size: 14px;
+                                }
+
+                                label {
+                                    margin: 0;
+                                }
+
+                                &_supprButton {
+                                    margin: 0;
+                                    width: 100%;
+                                    text-align: left;
+                                    padding: 0;
+                                    font-family: 'MainFont_light';
+                                    font-size: 13px;
+                                    background: none;
+                                    border: none;
+                                    &:hover {
+                                        color: $colorTwo;
+                                        cursor: pointer;
+                                    }
+                                }
+                            }
+                            &_addButton {
+                                border: solid 1px $colorDarkGrey;
+                                font-family: 'MainFont_light';
+                                margin: 0 0 0 19px;
+                                padding: 0;
+                                background: none;
+                                &:hover {
+                                    color: $colorTwo;
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+
+                        &_supprButton {
+                            margin: 9px auto 9px auto;
+                            width: 100%;
+                            text-align: center;
+                            padding: 0;
+                            font-family: 'MainFont_light';
+                            font-size: 16px;
+                            border: none;
+                            background-color: $colorThree;
+                            &:hover {
+                                background-color: $colorDarkGrey;
+                                color: $colorLightGrey;
+                                cursor: pointer;
+                            }
+                        }
+                    }
+
+                    &_addButton {
+                        font-family: 'MainFont_bold';
+                        border: none;
+                        &:hover {
+                            color: $colorSix;
+                            cursor: pointer;
+                        }
+                        background: none;
+                        width: 300px;
+                        margin: 16px auto 35px auto;
+                    }
+                }
             }
 
-            button {
-                background: none;
+            &_supprButton {
+                @include FormButtonType;
+                background-color: $colorFive;
                 border: none;
+                width: 300px;
+                margin: 0 auto 35px auto;
+                &:hover {
+                    background-color: $colorDarkGrey;
+                    color: $colorLightGrey;
+                    cursor: pointer;
+                }
             }
+
             &_field {
                 &_container {
                     display: flex;
@@ -170,19 +327,30 @@
                 }
             }
         } 
+        &_addButton {
+            @include FormButtonType;
+            background: none;
+            width: 300px;
+            margin: auto;
+        }
     }
 
-    &_projectPressList {
+    &_projectParagraphList {
         width: 80%;
-        margin: auto;
+        margin: 98px auto 0 auto;
         display: flex;
         flex-direction: column;
         row-gap: 19px;
 
+        &_topic {
+            font-size: 19px;
+            font-family: 'MainFont_bold';
+        }
+
         input, select {
             width: 40%;
             border: none;
-            background-color: $colorSix;
+            background-color: $colorTwo;
         }
         &_line {
             display: flex;
@@ -192,50 +360,60 @@
             width: 100%;
 
             label {
-                font-size: 13px;
+                font-size: 16px;
+                font-family: 'MainFont_light';
                 
             }
             input {
                 width: 100%;
+                font-family: 'MainFont_light';
             }
 
-            div {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                column-gap: 15px;
-                width: 100%;
-            }
-
-            button {
-                background: none;
-                border: none;
-            }
             &_title {
                 input {
                     height: auto;
                     width: 100%;
                     padding: 5px 10px;
                     box-sizing: border-box;
+                    font-family: 'MainFont_bold';
+                    font-size: 14px;
             }
             }
 
-            &_paragraph {
-
+            &_text {
                 textarea {
                     background-color: $colorSix;
                     border: none;
                     @include paddingArea;
                     width: 100%;
-                    min-height: 150px; 
+                    min-height: 150px;
                 }
             }
 
+            &_supprButton {
+                @include FormButtonType;
+                width: 100px;
+                background: none;
+                margin: 10px 0;
+            }
+        }
 
+        &_addButton {
+            @include FormButtonType;
+            width: 300px;
+            background: none;
+            margin: 10px auto;
         }
     }
 
     &_projectResidenciesList {
+
+        &_container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            column-gap: 35px;
+        }
+
         &_line {
             display: flex;
             flex-direction: column;
@@ -245,7 +423,82 @@
                     flex-direction: row;
                 }
             }
+
+            &_supprButton {
+                font-size: 16px;
+                font-family: 'MainFont_light';
+                margin: 16px auto 54px auto;
+            }
+        }
+
+        &_addButton {
+            @include FormButtonType;
+            width: 300px;
+            background: none;
+            margin: 10px auto;
         }
     }
 
+    &_projectPdfFile {
+
+        input {
+            display: none;
+        }
+
+        &_addButton {
+            font-size: 14px;
+        }
+        &_sampleContainer {
+            &_buttonsSystem {
+    
+                &--displayOff {
+                    display: none;
+                }
+    
+                &--displayOn {
+                    display: flex;
+                    flex-direction: row;
+    
+                    button {
+                        font-family: 'MainFont_bold';
+                        border: none;
+                        &:hover {
+                            color: $colorSix;
+                            cursor: pointer;
+                        }
+                        background: none;
+                        width: 300px;
+                        margin: 16px auto 35px auto; 
+                    }
+                }
+            }
+        }
+    }
+
+    &_buttons {
+
+        display: flex;
+        flex-direction: row;
+        margin: 54px auto;
+        width: 100%;
+        justify-content: center;
+        column-gap: 16px;
+        button {
+            font-size: 22px;
+            font-family: 'MainFont_bold';
+            color: $colorDarkGrey;
+            border-radius: 0;
+            border: 1px solid $colorDarkGrey;
+            background: none;
+            width: 170px;
+            padding: 15px;
+            &:hover {
+                color: $colorLightGrey;
+                background-color: $colorDarkGrey;
+                border: none;
+                cursor: pointer;
+            }
+        }
+        
+    }
 }

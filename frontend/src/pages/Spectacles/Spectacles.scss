@@ -8,6 +8,7 @@
         flex-direction: row;
         justify-content: center;
         width: 100%;
+        column-gap: 3px;
 
         &_filtersStateContainer {
             text-align: end;
@@ -23,25 +24,34 @@
         }
 
         &_filtersStateContainer {
+            padding: 0;
+
             &_item {
                 list-style-type: none;
                 button {
                     @include FilterButton;
+                    text-align: right;
+                    width: 100%;
 
                 }
                 &--displayOn {
                     button {
+                        
                         background-color: $colorSix;
+                        
                     }
                 }
             }
         }
 
         &_filtersTypeContainer {
+            padding: 0;
             &_item {
                 list-style-type: none;
                 button {
                     @include FilterButton;
+                    text-align: left;
+                    width: 100%;
                     &:hover {
                         cursor: pointer;
                         background-color: $colorFive;
@@ -50,6 +60,7 @@
                 }
                 &--displayOn {
                     button {
+                        width: 100%;
                         background-color: $colorFive;
                     }
                 }
@@ -58,18 +69,17 @@
     }
 
     &_projectsList {
-        margin-top: 98px;
+        margin-top: 19px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
-        // display: flex;
-        // flex-direction: column;
-        // row-gap: 70px;
+        padding: 0 40px;
         list-style-type: none;
         grid-gap: 3px;
 
         li {
             width: auto;
         }
+        
         &_projectItem {
             
             padding: 0;
@@ -84,6 +94,10 @@
                 cursor: pointer;
                 background-color: $colorSix;
 
+                .spectacles_projectsList_projectItem_img {
+                   animation: focusShow 0.5s ease forwards;
+                }
+
             }
 
             &_img {
@@ -91,6 +105,7 @@
                 // height: 272;
                 aspect-ratio: 1/1.15;
                 object-fit: cover;
+                filter: contrast(100%);
                 // filter: grayscale(1) sepia(30%) hue-rotate(150deg) invert(20%) saturate(700%) contrast(70%);
 
             } 
@@ -101,6 +116,7 @@
                 flex-direction: column;
                 justify-content: flex-start;
                 padding-bottom: 20px;
+                height: 130px;
 
                 &_title {
                     font-family: 'SpecialFont_regular';
@@ -110,9 +126,16 @@
                     text-transform: uppercase;
                     
                 }
+                &_subtitle {
+                    font-family: 'MainFont_light';
+                    font-size: 19px;
+                    color: $colorDarkGrey;
+                    margin:  0 0 10px 0;
+                    
+                }
                 &_creationDate {
                     font-family: 'MainFont_light';
-                    font-size: 18px;
+                    font-size: 14px;
                     color: $colorDarkGrey;
                     margin: 0;
                     
@@ -120,7 +143,7 @@
                 &_state {
                     font-family: 'MainFont_light';
                     font-style: italic;
-                    font-size: 16px;
+                    font-size: 14px;
                     color: $colorDarkGrey;
                     margin: 0;
                 }
