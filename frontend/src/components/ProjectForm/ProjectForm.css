@@ -537,10 +537,12 @@
   background-color: #00f0ff;
 }
 .projectForm_projectShowsList_container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   justify-content: space-between;
   width: 100%;
+  -moz-column-gap: 35px;
+       column-gap: 35px;
 }
 .projectForm_projectShowsList_container_infos {
   display: flex;
@@ -567,15 +569,18 @@
   margin: 22px 0 0 0;
 }
 .projectForm_projectShowsList_container_dates_gridDisplay {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: auto;
+  grid-gap: 5px;
+  box-sizing: content-box;
 }
 .projectForm_projectShowsList_container_dates_gridDisplay_singleDay {
   display: flex;
   flex-direction: column;
-  row-gap: 10px;
-  margin-top: 35px;
+  row-gap: 5px;
+  margin: 5px 0 22px 0;
+  width: auto;
 }
 .projectForm_projectShowsList_container_dates_gridDisplay_singleDay_date {
   width: 100%;
@@ -585,9 +590,10 @@
   margin-bottom: 9px;
 }
 .projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  row-gap: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  row-gap: 10px;
   -moz-column-gap: 9px;
        column-gap: 9px;
 }
@@ -599,6 +605,7 @@
   width: auto;
   font-family: "MainFont_light";
   font-size: 14px;
+  font-weight: bold;
 }
 .projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer label {
   margin: 0;
@@ -620,9 +627,10 @@
 .projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_addButton {
   border: solid 1px #232323;
   font-family: "MainFont_light";
-  margin: 0 0 0 19px;
+  margin: 0 0 0 0;
   padding: 0;
   background: none;
+  width: 100%;
 }
 .projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_addButton:hover {
   color: #00f0ff;
@@ -634,7 +642,7 @@
   text-align: center;
   padding: 0;
   font-family: "MainFont_light";
-  font-size: 16px;
+  font-size: 14px;
   border: none;
   background-color: rgba(255, 0, 255, 0.8);
 }
@@ -648,7 +656,6 @@
   font-weight: bold;
   border: none;
   background: none;
-  width: 300px;
   margin: 16px auto 35px auto;
 }
 .projectForm_projectShowsList_container_dates_gridDisplay_addButton:hover {
@@ -664,7 +671,7 @@
   justify-content: center;
   background-color: #fea201;
   border: none;
-  width: 300px;
+  width: 100%;
   margin: 0 auto 35px auto;
 }
 .projectForm_projectShowsList_container_supprButton:hover {

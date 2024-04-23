@@ -762,8 +762,9 @@ function ProjectForm({
 
             <div className='projectForm_projectShowsList'>
                 <p className='projectForm_projectShowsList_title'> REPRÉSENTATIONS </p>
+                <div className='projectForm_projectShowsList_container'>
                 {showsList?.map((show, index) => (
-                <div key={index} className='projectForm_projectShowsList_container'>
+                <div key={index}>
                     <div className='projectForm_projectShowsList_container_infos'>
                         <div>
                             <label htmlFor={`inputProjectShowCity${index}`}>COMMUNE DE REPRÉSENTATION:</label>
@@ -774,19 +775,6 @@ function ProjectForm({
                                 onChange={(e) => {
                                     const updatedShowsList = [...showsList];
                                     updatedShowsList[index].city = e.target.value;
-                                    setShowsList(updatedShowsList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectShowInfos${index}`}>INFOS+</label>
-                            <input
-                                type='text'
-                                id={`inputProjectShowInfos${index}`}
-                                value={show.moreInfos}
-                                onChange={(e) => {
-                                    const updatedShowsList = [...showsList];
-                                    updatedShowsList[index].moreInfos = e.target.value;
                                     setShowsList(updatedShowsList);
                                 }}
                             ></input>
@@ -813,6 +801,19 @@ function ProjectForm({
                                 onChange={(e) => {
                                     const updatedShowsList = [...showsList];
                                     updatedShowsList[index].placeLink = e.target.value;
+                                    setShowsList(updatedShowsList);
+                                }}
+                            ></input>
+                        </div>
+                        <div>
+                            <label htmlFor={`inputProjectShowInfos${index}`}>INFOS+</label>
+                            <input
+                                type='text'
+                                id={`inputProjectShowInfos${index}`}
+                                value={show.moreInfos}
+                                onChange={(e) => {
+                                    const updatedShowsList = [...showsList];
+                                    updatedShowsList[index].moreInfos = e.target.value;
                                     setShowsList(updatedShowsList);
                                 }}
                             ></input>
@@ -877,6 +878,7 @@ function ProjectForm({
                     <button className='projectForm_projectShowsList_container_supprButton' type='button' onClick={() => handleSupprShow(index)}>SUPPRIMER LIEU</button>
                 </div>              
                 ))}
+                </div>
                 <button className='projectForm_projectShowsList_addButton' type='button' onClick={() =>handleAddShow()} >+ AJOUTER UN LIEU</button>
             </div>
 

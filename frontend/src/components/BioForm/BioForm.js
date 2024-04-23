@@ -3,7 +3,6 @@ import { API_URL } from '../../utils/constants'
 import {useRef, useEffect, useState, useContext } from 'react'
 import { Context } from '../../utils/Context'
 import 'trix';
-// import 'trix/dist/trix.css';
 import '../../utils/trix.scss'
 
 function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDisplayBioForm}) {
@@ -30,8 +29,9 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
     const [bioField, setBioField] = useState(bioFormMode === 'edit' ? biographyEdit.field : '');
     const [bioLinkUrl, setBioLinkUrl] = useState(bioFormMode === 'edit' ? biographyEdit.linkUrl : '');
     const [bioBiography, setBioBiography] = useState(bioFormMode === 'edit' ? biographyEdit.biography : '');
-    
 
+    
+    
     // Réinitialisation des valuers input lorsque le formulaire s'ouvre / se ferme.
     useEffect(() => {
         if (bioFormMode === 'edit') {
@@ -50,7 +50,7 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
             setBioBiography('');
             clearTrixEditor()
         }
-    }, [bioFormMode, handleDisplayBioForm]);
+    }, [bioFormMode, handleDisplayBioForm, bioBiography]);
 
     useEffect(() => {
         const element = document.getElementById("inputBio");

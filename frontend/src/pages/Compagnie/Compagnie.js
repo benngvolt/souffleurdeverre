@@ -6,6 +6,7 @@ import Footer from '../../components/Footer/Footer'
 import BioCard from '../../components/BioCard/BioCard'
 import BioSheet from '../../components/BioSheet/BioSheet'
 import Equipe from '../../components/Equipe/Equipe'
+import Collapse from '../../components/Collapse/Collapse'
 
 import julienRocha from '../../assets/Julien_Rocha_Julien_Bruhat.jpg'
 import cedricVeschambre from '../../assets/Cedric_Veschambre_Julien_Bruhat.jpg'
@@ -74,10 +75,11 @@ function Compagnie() {
             <div className={displayBioAside=== true ? 'compagnieSection_bioSheetContainer compagnieSection_bioSheetContainer--displayOn' : 'compagnieSection_bioSheetContainer compagnieSection_bioSheetContainer--displayOff'}>
                 <BioSheet biography={bioAside} closeBioAside={closeBioAside} className='compagnieSection_bioSheetContainer'/>
             </div>
-            <div className='compagnieSection_teamCollapse'>
-                <button to="/equipe" className='compagnieSection_teamCollapse_teamButton'>COLLABORATIONS</button>
-                <Equipe className='compagnieSection_teamCollapse'/>
-            </div>
+            <Collapse title="COLLABORATIONS" style='light'>
+                <div className='compagnieSection_teamCollapse'>
+                    <Equipe className='compagnieSection_teamCollapse'/>
+                </div>
+            </Collapse>
             <div className='compagnieSection_AA'>
                 <h3 className='compagnieSection_AA_title'>Artiste Associé</h3>
                 <p className='compagnieSection_AA_text'> La compagnie Le Souffleur de Verre a vu le jour en 2003 en Auvergne et est implantée à Clermont-Ferrand. Ces projets artistiques et ces envies de travail sur les territoires que compte la région Auvergne-Rhône-Aples l’a mené à s’impliquer dans le Puy-de-Dôme (8 ans de résidence dite « association », menant à la fois créations et projets de médiation artistique, en vue du développement des publics à Cournon d’Auvergne), en Haute-Loire (3 ans résidence de territoire avec la municipalité et les établissements scolaires et associatifs de Monistrol-sur-Loire), et la Loire (3 ans comme compagnie associée au projet d’Arnaud Meunier, directeur de La Comédie de Saint-Étienne – Centre Dramatique National et 5 ans comme membres de l’ensemble artistique).<br/>
