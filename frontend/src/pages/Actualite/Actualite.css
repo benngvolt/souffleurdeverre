@@ -363,20 +363,108 @@
     opacity: 0;
   }
 }
-.editWorkModal_confirmBox {
-  z-index: 1;
-  position: fixed;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-}
-.editWorkModal_confirmBox--displayOn {
+.actualite {
   display: flex;
+  flex-direction: column;
 }
-.editWorkModal_confirmBox--displayOff {
-  display: none;
-}/*# sourceMappingURL=ConfirmBox.css.map */
+.actualite_show {
+  margin: auto;
+  padding: 0 98px;
+  box-sizing: border-box;
+  width: 50%;
+  margin: auto;
+}
+.actualite_show_precision {
+  font-family: "MainFont_light";
+  font-size: 16px;
+  font-size: 22px;
+  margin: 0;
+}
+.actualite_show_titleContainer {
+  display: flex;
+  flex-direction: row;
+}
+.actualite_show_titleContainer_title {
+  font-family: "SpecialFont_regular";
+  filter: drop-shadow(2px 2px 1px #00f0ff) drop-shadow(-2px -2px 1px rgba(255, 0, 255, 0.8));
+  margin: 0;
+  justify-content: flex-end;
+  font-size: 98px;
+}
+.actualite_show_titleContainer_type {
+  font-family: "MainFont_light";
+  font-size: 16px;
+  margin: 0 0 0 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+  font-size: 25px;
+}
+.actualite_show_datesContainer {
+  list-style-type: none;
+  padding: 0;
+}
+.actualite_show_datesContainer_item {
+  margin: 54px 0;
+}
+.actualite_show_datesContainer_item_dates {
+  display: flex;
+  flex-direction: column;
+}
+.actualite_show_datesContainer_item_dates_singleDate {
+  display: flex;
+  flex-direction: row;
+}
+.actualite_show_datesContainer_item_dates_singleDate_day {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  font-size: 29px;
+  font-family: "MainFont_light";
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0;
+}
+.actualite_show_datesContainer_item_dates_singleDate_time {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  font-size: 19px;
+  font-family: "MainFont_light";
+  text-transform: uppercase;
+  margin: 0 16px 5px 16px;
+}
+.actualite_show_datesContainer_item_placeName {
+  font-size: 46px;
+  font-family: "MainFont_light";
+  text-transform: uppercase;
+}
+.actualite_show_datesContainer_item_placeName_link {
+  color: #232323;
+  text-decoration: none;
+  margin: 0;
+}
+.actualite_show_datesContainer_item_placeName_link:hover {
+  color: #00f0ff;
+}
+.actualite_show_datesContainer_item_placeName_link_icon {
+  font-size: 20px;
+  padding-bottom: 3px;
+  margin: 0 19px;
+}
+.actualite_show_datesContainer_item_placeName_noLink {
+  margin: 0;
+}
+.actualite_show_datesContainer_item_showCity {
+  font-family: "MainFont_light";
+  font-size: 29px;
+  margin: 0;
+}
+.actualite_show_description {
+  font-family: "MainFont_light";
+  font-size: 16px;
+  text-align: justify;
+  width: 100%;
+  margin: 0;
+}/*# sourceMappingURL=Actualite.css.map */

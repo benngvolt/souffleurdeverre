@@ -363,8 +363,16 @@
     opacity: 0;
   }
 }
-.editWorkModal_confirmBox {
-  z-index: 1;
+.projectForm_DNDGallery_noImageText {
+  font-family: "MainFont_light";
+  font-style: italic;
+}
+.projectForm_DNDGallery_overlayImage {
+  opacity: 0.5;
+  width: auto;
+  height: 120px;
+}
+.projectForm_DNDGallery_confirmBox {
   position: fixed;
   align-items: center;
   justify-content: center;
@@ -373,10 +381,44 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
+  flex-direction: column;
+  margin: auto;
 }
-.editWorkModal_confirmBox--displayOn {
+.projectForm_DNDGallery_confirmBox--displayOn {
   display: flex;
 }
-.editWorkModal_confirmBox--displayOff {
+.projectForm_DNDGallery_confirmBox--displayOff {
   display: none;
-}/*# sourceMappingURL=ConfirmBox.css.map */
+}
+.projectForm_DNDGallery_confirmBox_label {
+  display: flex;
+  justify-content: center;
+  width: 150px;
+  background-color: white;
+  padding: 12px;
+  font-size: 16px;
+}
+.projectForm_DNDGallery_confirmBox_buttons {
+  margin: 10px auto;
+}
+.projectForm_DNDGallery_confirmBox_buttons button {
+  font-size: 18px;
+  border: none;
+  background: none;
+  color: black;
+}
+.projectForm_DNDGallery_confirmBox_buttons button:hover {
+  cursor: pointer;
+  color: grey;
+}
+.projectForm_DNDGallery_alertTextStyle {
+  display: flex;
+  justify-content: center;
+}
+.projectForm_DNDGallery_alertTextStyle--centered {
+  width: 100%;
+  margin: auto;
+  justify-content: center;
+  text-transform: uppercase;
+  font-size: 20px;
+}/*# sourceMappingURL=DNDGallery.css.map */

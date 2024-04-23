@@ -1,0 +1,877 @@
+@charset "UTF-8";
+/*---------------
+----- FONTS -----
+---------------*/
+@font-face {
+  font-family: "MainFont_light";
+  src: url("../../public/assets/fonts/ProximaNova-Light.ttf") format("truetype");
+  /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
+}
+@font-face {
+  font-family: "MainFont_light";
+  src: url("../../public/assets/fonts/ProximaNova-LightIt.ttf") format("truetype");
+  font-style: italic;
+  /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
+}
+@font-face {
+  font-family: "MainFont_light";
+  src: url("../../public/assets/fonts/ProximaNova-Bold.ttf") format("truetype");
+  font-weight: bold;
+  /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
+}
+@font-face {
+  font-family: "SpecialFont_regular";
+  src: url("../../public/assets/fonts/WarsawGothic/WarsawGothic.otf") format("truetype");
+  /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
+}
+/*-------------------
+----- KEYFRAMES -----
+-------------------*/
+@-webkit-keyframes float {
+  0% {
+    transform: translatey(0px);
+  }
+  50% {
+    transform: translatey(-20px);
+  }
+  100% {
+    transform: translatey(0px);
+  }
+}
+@keyframes float {
+  0% {
+    transform: translatey(0px);
+  }
+  50% {
+    transform: translatey(-20px);
+  }
+  100% {
+    transform: translatey(0px);
+  }
+}
+@-webkit-keyframes openHeader {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 71px;
+  }
+}
+@keyframes openHeader {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 71px;
+  }
+}
+@-webkit-keyframes closeHeader {
+  0% {
+    height: 71px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@keyframes closeHeader {
+  0% {
+    height: 71px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@-webkit-keyframes up-rotate {
+  0% {
+    -webkit-animation-timing-function: cubic-bezier(0.16, -0.88, 0.97, 0.53);
+            animation-timing-function: cubic-bezier(0.16, -0.88, 0.97, 0.53);
+    transform: translateY(0px);
+  }
+  30% {
+    transform-origin: center;
+    -webkit-animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateY(-10px);
+  }
+  100% {
+    transform-origin: center;
+    transform: translateY(-10px) rotate(45deg) scale(0.9);
+  }
+}
+@keyframes up-rotate {
+  0% {
+    -webkit-animation-timing-function: cubic-bezier(0.16, -0.88, 0.97, 0.53);
+            animation-timing-function: cubic-bezier(0.16, -0.88, 0.97, 0.53);
+    transform: translateY(0px);
+  }
+  30% {
+    transform-origin: center;
+    -webkit-animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateY(-10px);
+  }
+  100% {
+    transform-origin: center;
+    transform: translateY(-10px) rotate(45deg) scale(0.9);
+  }
+}
+@-webkit-keyframes down-rotate {
+  0% {
+    -webkit-animation-timing-function: cubic-bezier(0.16, -0.88, 0.97, 0.53);
+            animation-timing-function: cubic-bezier(0.16, -0.88, 0.97, 0.53);
+    transform: translateY(0px);
+  }
+  30% {
+    transform-origin: center;
+    -webkit-animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateY(10px);
+  }
+  100% {
+    transform-origin: center;
+    transform: translateY(10px) rotate(-45deg) scale(0.9);
+  }
+}
+@keyframes down-rotate {
+  0% {
+    -webkit-animation-timing-function: cubic-bezier(0.16, -0.88, 0.97, 0.53);
+            animation-timing-function: cubic-bezier(0.16, -0.88, 0.97, 0.53);
+    transform: translateY(0px);
+  }
+  30% {
+    transform-origin: center;
+    -webkit-animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateY(10px);
+  }
+  100% {
+    transform-origin: center;
+    transform: translateY(10px) rotate(-45deg) scale(0.9);
+  }
+}
+@-webkit-keyframes hide {
+  29% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes hide {
+  29% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes openCollapse {
+  0% {
+    height: 0;
+    opacity: 0%;
+  }
+  100% {
+    height: 100%;
+    opacity: 100%;
+  }
+}
+@keyframes openCollapse {
+  0% {
+    height: 0;
+    opacity: 0%;
+  }
+  100% {
+    height: 100%;
+    opacity: 100%;
+  }
+}
+@-webkit-keyframes closeCollapse {
+  0% {
+    height: 100%;
+    opacity: 100%;
+  }
+  100% {
+    height: 0;
+    opacity: 0%;
+  }
+}
+@keyframes closeCollapse {
+  0% {
+    height: 100%;
+    opacity: 100%;
+  }
+  100% {
+    height: 0;
+    opacity: 0%;
+  }
+}
+@-webkit-keyframes moveDown {
+  0% {
+    padding-top: 0;
+  }
+  100% {
+    padding-top: 19px;
+  }
+}
+@keyframes moveDown {
+  0% {
+    padding-top: 0;
+  }
+  100% {
+    padding-top: 19px;
+  }
+}
+@-webkit-keyframes reverseMoveDown {
+  0% {
+    padding-top: 19px;
+  }
+  100% {
+    padding-top: 0;
+  }
+}
+@keyframes reverseMoveDown {
+  0% {
+    padding-top: 19px;
+  }
+  100% {
+    padding-top: 0;
+  }
+}
+@-webkit-keyframes scrollBanner {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+@keyframes scrollBanner {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+@-webkit-keyframes focusShow {
+  0% {
+    filter: contrast(100%);
+  }
+  100% {
+    filter: contrast(80%);
+  }
+}
+@keyframes focusShow {
+  0% {
+    filter: contrast(100%);
+  }
+  100% {
+    filter: contrast(80%);
+  }
+}
+@-webkit-keyframes closeCollapseArrow {
+  0% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes closeCollapseArrow {
+  0% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@-webkit-keyframes openCollapseArrow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+@keyframes openCollapseArrow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+@-webkit-keyframes openCollapseChildren {
+  0% {
+    max-height: 0px;
+    opacity: 0;
+  }
+  50% {
+    max-height: 1000px;
+    opacity: 0;
+  }
+  100% {
+    max-height: 1000px;
+    opacity: 1;
+  }
+}
+@keyframes openCollapseChildren {
+  0% {
+    max-height: 0px;
+    opacity: 0;
+  }
+  50% {
+    max-height: 1000px;
+    opacity: 0;
+  }
+  100% {
+    max-height: 1000px;
+    opacity: 1;
+  }
+}
+@-webkit-keyframes closeCollapseChildren {
+  0% {
+    max-height: 1000px;
+    opacity: 1;
+  }
+  50% {
+    max-height: 1000px;
+    opacity: 0;
+  }
+  100% {
+    max-height: 0px;
+    opacity: 0;
+  }
+}
+@keyframes closeCollapseChildren {
+  0% {
+    max-height: 1000px;
+    opacity: 1;
+  }
+  50% {
+    max-height: 1000px;
+    opacity: 0;
+  }
+  100% {
+    max-height: 0px;
+    opacity: 0;
+  }
+}
+.projectForm {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  row-gap: 9px;
+  width: 80%;
+  overflow: scroll;
+  margin: auto;
+  background-color: white;
+}
+.projectForm_projectImageField {
+  display: flex;
+  flex-direction: column;
+  row-gap: 98px;
+  width: 80%;
+  margin: 54px auto;
+}
+.projectForm_projectImageField_imageFile {
+  margin: auto;
+}
+.projectForm_projectImageField_imageFile label {
+  font-family: "MainFont_light";
+  border: 1px solid #232323;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.projectForm_projectImageField_imageFile label:hover {
+  color: #019cff;
+  cursor: pointer;
+}
+.projectForm_projectImageField_imageFile--displayOff {
+  display: none;
+}
+.projectForm_projectImageField_imageFile_sampleContainer img {
+  width: 200px;
+}
+.projectForm_projectImageField_imageFile_sampleContainer_buttonsSystem--displayOff {
+  display: none;
+}
+.projectForm_projectImageField_imageFile_sampleContainer_buttonsSystem--displayOn {
+  display: flex;
+}
+.projectForm_projectImageField_imageFile_sampleContainer_buttonsSystem--displayOn button {
+  font-family: "MainFont_light";
+  background: none;
+  border: none;
+  font-size: 19px;
+}
+.projectForm_projectTitle, .projectForm_projectSubtitle, .projectForm_projectState, .projectForm_projectType, .projectForm_projectDuration, .projectForm_projectCreationDate, .projectForm_projectDescription, .projectForm_projectMoreInfos {
+  width: 80%;
+  margin: 0 auto 10px auto;
+  display: flex;
+  flex-direction: column;
+  -moz-column-gap: 19px;
+       column-gap: 19px;
+}
+.projectForm_projectTitle label, .projectForm_projectSubtitle label, .projectForm_projectState label, .projectForm_projectType label, .projectForm_projectDuration label, .projectForm_projectCreationDate label, .projectForm_projectDescription label, .projectForm_projectMoreInfos label {
+  width: 50%;
+  font-size: 19px;
+  font-family: "MainFont_light";
+}
+.projectForm_projectTitle input, .projectForm_projectTitle select, .projectForm_projectTitle textarea, .projectForm_projectSubtitle input, .projectForm_projectSubtitle select, .projectForm_projectSubtitle textarea, .projectForm_projectState input, .projectForm_projectState select, .projectForm_projectState textarea, .projectForm_projectType input, .projectForm_projectType select, .projectForm_projectType textarea, .projectForm_projectDuration input, .projectForm_projectDuration select, .projectForm_projectDuration textarea, .projectForm_projectCreationDate input, .projectForm_projectCreationDate select, .projectForm_projectCreationDate textarea, .projectForm_projectDescription input, .projectForm_projectDescription select, .projectForm_projectDescription textarea, .projectForm_projectMoreInfos input, .projectForm_projectMoreInfos select, .projectForm_projectMoreInfos textarea {
+  width: 100%;
+  border: none;
+  background-color: #00f0ff;
+  font-size: 16px;
+  font-family: "MainFont_light";
+}
+.projectForm_projectTitle textarea, .projectForm_projectSubtitle textarea, .projectForm_projectState textarea, .projectForm_projectType textarea, .projectForm_projectDuration textarea, .projectForm_projectCreationDate textarea, .projectForm_projectDescription textarea, .projectForm_projectMoreInfos textarea {
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 300px;
+}
+.projectForm_projectArtistsList, .projectForm_projectProductionList, .projectForm_projectVideoList, .projectForm_projectResidenciesList, .projectForm_projectPdfFile {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 19px;
+}
+.projectForm_projectArtistsList_title, .projectForm_projectProductionList_title, .projectForm_projectVideoList_title, .projectForm_projectResidenciesList_title, .projectForm_projectPdfFile_title {
+  font-family: "MainFont_light";
+  font-weight: bold;
+  font-size: 19px;
+}
+.projectForm_projectArtistsList input, .projectForm_projectArtistsList select, .projectForm_projectProductionList input, .projectForm_projectProductionList select, .projectForm_projectVideoList input, .projectForm_projectVideoList select, .projectForm_projectResidenciesList input, .projectForm_projectResidenciesList select, .projectForm_projectPdfFile input, .projectForm_projectPdfFile select {
+  font-family: "MainFont_light";
+  font-size: 16px;
+  width: 40%;
+  border: none;
+  background-color: #00f0ff;
+}
+.projectForm_projectArtistsList_line, .projectForm_projectProductionList_line, .projectForm_projectVideoList_line, .projectForm_projectResidenciesList_line, .projectForm_projectPdfFile_line {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  -moz-column-gap: 9px;
+       column-gap: 9px;
+  width: 100%;
+}
+.projectForm_projectArtistsList_line label, .projectForm_projectProductionList_line label, .projectForm_projectVideoList_line label, .projectForm_projectResidenciesList_line label, .projectForm_projectPdfFile_line label {
+  font-size: 16px;
+  font-family: "MainFont_light";
+}
+.projectForm_projectArtistsList_line input, .projectForm_projectProductionList_line input, .projectForm_projectVideoList_line input, .projectForm_projectResidenciesList_line input, .projectForm_projectPdfFile_line input {
+  width: 100%;
+}
+.projectForm_projectArtistsList_line div, .projectForm_projectProductionList_line div, .projectForm_projectVideoList_line div, .projectForm_projectResidenciesList_line div, .projectForm_projectPdfFile_line div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  -moz-column-gap: 15px;
+       column-gap: 15px;
+  width: 100%;
+}
+.projectForm_projectArtistsList_line button, .projectForm_projectProductionList_line button, .projectForm_projectVideoList_line button, .projectForm_projectResidenciesList_line button, .projectForm_projectPdfFile_line button {
+  font-family: "MainFont_light";
+  border: 1px solid #232323;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.projectForm_projectArtistsList_line button:hover, .projectForm_projectProductionList_line button:hover, .projectForm_projectVideoList_line button:hover, .projectForm_projectResidenciesList_line button:hover, .projectForm_projectPdfFile_line button:hover {
+  color: #019cff;
+  cursor: pointer;
+}
+.projectForm_projectArtistsList_line_prodFunction select, .projectForm_projectProductionList_line_prodFunction select, .projectForm_projectVideoList_line_prodFunction select, .projectForm_projectResidenciesList_line_prodFunction select, .projectForm_projectPdfFile_line_prodFunction select {
+  width: 100%;
+  font-family: "MainFont_light";
+  font-weight: bold;
+}
+.projectForm_projectArtistsList_line_artistFunction input, .projectForm_projectProductionList_line_artistFunction input, .projectForm_projectVideoList_line_artistFunction input, .projectForm_projectResidenciesList_line_artistFunction input, .projectForm_projectPdfFile_line_artistFunction input {
+  font-family: "MainFont_light";
+  font-weight: bold;
+}
+.projectForm_projectArtistsList_addButton, .projectForm_projectProductionList_addButton, .projectForm_projectVideoList_addButton, .projectForm_projectResidenciesList_addButton, .projectForm_projectPdfFile_addButton {
+  font-family: "MainFont_light";
+  border: 1px solid #232323;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background: none;
+  width: 300px;
+  margin: auto;
+}
+.projectForm_projectArtistsList_addButton:hover, .projectForm_projectProductionList_addButton:hover, .projectForm_projectVideoList_addButton:hover, .projectForm_projectResidenciesList_addButton:hover, .projectForm_projectPdfFile_addButton:hover {
+  color: #019cff;
+  cursor: pointer;
+}
+.projectForm_projectShowsList {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 19px;
+}
+.projectForm_projectShowsList_title {
+  font-family: "MainFont_light";
+  font-weight: bold;
+  font-size: 19px;
+}
+.projectForm_projectShowsList input, .projectForm_projectShowsList select {
+  width: 100%;
+  border: none;
+  background-color: #00f0ff;
+}
+.projectForm_projectShowsList_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+.projectForm_projectShowsList_container_infos {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.projectForm_projectShowsList_container_infos label {
+  font-size: 16px;
+  font-family: "MainFont_light";
+  margin: 22px 0;
+}
+.projectForm_projectShowsList_container_infos input {
+  font-family: "MainFont_light";
+  font-size: 16px;
+  width: 100%;
+}
+.projectForm_projectShowsList_container_dates {
+  display: flex;
+  flex-direction: column;
+}
+.projectForm_projectShowsList_container_dates label {
+  font-size: 16px;
+  font-family: "MainFont_light";
+  margin: 22px 0 0 0;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_singleDay {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  margin-top: 35px;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_singleDay_date {
+  width: 100%;
+  font-family: "MainFont_light";
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 9px;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  row-gap: 35px;
+  -moz-column-gap: 9px;
+       column-gap: 9px;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer {
+  display: flex;
+  flex-direction: column;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer input {
+  width: auto;
+  font-family: "MainFont_light";
+  font-size: 14px;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer label {
+  margin: 0;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer_supprButton {
+  margin: 0;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  font-family: "MainFont_light";
+  font-size: 13px;
+  background: none;
+  border: none;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer_supprButton:hover {
+  color: #00f0ff;
+  cursor: pointer;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_addButton {
+  border: solid 1px #232323;
+  font-family: "MainFont_light";
+  margin: 0 0 0 19px;
+  padding: 0;
+  background: none;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_addButton:hover {
+  color: #00f0ff;
+  cursor: pointer;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_singleDay_supprButton {
+  margin: 9px auto 9px auto;
+  width: 100%;
+  text-align: center;
+  padding: 0;
+  font-family: "MainFont_light";
+  font-size: 16px;
+  border: none;
+  background-color: rgba(255, 0, 255, 0.8);
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_singleDay_supprButton:hover {
+  background-color: #232323;
+  color: #E9E9E9;
+  cursor: pointer;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_addButton {
+  font-family: "MainFont_light";
+  font-weight: bold;
+  border: none;
+  background: none;
+  width: 300px;
+  margin: 16px auto 35px auto;
+}
+.projectForm_projectShowsList_container_dates_gridDisplay_addButton:hover {
+  color: #019cff;
+  cursor: pointer;
+}
+.projectForm_projectShowsList_container_supprButton {
+  font-family: "MainFont_light";
+  border: 1px solid #232323;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #fea201;
+  border: none;
+  width: 300px;
+  margin: 0 auto 35px auto;
+}
+.projectForm_projectShowsList_container_supprButton:hover {
+  color: #019cff;
+  cursor: pointer;
+}
+.projectForm_projectShowsList_container_supprButton:hover {
+  background-color: #232323;
+  color: #E9E9E9;
+  cursor: pointer;
+}
+.projectForm_projectShowsList_container_field_container {
+  display: flex;
+  flex-direction: row;
+}
+.projectForm_projectShowsList_addButton {
+  font-family: "MainFont_light";
+  border: 1px solid #232323;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background: none;
+  width: 300px;
+  margin: auto;
+}
+.projectForm_projectShowsList_addButton:hover {
+  color: #019cff;
+  cursor: pointer;
+}
+.projectForm_projectParagraphList {
+  width: 80%;
+  margin: 98px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 19px;
+}
+.projectForm_projectParagraphList_topic {
+  font-size: 19px;
+  font-family: "MainFont_light";
+  font-weight: bold;
+}
+.projectForm_projectParagraphList input, .projectForm_projectParagraphList select {
+  width: 40%;
+  border: none;
+  background-color: #00f0ff;
+}
+.projectForm_projectParagraphList_line {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  -moz-column-gap: 9px;
+       column-gap: 9px;
+  width: 100%;
+}
+.projectForm_projectParagraphList_line label {
+  font-size: 16px;
+  font-family: "MainFont_light";
+}
+.projectForm_projectParagraphList_line input {
+  width: 100%;
+  font-family: "MainFont_light";
+}
+.projectForm_projectParagraphList_line_title input {
+  height: auto;
+  width: 100%;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  font-family: "MainFont_light";
+  font-weight: bold;
+  font-size: 14px;
+}
+.projectForm_projectParagraphList_line_text textarea {
+  background-color: #019cff;
+  border: none;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 150px;
+}
+.projectForm_projectParagraphList_line_supprButton {
+  font-family: "MainFont_light";
+  border: 1px solid #232323;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100px;
+  background: none;
+  margin: 10px 0;
+}
+.projectForm_projectParagraphList_line_supprButton:hover {
+  color: #019cff;
+  cursor: pointer;
+}
+.projectForm_projectParagraphList_addButton {
+  font-family: "MainFont_light";
+  border: 1px solid #232323;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 300px;
+  background: none;
+  margin: 10px auto;
+}
+.projectForm_projectParagraphList_addButton:hover {
+  color: #019cff;
+  cursor: pointer;
+}
+.projectForm_projectResidenciesList_container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  -moz-column-gap: 35px;
+       column-gap: 35px;
+}
+.projectForm_projectResidenciesList_line {
+  display: flex;
+  flex-direction: column;
+}
+.projectForm_projectResidenciesList_line_field_container {
+  display: flex;
+  flex-direction: row;
+}
+.projectForm_projectResidenciesList_line_supprButton {
+  font-size: 16px;
+  font-family: "MainFont_light";
+  margin: 16px auto 54px auto;
+}
+.projectForm_projectResidenciesList_addButton {
+  font-family: "MainFont_light";
+  border: 1px solid #232323;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 300px;
+  background: none;
+  margin: 10px auto;
+}
+.projectForm_projectResidenciesList_addButton:hover {
+  color: #019cff;
+  cursor: pointer;
+}
+.projectForm_projectPdfFile #inputProjectPdfFile {
+  display: none;
+}
+.projectForm_projectPdfFile_addButton {
+  font-size: 14px;
+}
+.projectForm_projectPdfFile_sampleContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: auto;
+}
+.projectForm_projectPdfFile_sampleContainer img {
+  width: 300px;
+}
+.projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOff {
+  display: none;
+}
+.projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOn {
+  display: flex;
+  flex-direction: row;
+}
+.projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOn button {
+  font-family: "MainFont_light";
+  font-weight: bold;
+  border: none;
+  background: none;
+  width: 300px;
+  margin: 16px auto 35px auto;
+}
+.projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOn button:hover {
+  color: #019cff;
+  cursor: pointer;
+}
+.projectForm_projectPdfFile_pdfContainer_inputPdfName--displayOn {
+  display: block;
+}
+.projectForm_projectPdfFile_pdfContainer_inputPdfName--displayOff {
+  display: none;
+}
+.projectForm_buttons {
+  display: flex;
+  flex-direction: row;
+  margin: 54px auto;
+  width: 100%;
+  justify-content: center;
+  -moz-column-gap: 16px;
+       column-gap: 16px;
+}
+.projectForm_buttons button {
+  font-size: 22px;
+  font-family: "MainFont_light";
+  font-weight: bold;
+  color: #232323;
+  border-radius: 0;
+  border: 1px solid #232323;
+  background: none;
+  width: 170px;
+  padding: 15px;
+}
+.projectForm_buttons button:hover {
+  color: #E9E9E9;
+  background-color: #232323;
+  border: none;
+  cursor: pointer;
+}/*# sourceMappingURL=ProjectForm.css.map */

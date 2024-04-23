@@ -96,7 +96,8 @@
         row-gap: 19px;
 
         &_title {
-            font-family: 'MainFont_bold';
+            font-family: 'MainFont_light';
+            font-weight: bold;
             font-size: 19px;
         }
 
@@ -140,13 +141,15 @@
             &_prodFunction {
                     select {
                     width: 100%;
-                    font-family: 'MainFont_bold';
+                    font-family: 'MainFont_light';
+            font-weight: bold;
                 }
             }
 
             &_artistFunction {
                 input {
-                    font-family: 'MainFont_bold';
+                    font-family: 'MainFont_light';
+                    font-weight: bold;
                 }
             }
         } 
@@ -166,7 +169,8 @@
         row-gap: 19px;
 
         &_title {
-            font-family: 'MainFont_bold';
+            font-family: 'MainFont_light';
+            font-weight: bold;
             font-size: 19px;
         }
 
@@ -223,7 +227,8 @@
 
                         &_date {
                             width: 100%;
-                            font-family: 'MainFont_bold';
+                            font-family: 'MainFont_light';
+                            font-weight: bold;
                             font-size: 14px;
                             margin-bottom: 9px;
                         }
@@ -294,7 +299,8 @@
                     }
 
                     &_addButton {
-                        font-family: 'MainFont_bold';
+                        font-family: 'MainFont_light';
+                        font-weight: bold;
                         border: none;
                         &:hover {
                             color: $colorSix;
@@ -344,7 +350,8 @@
 
         &_topic {
             font-size: 19px;
-            font-family: 'MainFont_bold';
+            font-family: 'MainFont_light';
+            font-weight: bold;
         }
 
         input, select {
@@ -375,7 +382,8 @@
                     width: 100%;
                     padding: 5px 10px;
                     box-sizing: border-box;
-                    font-family: 'MainFont_bold';
+                    font-family: 'MainFont_light';
+                    font-weight: bold;
                     font-size: 14px;
             }
             }
@@ -441,7 +449,7 @@
 
     &_projectPdfFile {
 
-        input {
+        #inputProjectPdfFile {
             display: none;
         }
 
@@ -449,6 +457,13 @@
             font-size: 14px;
         }
         &_sampleContainer {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin: auto;
+            img {
+                width: 300px; 
+            }
             &_buttonsSystem {
     
                 &--displayOff {
@@ -460,7 +475,8 @@
                     flex-direction: row;
     
                     button {
-                        font-family: 'MainFont_bold';
+                        font-family: 'MainFont_light';
+                        font-weight: bold;
                         border: none;
                         &:hover {
                             color: $colorSix;
@@ -470,6 +486,17 @@
                         width: 300px;
                         margin: 16px auto 35px auto; 
                     }
+                }
+            }
+        }
+
+        &_pdfContainer {
+            &_inputPdfName {
+                &--displayOn {
+                    display: block;
+                }
+                &--displayOff {
+                    display: none;
                 }
             }
         }
@@ -485,7 +512,8 @@
         column-gap: 16px;
         button {
             font-size: 22px;
-            font-family: 'MainFont_bold';
+            font-family: 'MainFont_light';
+            font-weight: bold;
             color: $colorDarkGrey;
             border-radius: 0;
             border: 1px solid $colorDarkGrey;

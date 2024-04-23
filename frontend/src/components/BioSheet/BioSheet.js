@@ -1,8 +1,4 @@
 import './BioSheet.scss'
-// import { Link } from 'react-router-dom'
-// import React, {useEffect, useState} from 'react'
-// import { Context } from '../../utils/Context'
-// import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faXmark } from '@fortawesome/free-solid-svg-icons'
 import DOMPurify from 'dompurify';

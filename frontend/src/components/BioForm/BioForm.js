@@ -53,7 +53,7 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
     }, [bioFormMode, handleDisplayBioForm]);
 
     useEffect(() => {
-        const element = document.querySelector("trix-editor");
+        const element = document.getElementById("inputBio");
         if (element) {
             element.editor.setSelectedRange([0, 0]);
             element.editor.loadHTML(bioBiography); 

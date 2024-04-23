@@ -363,20 +363,21 @@
     opacity: 0;
   }
 }
-.editWorkModal_confirmBox {
-  z-index: 1;
-  position: fixed;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  left: 0;
-  width: 100%;
+.bioForm {
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
 }
-.editWorkModal_confirmBox--displayOn {
-  display: flex;
+.bioForm_sampleContainer img {
+  -o-object-fit: contain;
+     object-fit: contain;
+  width: 300px;
 }
-.editWorkModal_confirmBox--displayOff {
-  display: none;
-}/*# sourceMappingURL=ConfirmBox.css.map */
+.bioForm_sampleContainer img {
+  height: 100px;
+}
+#inputBio {
+  font-family: "MainFont_light";
+  text-align: justify;
+  padding: 35px;
+  height: 400px;
+  overflow: scroll;
+}/*# sourceMappingURL=BioForm.css.map */

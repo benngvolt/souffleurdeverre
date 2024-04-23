@@ -3,57 +3,29 @@ import { useEffect, useRef } from 'react';
 import 'trix';
 import '../../utils/trix.scss';
 
-function TitleAndParagraphInput({ setList, topic, list, paragraphTopic, titleTopic, paragraphProp, titleProp }) {
-    
-    // Référence pour stocker les instances Trix
-    const trixRefs = useRef([]);
+function TitleAndParagraphInput({ setList, topic, list, paragraphTopic, titleTopic, paragraphProp, titleProp, trixRefs, displayForm }) {
 
     const handleAddItem = () => {
         setList([...list, { [paragraphProp]: '', [titleProp]: '' }]);
     };
 
     const handleSupprItem = (index) => {
+
         const trixEditor = trixRefs.current[index];
-        if (trixEditor) {
-            trixEditor.removeEventListener('trix-change', handleTrixChange);
-        }
-        // Supprimer l'élément de la liste
         const updatedList = list.filter((_, i) => i !== index);
-        // Mettre à jour le contenu des Trix Editors
-        updatedList.forEach((item, idx) => {
-            const trixEditor = trixRefs.current[idx].editor;
+        const updatedRefs = trixRefs.current.filter((_, i) => i !== index);
+
+        updatedList.forEach((item, index) => {
+            const trixEditor = updatedRefs[index]?.editor;
             if (trixEditor) {
                 trixEditor.setSelectedRange([0, 0]);
                 trixEditor.loadHTML(item[paragraphProp]);
             }
         });
-        // Mettre à jour la liste
+
         setList(updatedList);
+        trixRefs.current = updatedRefs;
     };
-
-    useEffect(() => {
-        // Mettre à jour le contenu du Trix Editor lorsque bioBiography change
-        trixRefs.current.forEach((trix, index) => {
-            const trixEditor = trix?.editor;
-            if (trixEditor) {
-                trixEditor.setSelectedRange([0, 0]);
-                trixEditor.loadHTML(list[index][paragraphProp]);
-            }
-        });
-    }, [setList]);
-
-    
-
-    useEffect(() => {
-        // Mettre en place les gestionnaires d'événements trix-change pour chaque Trix Editor
-        trixRefs.current.forEach((trix, index) => {
-            if (trix) {
-                trix.addEventListener('trix-change', (event) => {
-                    handleTrixChange(index, event.target.value);
-                });
-            }
-        });
-    }, [list, paragraphProp, trixRefs.current]);
 
     const handleTrixChange = (index, content) => {
         setList(prevList => {
@@ -61,9 +33,39 @@ function TitleAndParagraphInput({ setList, topic, list, paragraphTopic, titleTop
             updatedList[index][paragraphProp] = content;
             return updatedList;
         });
-        console.log(list);
     };
 
+    useEffect(() => {
+        trixRefs.current.forEach((trix, index) => {
+            const trixEditor = trix?.editor;
+            if (trix && trixEditor) {
+                trixEditor.setSelectedRange([0, 0]);
+                trixEditor.loadHTML(list[index][paragraphProp]);
+            }
+        });
+    }, [displayForm]);
+
+    useEffect(() => {
+        trixRefs.current.forEach((trix, index) => {
+            const trixEditor = trix?.editor;
+            if (trix && trixEditor) {
+                // trixEditor.setSelectedRange([0, 0]);
+                // trixEditor.loadHTML(list[index][paragraphProp]);
+                
+                const handleTrixChangeWrapper = (event) => {
+                    handleTrixChange(index, event.target.value);
+                };
+    
+                trix.addEventListener('trix-change', handleTrixChangeWrapper);
+
+                return () => {
+                    trix.removeEventListener('trix-change', handleTrixChangeWrapper);
+                };
+            }
+        });
+    }, [list, paragraphProp, trixRefs]);
+    
+    
     return (
         <div className='projectForm_projectParagraphList'>
             <p className='projectForm_projectParagraphList_topic'>{topic}</p>

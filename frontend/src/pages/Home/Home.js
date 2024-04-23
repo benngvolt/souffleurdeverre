@@ -1,8 +1,5 @@
 import './Home.scss'
 import { Link } from 'react-router-dom'
-// import React, { useContext, useEffect } from 'react'
-// import { Context } from '../../utils/Context'
-// import { useNavigate } from 'react-router-dom'
 import facebookLogo from '../../assets/facebook_black.png'
 import xLogo from '../../assets/x_black.png'
 import youtubeLogo from '../../assets/youtube_black.png'

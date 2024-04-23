@@ -79,14 +79,12 @@ function uploadImages(req, res, next) {
   };
 
 
-
   function uploadPdfs(req, res, next) {
     
     const newPdfsObjects = [];
     const pdfFileIndexes = req.body.pdfFileIndexes;
     const files = req.files.pdfFiles;
     const pdfName = req.body.pdfName;
-    console.log('on atteint uploadPdfs')
     if (!files || files.length === 0) {
       // Aucune image n'a été téléchargée, appeler next() et sortir de la fonction
       return next();

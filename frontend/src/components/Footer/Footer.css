@@ -363,20 +363,9 @@
     opacity: 0;
   }
 }
-.editWorkModal_confirmBox {
-  z-index: 1;
-  position: fixed;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-}
-.editWorkModal_confirmBox--displayOn {
-  display: flex;
-}
-.editWorkModal_confirmBox--displayOff {
-  display: none;
-}/*# sourceMappingURL=ConfirmBox.css.map */
+.footer {
+  margin: 54px auto;
+  width: 70%;
+  text-align: center;
+  font-family: "MainFont_light";
+}/*# sourceMappingURL=Footer.css.map */

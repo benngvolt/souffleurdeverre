@@ -16,8 +16,9 @@
 }
 
 @font-face {
-    font-family: 'MainFont_bold';
+    font-family: 'MainFont_light';
     src: url('../../public/assets/fonts/ProximaNova-Bold.ttf') format('truetype');
+    font-weight: bold;
     /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 
@@ -46,13 +47,15 @@
 }
 
 @mixin TextTitle {
-    font-family: 'MainFont_bold';
+    font-family: 'MainFont_light';
+    font-weight: bold;
     font-size: 16px;
     text-align: justify;
 }
 
 @mixin BoldType {
-    font-family: 'MainFont_bold';
+    font-family: 'MainFont_light';
+    font-weight: bold;
     font-size: 16px;
 }
 
@@ -101,7 +104,8 @@
 
 @mixin FilterButton {
     display: inline-block;
-    font-family: 'MainFont_bold';
+    font-family: 'MainFont_light';
+    font-weight: bold;
 	text-transform: uppercase;
     font-size: 16px;
     color: $colorDarkGrey;
@@ -215,13 +219,13 @@ $padMaxWidth: 991px;
         height: 50px;
     }
     100% {
-		height: 70px;    
+		height: 71px;    
 	}
 }
 
 @keyframes closeHeader {
     0% {
-        height: 70px;
+        height: 71px;
     }
     100% {
 		height: 50px;    
@@ -329,5 +333,59 @@ $padMaxWidth: 991px;
     100% {
         filter: contrast(80%);
         
+    }
+}
+
+@keyframes closeCollapseArrow {
+
+    0% {  
+        transform: rotate(180deg);
+    }
+
+    100% { 
+        transform: rotate(0deg);
+    }
+    
+}
+
+@keyframes openCollapseArrow {
+    0% {  
+        transform: rotate(0deg);
+    }
+
+    100% { 
+        transform: rotate(180deg);
+    }
+}
+
+@keyframes openCollapseChildren {
+    0% {  
+        max-height: 0px;
+        opacity: 0; 
+    }
+    50% { 
+        max-height: 1000px;
+        opacity: 0;
+    }
+
+    100% { 
+        max-height: 1000px;
+        opacity: 1;
+    }
+}
+
+@keyframes closeCollapseChildren {
+    0% {  
+        max-height: 1000px;
+        opacity: 1;
+    }
+    50% {  
+        max-height: 1000px;
+        opacity: 0;
+    }
+
+    100% { 
+        max-height: 0px;
+        opacity: 0;
     }
 }

@@ -363,7 +363,166 @@
     opacity: 0;
   }
 }
-.editWorkModal_confirmBox {
+.compagnieSection_title {
+  padding: 0 98px;
+  box-sizing: border-box;
+  font-weight: 200;
+  font-family: "SpecialFont_regular";
+  font-size: 120px;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  filter: drop-shadow(5px 5px 1px #fea201) drop-shadow(-5px -5px 1px #019cff);
+}
+.compagnieSection_intro {
+  padding: 0 98px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 60px;
+}
+.compagnieSection_intro_rightbloc {
+  padding-top: 120px;
+}
+.compagnieSection_intro p {
+  font-family: "MainFont_light";
+  font-size: 16px;
+  text-align: justify;
+  width: 49%;
+}
+.compagnieSection_image {
+  width: 100%;
+  height: 820px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.compagnieSection_biosList {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 105px 0;
+}
+.compagnieSection_biosList_bioItem {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+}
+.compagnieSection_bioSheetContainer--displayOff {
+  display: none;
+}
+.compagnieSection_bioSheetContainer--displayOn {
+  display: flex;
+}
+.compagnieSection_teamCollapse {
+  display: flex;
+  flex-direction: column;
+  padding: 0 98px;
+  box-sizing: border-box;
+  padding-top: 98px;
+  width: 100%;
+  margin: auto;
+}
+.compagnieSection_teamCollapse_teamButton {
+  margin: 0 auto 98px auto;
+  padding: 10px;
+  box-sizing: border-box;
+  font-family: "SpecialFont_regular";
+  font-size: 30px;
+  width: 12em;
+  text-transform: uppercase;
+  color: #232323;
+  text-decoration: none;
+  border: none;
+  border: none;
+  background-color: rgba(0, 255, 0, 0.8);
+}
+.compagnieSection_teamCollapse_team {
+  display: flex;
+  flex-direction: column;
+  row-gap: 98px;
+}
+.compagnieSection_teamCollapse_team_biosList {
+  list-style: none;
+  padding: 0;
+}
+.compagnieSection_teamCollapse_team_buttons {
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  -moz-column-gap: 60px;
+       column-gap: 60px;
+  margin: auto;
+  justify-content: center;
+}
+.compagnieSection_teamCollapse_team_buttons_button--notSelected {
+  display: inline-block;
+  font-family: "MainFont_light";
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: #232323;
+  background: none;
+  border: none;
+  height: 30px;
+  padding: 0px 40px;
+  line-height: 1.3;
+}
+.compagnieSection_teamCollapse_team_buttons_button--notSelected:hover {
+  cursor: pointer;
+  background-color: #019cff;
+  color: #E9E9E9;
+}
+.compagnieSection_teamCollapse_team_buttons_button--selected {
+  display: inline-block;
+  font-family: "MainFont_light";
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: #232323;
+  background: none;
+  border: none;
+  height: 30px;
+  padding: 0px 40px;
+  line-height: 1.3;
+  background-color: #00f0ff;
+}
+.compagnieSection_teamCollapse_team_buttons_button--selected:hover {
+  cursor: pointer;
+  background-color: #019cff;
+  color: #E9E9E9;
+}
+.compagnieSection_teamCollapse_team_biosList {
+  margin: 0 50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  row-gap: 59px;
+}
+.compagnieSection_teamCollapse_team_biosList_item {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.compagnieSection_teamCollapse_team_biosList_item_img {
+  margin: auto;
+  width: 90%;
+  aspect-ratio: 1.3/1;
+  -o-object-fit: cover;
+     object-fit: cover;
+  filter: grayscale(100%);
+}
+.compagnieSection_teamCollapse_team_biosList_item_name {
+  font-family: "MainFont_light";
+  font-weight: bold;
+  font-size: 16px;
+  margin: auto;
+}
+.compagnieSection_teamCollapse_team_biosList_item_role {
+  font-family: "MainFont_light";
+  font-size: 16px;
+  margin: auto;
+}
+.compagnieSection_bioSheetContainer {
   z-index: 1;
   position: fixed;
   align-items: center;
@@ -373,10 +532,84 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
+  overflow-y: scroll;
 }
-.editWorkModal_confirmBox--displayOn {
+.compagnieSection_bioSheetContainer_mainContainer {
+  margin: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  -moz-column-gap: 0;
+       column-gap: 0;
+  background-color: #E9E9E9;
+  position: relative;
+}
+.compagnieSection_bioSheetContainer_mainContainer_image {
+  width: 665px;
+  height: 814px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.compagnieSection_bioSheetContainer_mainContainer_texts {
+  padding: 300px 67px 67px 67px;
+  width: 100%;
+}
+.compagnieSection_bioSheetContainer_mainContainer_texts_name {
+  font-family: "SpecialFont_regular";
+  font-size: 98px;
+  text-transform: uppercase;
+}
+.compagnieSection_bioSheetContainer_mainContainer_texts_role {
+  font-family: "MainFont_bold";
+  font-size: 18px;
+  margin-bottom: 40px;
+}
+.compagnieSection_bioSheetContainer_mainContainer_texts_bio {
+  font-family: "MainFont_light";
+  font-size: 16px;
+  text-align: justify;
+}
+.compagnieSection_bioSheetContainer_button {
+  background: none;
+  border: none;
+  position: absolute;
+  top: 60px;
+  right: 60px;
+}
+.compagnieSection_bioSheetContainer_button:hover {
+  cursor: pointer;
+}
+.compagnieSection_bioSheetContainer_button_icon {
+  color: #232323;
+  font-size: 30px;
+  position: fixed;
+  right: 65px;
+}
+.compagnieSection_bioSheetContainer--displayOn {
   display: flex;
 }
-.editWorkModal_confirmBox--displayOff {
+.compagnieSection_bioSheetContainer--displayOff {
   display: none;
-}/*# sourceMappingURL=ConfirmBox.css.map */
+}
+.compagnieSection_AA {
+  margin: 150px auto;
+  padding: 98px;
+  display: flex;
+  flex-direction: column;
+  background-color: #fea201;
+  height: auto;
+}
+.compagnieSection_AA_title {
+  width: 37%;
+  margin: 0 auto 54px auto;
+  font-family: "SpecialFont_regular";
+  text-transform: uppercase;
+  font-size: 54px;
+}
+.compagnieSection_AA_text {
+  width: 37%;
+  margin: auto;
+  font-family: "MainFont_light";
+  font-size: 16px;
+  text-align: justify;
+}/*# sourceMappingURL=Compagnie.css.map */

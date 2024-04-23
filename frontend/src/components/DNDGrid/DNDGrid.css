@@ -1,0 +1,128 @@
+.dndGrid {
+  width: 500px;
+  height: auto;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
+}
+.dndGrid_6_item_0 {
+  height: 1000px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndGrid_6_item_1 {
+  height: 800px;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.dndGrid_6_item_2 {
+  height: 800px;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.dndGrid_6_item_3 {
+  height: 400px;
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+.dndGrid_6_item_4 {
+  height: 400px;
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+.dndGrid_6_item_5 {
+  height: 400px;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.dndGrid_5_item_0 {
+  height: 1000px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndGrid_5_item_1 {
+  height: 600px;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.dndGrid_5_item_2 {
+  height: 600px;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.dndGrid_5_item_3 {
+  height: 600px;
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+.dndGrid_5_item_4 {
+  height: 600px;
+  grid-column-start: 2;
+  grid-column-end: 4;
+}
+.dndGrid_4_item_0 {
+  height: 1000px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndGrid_4_item_1 {
+  height: 800px;
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+.dndGrid_4_item_2 {
+  height: 800px;
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+.dndGrid_4_item_3 {
+  height: 800px;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.dndGrid_3_item_0 {
+  height: 1000px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndGrid_3_item_1 {
+  height: 800px;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.dndGrid_3_item_2 {
+  height: 800px;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.dndGrid_2_item_0 {
+  height: 1000px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndGrid_2_item_1 {
+  height: 1000px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndGrid_2_item_0 {
+  height: 1000px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndGrid_0 {
+  display: none;
+}
+.dndGrid_item {
+  width: auto;
+  list-style-type: none;
+}
+.dndGrid_item img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}/*# sourceMappingURL=DNDGrid.css.map */

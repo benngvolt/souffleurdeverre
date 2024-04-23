@@ -363,20 +363,154 @@
     opacity: 0;
   }
 }
-.editWorkModal_confirmBox {
-  z-index: 1;
-  position: fixed;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-}
-.editWorkModal_confirmBox--displayOn {
+.spectacles_filtersHandler {
   display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  -moz-column-gap: 3px;
+       column-gap: 3px;
 }
-.editWorkModal_confirmBox--displayOff {
-  display: none;
-}/*# sourceMappingURL=ConfirmBox.css.map */
+.spectacles_filtersHandler_filtersStateContainer {
+  text-align: end;
+}
+.spectacles_filtersHandler_filtersStateContainer, .spectacles_filtersHandler_filtersTypeContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  -moz-column-gap: 60px;
+       column-gap: 60px;
+}
+.spectacles_filtersHandler_filtersStateContainer {
+  padding: 0;
+}
+.spectacles_filtersHandler_filtersStateContainer_item {
+  list-style-type: none;
+}
+.spectacles_filtersHandler_filtersStateContainer_item button {
+  display: inline-block;
+  font-family: "MainFont_light";
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: #232323;
+  background: none;
+  border: none;
+  height: 30px;
+  padding: 0px 40px;
+  line-height: 1.3;
+  text-align: right;
+  width: 100%;
+}
+.spectacles_filtersHandler_filtersStateContainer_item button:hover {
+  cursor: pointer;
+  background-color: #019cff;
+  color: #E9E9E9;
+}
+.spectacles_filtersHandler_filtersStateContainer_item--displayOn button {
+  background-color: #019cff;
+}
+.spectacles_filtersHandler_filtersTypeContainer {
+  padding: 0;
+}
+.spectacles_filtersHandler_filtersTypeContainer_item {
+  list-style-type: none;
+}
+.spectacles_filtersHandler_filtersTypeContainer_item button {
+  display: inline-block;
+  font-family: "MainFont_light";
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: #232323;
+  background: none;
+  border: none;
+  height: 30px;
+  padding: 0px 40px;
+  line-height: 1.3;
+  text-align: left;
+  width: 100%;
+}
+.spectacles_filtersHandler_filtersTypeContainer_item button:hover {
+  cursor: pointer;
+  background-color: #019cff;
+  color: #E9E9E9;
+}
+.spectacles_filtersHandler_filtersTypeContainer_item button:hover {
+  cursor: pointer;
+  background-color: #fea201;
+  color: #E9E9E9;
+}
+.spectacles_filtersHandler_filtersTypeContainer_item--displayOn button {
+  width: 100%;
+  background-color: #fea201;
+}
+.spectacles_projectsList {
+  margin-top: 19px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  padding: 0 40px;
+  list-style-type: none;
+  grid-gap: 3px;
+}
+.spectacles_projectsList li {
+  width: auto;
+}
+.spectacles_projectsList_projectItem {
+  padding: 0;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0px;
+  text-decoration: none;
+  margin-bottom: 35px;
+}
+.spectacles_projectsList_projectItem:hover {
+  cursor: pointer;
+  background-color: #019cff;
+}
+.spectacles_projectsList_projectItem:hover .spectacles_projectsList_projectItem_img {
+  -webkit-animation: focusShow 0.5s ease forwards;
+          animation: focusShow 0.5s ease forwards;
+}
+.spectacles_projectsList_projectItem_img {
+  width: 100%;
+  aspect-ratio: 1/1.15;
+  -o-object-fit: cover;
+     object-fit: cover;
+  filter: contrast(100%);
+}
+.spectacles_projectsList_projectItem_mainDatas {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-bottom: 20px;
+  height: 130px;
+}
+.spectacles_projectsList_projectItem_mainDatas_title {
+  font-family: "SpecialFont_regular";
+  font-size: 54px;
+  color: #232323;
+  margin: 10px 0 0 0;
+  text-transform: uppercase;
+}
+.spectacles_projectsList_projectItem_mainDatas_subtitle {
+  font-family: "MainFont_light";
+  font-size: 19px;
+  color: #232323;
+  margin: 0 0 10px 0;
+}
+.spectacles_projectsList_projectItem_mainDatas_creationDate {
+  font-family: "MainFont_light";
+  font-size: 14px;
+  color: #232323;
+  margin: 0;
+}
+.spectacles_projectsList_projectItem_mainDatas_state {
+  font-family: "MainFont_light";
+  font-style: italic;
+  font-size: 14px;
+  color: #232323;
+  margin: 0;
+}/*# sourceMappingURL=Spectacles.css.map */

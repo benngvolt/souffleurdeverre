@@ -1,8 +1,10 @@
 import './Header.scss'
 import { Link } from 'react-router-dom'
 import React, { useState } from 'react'
-// import { Context } from '../../utils/Context'
-// import { useNavigate } from 'react-router-dom'
+import facebookLogo from '../../assets/facebook_black.png'
+import xLogo from '../../assets/x_black.png'
+import youtubeLogo from '../../assets/youtube_black.png'
+import instagramLogo from '../../assets/instagram_black.png'
 
 
  
@@ -29,6 +31,20 @@ function Header() {
                 </g>
             </svg>
             <nav className={displayMenu===false?'header_nav header_nav--displayOff':'header_nav header_nav--displayOn'}>
+                <div className='header_nav_socials'>
+                    <a href="https://www.facebook.com" target="_blank" rel="noreferrer" className='header_nav_socials_item'>
+                        <img src={facebookLogo} alt="lien facebook"/>
+                    </a>
+                    <a href="https://www.twitter.com" target="_blank" rel="noreferrer" className='header_nav_socials_item'>
+                        <img src={xLogo} alt="lien x"/>
+                    </a>
+                    <a href="https://www.youtube.com" target="_blank" rel="noreferrer" className='header_nav_socials_item'>
+                        <img src={youtubeLogo} alt="lien youtube"/>
+                    </a>
+                    <a href="https://www.instagram.com" target="_blank" rel="noreferrer" className='header_nav_socials_item'>
+                        <img src={instagramLogo} alt="lien instagram"/>
+                    </a>
+                </div>
                 <div className='header_nav_menu'>
                     <Link to="/" className='header_nav_menu_item'><h2>ACCUEIL</h2></Link>
                     <Link to="/compagnie" className='header_nav_menu_item'><h2>COMPAGNIE</h2></Link>

@@ -363,20 +363,144 @@
     opacity: 0;
   }
 }
-.editWorkModal_confirmBox {
+.dndItem {
+  position: relative;
+}
+.dndItem_6_item_0 {
+  height: 250px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndItem_6_item_1 {
+  height: 200px;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.dndItem_6_item_2 {
+  height: 200px;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.dndItem_6_item_3 {
+  height: 150px;
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+.dndItem_6_item_4 {
+  height: 150px;
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+.dndItem_6_item_5 {
+  height: 150px;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.dndItem_5_item_0 {
+  height: 250px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndItem_5_item_1 {
+  height: 200px;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.dndItem_5_item_2 {
+  height: 200px;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.dndItem_5_item_3 {
+  height: 200px;
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+.dndItem_5_item_4 {
+  height: 200px;
+  grid-column-start: 2;
+  grid-column-end: 4;
+}
+.dndItem_4_item_0 {
+  height: 250px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndItem_4_item_1 {
+  height: 200px;
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+.dndItem_4_item_2 {
+  height: 200px;
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+.dndItem_4_item_3 {
+  height: 200px;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.dndItem_3_item_0 {
+  height: 250px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndItem_3_item_1 {
+  height: 200px;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.dndItem_3_item_2 {
+  height: 200px;
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.dndItem_2_item_0 {
+  height: 250px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndItem_2_item_1 {
+  height: 250px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndItem_1_item_0 {
+  height: 250px;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.dndItem_0 {
+  display: none;
+}
+.dndItem:hover {
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+.dndItem_image {
   z-index: 1;
-  position: fixed;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  -o-object-fit: cover;
+     object-fit: cover;
 }
-.editWorkModal_confirmBox--displayOn {
-  display: flex;
+.dndItem_buttons {
+  position: absolute;
+  bottom: 0;
 }
-.editWorkModal_confirmBox--displayOff {
-  display: none;
-}/*# sourceMappingURL=ConfirmBox.css.map */
+.dndItem_buttons_supprButton, .dndItem_buttons_isMainButton {
+  background-color: black;
+  border: none;
+  color: white;
+  z-index: 2;
+}
+.dndItem_buttons_supprButton:hover, .dndItem_buttons_isMainButton:hover {
+  cursor: pointer;
+}
+.dndItem_buttons_isMainButton--isWhite {
+  color: white;
+}
+.dndItem_buttons_isMainButton--isOrange {
+  color: rgb(81, 0, 255);
+}/*# sourceMappingURL=DNDSortableSingleItem.css.map */

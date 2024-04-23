@@ -63,10 +63,14 @@ function ProjectForm({
     const inputProjectImageFileRef = useRef (null);
     const inputProjectPdfFileRef = useRef (null);
     const projectPdfSampleRef = useRef (null);
+
+    const paragraphRefs = useRef([]);
+    const pressRefs = useRef([]);
     
     /* -----------------------------------------
     ----- AFFICHAGE FORMULAIRE SELON ETAT ------
     ------------------------------------------*/
+
     useEffect(() => {
         if (projectFormMode === 'edit' && projectEdit) {
             setProjectTitle(projectEdit.title);
@@ -226,13 +230,14 @@ function ProjectForm({
         // Afficher l'aperçu
         projectPdfSampleRef.current.setAttribute('src', previewUrl);
         projectPdfSampleRef.current.setAttribute('alt', '');
-        setIsImageLoaded(true);
+        setIsPdfLoaded(true);
         } else {
-        setIsImageLoaded(false);
+        setIsPdfLoaded(false);
         }
     }
     function handleAddPdfFile() {
         if (newPdf) {
+            console.log('il y a un nouuveau pdf')
             const updatedAddPdfFiles = [...pdfFiles, newPdf];
             setPdfFiles(updatedAddPdfFiles);
         }
@@ -419,12 +424,15 @@ function ProjectForm({
     ----- TRIX  EDITOR ------
     -------------------------*/
     useEffect(() => {
-        const elementDescription = document.getElementById("inputProjectDescription");
-        if (elementDescription) {
-            elementDescription.editor.setSelectedRange([0, 0]);
-            elementDescription.editor.loadHTML(projectDescription); 
+        if (inputProjectDescriptionRef) {
+            inputProjectDescriptionRef.current.editor.setSelectedRange([0, 0]);
+            inputProjectDescriptionRef.current.editor.loadHTML(projectDescription); 
         }
     }, [projectDescription, handleDisplayProjectForm]);
+
+    const handleTrixChange = (event) => {
+        setProjectDescription(event.target.value);
+    };
     
     function clearTrixEditor() {
         const elements = document.querySelectorAll("trix-editor");
@@ -433,8 +441,6 @@ function ProjectForm({
             element.editor.loadHTML(''); 
         });
     }
-
-    
 
     return  (      
         <form onSubmit={(event) => projectFormSubmit(event)} method="post" className='projectForm'>
@@ -502,8 +508,12 @@ function ProjectForm({
             </div>
             <div className='projectForm_projectDescription'>
                 <label htmlFor='inputProjectDescription'>RÉSUMÉ</label>
-                <input id='trix-description' type="hidden" name="content" defaultValue={projectDescription} ref={inputProjectDescriptionRef}></input>
-                <trix-editor id='inputProjectDescription' input="trix-description"/>
+                <input id='trix-description' type="hidden" name="content" defaultValue={projectDescription} ></input>
+                <trix-editor 
+                    id='inputProjectDescription' 
+                    input="trix-description" 
+                    ref={inputProjectDescriptionRef}
+                    trix-change={handleTrixChange} />
             </div>
             <TitleAndParagraphInput 
                 setList={setParagraphList} 
@@ -513,6 +523,8 @@ function ProjectForm({
                 list={paragraphList}
                 paragraphProp="paragraphText"
                 titleProp="paragraphTitle"
+                trixRefs={paragraphRefs}
+                displayForm={handleDisplayProjectForm}
             />
             
             {/* -----CRÉATION D'UN TABLEAU D'OBJETS  */}
@@ -598,6 +610,8 @@ function ProjectForm({
                 list={pressList}
                 paragraphProp="quote"
                 titleProp="mediaName"
+                trixRefs={pressRefs}
+                displayForm={handleDisplayProjectForm}
             />
             <div className='projectForm_projectVideoList'>
                 <p className='projectForm_projectVideoList_title'> EXTRAITS VIDEO </p>
@@ -869,15 +883,15 @@ function ProjectForm({
             <div className='projectForm_projectPdfFile'>
                 <p className='projectForm_projectPdfFile_title'>DOSSIERS</p>
                 <div className='projectForm_projectPdfFile_pdfContainer'>
-                {pdfFiles.map((pdf, index) => (
+                {pdfFiles?.map((pdf, index) => (
                     <div  key={index}>
                         <p>{pdf.pdfName}</p>
                         <label htmlFor='inputProjectPdfName'>NOM DU PDF</label>
                         <input 
                             type='text' 
-                            id='inputProjectPdfName' 
+                            id='inputProjectPdfName'
                             name="pdfName"
-                            value={projectFormMode === 'edit' ? (pdf.pdfName || null) : null} 
+                            value={projectFormMode === 'edit' ? (pdf.pdfName || "") : ''} 
                             onChange={(e) => {
                                 const updatedChangedPdfFiles = [...pdfFiles];
                                 updatedChangedPdfFiles[index].pdfName = e.target.value;
