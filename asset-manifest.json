@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/souffleurdeverre/static/css/main.9074f2a4.css",
-    "main.js": "/souffleurdeverre/static/js/main.c58b5309.js",
+    "main.css": "/souffleurdeverre/static/css/main.44af0265.css",
+    "main.js": "/souffleurdeverre/static/js/main.1d66cb36.js",
     "static/js/655.5e62bcaf.chunk.js": "/souffleurdeverre/static/js/655.5e62bcaf.chunk.js",
     "static/js/787.9e9f4ffd.chunk.js": "/souffleurdeverre/static/js/787.9e9f4ffd.chunk.js",
     "static/media/Cedric_Veschambre_Julien_Bruhat.jpg": "/souffleurdeverre/static/media/Cedric_Veschambre_Julien_Bruhat.f62cedd9255eed4c9da5.jpg",
@@ -12,13 +12,13 @@
     "static/media/WarsawGothic.otf": "/souffleurdeverre/static/media/WarsawGothic.6f0a07fe7cb1bf37e7b0.otf",
     "static/media/logoSouffleur.svg": "/souffleurdeverre/static/media/logoSouffleur.c2e3a9c35e7bf4afbf0b08fd73a8db05.svg",
     "index.html": "/souffleurdeverre/index.html",
-    "main.9074f2a4.css.map": "/souffleurdeverre/static/css/main.9074f2a4.css.map",
-    "main.c58b5309.js.map": "/souffleurdeverre/static/js/main.c58b5309.js.map",
+    "main.44af0265.css.map": "/souffleurdeverre/static/css/main.44af0265.css.map",
+    "main.1d66cb36.js.map": "/souffleurdeverre/static/js/main.1d66cb36.js.map",
     "655.5e62bcaf.chunk.js.map": "/souffleurdeverre/static/js/655.5e62bcaf.chunk.js.map",
     "787.9e9f4ffd.chunk.js.map": "/souffleurdeverre/static/js/787.9e9f4ffd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9074f2a4.css",
-    "static/js/main.c58b5309.js"
+    "static/css/main.44af0265.css",
+    "static/js/main.1d66cb36.js"
   ]
 }
