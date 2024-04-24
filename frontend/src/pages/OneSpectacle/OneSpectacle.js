@@ -45,11 +45,6 @@ function OneSpectacle() {
                 {project.description &&        
                 <p className='oneSpectacle_mainDatas_description' dangerouslySetInnerHTML={{__html:cleanedDescription}}></p>
                 }
-                {/* {project.images &&
-                <div className={`oneSpectacle_imagesGrid_item oneSpectacle_imagesGrid_${project.images?.length}_item_0`}>
-                    <img key={project.images[0]._id} alt={project.title + project.images[0]._id} src={project.images[0].imageUrl}/>
-                </div>
-                } */}
                 {project.images && 
                 <div
                     className={`oneSpectacle_imagesGrid_parallaxContainer oneSpectacle_imagesGrid_item oneSpectacle_imagesGrid_${project.images.length}_item_0`}
@@ -166,7 +161,7 @@ function OneSpectacle() {
                                         <li key={residency.id} className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item'>
                                             <p className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text'>
                                                 {residency.startDates && residency.endDates && (
-                                                <FullPeriodDate startISODate={residency.startDates} endISODate={residency.endDates}/>
+                                                <FullPeriodDate startISODate={residency.startDates} endISODate={residency.endDates} className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text_date'/>
                                                 )}
                                                 <IsALink className="oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text" link={residency.placeLink} name={residency.placeName}/>
                                                 {`/ ${residency.city ? residency.city : ""}`}

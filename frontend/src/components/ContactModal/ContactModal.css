@@ -1,0 +1,514 @@
+@charset "UTF-8";
+/*---------------
+----- FONTS -----
+---------------*/
+@font-face {
+  font-family: "SpecialFont";
+  src: url("../../public/assets/fonts/Mermaid1001.ttf") format("truetype");
+  /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
+}
+@font-face {
+  font-family: "MainFont_light";
+  src: url("../../public/assets/fonts/ProximaNova-Light.ttf") format("truetype");
+  /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
+}
+@font-face {
+  font-family: "MainFont_lightItalic";
+  src: url("../../public/assets/fonts/ProximaNova-LightIt.ttf") format("truetype");
+  /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
+}
+@font-face {
+  font-family: "MainFont_bold";
+  src: url("../../public/assets/fonts/ProximaNova-Bold.ttf") format("truetype");
+  /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
+}
+/*----------------
+----- MIXINS -----
+----------------*/
+/*-------------------
+----- VARIABLES -----
+-------------------*/
+/*-------------------
+----- KEYFRAMES -----
+-------------------*/
+@-webkit-keyframes float {
+  0% {
+    transform: translatey(0px);
+  }
+  50% {
+    transform: translatey(-20px);
+  }
+  100% {
+    transform: translatey(0px);
+  }
+}
+@keyframes float {
+  0% {
+    transform: translatey(0px);
+  }
+  50% {
+    transform: translatey(-20px);
+  }
+  100% {
+    transform: translatey(0px);
+  }
+}
+@-webkit-keyframes heightRetract {
+  0% {
+    padding-top: 0%;
+    padding-bottom: 0%;
+  }
+  25% {
+    padding-top: 0%;
+    padding-bottom: 0%;
+  }
+  100% {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+}
+@keyframes heightRetract {
+  0% {
+    padding-top: 0%;
+    padding-bottom: 0%;
+  }
+  25% {
+    padding-top: 0%;
+    padding-bottom: 0%;
+  }
+  100% {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+}
+@-webkit-keyframes heightRetractInvert {
+  0% {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+  100% {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+@keyframes heightRetractInvert {
+  0% {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+  100% {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+@-webkit-keyframes navOpen {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes navOpen {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes navOpenInvert {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes navOpenInvert {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes showHamburger {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes showHamburger {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes hideHamburger {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes hideHamburger {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes openHeader {
+  0% {
+    height: 35px;
+  }
+  100% {
+    height: 98px;
+  }
+}
+@keyframes openHeader {
+  0% {
+    height: 35px;
+  }
+  100% {
+    height: 98px;
+  }
+}
+@-webkit-keyframes closeVerticalHeader {
+  0% {
+    width: 40%;
+  }
+  100% {
+    width: 35px;
+  }
+}
+@keyframes closeVerticalHeader {
+  0% {
+    width: 40%;
+  }
+  100% {
+    width: 35px;
+  }
+}
+@-webkit-keyframes openVerticalHeader {
+  0% {
+    width: 35px;
+  }
+  100% {
+    width: 40%;
+  }
+}
+@keyframes openVerticalHeader {
+  0% {
+    width: 35px;
+  }
+  100% {
+    width: 40%;
+  }
+}
+@-webkit-keyframes closeHeader {
+  0% {
+    height: 98px;
+  }
+  100% {
+    height: 35px;
+  }
+}
+@keyframes closeHeader {
+  0% {
+    height: 98px;
+  }
+  100% {
+    height: 35px;
+  }
+}
+@-webkit-keyframes disappear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+@keyframes disappear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+@-webkit-keyframes disappearValidBox {
+  0% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes disappearValidBox {
+  0% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes darkAppear {
+  0% {
+    filter: brightness(0);
+  }
+  20% {
+    filter: brightness(0);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+@keyframes darkAppear {
+  0% {
+    filter: brightness(0);
+  }
+  20% {
+    filter: brightness(0);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+@-webkit-keyframes closeCollapse {
+  0% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes closeCollapse {
+  0% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@-webkit-keyframes openCollapse {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+@keyframes openCollapse {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+@-webkit-keyframes openCollapseChildren {
+  0% {
+    height: 0px;
+    opacity: 0;
+  }
+  50% {
+    height: auto;
+    opacity: 0;
+  }
+  100% {
+    height: auto;
+    opacity: 1;
+  }
+}
+@keyframes openCollapseChildren {
+  0% {
+    height: 0px;
+    opacity: 0;
+  }
+  50% {
+    height: auto;
+    opacity: 0;
+  }
+  100% {
+    height: auto;
+    opacity: 1;
+  }
+}
+@-webkit-keyframes closeCollapseChildren {
+  0% {
+    height: auto;
+    opacity: 1;
+  }
+  50% {
+    height: auto;
+    opacity: 0;
+  }
+  100% {
+    height: 0px;
+    opacity: 0;
+  }
+}
+@keyframes closeCollapseChildren {
+  0% {
+    height: auto;
+    opacity: 1;
+  }
+  50% {
+    height: auto;
+    opacity: 0;
+  }
+  100% {
+    height: 0px;
+    opacity: 0;
+  }
+}
+@-webkit-keyframes appearOpacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes appearOpacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.contactModal {
+  width: auto;
+  background-color: #E9E9E9;
+  margin: auto;
+  position: relative;
+  -webkit-animation: appearOpacity 2s ease forwards;
+          animation: appearOpacity 2s ease forwards;
+}
+@media only screen and (max-width: 768px) {
+  .contactModal {
+    width: 90%;
+  }
+}
+.contactModal_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 35px 54px;
+  height: 220px;
+  margin: 0 35px;
+}
+@media only screen and (max-width: 768px) {
+  .contactModal_container {
+    padding: 0;
+  }
+}
+.contactModal_container_yellowBlock {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 98px;
+  height: 160px;
+  background-color: rgb(255, 242, 0);
+  justify-content: center;
+}
+@media only screen and (max-width: 768px) {
+  .contactModal_container_yellowBlock {
+    margin: auto 0;
+    display: none;
+  }
+}
+.contactModal_container_datas {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 16px;
+  margin-left: 35px;
+}
+@media only screen and (max-width: 768px) {
+  .contactModal_container_datas {
+    margin-left: 0;
+  }
+}
+.contactModal_container_datas_title {
+  display: flex;
+  justify-content: flex-start;
+  font-family: "SpecialFont";
+  font-size: 35px;
+  margin: 0;
+}
+@media only screen and (max-width: 768px) {
+  .contactModal_container_datas_title {
+    font-size: 27px;
+  }
+}
+.contactModal_container_datas_tel {
+  font-family: "MainFont_light";
+  font-size: 22px;
+  margin: 0;
+}
+@media only screen and (min-width: 769px) and (max-width: 991px) {
+  .contactModal_container_datas_tel {
+    font-size: 22px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .contactModal_container_datas_tel {
+    font-size: 14px;
+  }
+}
+.contactModal_container_datas_address, .contactModal_container_datas_mail {
+  font-family: "MainFont_light";
+  font-size: 22px;
+  margin: 0;
+}
+@media only screen and (min-width: 769px) and (max-width: 991px) {
+  .contactModal_container_datas_address, .contactModal_container_datas_mail {
+    font-size: 22px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .contactModal_container_datas_address, .contactModal_container_datas_mail {
+    font-size: 14px;
+  }
+}
+.contactModal_closeButton {
+  width: auto;
+  display: flex;
+  color: #0c0c0c;
+  background: none;
+  border: none;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+@media only screen and (max-width: 768px) {
+  .contactModal_closeButton {
+    top: 10px;
+    left: 10px;
+  }
+}
+.contactModal_closeButton_icon {
+  height: 2em;
+}
+.contactModal_closeButton_icon:hover {
+  cursor: pointer;
+}/*# sourceMappingURL=ContactModal.css.map */

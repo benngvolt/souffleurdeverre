@@ -2,19 +2,105 @@
 
 .bioForm {
     height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 9px;
+    width: 80%;
+    overflow: scroll;
+    margin: auto;
+    background-color: white;
+    box-sizing: border-box;
+  
+
     &_sampleContainer {
         img {
             object-fit: contain;
             width: 300px;
+            margin-top: 98px;
         }
     }
-    &_sampleContainer {
-        img {
-            height: 100px;
+
+    &_bioImageFile {
+        label  {
+            cursor: pointer;
+            font-family: 'MainFont_light';
+            font-weight: bold;
+            font-size: 16px;
+        }
+        input {
+            display: none;
         }
     }
+
+    &_surname,
+    &_name,
+    &_role,
+    &_field,
+    &_linkUrl  {
+        width: 30%;
+        margin: 0 auto 10px auto;
+        display: flex;
+        flex-direction: column;
+        column-gap: 19px;
+
+        label {
+            width: 50%;
+            font-size: 19px;
+            font-family: 'MainFont_light'
+        }
+        input, select, textarea {
+            width: 100%;
+            border: none;
+            background-color: $colorTwo;
+            font-size: 16px;
+            font-family: 'MainFont_light'
+        }
+        textarea{
+            max-width: 100%;
+            min-width: 100%;
+            min-height: 300px;
+        } 
+    }
+
     &_bio {
-        
+        width: 90%;
+        margin-top: 35px;
+        label {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin: auto;
+            width: 100%;
+            font-family: 'MainFont_light';
+            font-size: 19px;
+        }
+    }
+
+    &_buttons {
+        display: flex;
+        flex-direction: row;
+        margin: 0 auto 54px auto;
+        width: 100%;
+        justify-content: center;
+        column-gap: 16px;
+        button {
+            font-size: 22px;
+            font-family: 'MainFont_light';
+            font-weight: bold;
+            color: $colorDarkGrey;
+            border-radius: 0;
+            border: 1px solid $colorDarkGrey;
+            background: none;
+            width: 170px;
+            padding: 15px;
+            &:hover {
+                color: $colorLightGrey;
+                background-color: $colorDarkGrey;
+                border: none;
+                cursor: pointer;
+            }
+        }
     }
 }
 #inputBio {

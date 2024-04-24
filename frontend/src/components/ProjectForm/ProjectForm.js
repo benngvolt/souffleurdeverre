@@ -7,6 +7,11 @@ import { v4 as uuidv4 } from 'uuid'
 // import DOMPurify from 'dompurify';
 import DNDGallery from '../../components/DNDGallery/DNDGallery'
 import TitleAndParagraphInput from '../TitleAndParagraphInput/TitleAndParagraphInput'
+import ConfirmBox from '../ConfirmBox/ConfirmBox'
+import Loader from '../Loader/Loader'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faXmark} from '@fortawesome/free-solid-svg-icons'
+import ErrorText from '../ErrorText/ErrorText'
 import 'trix';
 // import 'trix/dist/trix.css';
 import '../../utils/trix.scss'
@@ -45,7 +50,10 @@ function ProjectForm({
             projectTypes, 
             handleLoadProjects, 
             productionFunctions, 
-            residencyTypes } 
+            residencyTypes,
+            loaderDisplay,
+            displayLoader,
+            hideLoader} 
             = useContext(Context);
 
     /* ---------------------------
@@ -72,6 +80,8 @@ function ProjectForm({
     ------------------------------------------*/
 
     useEffect(() => {
+        setDisplayServerError(false);
+        setDisplayError(false);
         if (projectFormMode === 'edit' && projectEdit) {
             setProjectTitle(projectEdit.title);
             setProjectSubtitle(projectEdit.subtitle);
@@ -106,6 +116,10 @@ function ProjectForm({
     const [projectCreationDate, setProjectCreationDate] = useState('')
     const [projectDescription, setProjectDescription] = useState('')
     const [projectMoreInfos, setProjectMoreInfos] = useState('')
+    const [confirmBoxState, setConfirmBoxState] = useState(false);
+
+    const [displayServerError, setDisplayServerError] = useState(false);
+    const [displayError, setDisplayError] = useState(false);
 
     /* ---------------------------
     ----- ARTISTS LIST -----------
@@ -218,7 +232,8 @@ function ProjectForm({
         const dataUrl = canvas.toDataURL('image/jpeg');
         return dataUrl;
     }
-    async function displayPdfSample(event) {
+    async function displayPdfSample() {
+        console.log("ça change");
         const pdf = inputProjectPdfFileRef.current.files[0];
         if (pdf) {
         const id = uuidv4(); // Générez un identifiant unique
@@ -257,6 +272,10 @@ function ProjectForm({
     function cancelAddPdfFile() {
         setNewPdf (null);
         setIsPdfLoaded(false);
+        // Réinitialiser l'élément input
+        inputProjectPdfFileRef.current.value = '';
+        // Réinitialiser les fichiers sélectionnés
+        inputProjectPdfFileRef.current.files = null;
         projectPdfSampleRef.current.setAttribute("src", "");
         projectPdfSampleRef.current.setAttribute("alt", "");
     }
@@ -320,6 +339,9 @@ function ProjectForm({
     function projectFormSubmit(event) {
         event.preventDefault();
         //RÉORGANISATION DES ELEMENTS 'RESIDENCY' PAR ORDRE CHRONOLOGIQUE
+        displayLoader();
+        setDisplayServerError(false);
+        setDisplayError(false);
         const sortedResidenciesList = residenciesList.sort((a, b) => {
             const dateA = new Date(a.startDates);
             const dateB = new Date(b.startDates);
@@ -359,7 +381,7 @@ function ProjectForm({
             if (pdf instanceof File) {
                 projectFormData.append('pdfFiles', pdf);
                 projectFormData.append('pdfFileIndexes', index);
-                projectFormData.append('pdfName', pdf.pdfName)
+                projectFormData.append('pdfNames', pdf.pdfName)
             } else {
                 projectFormData.append(`existingPdfs[${index}]`, JSON.stringify(pdf));
             }
@@ -373,53 +395,81 @@ function ProjectForm({
                 projectFormData.append(`existingImages[${index}]`, JSON.stringify(image));
             }
         });
-        if (projectFormMode==='add') {
-            fetch(`${API_URL}/api/projects`, {
-                method: "POST",
-                headers: {
-                    // 'Content-Type': 'application/json',
-                    // 'Authorization': 'Bearer ' + token,
-                },
-                body: projectFormData,
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response;
-                    } else {
-                        throw new Error('La requête a échoué');
-                    }
-                })
-                .then(()=> {
-                    closeForm();
-                })
-                .catch((error) => console.error(error));
-        } else if (projectFormMode==='edit') {
-            fetch(`${API_URL}/api/projects/${projectEdit._id}`, {
-                method: "PUT",
-                headers: {
-                    // 'Content-Type': 'application/json',
-                    // 'Authorization': 'Bearer ' + token,
-                },
-                body: projectFormData,
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response;
-                    } else {
-                        throw new Error('La requête a échoué');
-                    }
-                })
-                .then(()=> {
-                    closeForm();
-                })
-                .catch((error) => console.error(error));
+        if (
+            !inputProjectTitleRef.current.value ||
+            !inputProjectStateRef.current.value ||
+            !inputProjectTypeRef.current.value
+        ) {
+            hideLoader();
+            setDisplayError(true);
+            return;
+        } else {
+            if (projectFormMode==='add') {
+                fetch(`${API_URL}/api/projects`, {
+                    method: "POST",
+                    headers: {
+                        // 'Content-Type': 'application/json',
+                        // 'Authorization': 'Bearer ' + token,
+                    },
+                    body: projectFormData,
+                    })
+                    .then((response) => {
+                        if (response.ok) {
+                            hideLoader();
+                            return response;
+                        } else {
+                            hideLoader();
+                            setDisplayServerError(true);
+                            throw new Error('La requête a échoué');
+                        }
+                    })
+                    .then(()=> {
+                        closeForm();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        hideLoader();
+                        setDisplayServerError(true);
+                    });
+
+            } else if (projectFormMode==='edit') {
+                fetch(`${API_URL}/api/projects/${projectEdit._id}`, {
+                    method: "PUT",
+                    headers: {
+                        // 'Content-Type': 'application/json',
+                        // 'Authorization': 'Bearer ' + token,
+                    },
+                    body: projectFormData,
+                    })
+                    .then((response) => {
+                        if (response.ok) {
+                            hideLoader();
+                            return response;
+                        } else {
+                            hideLoader();
+                            setDisplayServerError(true);
+                            throw new Error('La requête a échoué');
+                        }
+                    })
+                    .then(()=> {
+                        closeForm();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        hideLoader();
+                        setDisplayServerError(true);
+                    });
+            }
         }
     }
+
     function closeForm() {
         setHandleDisplayProjectForm(false);
         handleLoadProjects();
         clearTrixEditor();
+        hideLoader();
     }
+
     /* ------------------------
     ----- TRIX  EDITOR ------
     -------------------------*/
@@ -442,9 +492,22 @@ function ProjectForm({
         });
     }
 
+    /* ------------------------
+    ----- CONFIRMBOX ------
+    -------------------------*/
+    function closeConfirmBox () {
+        setConfirmBoxState(false);
+    }
+
+    function openConfirmBox () {
+        setConfirmBoxState(true);
+    }
+
     return  (      
         <form onSubmit={(event) => projectFormSubmit(event)} method="post" className='projectForm'>
-
+            <button type='button' className='projectForm_stickyCancelButton' onClick={() => openConfirmBox ()}>
+                <FontAwesomeIcon icon={faXmark} className='projectForm_stickyCancelButton_icon'/>
+            </button>
             <div className='projectForm_projectImageField'>
                 <DNDGallery imageFiles={imageFiles} setImageFiles={setImageFiles} mainImageIndex={mainImageIndex} setMainImageIndex={setMainImageIndex} />
                 <div className={imageFiles.length < 6 ? 'projectForm_projectImageField_imageFile' : 'projectForm_projectImageField_imageFile--displayOff'}>
@@ -682,7 +745,6 @@ function ProjectForm({
                                     const nextDay = new Date(e.target.value);
                                     nextDay.setDate(nextDay.getDate() + 1);
                                     updatedResidenciesList[index].endDates = nextDay.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
-
                                     setResidenciesList(updatedResidenciesList);
                                 }}
                             ></input>
@@ -886,7 +948,7 @@ function ProjectForm({
                 <p className='projectForm_projectPdfFile_title'>DOSSIERS</p>
                 <div className='projectForm_projectPdfFile_pdfContainer'>
                 {pdfFiles?.map((pdf, index) => (
-                    <div  key={index}>
+                    <div key={index}>
                         <p>{pdf.pdfName}</p>
                         <label htmlFor='inputProjectPdfName'>NOM DU PDF</label>
                         <input 
@@ -904,8 +966,6 @@ function ProjectForm({
                     </div>
                 ))}
                 </div>
-                <label className='projectForm_projectPdfFile_addButton' htmlFor='inputProjectPdfFile'>{isImageLoaded ? 'CHANGER DE FICHIER' : '+ AJOUTER UN FICHIER'}</label>
-                <input type='file' id='inputProjectPdfFile' name="pdfFiles" ref={inputProjectPdfFileRef} onChange={displayPdfSample}></input>
                 <div  className="projectForm_projectPdfFile_sampleContainer">
                     <img id='pdfSample' ref={projectPdfSampleRef} src='' alt=''/>
                     <div className={isPdfLoaded ? "projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOn" : "projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOff"}>
@@ -913,10 +973,22 @@ function ProjectForm({
                         <button aria-label="Annuler" onClick={cancelAddPdfFile} type="button">ANNULER</button>
                     </div>
                 </div>
+                <label className={isPdfLoaded ? 'projectForm_projectPdfFile_addButton--displayOff' : 'projectForm_projectPdfFile_addButton'} htmlFor='inputProjectPdfFile'>+ AJOUTER UN FICHIER</label>
+                <input type='file' id='inputProjectPdfFile' name="pdfFiles" ref={inputProjectPdfFileRef} onChange={displayPdfSample}></input>
             </div>
+            <ErrorText errorText={"Une erreur s\'est produite"} state={displayServerError}/>
+            <ErrorText errorText={"Tous les champs marqués d'une * doivent être remplis"} state={displayError}/>
             <div className='projectForm_buttons'>
                 <button type='submit'>VALIDER</button>
-                <button type='button' onClick={() => closeForm()}>ANNULER</button>
+                <button type='button' onClick={() => openConfirmBox ()}>ANNULER</button>
+            </div>
+            <ConfirmBox 
+                affirmativeChoice={closeForm} 
+                confirmBoxState={confirmBoxState}
+                negativeChoice={closeConfirmBox}
+            />
+            <div className={loaderDisplay===true?'homePage_loader--displayOn':'homePage_loader--displayOff'}>
+                <Loader className='loader--opaque' loaderDisplay={loaderDisplay}/>
             </div>
         </form>
     )

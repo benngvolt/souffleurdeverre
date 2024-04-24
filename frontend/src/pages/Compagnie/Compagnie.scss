@@ -176,11 +176,13 @@
                         @include Title;
                         font-size: 98px;
                         text-transform: uppercase;
+                        margin: 30px 0;
                     }
                     &_role {
-                        font-family: 'MainFont_bold';
+                        font-family: 'MainFont_light';
+                        font-weight: bold;
                         font-size: 18px;
-                        margin-bottom: 40px;
+                        margin-bottom: 54px;
                     }
                     &_bio {
                         @include TextBloc;
@@ -199,7 +201,7 @@
                     }
                 &_icon {
                     color: $colorDarkGrey;
-                    font-size: 30px;
+                    height: 2em;
                     position: fixed;
                     right: 65px;
                 }

@@ -21,51 +21,52 @@
             display: none;
         }
 
-        // &_container  {
-        //     display: flex;
-        //     flex-direction: column;
-        //     width: 630px;
-        //     height: auto;
-        //     padding: 3% 0;
+        &_container  {
+            display: flex;
+            flex-direction: column;
+            width: 630px;
+            height: auto;
+            padding: 3% 0;
+            background-color: $colorLightGrey ;
 
-        //     &_question {
-        //         padding-top: 20px;
-        //         margin: 0 auto 5px auto;
-        //         font-family: 'MainFont';
-        //         color: $colorDarkGrey;
-        //         display: flex;
-        //         justify-content: center;
-        //         width: 300px;
-        //         @include MainFont;
-        //         background-color: $colorSelection;
-        //         padding: 12px;
-        //         font-size: 16px;
-                
-        //     }
-        //     &_buttons {
-        //         display: flex;
-        //         flex-direction: row-reverse;
-        //         justify-content: space-between;
-        //         column-gap: 20px;
-        //         width: 15%;
-        //         margin: auto;
+            &_question {
+                padding-top: 20px;
+                margin: 0 auto 5px auto;
+                font-family: 'MainFont_light';
+                font-weight: bold;
+                font-size: 22px;
+                color: $colorDarkGrey;
+                display: flex;
+                justify-content: center;
+                width: 300px;
+                padding: 12px;
+
+            }
+            &_buttons {
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-between;
+                column-gap: 20px;
+                width: 15%;
+                margin: auto;
                 
 
-        //         button {
-        //             font-family: 'TitleFont';
-        //             border: none;
-        //             background: none;
-        //             color: $colorSelection;
-        //             width: 50%;
-        //             margin: 5% auto 0 auto;
-        //             padding: 2%;
-        //             font-size: 18px;
-        //             &:hover {
-        //                 cursor: pointer;
-        //                 color: $colorLightGrey;
-        //             }
-        //         }
-        //     }
-        // }
+                button {
+                    font-family: 'SpecialFont_regular';
+                    border: none;
+                    background: none;
+                    
+                    width: 50%;
+                    margin: 5% auto 0 auto;
+                    padding: 2%;
+                    font-size: 35px;
+                    &:hover {
+                        cursor: pointer;
+                        color: $colorLightGrey;
+                        background-color: $colorThree;
+                    }
+                }
+            }
+        }
     } 
 }

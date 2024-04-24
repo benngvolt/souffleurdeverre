@@ -5,12 +5,14 @@ import facebookLogo from '../../assets/facebook_black.png'
 import xLogo from '../../assets/x_black.png'
 import youtubeLogo from '../../assets/youtube_black.png'
 import instagramLogo from '../../assets/instagram_black.png'
+import ContactModal from '../ContactModal/ContactModal'
 
 
  
 function Header() {
 
-    const [displayMenu, setDisplayMenu] = useState (false)
+    const [displayMenu, setDisplayMenu] = useState (false);
+    const [displayContactModal, setdisplayContactModal]= useState(false);
 
     function showMenu() {
         setDisplayMenu(true)
@@ -18,7 +20,7 @@ function Header() {
 
     function hideMenu() {
         setDisplayMenu(false)
-}
+    }
 
     return  (      
         <header className={displayMenu===true ? 'header header--opened' : 'header header--closed'} onMouseOver={()=>showMenu()} onMouseLeave={()=>hideMenu()} >
@@ -50,10 +52,13 @@ function Header() {
                     <Link to="/compagnie" className='header_nav_menu_item'><h2>COMPAGNIE</h2></Link>
                     <Link to="/actualite" className='header_nav_menu_item'><h2>ACTUALITÉ</h2></Link>
                     <Link to="/spectacles" className='header_nav_menu_item'><h2>SPECTACLES</h2></Link>
-                    <button className='header_nav_menu_item'>CONTACT</button>
+                    <button aria-label='Afficher la fenêtre Contact' type='button' className='header_nav_menu_item' onClick={()=>setdisplayContactModal(true)}>CONTACT</button>
                     <Link to="/edit" className='header_nav_menu_item'><p>EDIT</p></Link>
                 </div>
             </nav>
+            <section className={displayContactModal===true ? 'header_contactModal header_contactModal--open':' header_contactModal header_contactModal--close'}>
+                <ContactModal setdisplayContactModal={setdisplayContactModal}/>
+            </section>
         </header>
     )
 }

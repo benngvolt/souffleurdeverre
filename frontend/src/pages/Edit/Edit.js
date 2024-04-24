@@ -43,6 +43,7 @@ function Edit() {
     -------------------------------------*/
 
     function closeConfirmBox () {
+        console.log('closeEditCOnfirmBox')
         setConfirmBoxState(false);
     }
 
@@ -221,11 +222,9 @@ function Edit() {
                 />
             </div>
             <ConfirmBox 
-                deleteMode = {deleteMode}
-                deleteProject={deleteProject} 
-                deleteBio={deleteBio} 
+                affirmativeChoice={deleteMode==='bio' ? deleteBio : deleteProject} 
                 confirmBoxState={confirmBoxState}
-                closeConfirmBox={closeConfirmBox}
+                negativeChoice={closeConfirmBox}
             />
         </div>
     )

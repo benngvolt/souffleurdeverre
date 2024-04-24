@@ -2,12 +2,14 @@ import './BioForm.scss'
 import { API_URL } from '../../utils/constants'
 import {useRef, useEffect, useState, useContext } from 'react'
 import { Context } from '../../utils/Context'
+import Loader from '../Loader/Loader'
 import 'trix';
 import '../../utils/trix.scss'
+import ErrorText from '../ErrorText/ErrorText'
 
 function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDisplayBioForm}) {
 
-    const { bioFields, handleLoadBiographies } = useContext(Context);
+    const { bioFields, handleLoadBiographies, loaderDisplay, displayLoader, hideLoader } = useContext(Context);
 
     const inputSurnameRef = useRef(null);
     const inputNameRef = useRef(null);
@@ -29,7 +31,8 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
     const [bioField, setBioField] = useState(bioFormMode === 'edit' ? biographyEdit.field : '');
     const [bioLinkUrl, setBioLinkUrl] = useState(bioFormMode === 'edit' ? biographyEdit.linkUrl : '');
     const [bioBiography, setBioBiography] = useState(bioFormMode === 'edit' ? biographyEdit.biography : '');
-
+    const [displayServerError, setDisplayServerError] = useState(false);
+    const [displayError, setDisplayError] = useState(false);
     
     
     // Réinitialisation des valuers input lorsque le formulaire s'ouvre / se ferme.
@@ -63,6 +66,7 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
     function bioFormSubmit(event) {
         event.preventDefault();
         // const token = window.sessionStorage.getItem('1');
+        displayLoader();
         const bioFormData = new FormData();
 
         bioFormData.append('image', inputBioImageFileRef.current.files[0]);
@@ -73,46 +77,72 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
         bioFormData.append('biography', inputBioRef.current.value);
         bioFormData.append('field', inputFieldRef.current.value);
 
-        if (bioFormMode==='add') {
-            fetch(`${API_URL}/api/biographies`, {
-                method: "POST",
-                headers: {
-                    // 'Content-Type': 'application/json',
-                    // 'Authorization': 'Bearer ' + token,
-                },
-                body: bioFormData,
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response;
-                    } else {
-                        throw new Error('La requête a échoué');
-                    }
-                })
-                .then(()=> {
-                    closeForm();
-                })
-                .catch((error) => console.error(error));
-        } else if (bioFormMode==='edit') {
-            fetch(`${API_URL}/api/biographies/${biographyEdit._id}`, {
-                method: "PUT",
-                headers: {
-                    // 'Content-Type': 'application/json',
-                    // 'Authorization': 'Bearer ' + token,
-                },
-                body: bioFormData,
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response;
-                    } else {
-                        throw new Error('La requête a échoué');
-                    }
-                })
-                .then(()=> {
-                    closeForm();
-                })
-                .catch((error) => console.error(error));
+        if (
+            !inputSurnameRef.current.value ||
+            !inputNameRef.current.value ||
+            !inputRoleRef.current.value ||
+            !inputFieldRef.current.value
+        ) {
+            hideLoader();
+            setDisplayError(true);
+            return;
+        } else {
+
+            if (bioFormMode==='add') {
+                fetch(`${API_URL}/api/biographies`, {
+                    method: "POST",
+                    headers: {
+                        // 'Content-Type': 'application/json',
+                        // 'Authorization': 'Bearer ' + token,
+                    },
+                    body: bioFormData,
+                    })
+                    .then((response) => {
+                        if (response.ok) {
+                            hideLoader();
+                            return response;
+                        } else {
+                            hideLoader();
+                            setDisplayServerError(true);
+                            throw new Error('La requête a échoué');
+                        }
+                    })
+                    .then(()=> {
+                        closeForm();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        hideLoader();
+                        setDisplayServerError(true);
+                    });
+            } else if (bioFormMode==='edit') {
+                fetch(`${API_URL}/api/biographies/${biographyEdit._id}`, {
+                    method: "PUT",
+                    headers: {
+                        // 'Content-Type': 'application/json',
+                        // 'Authorization': 'Bearer ' + token,
+                    },
+                    body: bioFormData,
+                    })
+                    .then((response) => {
+                        if (response.ok) {
+                            hideLoader();
+                            return response;
+                        } else {
+                            hideLoader();
+                            setDisplayServerError(true);
+                            throw new Error('La requête a échoué');
+                        }
+                    })
+                    .then(()=> {
+                        closeForm();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        hideLoader();
+                        setDisplayServerError(true);
+                    });
+            }
         }
     }
 
@@ -143,7 +173,8 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
     function closeForm() {
         setHandleDisplayBioForm(false);
         handleLoadBiographies();
-        clearTrixEditor()
+        clearTrixEditor();
+        hideLoader();
     }
 
     return  (    
@@ -186,9 +217,14 @@ function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDis
                 <input id="trix" type="hidden" name="content" defaultValue={bioBiography} ref={inputBioRef}></input>
                 <trix-editor id='inputBio' input="trix"/>
             </div>
+            <ErrorText errorText={"Une erreur s\'est produite"} state={displayServerError}/>
+            <ErrorText errorText={"Tous les champs marqués d'une * doivent être remplis"} state={displayError}/>
             <div className='bioForm_buttons'>
                 <button type='submit'>VALIDER</button>
                 <button onClick={() => closeForm()}>ANNULER</button>
+            </div>
+            <div className={loaderDisplay===true?'homePage_loader--displayOn':'homePage_loader--displayOff'}>
+                <Loader className='loader--opaque' loaderDisplay={loaderDisplay}/>
             </div>
         </form>
     )

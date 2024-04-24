@@ -3,63 +3,66 @@
 .actualite {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    row-gap: 54px;
 
-    &_show {
+    &_show, &_residency {
         margin: auto;
         @include SidePaddings;
-        width: 50%;
-        margin: auto;
-
-        &_precision {
-            @include LightType;
-            font-size: 22px;
-            margin: 0;
-        }
+        width: 40%;
+        display: flex;
+        flex-direction: column;
 
         &_titleContainer {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
     
             &_title {
                 @include Title;
-                @include DropColorFilter2;
                 margin: 0;
                 justify-content: flex-end;
                 font-size: 98px;
             }
 
             &_type {
-                @include LightType;
-                margin: 0 0 0 25px;
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-end;
-                padding-bottom: 20px;
-                font-size: 25px;
+                font-family: 'MainFont_light';
+                font-style: italic;
+                margin: 0;
+                font-size: 19px;
             }
         }
 
+        &_precision {
+            font-family: 'MainFont_light';
+            text-transform: uppercase;
+            font-weight: bold;
+            color: $colorLightGrey;
+            font-size: 22px;
+            margin: 35px 0 0 0;
+            padding-left: 9px;
+        }
+
         &_datesContainer {
+            display: flex;
+            flex-direction: column;
             list-style-type: none;
             padding: 0;
-            
+
             &_item {
-                margin: 54px 0;
+                margin: 16px 0;
                 &_dates {
-                    // overflow: hidden;
-                    // white-space: nowrap;
                     display: flex;
                     flex-direction: column;
                     &_singleDate {
-                        // animation: scrollBanner 40s linear infinite;
                         display: flex;
                         flex-direction: row;
                         &_day {
                             
-                             display: flex;
+                            display: flex;
                             flex-direction: column;
                             justify-content: flex-end;
-                            font-size: 29px;
+                            font-size: 22px;
                             font-family: 'MainFont_light';
                             font-weight: bold;
                             text-transform: uppercase;
@@ -69,18 +72,24 @@
                             display: flex;
                             flex-direction: column;
                             justify-content: flex-end;
-                            font-size: 19px;
+                            font-size: 22px;
                             font-family: 'MainFont_light';
-                            text-transform: uppercase;
-                            margin: 0 16px 5px 16px;
-                            
+                            // text-transform: uppercase;
+                            margin: 0 19px;
                         }
                    }
 
                 }
+                &_residencyType  {
+                    margin: 0;
+                    font-family: 'MainFont_light';
+                    font-style: italic;
+                    font-size: 19px;
+                    // font-weight: bold;
+                }
 
                 &_placeName {
-                    font-size: 46px;
+                    font-size: 22px;
                     font-family: 'MainFont_light';
                     text-transform: uppercase;
 
@@ -93,20 +102,19 @@
                         }
 
                         &_icon {
-                            font-size: 20px;
+                            height: 16px;
                             padding-bottom: 3px;
-                            margin: 0 19px;
+                            margin: 0 9px;
                         }
                     }
 
                     &_noLink {
                         margin: 0;
                     }
-
                 }
                 &_showCity {
                     font-family: 'MainFont_light';
-                    font-size: 29px;
+                    font-size: 22px;
                     margin: 0;
                 }
             }
@@ -118,6 +126,23 @@
             text-align: justify;
             width: 100%;
             margin: 0;
+        }
+        &_img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+        }
+    }
+
+    &_show {
+        &_precision  {
+            background-color: $colorFive;
+        }
+    }
+
+    &_residency {
+        &_precision  {
+            background-color: $colorThree;
         }
     }
 }

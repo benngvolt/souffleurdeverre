@@ -10,6 +10,28 @@
     margin: auto;
     background-color: white;
 
+    &_stickyCancelButton {
+        width: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        color: $colorDarkGrey;
+        background: none;
+        border: none;
+        position: sticky;
+        top: 60px;
+        left: 60px;
+        
+        &_icon {
+            height: 2em;
+            margin-right: 15px;
+            
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
     &_projectImageField {
         display: flex;
         flex-direction: column;
@@ -461,24 +483,31 @@
 
         &_addButton {
             font-size: 14px;
+
+            &--displayOff {
+                display: none;
+            }
         }
         &_sampleContainer {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             width: 100%;
             margin: auto;
             img {
                 width: 300px; 
+                margin: auto;
             }
             &_buttonsSystem {
-    
+               
                 &--displayOff {
                     display: none;
                 }
     
                 &--displayOn {
                     display: flex;
-                    flex-direction: row;
+                    flex-direction: column;
+                    margin-bottom: 35px;
     
                     button {
                         font-family: 'MainFont_light';
@@ -490,7 +519,7 @@
                         }
                         background: none;
                         width: 300px;
-                        margin: 16px auto 35px auto; 
+                        margin: 16px auto 0px auto; 
                     }
                 }
             }
@@ -505,6 +534,40 @@
                     display: none;
                 }
             }
+
+            div {
+                width: 20%;
+                display: flex;
+                flex-direction: column;
+                margin: auto;
+
+                p {
+
+                }
+
+                label {
+                    font-family: 'MainFont_light';
+                    font-weight: bold;
+                    margin: auto;
+                }
+
+                input {
+                    width: 100%;
+                }
+
+                button {
+                    font-family: 'MainFont_light';
+                    font-size: 16px;
+                    margin-top: 10px;
+                    background: none;
+                    border: none;
+                    color: $colorDarkGrey;
+                    &:hover {
+                        color: $colorOne;
+                        cursor: pointer;
+                    }
+                }
+            }
         }
     }
 
@@ -512,10 +575,11 @@
 
         display: flex;
         flex-direction: row;
-        margin: 54px auto;
+        margin: 0 auto 54px auto;
         width: 100%;
         justify-content: center;
         column-gap: 16px;
+
         button {
             font-size: 22px;
             font-family: 'MainFont_light';

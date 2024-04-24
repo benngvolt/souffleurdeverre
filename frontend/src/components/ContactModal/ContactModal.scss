@@ -1,0 +1,82 @@
+@import '../../utils/mixins';
+
+.contactModal {
+    
+    width: auto;
+    background-color: $colorLightGrey;
+    margin: auto;
+    position: relative;
+    animation: appearOpacity 2s ease forwards;
+    position: relative;
+    
+    &_container {
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 35px 54px;
+        height: auto;
+        margin: 0 auto;
+
+            &_datas {
+                
+                &_block  {
+                
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    margin: auto;
+
+                &_title {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    font-family: 'MainFont_light';
+                    font-weight: bold;
+                    font-size: 19px;
+                    margin: 22px auto;
+                    text-align: center;
+                }
+
+                &_text {
+
+                    &--light, &--bold {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        font-family: 'MainFont_light';
+                        font-size: 16px;
+                        text-align: center;
+                    }
+
+                    &--bold {
+                        font-weight: bold;
+                        text-align: center;
+                        margin: 16px auto;
+                    }
+
+                }
+            }
+        }
+    }
+
+    &_closeButton {
+        width: auto;
+        display: flex;
+        color: $colorDarkGrey;
+        background: none;
+        border: none;
+        position: fixed;
+        margin: 10px 0 0 10px;
+        
+        &_icon {
+            height: 2em;
+            
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    
+}

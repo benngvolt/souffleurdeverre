@@ -84,7 +84,8 @@ function uploadImages(req, res, next) {
     const newPdfsObjects = [];
     const pdfFileIndexes = req.body.pdfFileIndexes;
     const files = req.files.pdfFiles;
-    const pdfName = req.body.pdfName;
+    const pdfNames = req.body.pdfNames;
+    
     if (!files || files.length === 0) {
       // Aucune image n'a été téléchargée, appeler next() et sortir de la fonction
       return next();
@@ -95,6 +96,7 @@ function uploadImages(req, res, next) {
       return new Promise(async(resolve, reject) => {
         try {
           const { originalname, buffer } = file;
+          const pdfName = pdfNames[index];
     
           // Créez un blob dans le stockage Google Cloud Storage
           const blob = bucket.file('pdfList/' + originalname);
@@ -112,14 +114,16 @@ function uploadImages(req, res, next) {
             if (pdfFileIndexes) {
               newPdfsObjects.push({
                 pdfLink: publicUrl,
-                pdfName: pdfName[index],
+                pdfName: pdfName,
                 index: JSON.parse(pdfFileIndexes[index])
               });
+              console.log(newPdfsObjects);
             } else {
               newPdfsObjects.push({
                 pdfLink: publicUrl,
-                pdfName: pdfName[index],
+                pdfName: pdfName,
               });
+              console.log(newPdfsObjects);
             }
             // Continuer avec la prochaine promesse
             resolve(publicUrl);
