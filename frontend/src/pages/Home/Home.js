@@ -5,6 +5,7 @@ import xLogo from '../../assets/x_black.png'
 import youtubeLogo from '../../assets/youtube_black.png'
 import instagramLogo from '../../assets/instagram_black.png'
 import logoSouffleur from '../../assets/logoSouffleur.svg'
+import cedricVeschambre from '../../assets/Cedric_Veschambre_Julien_Bruhat.jpg'
 
  
 function Home() {
@@ -12,7 +13,10 @@ function Home() {
     return  (      
         <section className='home'>
             <div className='home_title'>
-                <img className='home_title_logo' src={logoSouffleur} alt="logo souffleur de verre"/>
+                <div class="home_title_logoMask">
+                    <img src={cedricVeschambre} alt="logo souffleur de verre"/>
+                </div>
+                {/* <img className='home_title_logo' src={logoSouffleur} alt="logo souffleur de verre"/> */}
                 <h1 className='home_title_text'> LE SOUFFLEUR DE VERRE</h1>
             </div>
             <nav className='home_nav'>

@@ -6,8 +6,9 @@
     flex-direction: column;
     justify-content: center;
     margin: auto;
-    width: 350px;
+    width: 50%;
     height: 90vh;
+    
 
     &_title {
         display: flex;
@@ -16,6 +17,21 @@
         justify-content: center;
         align-items: center;
         margin-bottom: 40px;
+
+        &_logoMask {
+            position: relative;
+            width: 100%;
+            @include colorDuo1;
+        }
+          
+        &_logoMask img {
+            animation: float 6s ease-in-out infinite;
+            width: 100%;
+            height: auto;
+            /* Appliquer le masque */
+            -webkit-mask: url('../../assets/logoSouffleur.svg#mask');
+            mask: url('../../assets/logoSouffleur.svg#mask');
+        }
 
         &_logo {
             width: 300px;
@@ -33,7 +49,7 @@
 
     &_nav {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         row-gap: 30px;
         // &_menu {
         //     &_item {
@@ -46,7 +62,7 @@
 
         &_socials {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             row-gap: 15px;
             width: 20%;
             border-radius: 50%;
