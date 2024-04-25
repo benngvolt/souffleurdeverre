@@ -1,7 +1,7 @@
 @import '../../utils/mixins';
 
 .compagnieSection {
-
+    animation: pageAppearing 2s ease forwards;
     &_title {
         @include SidePaddings;
         font-weight: 200;
@@ -64,8 +64,10 @@
         flex-direction: column;
         @include SidePaddings;
         padding-top: 98px;
+        padding-bottom: 54px;
         width: 100%;
         margin: auto;
+        background-color: $colorLightGrey;
 
         &_teamButton {
             margin: 0 auto 98px auto;
@@ -79,6 +81,7 @@
             display: flex;
             flex-direction: column;
             row-gap: 98px;
+            
             &_biosList {
                 list-style: none;
                 padding: 0;
@@ -104,8 +107,6 @@
         
                 }
             }
-            
-           
         
             &_biosList {
                 margin: 0 50px;
@@ -127,13 +128,12 @@
                     }
                     &_name {
                         @include BoldType;
-                        margin: auto;
+                        margin: 16px auto 0 auto;
 
                     }
                     &_role {
                         @include LightType;
                         margin: auto;
-
                     }
                 }
             }
@@ -216,7 +216,7 @@
     }
 
     &_AA {
-        margin: 150px auto;
+        margin: 0 auto;
         padding: 98px;
         display: flex;
         flex-direction: column;

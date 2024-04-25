@@ -6,6 +6,7 @@ import xLogo from '../../assets/x_black.png'
 import youtubeLogo from '../../assets/youtube_black.png'
 import instagramLogo from '../../assets/instagram_black.png'
 import ContactModal from '../ContactModal/ContactModal'
+import { useLocation } from 'react-router-dom';
 
 
  
@@ -13,6 +14,7 @@ function Header() {
 
     const [displayMenu, setDisplayMenu] = useState (false);
     const [displayContactModal, setdisplayContactModal]= useState(false);
+    const location = useLocation();
 
     function showMenu() {
         setDisplayMenu(true)
@@ -23,7 +25,7 @@ function Header() {
     }
 
     return  (      
-        <header className={displayMenu===true ? 'header header--opened' : 'header header--closed'} onMouseOver={()=>showMenu()} onMouseLeave={()=>hideMenu()} >
+        <header className={location.pathname!=='/'? (displayMenu===true ? 'header header--opened' : 'header header--closed') : 'header--displayOff'} onMouseOver={()=>showMenu()} onMouseLeave={()=>hideMenu()} >
             
             <svg id="hamburger" className={displayMenu===true? 'header_icon header_icon--opened':'header_icon header_icon--closed'} viewbox="0 0 60 30">
                 <g stroke="#232323" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -34,16 +36,16 @@ function Header() {
             </svg>
             <nav className={displayMenu===false?'header_nav header_nav--displayOff':'header_nav header_nav--displayOn'}>
                 <div className='header_nav_socials'>
-                    <a href="https://www.facebook.com" target="_blank" rel="noreferrer" className='header_nav_socials_item'>
+                    <a href="https://www.facebook.com/souffleurdeverre" target="_blank" rel="noreferrer" className='header_nav_socials_item'>
                         <img src={facebookLogo} alt="lien facebook"/>
                     </a>
-                    <a href="https://www.twitter.com" target="_blank" rel="noreferrer" className='header_nav_socials_item'>
+                    <a href="https://twitter.com/ciesouffleur" target="_blank" rel="noreferrer" className='header_nav_socials_item'>
                         <img src={xLogo} alt="lien x"/>
                     </a>
-                    <a href="https://www.youtube.com" target="_blank" rel="noreferrer" className='header_nav_socials_item'>
+                    <a href="https://www.youtube.com/@compagnielesouffleurdeverr6312" target="_blank" rel="noreferrer" className='header_nav_socials_item'>
                         <img src={youtubeLogo} alt="lien youtube"/>
                     </a>
-                    <a href="https://www.instagram.com" target="_blank" rel="noreferrer" className='header_nav_socials_item'>
+                    <a href="https://www.instagram.com/ciesouffleur" target="_blank" rel="noreferrer" className='header_nav_socials_item'>
                         <img src={instagramLogo} alt="lien instagram"/>
                     </a>
                 </div>
@@ -56,9 +58,9 @@ function Header() {
                     <Link to="/edit" className='header_nav_menu_item'><p>EDIT</p></Link>
                 </div>
             </nav>
-            <section className={displayContactModal===true ? 'header_contactModal header_contactModal--open':' header_contactModal header_contactModal--close'}>
+            <article className={displayContactModal===true ? 'header_contactModal header_contactModal--open':' header_contactModal header_contactModal--close'}>
                 <ContactModal setdisplayContactModal={setdisplayContactModal}/>
-            </section>
+            </article>
         </header>
     )
 }

@@ -1,14 +1,14 @@
 @import '../../utils/mixins';
 
 .home {
-
+    animation: pageAppearing 4s ease forwards;
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin: auto;
     width: 50%;
-    height: 90vh;
-    
+    height: 100vh;
+    align-items: center;
 
     &_title {
         display: flex;
@@ -16,12 +16,16 @@
         row-gap: 20px;
         justify-content: center;
         align-items: center;
-        margin-bottom: 40px;
-
+        margin: 40px 0;
+        animation: pageAppearing 4s ease forwards 3s;
         &_logoMask {
             position: relative;
             width: 100%;
-            @include colorDuo1;
+            @include colorDuo3big;
+
+            &--loaded {
+                animation: pageAppearing 5s ease forwards;
+            }
         }
           
         &_logoMask img {
@@ -49,27 +53,45 @@
 
     &_nav {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         row-gap: 30px;
-        // &_menu {
-        //     &_item {
-        //         margin: 0 auto 15px auto;
-        //         color: $colorDarkGrey;
-        //         font-family: 'MainFont_light';
-        //         font-size: 30px;
-        //     }
-        // }
+        margin: auto;
+        &_menu {
+            display: flex;
+            flex-direction: row;
+            column-gap: 22px;
+            &_item, h2, p {
+                margin: auto;
+                color: $colorDarkGrey;
+                font-family: 'MainFont_light';
+                font-size: 22px;
+                font-weight: normal;
+                &:hover {
+                    cursor: pointer;
+                    font-style: italic;
+                    font-weight: bold;
+                }
+            }
+        }
 
         &_socials {
             display: flex;
             flex-direction: row;
-            row-gap: 15px;
-            width: 20%;
+            column-gap: 22px;
+            width: auto;
             border-radius: 50%;
             margin: auto;
             &_item {
                 img {
-                    width: 40px;
+                    width: 30px;
+                }
+                &:hover {
+                    cursor: pointer;
+                    // color: $colorMediumGrey;
+                    // background-color: pink;
+                    @include colorDuo3;
+                    // font-style: italic;
+                    // font-weight: bold;
                 }
             }
         }
@@ -82,14 +104,7 @@
             text-decoration: none;
             border: none;
             background: none;
-
-            &:hover {
-                cursor: pointer;
-                font-family: 'MainFont_lightItalic';
-                // color: $colorMediumGrey;
-                // background-color: pink;
-                @include colorDuo3;
-            }
+            font-family: 'MainFont_light';
         }
     }
 }

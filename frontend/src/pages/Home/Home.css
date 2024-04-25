@@ -5,28 +5,48 @@
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-Light.ttf") format("truetype");
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-LightIt.ttf") format("truetype");
   font-style: italic;
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-Bold.ttf") format("truetype");
   font-weight: bold;
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "SpecialFont_regular";
   src: url("../../public/assets/fonts/WarsawGothic/WarsawGothic.otf") format("truetype");
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 /*-------------------
 ----- KEYFRAMES -----
 -------------------*/
+@-webkit-keyframes pageAppearing {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes pageAppearing {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 @-webkit-keyframes float {
   0% {
     transform: translatey(0px);
@@ -261,18 +281,22 @@
 }
 @-webkit-keyframes focusShow {
   0% {
-    filter: contrast(100%);
+    transform: scale(1);
+    overflow: hidden;
   }
   100% {
-    filter: contrast(80%);
+    transform: scale(0.97);
+    overflow: hidden;
   }
 }
 @keyframes focusShow {
   0% {
-    filter: contrast(100%);
+    transform: scale(1);
+    overflow: hidden;
   }
   100% {
-    filter: contrast(80%);
+    transform: scale(0.97);
+    overflow: hidden;
   }
 }
 @-webkit-keyframes closeCollapseArrow {
@@ -364,12 +388,15 @@
   }
 }
 .home {
+  -webkit-animation: pageAppearing 4s ease forwards;
+          animation: pageAppearing 4s ease forwards;
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin: auto;
-  width: 350px;
-  height: 90vh;
+  width: 50%;
+  height: 100vh;
+  align-items: center;
 }
 .home_title {
   display: flex;
@@ -377,14 +404,28 @@
   row-gap: 20px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 40px;
+  margin: 40px 0;
+}
+.home_title_logoMask {
+  position: relative;
+  width: 100%;
+  filter: drop-shadow(10px 10px 1px #fea201) drop-shadow(-10px -10px 1px #019cff);
+}
+.home_title_logoMask img {
+  -webkit-animation: float 6s ease-in-out infinite;
+          animation: float 6s ease-in-out infinite;
+  width: 100%;
+  height: auto;
+  /* Appliquer le masque */
+  -webkit-mask: url("../../assets/logoSouffleur.svg#mask");
+  mask: url("../../assets/logoSouffleur.svg#mask");
 }
 .home_title_logo {
   width: 300px;
   margin: auto;
   -webkit-animation: float 6s ease-in-out infinite;
           animation: float 6s ease-in-out infinite;
-  filter: drop-shadow(5px 5px 1px #fea201) drop-shadow(-5px -5px 1px #019cff);
+  filter: drop-shadow(3px 3px 0px #fea201) drop-shadow(-3px -3px 0px #019cff);
 }
 .home_title_text {
   font-family: "MainFont_light";
@@ -395,17 +436,41 @@
   display: flex;
   flex-direction: column;
   row-gap: 30px;
+  margin: auto;
+}
+.home_nav_menu {
+  display: flex;
+  flex-direction: row;
+  -moz-column-gap: 22px;
+       column-gap: 22px;
+}
+.home_nav_menu_item, .home_nav_menu h2, .home_nav_menu p {
+  margin: auto;
+  color: #232323;
+  font-family: "MainFont_light";
+  font-size: 22px;
+  font-weight: normal;
+}
+.home_nav_menu_item:hover, .home_nav_menu h2:hover, .home_nav_menu p:hover {
+  cursor: pointer;
+  font-style: italic;
+  font-weight: bold;
 }
 .home_nav_socials {
   display: flex;
-  flex-direction: column;
-  row-gap: 15px;
-  width: 20%;
+  flex-direction: row;
+  -moz-column-gap: 22px;
+       column-gap: 22px;
+  width: auto;
   border-radius: 50%;
   margin: auto;
 }
 .home_nav_socials_item img {
-  width: 40px;
+  width: 30px;
+}
+.home_nav_socials_item:hover {
+  cursor: pointer;
+  filter: drop-shadow(3px 3px 0px #fea201) drop-shadow(-3px -3px 0px #019cff);
 }
 .home_nav_item, .home_nav a, .home_nav button {
   display: flex;
@@ -414,9 +479,5 @@
   text-decoration: none;
   border: none;
   background: none;
-}
-.home_nav_item:hover, .home_nav a:hover, .home_nav button:hover {
-  cursor: pointer;
-  font-family: "MainFont_lightItalic";
-  filter: drop-shadow(5px 5px 1px #fea201) drop-shadow(-5px -5px 1px #019cff);
+  font-family: "MainFont_light";
 }/*# sourceMappingURL=Home.css.map */

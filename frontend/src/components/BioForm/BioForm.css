@@ -5,28 +5,48 @@
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-Light.ttf") format("truetype");
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-LightIt.ttf") format("truetype");
   font-style: italic;
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-Bold.ttf") format("truetype");
   font-weight: bold;
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "SpecialFont_regular";
   src: url("../../public/assets/fonts/WarsawGothic/WarsawGothic.otf") format("truetype");
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 /*-------------------
 ----- KEYFRAMES -----
 -------------------*/
+@-webkit-keyframes pageAppearing {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes pageAppearing {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 @-webkit-keyframes float {
   0% {
     transform: translatey(0px);
@@ -261,18 +281,22 @@
 }
 @-webkit-keyframes focusShow {
   0% {
-    filter: contrast(100%);
+    transform: scale(1);
+    overflow: hidden;
   }
   100% {
-    filter: contrast(80%);
+    transform: scale(0.97);
+    overflow: hidden;
   }
 }
 @keyframes focusShow {
   0% {
-    filter: contrast(100%);
+    transform: scale(1);
+    overflow: hidden;
   }
   100% {
-    filter: contrast(80%);
+    transform: scale(0.97);
+    overflow: hidden;
   }
 }
 @-webkit-keyframes closeCollapseArrow {
@@ -365,15 +389,96 @@
 }
 .bioForm {
   height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 9px;
+  width: 80%;
+  overflow: scroll;
+  margin: auto;
+  background-color: white;
+  box-sizing: border-box;
 }
 .bioForm_sampleContainer img {
   -o-object-fit: contain;
      object-fit: contain;
   width: 300px;
+  margin-top: 98px;
 }
-.bioForm_sampleContainer img {
-  height: 100px;
+.bioForm_bioImageFile label {
+  cursor: pointer;
+  font-family: "MainFont_light";
+  font-weight: bold;
+  font-size: 16px;
 }
+.bioForm_bioImageFile input {
+  display: none;
+}
+.bioForm_surname, .bioForm_name, .bioForm_role, .bioForm_field, .bioForm_linkUrl {
+  width: 30%;
+  margin: 0 auto 10px auto;
+  display: flex;
+  flex-direction: column;
+  -moz-column-gap: 19px;
+       column-gap: 19px;
+}
+.bioForm_surname label, .bioForm_name label, .bioForm_role label, .bioForm_field label, .bioForm_linkUrl label {
+  width: 50%;
+  font-size: 19px;
+  font-family: "MainFont_light";
+}
+.bioForm_surname input, .bioForm_surname select, .bioForm_surname textarea, .bioForm_name input, .bioForm_name select, .bioForm_name textarea, .bioForm_role input, .bioForm_role select, .bioForm_role textarea, .bioForm_field input, .bioForm_field select, .bioForm_field textarea, .bioForm_linkUrl input, .bioForm_linkUrl select, .bioForm_linkUrl textarea {
+  width: 100%;
+  border: none;
+  background-color: #00f0ff;
+  font-size: 16px;
+  font-family: "MainFont_light";
+}
+.bioForm_surname textarea, .bioForm_name textarea, .bioForm_role textarea, .bioForm_field textarea, .bioForm_linkUrl textarea {
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 300px;
+}
+.bioForm_bio {
+  width: 90%;
+  margin-top: 35px;
+}
+.bioForm_bio label {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: auto;
+  width: 100%;
+  font-family: "MainFont_light";
+  font-size: 19px;
+}
+.bioForm_buttons {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto 54px auto;
+  width: 100%;
+  justify-content: center;
+  -moz-column-gap: 16px;
+       column-gap: 16px;
+}
+.bioForm_buttons button {
+  font-size: 22px;
+  font-family: "MainFont_light";
+  font-weight: bold;
+  color: #232323;
+  border-radius: 0;
+  border: 1px solid #232323;
+  background: none;
+  width: 170px;
+  padding: 15px;
+}
+.bioForm_buttons button:hover {
+  color: #E9E9E9;
+  background-color: #232323;
+  border: none;
+  cursor: pointer;
+}
+
 #inputBio {
   font-family: "MainFont_light";
   text-align: justify;

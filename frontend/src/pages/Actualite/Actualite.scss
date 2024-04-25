@@ -1,6 +1,7 @@
 @import '../../utils/mixins';
 
 .actualite {
+    animation: pageAppearing 2s ease forwards;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

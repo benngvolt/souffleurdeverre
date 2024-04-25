@@ -5,28 +5,48 @@
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-Light.ttf") format("truetype");
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-LightIt.ttf") format("truetype");
   font-style: italic;
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-Bold.ttf") format("truetype");
   font-weight: bold;
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "SpecialFont_regular";
   src: url("../../public/assets/fonts/WarsawGothic/WarsawGothic.otf") format("truetype");
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 /*-------------------
 ----- KEYFRAMES -----
 -------------------*/
+@-webkit-keyframes pageAppearing {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes pageAppearing {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 @-webkit-keyframes float {
   0% {
     transform: translatey(0px);
@@ -261,18 +281,22 @@
 }
 @-webkit-keyframes focusShow {
   0% {
-    filter: contrast(100%);
+    transform: scale(1);
+    overflow: hidden;
   }
   100% {
-    filter: contrast(80%);
+    transform: scale(0.97);
+    overflow: hidden;
   }
 }
 @keyframes focusShow {
   0% {
-    filter: contrast(100%);
+    transform: scale(1);
+    overflow: hidden;
   }
   100% {
-    filter: contrast(80%);
+    transform: scale(0.97);
+    overflow: hidden;
   }
 }
 @-webkit-keyframes closeCollapseArrow {
@@ -371,6 +395,16 @@
   -moz-column-gap: 3px;
        column-gap: 3px;
 }
+.spectacles_filtersHandler_errorText {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  font-family: "MainFont_light";
+  font-size: 150px;
+  margin: 10% auto 0 auto;
+  text-transform: uppercase;
+}
 .spectacles_filtersHandler_filtersStateContainer {
   text-align: end;
 }
@@ -447,6 +481,8 @@
   background-color: #fea201;
 }
 .spectacles_projectsList {
+  -webkit-animation: pageAppearing 2s ease forwards;
+          animation: pageAppearing 2s ease forwards;
   margin-top: 19px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -458,6 +494,8 @@
   width: auto;
 }
 .spectacles_projectsList_projectItem {
+  -webkit-animation: pageAppearing 2s ease forwards;
+          animation: pageAppearing 2s ease forwards;
   padding: 0;
   width: auto;
   display: flex;
@@ -479,7 +517,6 @@
   aspect-ratio: 1/1.15;
   -o-object-fit: cover;
      object-fit: cover;
-  filter: contrast(100%);
 }
 .spectacles_projectsList_projectItem_mainDatas {
   display: flex;

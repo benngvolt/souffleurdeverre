@@ -5,6 +5,7 @@
 @font-face {
     font-family: 'MainFont_light';
     src: url('../../public/assets/fonts/ProximaNova-Light.ttf') format('truetype');
+    font-display: block;
     /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 
@@ -12,6 +13,7 @@
     font-family: 'MainFont_light';
     src: url('../../public/assets/fonts/ProximaNova-LightIt.ttf') format('truetype');
     font-style: italic;
+    font-display: block;
     /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 
@@ -19,12 +21,14 @@
     font-family: 'MainFont_light';
     src: url('../../public/assets/fonts/ProximaNova-Bold.ttf') format('truetype');
     font-weight: bold;
+    font-display: block;
     /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 
 @font-face {
     font-family: 'SpecialFont_regular';
     src: url('../../public/assets/fonts/WarsawGothic/WarsawGothic.otf') format('truetype');
+    font-display: block;
     /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 
@@ -184,20 +188,41 @@ $padMinWidth: 481px;
 $padMaxWidth: 991px;
 
 @mixin colorDuo1 {
-    filter: drop-shadow(5px 5px 1px $colorOne) drop-shadow(-5px -5px 1px $colorTwo) ;
+    filter: drop-shadow(3px 3px 0px $colorOne) drop-shadow(-3px -3px 0px $colorTwo) ;
 }
 
 @mixin colorDuo2 {
-    filter: drop-shadow(5px 5px 1px $colorThree) drop-shadow(-5px -5px 1px $colorFour) ;
+    filter: drop-shadow(3px 3px 0px $colorThree) drop-shadow(-3px -3px 0px $colorFour) ;
 }
 
 @mixin colorDuo3 {
-    filter: drop-shadow(5px 5px 1px $colorFive) drop-shadow(-5px -5px 1px $colorSix) ;
+    filter: drop-shadow(3px 3px 0px $colorFive) drop-shadow(-3px -3px 0px $colorSix) ;
+}
+
+@mixin colorDuo1big {
+    filter: drop-shadow(10px 10px 1px $colorOne) drop-shadow(-10px -10px 1px $colorTwo) ;
+}
+
+@mixin colorDuo2big {
+    filter: drop-shadow(10px 10px 1px $colorThree) drop-shadow(-10px -10px 1px $colorFour) ;
+}
+
+@mixin colorDuo3big {
+    filter: drop-shadow(10px 10px 1px $colorFive) drop-shadow(-10px -10px 1px $colorSix) ;
 }
 
 /*-------------------
 ----- KEYFRAMES -----
 -------------------*/
+@keyframes pageAppearing {
+	0% {
+		opacity: 0;
+        
+	}
+	100% {
+		opacity: 1;
+	}
+}
 
 @keyframes float {
 	0% {
@@ -327,12 +352,12 @@ $padMaxWidth: 991px;
 
 @keyframes focusShow {
     0% {
-        filter: contrast(100%);
-        
+        transform: scale(1);
+        overflow: hidden;
     }
     100% {
-        filter: contrast(80%);
-        
+        transform: scale(0.97);
+        overflow: hidden;
     }
 }
 

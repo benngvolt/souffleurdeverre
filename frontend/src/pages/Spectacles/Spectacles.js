@@ -23,7 +23,7 @@ function Spectacles() {
     useEffect(()=> {
         const updatedSortedProjects = projects.filter ((project) => (sortedProjectsByState.includes(project)) && (sortedProjectsByType.includes(project)))
         setSortedProjects (updatedSortedProjects);
-        console.log(sortedProjects);
+        
     }, [sortedProjectsByState, sortedProjectsByType]);
 
     function handleFilterProjectState (state) {
@@ -89,7 +89,7 @@ function Spectacles() {
                 </ul>
             </div>
             {sortedProjects.length === 0 &&
-                <p>Aucun projet à afficher</p>
+            <p className='spectacles_filtersHandler_errorText'>...</p>
             }
             <ul className='spectacles_projectsList' >
                 {sortedProjects?.map((project) => (

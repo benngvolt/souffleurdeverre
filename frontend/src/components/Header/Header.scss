@@ -10,6 +10,10 @@
     z-index: 2;
     background-color: $colorSix;
 
+    &--displayOff {
+        display: none;
+    }
+
     &--opened {
         animation: openHeader ease 0.5s forwards;
     }

@@ -5,28 +5,48 @@
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-Light.ttf") format("truetype");
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-LightIt.ttf") format("truetype");
   font-style: italic;
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-Bold.ttf") format("truetype");
   font-weight: bold;
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "SpecialFont_regular";
   src: url("../../public/assets/fonts/WarsawGothic/WarsawGothic.otf") format("truetype");
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 /*-------------------
 ----- KEYFRAMES -----
 -------------------*/
+@-webkit-keyframes pageAppearing {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes pageAppearing {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 @-webkit-keyframes float {
   0% {
     transform: translatey(0px);
@@ -261,18 +281,22 @@
 }
 @-webkit-keyframes focusShow {
   0% {
-    filter: contrast(100%);
+    transform: scale(1);
+    overflow: hidden;
   }
   100% {
-    filter: contrast(80%);
+    transform: scale(0.97);
+    overflow: hidden;
   }
 }
 @keyframes focusShow {
   0% {
-    filter: contrast(100%);
+    transform: scale(1);
+    overflow: hidden;
   }
   100% {
-    filter: contrast(80%);
+    transform: scale(0.97);
+    overflow: hidden;
   }
 }
 @-webkit-keyframes closeCollapseArrow {
@@ -364,107 +388,130 @@
   }
 }
 .actualite {
+  -webkit-animation: pageAppearing 2s ease forwards;
+          animation: pageAppearing 2s ease forwards;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  row-gap: 54px;
 }
-.actualite_show {
+.actualite_show, .actualite_residency {
   margin: auto;
   padding: 0 98px;
   box-sizing: border-box;
-  width: 50%;
-  margin: auto;
-}
-.actualite_show_precision {
-  font-family: "MainFont_light";
-  font-size: 16px;
-  font-size: 22px;
-  margin: 0;
-}
-.actualite_show_titleContainer {
+  width: 40%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
-.actualite_show_titleContainer_title {
+.actualite_show_titleContainer, .actualite_residency_titleContainer {
+  display: flex;
+  flex-direction: column;
+}
+.actualite_show_titleContainer_title, .actualite_residency_titleContainer_title {
   font-family: "SpecialFont_regular";
-  filter: drop-shadow(2px 2px 1px #00f0ff) drop-shadow(-2px -2px 1px rgba(255, 0, 255, 0.8));
   margin: 0;
   justify-content: flex-end;
   font-size: 98px;
 }
-.actualite_show_titleContainer_type {
+.actualite_show_titleContainer_type, .actualite_residency_titleContainer_type {
   font-family: "MainFont_light";
-  font-size: 16px;
-  margin: 0 0 0 25px;
+  font-style: italic;
+  margin: 0;
+  font-size: 19px;
+}
+.actualite_show_precision, .actualite_residency_precision {
+  font-family: "MainFont_light";
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #E9E9E9;
+  font-size: 22px;
+  margin: 35px 0 0 0;
+  padding-left: 9px;
+}
+.actualite_show_datesContainer, .actualite_residency_datesContainer {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding-bottom: 20px;
-  font-size: 25px;
-}
-.actualite_show_datesContainer {
   list-style-type: none;
   padding: 0;
 }
-.actualite_show_datesContainer_item {
-  margin: 54px 0;
+.actualite_show_datesContainer_item, .actualite_residency_datesContainer_item {
+  margin: 16px 0;
 }
-.actualite_show_datesContainer_item_dates {
+.actualite_show_datesContainer_item_dates, .actualite_residency_datesContainer_item_dates {
   display: flex;
   flex-direction: column;
 }
-.actualite_show_datesContainer_item_dates_singleDate {
+.actualite_show_datesContainer_item_dates_singleDate, .actualite_residency_datesContainer_item_dates_singleDate {
   display: flex;
   flex-direction: row;
 }
-.actualite_show_datesContainer_item_dates_singleDate_day {
+.actualite_show_datesContainer_item_dates_singleDate_day, .actualite_residency_datesContainer_item_dates_singleDate_day {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  font-size: 29px;
+  font-size: 22px;
   font-family: "MainFont_light";
   font-weight: bold;
   text-transform: uppercase;
   margin: 0;
 }
-.actualite_show_datesContainer_item_dates_singleDate_time {
+.actualite_show_datesContainer_item_dates_singleDate_time, .actualite_residency_datesContainer_item_dates_singleDate_time {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  font-size: 22px;
+  font-family: "MainFont_light";
+  margin: 0 19px;
+}
+.actualite_show_datesContainer_item_residencyType, .actualite_residency_datesContainer_item_residencyType {
+  margin: 0;
+  font-family: "MainFont_light";
+  font-style: italic;
   font-size: 19px;
-  font-family: "MainFont_light";
-  text-transform: uppercase;
-  margin: 0 16px 5px 16px;
 }
-.actualite_show_datesContainer_item_placeName {
-  font-size: 46px;
+.actualite_show_datesContainer_item_placeName, .actualite_residency_datesContainer_item_placeName {
+  font-size: 22px;
   font-family: "MainFont_light";
   text-transform: uppercase;
 }
-.actualite_show_datesContainer_item_placeName_link {
+.actualite_show_datesContainer_item_placeName_link, .actualite_residency_datesContainer_item_placeName_link {
   color: #232323;
   text-decoration: none;
   margin: 0;
 }
-.actualite_show_datesContainer_item_placeName_link:hover {
+.actualite_show_datesContainer_item_placeName_link:hover, .actualite_residency_datesContainer_item_placeName_link:hover {
   color: #00f0ff;
 }
-.actualite_show_datesContainer_item_placeName_link_icon {
-  font-size: 20px;
+.actualite_show_datesContainer_item_placeName_link_icon, .actualite_residency_datesContainer_item_placeName_link_icon {
+  height: 16px;
   padding-bottom: 3px;
-  margin: 0 19px;
+  margin: 0 9px;
 }
-.actualite_show_datesContainer_item_placeName_noLink {
+.actualite_show_datesContainer_item_placeName_noLink, .actualite_residency_datesContainer_item_placeName_noLink {
   margin: 0;
 }
-.actualite_show_datesContainer_item_showCity {
+.actualite_show_datesContainer_item_showCity, .actualite_residency_datesContainer_item_showCity {
   font-family: "MainFont_light";
-  font-size: 29px;
+  font-size: 22px;
   margin: 0;
 }
-.actualite_show_description {
+.actualite_show_description, .actualite_residency_description {
   font-family: "MainFont_light";
   font-size: 16px;
   text-align: justify;
   width: 100%;
   margin: 0;
+}
+.actualite_show_img, .actualite_residency_img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.actualite_show_precision {
+  background-color: #fea201;
+}
+.actualite_residency_precision {
+  background-color: rgba(255, 0, 255, 0.8);
 }/*# sourceMappingURL=Actualite.css.map */

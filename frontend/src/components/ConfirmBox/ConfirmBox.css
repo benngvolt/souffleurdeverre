@@ -5,28 +5,48 @@
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-Light.ttf") format("truetype");
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-LightIt.ttf") format("truetype");
   font-style: italic;
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-Bold.ttf") format("truetype");
   font-weight: bold;
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "SpecialFont_regular";
   src: url("../../public/assets/fonts/WarsawGothic/WarsawGothic.otf") format("truetype");
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 /*-------------------
 ----- KEYFRAMES -----
 -------------------*/
+@-webkit-keyframes pageAppearing {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes pageAppearing {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 @-webkit-keyframes float {
   0% {
     transform: translatey(0px);
@@ -261,18 +281,22 @@
 }
 @-webkit-keyframes focusShow {
   0% {
-    filter: contrast(100%);
+    transform: scale(1);
+    overflow: hidden;
   }
   100% {
-    filter: contrast(80%);
+    transform: scale(0.97);
+    overflow: hidden;
   }
 }
 @keyframes focusShow {
   0% {
-    filter: contrast(100%);
+    transform: scale(1);
+    overflow: hidden;
   }
   100% {
-    filter: contrast(80%);
+    transform: scale(0.97);
+    overflow: hidden;
   }
 }
 @-webkit-keyframes closeCollapseArrow {
@@ -379,4 +403,47 @@
 }
 .editWorkModal_confirmBox--displayOff {
   display: none;
+}
+.editWorkModal_confirmBox_container {
+  display: flex;
+  flex-direction: column;
+  width: 630px;
+  height: auto;
+  padding: 3% 0;
+  background-color: #E9E9E9;
+}
+.editWorkModal_confirmBox_container_question {
+  padding-top: 20px;
+  margin: 0 auto 5px auto;
+  font-family: "MainFont_light";
+  font-weight: bold;
+  font-size: 22px;
+  color: #232323;
+  display: flex;
+  justify-content: center;
+  width: 300px;
+  padding: 12px;
+}
+.editWorkModal_confirmBox_container_buttons {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+  width: 15%;
+  margin: auto;
+}
+.editWorkModal_confirmBox_container_buttons button {
+  font-family: "SpecialFont_regular";
+  border: none;
+  background: none;
+  width: 50%;
+  margin: 5% auto 0 auto;
+  padding: 2%;
+  font-size: 35px;
+}
+.editWorkModal_confirmBox_container_buttons button:hover {
+  cursor: pointer;
+  color: #E9E9E9;
+  background-color: rgba(255, 0, 255, 0.8);
 }/*# sourceMappingURL=ConfirmBox.css.map */

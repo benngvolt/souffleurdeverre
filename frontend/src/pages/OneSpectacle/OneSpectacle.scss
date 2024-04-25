@@ -1,7 +1,7 @@
 @import '../../utils/mixins';
 
 .oneSpectacle {
-
+    animation: pageAppearing 2s ease forwards;
     &_mainDatas {
 
         margin: 3px 0 ;

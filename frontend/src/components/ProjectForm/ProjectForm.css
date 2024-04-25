@@ -5,28 +5,48 @@
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-Light.ttf") format("truetype");
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-LightIt.ttf") format("truetype");
   font-style: italic;
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "MainFont_light";
   src: url("../../public/assets/fonts/ProximaNova-Bold.ttf") format("truetype");
   font-weight: bold;
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 @font-face {
   font-family: "SpecialFont_regular";
   src: url("../../public/assets/fonts/WarsawGothic/WarsawGothic.otf") format("truetype");
+  font-display: block;
   /* Ajouter ici les autres formats de police (.woff2, .ttf, .eot, etc.) pour la compatibilité des navigateurs */
 }
 /*-------------------
 ----- KEYFRAMES -----
 -------------------*/
+@-webkit-keyframes pageAppearing {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes pageAppearing {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 @-webkit-keyframes float {
   0% {
     transform: translatey(0px);
@@ -261,18 +281,22 @@
 }
 @-webkit-keyframes focusShow {
   0% {
-    filter: contrast(100%);
+    transform: scale(1);
+    overflow: hidden;
   }
   100% {
-    filter: contrast(80%);
+    transform: scale(0.97);
+    overflow: hidden;
   }
 }
 @keyframes focusShow {
   0% {
-    filter: contrast(100%);
+    transform: scale(1);
+    overflow: hidden;
   }
   100% {
-    filter: contrast(80%);
+    transform: scale(0.97);
+    overflow: hidden;
   }
 }
 @-webkit-keyframes closeCollapseArrow {
@@ -372,6 +396,26 @@
   overflow: scroll;
   margin: auto;
   background-color: white;
+}
+.projectForm_stickyCancelButton {
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  color: #232323;
+  background: none;
+  border: none;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 60px;
+  left: 60px;
+}
+.projectForm_stickyCancelButton_icon {
+  height: 2em;
+  margin-right: 15px;
+}
+.projectForm_stickyCancelButton_icon:hover {
+  cursor: pointer;
 }
 .projectForm_projectImageField {
   display: flex;
@@ -822,21 +866,27 @@
 .projectForm_projectPdfFile_addButton {
   font-size: 14px;
 }
+.projectForm_projectPdfFile_addButton--displayOff {
+  display: none;
+}
 .projectForm_projectPdfFile_sampleContainer {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   width: 100%;
   margin: auto;
 }
 .projectForm_projectPdfFile_sampleContainer img {
   width: 300px;
+  margin: auto;
 }
 .projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOff {
   display: none;
 }
 .projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOn {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  margin-bottom: 35px;
 }
 .projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOn button {
   font-family: "MainFont_light";
@@ -844,7 +894,7 @@
   border: none;
   background: none;
   width: 300px;
-  margin: 16px auto 35px auto;
+  margin: 16px auto 0px auto;
 }
 .projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOn button:hover {
   color: #019cff;
@@ -856,10 +906,36 @@
 .projectForm_projectPdfFile_pdfContainer_inputPdfName--displayOff {
   display: none;
 }
+.projectForm_projectPdfFile_pdfContainer div {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+.projectForm_projectPdfFile_pdfContainer div label {
+  font-family: "MainFont_light";
+  font-weight: bold;
+  margin: auto;
+}
+.projectForm_projectPdfFile_pdfContainer div input {
+  width: 100%;
+}
+.projectForm_projectPdfFile_pdfContainer div button {
+  font-family: "MainFont_light";
+  font-size: 16px;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: #232323;
+}
+.projectForm_projectPdfFile_pdfContainer div button:hover {
+  color: #ff0030;
+  cursor: pointer;
+}
 .projectForm_buttons {
   display: flex;
   flex-direction: row;
-  margin: 54px auto;
+  margin: 0 auto 54px auto;
   width: 100%;
   justify-content: center;
   -moz-column-gap: 16px;
