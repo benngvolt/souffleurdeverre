@@ -25,8 +25,7 @@ function Compagnie() {
     useEffect(() => {
         fetch(`${API_URL}/api/biographies/Veschambre`)
         .then((res) => res.json())
-        .then((data) => setBioVeschambre(data),
-            console.log('travaux chargés'),
+        .then((data) => setBioVeschambre(data)
         )
         .catch((error)=>console.log(error.message))
     },[]);
@@ -75,7 +74,7 @@ function Compagnie() {
             <div className={displayBioAside=== true ? 'compagnieSection_bioSheetContainer compagnieSection_bioSheetContainer--displayOn' : 'compagnieSection_bioSheetContainer compagnieSection_bioSheetContainer--displayOff'}>
                 <BioSheet biography={bioAside} closeBioAside={closeBioAside} className='compagnieSection_bioSheetContainer'/>
             </div>
-            <Collapse title="COLLABORATIONS" style='light'>
+            <Collapse title="COLLABORATIONS" style='white'>
                 <div className='compagnieSection_teamCollapse'>
                     <Equipe className='compagnieSection_teamCollapse'/>
                 </div>

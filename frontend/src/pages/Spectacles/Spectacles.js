@@ -29,7 +29,11 @@ function Spectacles() {
     function handleFilterProjectState (state) {
         const newSortedProjectsByState = projects.filter((project)=> (project.projectState === state));
         setSortedProjectsByState (newSortedProjectsByState);
-        setDisplayStateFilter (state)
+        setDisplayStateFilter (state);
+        if (!newSortedProjectsByState.some((project)=>project.projectType === displayTypeFilter)) {
+            setDisplayTypeFilter ('tous');
+            displayAllProjectsTypes();
+        }
     }
 
     function handleFilterProjectType (type) {
@@ -37,8 +41,6 @@ function Spectacles() {
         setSortedProjectsByType (newSortedProjectsByType);
         setDisplayTypeFilter (type)
     }
-
-
 
     function displayAllProjectsStates () {
         setSortedProjectsByState (projects);
@@ -49,8 +51,6 @@ function Spectacles() {
         setSortedProjectsByType (projects);
         setDisplayTypeFilter ("tous");
     }
-
-
 
     return  (      
         <section className='spectacles'>
@@ -77,16 +77,26 @@ function Spectacles() {
                         TOUS LES PUBLICS
                         </button>
                     </li>
-                    {projectTypes
-                        ?.filter(projectType => projects.some(project => project.projectType === projectType))
-                        .map((projectType)=>(
-                        <li className={displayTypeFilter===`${projectType}`?'spectacles_filtersHandler_filtersTypeContainer_item spectacles_filtersHandler_filtersTypeContainer_item--displayOn':'spectacles_filtersHandler_filtersTypeContainer_item'}>
-                            <button type='button' onClick={() => handleFilterProjectType(`${projectType}`)}>
-                            {projectType}  
-                            </button>
-                        </li>
-                    ))}
+                    {displayStateFilter !== 'tous'
+                        ? 
+                        projectTypes
+                            ?.filter(projectType => projects.some(project => project.projectType === projectType && project.projectState === displayStateFilter))
+                            .map((projectType)=>(
+                            <li className={displayTypeFilter===`${projectType}`?'spectacles_filtersHandler_filtersTypeContainer_item spectacles_filtersHandler_filtersTypeContainer_item--displayOn':'spectacles_filtersHandler_filtersTypeContainer_item'}>
+                                <button type='button' onClick={() => handleFilterProjectType(`${projectType}`)}>
+                                {projectType}  
+                                </button>
+                            </li>
+                    )) 
+                    :   projectTypes
+                            .map((projectType)=>(
+                            <li className={displayTypeFilter===`${projectType}`?'spectacles_filtersHandler_filtersTypeContainer_item spectacles_filtersHandler_filtersTypeContainer_item--displayOn':'spectacles_filtersHandler_filtersTypeContainer_item'}>
+                                <button type='button' onClick={() => handleFilterProjectType(`${projectType}`)}>
+                                {projectType}  
+                                </button>
+                            </li>)) }
                 </ul>
+                
             </div>
             {sortedProjects.length === 0 &&
             <p className='spectacles_filtersHandler_errorText'>...</p>

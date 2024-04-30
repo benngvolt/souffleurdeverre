@@ -43,7 +43,6 @@ function Edit() {
     -------------------------------------*/
 
     function closeConfirmBox () {
-        console.log('closeEditCOnfirmBox')
         setConfirmBoxState(false);
     }
 
@@ -110,7 +109,6 @@ function Edit() {
     }
 
     function addProject() {
-        console.log(projectFormMode)
         setArtistsList([]);
         setProductionList([]);
         setPressList([]);
@@ -211,6 +209,8 @@ function Edit() {
                     setMainImageIndex = {setMainImageIndex}
                     setPdfFiles = {setPdfFiles}
                     pdfFiles = {pdfFiles}
+                    editProject = {editProject}
+                    addProject = {addProject}
                 />
             </div>
             <div className={handleDisplayBioForm===false ? "editSection_forms--displayOff" : "editSection_forms--displayOn"}>

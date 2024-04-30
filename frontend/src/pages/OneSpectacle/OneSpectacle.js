@@ -24,7 +24,6 @@ function OneSpectacle() {
             .then((res) => res.json())
             .then((data) => {
                 setProject(data);
-                console.log('Projet chargé');
             })
             .catch((error) => console.log(error.message));
     }, []);
@@ -45,7 +44,7 @@ function OneSpectacle() {
                 {project.description &&        
                 <p className='oneSpectacle_mainDatas_description' dangerouslySetInnerHTML={{__html:cleanedDescription}}></p>
                 }
-                {project.images && 
+                {project.images && project.images?.length > 0 &&
                 <div
                     className={`oneSpectacle_imagesGrid_parallaxContainer oneSpectacle_imagesGrid_item oneSpectacle_imagesGrid_${project.images.length}_item_0`}
                 >
@@ -92,7 +91,7 @@ function OneSpectacle() {
                 </div>
                 }       
             </div>
-            {project.images?.length > 1 &&
+            { project.images && project.images?.length > 1 && 
             <ul className={`oneSpectacle_imagesGrid oneSpectacle_imagesGrid_${project.images?.length}`}>
                 {project.images
                     ?.filter((image, index) => index > 0)
@@ -105,23 +104,19 @@ function OneSpectacle() {
             }
             {project.showsList && project.showsList.length !== 0 &&
             <div className='oneSpectacle_mainDatas_residenciesAndShows'>
-                <div>
-                    <div className='oneSpectacle_mainDatas_residenciesAndShows_showsList'> 
-                        <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_title'>DIFFUSION</p>
-                        <div className='oneSpectacle_mainDatas_residenciesAndShows_showsList_listContainer'>
-                            <ul className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list'>
-                                {project.showsList?.map((show) => (
-                                    <li key={show.id} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item'>
-                                        <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text'>
-                                        <FullPonctualDates datesArray={show.dates} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_text'/>
-                                        <IsALink className="oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text" link={show.placeLink} name={show.placeName}/>   
-                                        {`/ ${show.city ? show.city : ""}`}
-                                        </p>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
+                <div className='oneSpectacle_mainDatas_residenciesAndShows_showsList'> 
+                    <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_title'>DIFFUSION</p>
+                    <ul className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list'>
+                        {project.showsList?.map((show) => (
+                            <li key={show.id} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item'>
+                                <FullPonctualDates datesArray={show.dates} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item'/>
+                                <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_places'>
+                                    <IsALink className="oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_places" link={show.placeLink} name={show.placeName}/>   
+                                    {`/ ${show.city ? show.city : ""}`}
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
             }

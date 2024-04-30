@@ -125,7 +125,6 @@ function DNDGallery ({ imageFiles, setImageFiles, mainImageIndex, setMainImageIn
   function handleDragStart(event) {
     setActiveId(event.active.id);
     setMainImageId(items[mainImageIndex]._id);
-    console.log(imageFiles);
   }
 
   //DÉFINITION DE L'ID DE L'ÉLÉMENT D'ARRIVÉE

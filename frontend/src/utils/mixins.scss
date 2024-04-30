@@ -368,14 +368,14 @@ $padMaxWidth: 991px;
     }
 
     100% { 
-        transform: rotate(0deg);
+        transform: rotate(90deg);
     }
     
 }
 
 @keyframes openCollapseArrow {
     0% {  
-        transform: rotate(0deg);
+        transform: rotate(90deg);
     }
 
     100% { 

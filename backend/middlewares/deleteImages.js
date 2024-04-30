@@ -67,7 +67,6 @@ async function deleteProjectPdfFiles(req) {
         await bucket.file('pdfList/' + fileToDeleteName).delete();
       }
     }
-    console.log(pdfToDelete)
 
   } catch (error) {
     console.error(error.message);
@@ -95,9 +94,6 @@ async function deleteBiographyImageFiles(req) {
     const cloudImageUrls = await getCloudImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
     const dbImageUrls = await getDbImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
     const imagesToDelete = cloudImageUrls.filter((url) => !dbImageUrls.includes(url));
-    console.log(cloudImageUrls)
-    console.log(dbImageUrls)
-    console.log(imagesToDelete)
     // Suppression des images non référencées dans le cloud
     for (const imageUrl of imagesToDelete) {
       // Divisez l'URL en parties en utilisant "/" comme séparateur

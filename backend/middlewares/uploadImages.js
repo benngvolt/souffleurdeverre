@@ -117,13 +117,11 @@ function uploadImages(req, res, next) {
                 pdfName: pdfName,
                 index: JSON.parse(pdfFileIndexes[index])
               });
-              console.log(newPdfsObjects);
             } else {
               newPdfsObjects.push({
                 pdfLink: publicUrl,
                 pdfName: pdfName,
               });
-              console.log(newPdfsObjects);
             }
             // Continuer avec la prochaine promesse
             resolve(publicUrl);

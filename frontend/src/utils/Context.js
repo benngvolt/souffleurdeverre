@@ -13,8 +13,8 @@ export const Provider = ({ children }) => {
     const [fullCurrentDate, setFullCurrentDate] = useState ([]);
 
     const bioFields = ['technique', 'artistique', 'administration'];
-    const projectTypes = ['tout public', 'jeune public', 'public adolescent', 'lecture-spectacle', 'lecture', 'médiation'];
-    const projectStates = ['en tournée', 'en création', 'archivé', 'laboratoire'];
+    const projectTypes = ['tout public', 'jeune public', 'public adolescent'];
+    const projectStates = ['en tournée', 'en création', 'archivé', 'lecture-spectacle', 'lecture', 'médiation', 'laboratoire'];
     const productionFunctions = ['Production','Co-production','Soutien','Remerciements', 'Aide à la création', 'Partenariat', 'Aide à la résidence d’écriture'];
     const residencyTypes = ['Laboratoires','Résidences d\'écriture','Résidences de création', 'Répétitions', "Lectures et rencontres"];
 
@@ -29,7 +29,6 @@ export const Provider = ({ children }) => {
             .then((data) => {
                 setProjects(data);
                 hideLoader();
-                console.log('Projets chargés');
             })
             .catch((error) => {
                 console.log(error.message);
@@ -42,7 +41,6 @@ export const Provider = ({ children }) => {
         .then((res) => res.json())
         .then((data) => 
             setBiographies(data),
-            console.log('biographies chargés'),
         )
         .catch((error)=>console.log(error.message))
     },[loadBiographies]);

@@ -43,6 +43,9 @@ function ProjectForm({
         setPdfFiles
     }) {
 
+    
+    
+
     /* ---------------------------
     ----- RÉCUPÉRATION CONTEXT ---
     ----------------------------*/
@@ -59,6 +62,7 @@ function ProjectForm({
     /* ---------------------------
     ----- DÉFINITION USEREF ------
     ----------------------------*/
+    
     const inputProjectTitleRef = useRef(null);
     const inputProjectSubtitleRef = useRef(null);
     const inputProjectStateRef = useRef(null);
@@ -74,12 +78,26 @@ function ProjectForm({
 
     const paragraphRefs = useRef([]);
     const pressRefs = useRef([]);
+    const projectFormRef = useRef();
     
-    /* -----------------------------------------
-    ----- AFFICHAGE FORMULAIRE SELON ETAT ------
-    ------------------------------------------*/
+    /* ------------------------
+    ----- CHAMPS SIMPLES ------
+    -------------------------*/
 
-    useEffect(() => {
+    const [projectTitle, setProjectTitle] = useState('')
+    const [projectSubtitle, setProjectSubtitle] = useState('')
+    const [projectState, setProjectState] = useState('')
+    const [projectType, setProjectType] = useState('')
+    const [projectDuration, setProjectDuration] = useState('')
+    const [projectCreationDate, setProjectCreationDate] = useState('')
+    const [projectDescription, setProjectDescription] = useState('')
+    const [projectMoreInfos, setProjectMoreInfos] = useState('')
+    const [confirmBoxState, setConfirmBoxState] = useState(false);
+    const [displayServerError, setDisplayServerError] = useState(false);
+    const [displayError, setDisplayError] = useState(false);
+    const [projectCurrentDescription, setProjectCurrentDescription] = useState('');
+
+    function initializeFields() {
         setDisplayServerError(false);
         setDisplayError(false);
         if (projectFormMode === 'edit' && projectEdit) {
@@ -101,25 +119,8 @@ function ProjectForm({
             setProjectDescription('');
             setProjectMoreInfos('');
         }
-    }, [projectFormMode, projectEdit]);
+    }
 
-    // const cleanedDescription = DOMPurify.sanitize(projectEdit?.description);
-
-    /* ------------------------
-    ----- CHAMPS SIMPLES ------
-    -------------------------*/
-    const [projectTitle, setProjectTitle] = useState('')
-    const [projectSubtitle, setProjectSubtitle] = useState('')
-    const [projectState, setProjectState] = useState('')
-    const [projectType, setProjectType] = useState('')
-    const [projectDuration, setProjectDuration] = useState('')
-    const [projectCreationDate, setProjectCreationDate] = useState('')
-    const [projectDescription, setProjectDescription] = useState('')
-    const [projectMoreInfos, setProjectMoreInfos] = useState('')
-    const [confirmBoxState, setConfirmBoxState] = useState(false);
-
-    const [displayServerError, setDisplayServerError] = useState(false);
-    const [displayError, setDisplayError] = useState(false);
 
     /* ---------------------------
     ----- ARTISTS LIST -----------
@@ -129,7 +130,7 @@ function ProjectForm({
     };
     const handleSupprArtist = (index) => {
         setArtistsList (artistsList.filter((_, i) => i !== index));
-    }
+    };
     
     /* ------------------------
     ----- PROD LIST -----------
@@ -233,7 +234,6 @@ function ProjectForm({
         return dataUrl;
     }
     async function displayPdfSample() {
-        console.log("ça change");
         const pdf = inputProjectPdfFileRef.current.files[0];
         if (pdf) {
         const id = uuidv4(); // Générez un identifiant unique
@@ -252,19 +252,16 @@ function ProjectForm({
     }
     function handleAddPdfFile() {
         if (newPdf) {
-            console.log('il y a un nouuveau pdf')
             const updatedAddPdfFiles = [...pdfFiles, newPdf];
             setPdfFiles(updatedAddPdfFiles);
         }
         setIsPdfLoaded(false);
         cancelAddPdfFile();
-        console.log(pdfFiles);
     }
 
     function handleSupprPdf(index) {
         // Créer une copie du tableau pdfFiles sans l'élément à l'index spécifié
         const updatedSupprPdfFiles = pdfFiles.filter((_, i) => i !== index);
-        console.log(updatedSupprPdfFiles); // Vérifiez si les éléments supprimés sont corrects
         // Mettre à jour l'état avec le nouveau tableau sans l'élément supprimé
         setPdfFiles(updatedSupprPdfFiles);
     }
@@ -298,7 +295,8 @@ function ProjectForm({
             const image = inputProjectImageFileRef.current.files[0];
             if (image) {
                 setNewImage (image);
-                const id = uuidv4(); // Générez un identifiant unique
+                const id = uuidv4(); 
+                // Générez un identifiant unique
                 image._id = id;
                 image.sampleImageUrl= URL.createObjectURL(image);
                 projectMainImageSampleRef.current.setAttribute("src", image.sampleImageUrl);
@@ -366,7 +364,7 @@ function ProjectForm({
         projectFormData.append('projectType', inputProjectTypeRef.current.value);
         projectFormData.append('creationDate', inputProjectCreationDateRef.current.value);
         projectFormData.append('duration', inputProjectDurationRef.current.value);
-        projectFormData.append('description', inputProjectDescriptionRef.current.value);
+        projectFormData.append('description', projectCurrentDescription);
         projectFormData.append('moreInfos', inputProjectMoreInfosRef.current.value);
         projectFormData.append('mainImageIndex', mainImageIndex);
         projectFormData.append('artistsList', JSON.stringify(artistsList));
@@ -464,31 +462,52 @@ function ProjectForm({
     }
 
     function closeForm() {
+       
+        clearTrixEditor();
         setHandleDisplayProjectForm(false);
         handleLoadProjects();
-        clearTrixEditor();
         hideLoader();
     }
 
     /* ------------------------
     ----- TRIX  EDITOR ------
     -------------------------*/
+
+    const handleOneTrixChange = (event) => {
+        const newValue = event.target.value;
+        setProjectCurrentDescription(newValue);
+    };
+    
     useEffect(() => {
         if (inputProjectDescriptionRef) {
-            inputProjectDescriptionRef.current.editor.setSelectedRange([0, 0]);
-            inputProjectDescriptionRef.current.editor.loadHTML(projectDescription); 
+            inputProjectDescriptionRef.current.editor.loadHTML(projectDescription);
+            setProjectCurrentDescription(projectDescription);
         }
     }, [projectDescription, handleDisplayProjectForm]);
-
-    const handleTrixChange = (event) => {
-        setProjectDescription(event.target.value);
-    };
+    
+    useEffect(() => {
+        if (inputProjectDescriptionRef && inputProjectDescriptionRef.current) {
+            const editor = inputProjectDescriptionRef.current;
+            editor.addEventListener('trix-change', handleOneTrixChange);
+            return () => {
+                editor.removeEventListener('trix-change', handleOneTrixChange);
+            };
+        }
+    }, [inputProjectDescriptionRef]);
+    
+    useEffect(() => {
+        if (projectFormRef.current) {
+            projectFormRef.current.scrollTo(0, 0);
+        }
+        initializeFields();
+    }, [projectEdit, handleDisplayProjectForm  ]);
     
     function clearTrixEditor() {
         const elements = document.querySelectorAll("trix-editor");
         elements.forEach(element => {
-            element.editor.setSelectedRange([0, 0]);
-            element.editor.loadHTML(''); 
+            const editor = element.editor;
+            editor.setSelectedRange([0, 0]);
+            editor.loadHTML(''); 
         });
     }
 
@@ -504,7 +523,7 @@ function ProjectForm({
     }
 
     return  (      
-        <form onSubmit={(event) => projectFormSubmit(event)} method="post" className='projectForm'>
+        <form onSubmit={(event) => projectFormSubmit(event)} method="post" className='projectForm' ref={projectFormRef}>
             <button type='button' className='projectForm_stickyCancelButton' onClick={() => openConfirmBox ()}>
                 <FontAwesomeIcon icon={faXmark} className='projectForm_stickyCancelButton_icon'/>
             </button>
@@ -571,12 +590,12 @@ function ProjectForm({
             </div>
             <div className='projectForm_projectDescription'>
                 <label htmlFor='inputProjectDescription'>RÉSUMÉ</label>
-                <input id='trix-description' type="hidden" name="content" defaultValue={projectDescription} ></input>
+                <input id='trix-description' type="hidden" name="descriptionContent" defaultValue={projectDescription} ></input>
                 <trix-editor 
                     id='inputProjectDescription' 
                     input="trix-description" 
                     ref={inputProjectDescriptionRef}
-                    trix-change={handleTrixChange} />
+                    />
             </div>
             <TitleAndParagraphInput 
                 setList={setParagraphList} 
