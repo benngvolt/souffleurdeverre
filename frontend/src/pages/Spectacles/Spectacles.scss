@@ -83,12 +83,13 @@
 
     &_projectsList {
         animation: pageAppearing 2s ease forwards;
-        margin-top: 19px;
+        margin: 19px auto;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         padding: 0 40px;
         list-style-type: none;
         grid-gap: 3px;
+        width: 70%;
 
         li {
             width: auto;

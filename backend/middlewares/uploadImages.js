@@ -84,7 +84,10 @@ function uploadImages(req, res, next) {
     const newPdfsObjects = [];
     const pdfFileIndexes = req.body.pdfFileIndexes;
     const files = req.files.pdfFiles;
-    const pdfNames = req.body.pdfNames;
+    let pdfNames = req.body.pdfNames;
+    if (!Array.isArray(pdfNames)) {
+        pdfNames = [pdfNames];
+    }
     
     if (!files || files.length === 0) {
       // Aucune image n'a été téléchargée, appeler next() et sortir de la fonction

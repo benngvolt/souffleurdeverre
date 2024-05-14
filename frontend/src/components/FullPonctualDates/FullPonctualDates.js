@@ -35,10 +35,11 @@ function FullPonctualDates({datesArray, className}) {
     };
 
     const totalDates = datesArray.length;
+    const sortedDatesArray = datesArray.sort((a, b) => new Date(a.day) - new Date(b.day));
 
     return  ( 
         <div className={`${className}_dates`}>
-            {datesArray.map((date, index) => (
+            {sortedDatesArray.map((date, index) => (
                 <div className={`${className}_dates_singleDate`} key={index}>
                     <p className={`${className}_dates_singleDate_day`}> {`${formatDay(date.day, index, totalDates)}`} </p>
                     {date.times.length > 0 && (

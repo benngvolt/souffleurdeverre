@@ -50,6 +50,7 @@
                 
                 img {
                     width: 200px;
+                    margin-top: 22px;
                 }
 
                 &_buttonsSystem {
@@ -64,7 +65,13 @@
                             font-family: 'MainFont_light';
                             background: none;
                             border: none;
-                            font-size: 19px;
+                            font-size: 16px;
+                            margin: 16px auto 0 auto;
+                            box-sizing: border-box;
+                            &:hover {
+                                font-weight: bold;
+                                cursor: pointer;
+                            }
                         }
                     }
                 }

@@ -541,7 +541,6 @@ function ProjectForm({
                     </div>
                 </div>
             </div>
-            
             <div className='projectForm_projectTitle'>
                 <label htmlFor='inputProjectTitle'>TITRE*</label>
                 <input type='text' id='inputProjectTitle' ref={inputProjectTitleRef} value={projectTitle} onChange={(e) =>setProjectTitle(e.target.value)}></input>

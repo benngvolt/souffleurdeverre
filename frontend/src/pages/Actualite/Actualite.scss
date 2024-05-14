@@ -9,21 +9,32 @@
     row-gap: 54px;
 
     &_show, &_residency {
-        margin: auto;
+        margin: 0 auto 54px auto;
         @include SidePaddings;
         width: 40%;
         display: flex;
         flex-direction: column;
+       
 
         &_titleContainer {
             display: flex;
             flex-direction: column;
+            margin: 0;
+
+            a {
+                text-decoration: none;
+                color: $colorDarkGrey;
+            }
     
             &_title {
                 @include Title;
                 margin: 0;
                 justify-content: flex-end;
                 font-size: 98px;
+                &:hover {
+                    cursor: pointer;
+                    @include colorDuo3;
+                }
             }
 
             &_type {
@@ -40,7 +51,7 @@
             font-weight: bold;
             color: $colorLightGrey;
             font-size: 22px;
-            margin: 35px 0 0 0;
+            margin: 16px 0 0 0;
             padding-left: 9px;
         }
 
@@ -52,45 +63,9 @@
 
             &_item {
                 margin: 16px 0;
-                &_dates {
-                    display: flex;
-                    flex-direction: column;
-                    &_singleDate {
-                        display: flex;
-                        flex-direction: row;
-                        &_day {
-                            
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: flex-end;
-                            font-size: 22px;
-                            font-family: 'MainFont_light';
-                            font-weight: bold;
-                            text-transform: uppercase;
-                            margin: 0;
-                        }
-                        &_time {
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: flex-end;
-                            font-size: 22px;
-                            font-family: 'MainFont_light';
-                            // text-transform: uppercase;
-                            margin: 0 19px;
-                        }
-                   }
-
-                }
-                &_residencyType  {
-                    margin: 0;
-                    font-family: 'MainFont_light';
-                    font-style: italic;
-                    font-size: 19px;
-                    // font-weight: bold;
-                }
-
                 &_placeName {
                     font-size: 22px;
+                    font-weight: bold;
                     font-family: 'MainFont_light';
                     text-transform: uppercase;
 
@@ -115,9 +90,59 @@
                 }
                 &_showCity {
                     font-family: 'MainFont_light';
-                    font-size: 22px;
+                    font-size: 19px;
                     margin: 0;
                 }
+                &_dates {
+                    display: flex;
+                    flex-direction: column;
+                    margin: 0;
+                    &_singleDate {
+                        display: flex;
+                        flex-direction: row;
+                        &_day {
+                            
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: flex-end;
+                            font-size: 19px;
+                            font-family: 'MainFont_light';
+                            font-weight: bold;
+                            text-transform: uppercase;
+                            margin: 0;
+                            color: $colorDarkGrey;
+                        }
+                        &_residencyDay {
+                            
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: flex-end;
+                            font-size: 19px;
+                            font-family: 'MainFont_light';
+                            font-weight: bold;
+                            text-transform: uppercase;
+                            margin: 0;
+                            color: $colorDarkGrey;
+                        }
+                        &_time {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: flex-end;
+                            font-size: 19px;
+                            font-family: 'MainFont_light';
+                            margin: 0 19px;
+                        }
+                   }
+
+                }
+                &_residencyType  {
+                    margin: 0;
+                    font-family: 'MainFont_light';
+                    font-style: italic;
+                    font-size: 19px;
+                }
+
+                
             }
         }
 

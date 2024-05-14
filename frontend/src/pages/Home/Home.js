@@ -7,7 +7,7 @@ import xLogo from '../../assets/x_black.png'
 import youtubeLogo from '../../assets/youtube_black.png'
 import instagramLogo from '../../assets/instagram_black.png'
 import logoSouffleur from '../../assets/logoSouffleur.svg'
-import cedricVeschambre from '../../assets/Cedric_Veschambre_Julien_Bruhat.jpg'
+import cedricVeschambre from '../../assets/Cedric_Veschambre_Julien_Bruhat.webp'
 import ContactModal from '../../components/ContactModal/ContactModal'
 import Loader from '../../components/Loader/Loader'
 

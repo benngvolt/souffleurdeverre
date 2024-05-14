@@ -11,23 +11,29 @@ function Spectacles() {
     // const [projects, setProjects] = useState([]);
     const { projects, projectTypes, projectStates, fullCurrentDate } = useContext(Context);
     const [sortedProjects, setSortedProjects] = useState(projects);
+    const [chronologicalSortedProjects, setChronologicalSortedProjects] = useState([]);
     const [sortedProjectsByState, setSortedProjectsByState] = useState(projects);
     const [sortedProjectsByType, setSortedProjectsByType] = useState(projects);
     const [displayStateFilter, setDisplayStateFilter] = useState('tous');
     const [displayTypeFilter, setDisplayTypeFilter] = useState('tous');
     
+    const visibleProjects = projects.filter((project)=>(project.projectState !== "*non visible*"));
+
     useEffect(()=> {
-        setSortedProjects(projects);
+        setSortedProjects(visibleProjects);
     }, []);
 
     useEffect(()=> {
-        const updatedSortedProjects = projects.filter ((project) => (sortedProjectsByState.includes(project)) && (sortedProjectsByType.includes(project)))
+        const updatedSortedProjects = visibleProjects.filter ((project) => (sortedProjectsByState.includes(project)) && (sortedProjectsByType.includes(project)))
         setSortedProjects (updatedSortedProjects);
-        
     }, [sortedProjectsByState, sortedProjectsByType]);
 
+    useEffect(()=> {
+        setChronologicalSortedProjects (sortedProjects.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate) ))
+    }, [sortedProjects]);
+
     function handleFilterProjectState (state) {
-        const newSortedProjectsByState = projects.filter((project)=> (project.projectState === state));
+        const newSortedProjectsByState = visibleProjects.filter((project)=> (project.projectState === state));
         setSortedProjectsByState (newSortedProjectsByState);
         setDisplayStateFilter (state);
         if (!newSortedProjectsByState.some((project)=>project.projectType === displayTypeFilter)) {
@@ -37,20 +43,21 @@ function Spectacles() {
     }
 
     function handleFilterProjectType (type) {
-        const newSortedProjectsByType = projects.filter((project)=> (project.projectType === type));
+        const newSortedProjectsByType = visibleProjects.filter((project)=> (project.projectType === type));
         setSortedProjectsByType (newSortedProjectsByType);
         setDisplayTypeFilter (type)
     }
 
     function displayAllProjectsStates () {
-        setSortedProjectsByState (projects);
+        setSortedProjectsByState (visibleProjects);
         setDisplayStateFilter ("tous");
     }
 
     function displayAllProjectsTypes () {
-        setSortedProjectsByType (projects);
+        setSortedProjectsByType (visibleProjects);
         setDisplayTypeFilter ("tous");
     }
+
 
     return  (      
         <section className='spectacles'>
@@ -62,7 +69,7 @@ function Spectacles() {
                         </button>
                     </li>
                     {projectStates
-                        ?.filter(projectState => projects.some(project => project.projectState === projectState))
+                        ?.filter(projectState => projects.some(project => project.projectState === projectState) && projectState!=="*non visible*")
                         .map((projectState)=>(
                         <li className={displayStateFilter===`${projectState}`?'spectacles_filtersHandler_filtersStateContainer_item spectacles_filtersHandler_filtersStateContainer_item--displayOn':'spectacles_filtersHandler_filtersStateContainer_item'}>
                             <button type='button' onClick={() => handleFilterProjectState(`${projectState}`)}>
@@ -98,11 +105,11 @@ function Spectacles() {
                 </ul>
                 
             </div>
-            {sortedProjects.length === 0 &&
+            {chronologicalSortedProjects.length === 0 &&
             <p className='spectacles_filtersHandler_errorText'>...</p>
             }
             <ul className='spectacles_projectsList' >
-                {sortedProjects?.map((project) => (
+                {chronologicalSortedProjects?.map((project) => (
                     <li>
                         <Link to={`/spectacles/${project._id}`} className='spectacles_projectsList_projectItem'>
                             <img src={project.images[project.mainImageIndex]?.imageUrl} alt={project.title} className='spectacles_projectsList_projectItem_img' />

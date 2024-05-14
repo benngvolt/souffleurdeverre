@@ -2,6 +2,15 @@
 
 .oneSpectacle {
     animation: pageAppearing 2s ease forwards;
+
+    &_invisible {
+        display: flex;
+        justify-content: center;
+        font-size: 16px;
+        font-family: 'MainFont_light';
+        width: 100%;
+        margin: 180px auto;
+    }
     &_mainDatas {
 
         margin: 3px 0 ;
@@ -379,10 +388,17 @@
                                 
                                 text-decoration: none;
                                 color: $colorDarkGrey;
+                                
                                 &_icon {
                                     height: 12px;
                                     margin: 0 0 2px 4px ;
                                 }
+                            }
+
+                            &_noLink {
+                                text-decoration: none;
+                                color: $colorDarkGrey;
+                                margin: 0;
                             }
             
                         }
