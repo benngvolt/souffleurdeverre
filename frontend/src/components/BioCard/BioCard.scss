@@ -3,30 +3,52 @@
 .bioCard {
 
     width: auto;
+    margin: 0;
 
     &_card {
         display: flex;
         flex-direction: row;
-        column-gap: 60px;
+        column-gap: 7%;
         border: none;
         background: none;
         padding: 0 54px 0 0;
         box-sizing: border-box;
-        height: 272px;
         width: 100%;
+
+        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            flex-direction: column;
+            padding: 0 0 35px 0;
+        }
+        @media only screen and (max-width:$mobileMaxWidth){
+            flex-direction: column;
+            padding: 0 0 35px 0;
+        } 
         
         &:hover {
             cursor: pointer;
             background-color: $colorThree;
             .bioCard_card_caption {
                 animation: moveDown ease 1s forwards;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    animation: none;
+                    padding-top: 19px;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    animation: none;
+                } 
             }
         }
 
         &_image {
-            width: 330px;
-            height: 272px;
+            width: 50%;
+            aspect-ratio: 1.25/1;
             object-fit: cover;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                width: 100%;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                width: 100%;
+            } 
         }
         &_caption {
 
@@ -35,16 +57,42 @@
             text-align: left;
             width: 100%;
             animation: reverseMoveDown ease 1s forwards;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                animation: none;
+                padding-top: 19px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                animation: none;
+                padding-top: 19px;
+            } 
 
             &_name {
                 font-family: 'SpecialFont_regular';
-                font-size: 54px;
+                font-size: 35px;
                 text-transform: uppercase;
                 margin: 0;
+                color: $colorDarkGrey;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    text-align: center;
+                    font-size: 30px;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    text-align: center;
+                    font-size: 30px;
+                } 
             }
             &_role {
                 font-family: 'MainFont_light';
-                font-size: 19px;
+                font-size: 16px;
+                color: $colorDarkGrey;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    text-align: center;
+                    padding: 0 19px;
+                    box-sizing: border-box;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    text-align: center;
+                } 
             }
         }
     }

@@ -115,11 +115,11 @@ function Spectacles() {
                             <img src={project.images[project.mainImageIndex]?.imageUrl} alt={project.title} className='spectacles_projectsList_projectItem_img' />
                             <div className='spectacles_projectsList_projectItem_mainDatas'>
                                 <p className='spectacles_projectsList_projectItem_mainDatas_title'>{project.title}</p>
-                                {project.subtitle &&
+                                {/* {project.subtitle &&
                                     <p className='spectacles_projectsList_projectItem_mainDatas_subtitle'>{project.subtitle}</p>
-                                }
-                                <p className='spectacles_projectsList_projectItem_mainDatas_creationDate'>{project.creationDate}</p>
-                                <p className='spectacles_projectsList_projectItem_mainDatas_state'>{project.projectState}</p>
+                                } */}
+                                {/* <p className='spectacles_projectsList_projectItem_mainDatas_creationDate'>{project.creationDate}</p> */}
+                                {/* <p className='spectacles_projectsList_projectItem_mainDatas_state'>{project.projectState}</p> */}
                             </div>
                         </Link>
                     </li>

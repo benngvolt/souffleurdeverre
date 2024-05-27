@@ -10,7 +10,9 @@ function BioSheet({biography, closeBioAside, className}) {
     return  (      
         <aside className={`${className}`}>
             <div className={`${className}_mainContainer`}>
-                <img className={`${className}_mainContainer_image`} src={biography.bioImageUrl} alt={biography.surname} /> 
+                <div className={`${className}_mainContainer_imageContainer`}>
+                    <img className={`${className}_mainContainer_imageContainer_image`} src={biography.bioImageUrl} alt={biography.surname} /> 
+                </div>
                 <div className={`${className}_mainContainer_texts`}>
                     <p className={`${className}_mainContainer_texts_name`}>{biography.name} {biography.surname}</p>
                     <p className={`${className}_mainContainer_texts_role`}>{biography.role}</p>

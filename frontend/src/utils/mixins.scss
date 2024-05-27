@@ -48,6 +48,12 @@
     font-family: 'MainFont_light';
     font-size: 16px;
     text-align: justify;
+    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+        font-size: 15px;
+    }
+    @media only screen and (max-width:$mobileMaxWidth){
+        font-size: 14px;
+    } 
 }
 
 @mixin TextTitle {
@@ -69,7 +75,8 @@
 }
 
 @mixin SidePaddings {
-    padding: 0 98px;
+    // padding: 0 98px;
+    padding: 0 6%;
     box-sizing: border-box;
 }
 
@@ -120,9 +127,16 @@
     line-height: 1.3;
     &:hover {
         cursor: pointer;
-        background-color: $colorSix;
-        color: $colorLightGrey;
+        background-color: $colorTwo;
     }
+    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+        padding: 0px 20px;
+        font-size: 15px;
+    }
+    @media only screen and (max-width:$mobileMaxWidth){
+        padding: 0px 6px;
+        font-size: 13px;
+    } 
 }
 
 
@@ -176,8 +190,8 @@ $colorLightGrey: #E9E9E9;
 
 $colorOne: #ff0030;
 $colorTwo: #00f0ff;
-$colorThree: rgba(255, 0, 255, 0.8);
-$colorFour: rgba(0, 255, 0, 0.8);
+$colorThree: rgba(255, 0, 255, 1);
+$colorFour: rgba(0, 255, 0, 1);
 $colorFive: #fea201;
 $colorSix: #019cff;
 
@@ -208,8 +222,14 @@ $padMaxWidth: 991px;
 }
 
 @mixin colorDuo3big {
-    filter: drop-shadow(10px 10px 1px $colorFive) drop-shadow(-10px -10px 1px $colorSix) ;
-}
+    filter: drop-shadow(8px 8px 1px $colorFive) drop-shadow(-8px -8px 1px $colorSix) ;
+    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+        filter: drop-shadow(5px 5px 0.75px $colorFive) drop-shadow(-5px -5px 0.75px $colorSix) ;
+    }
+    @media only screen and (max-width:$mobileMaxWidth){
+        filter: drop-shadow(3px 3px 0.5px $colorFive) drop-shadow(-3px -3px 0.5px $colorSix) ;
+    } 
+}   
 
 /*-------------------
 ----- KEYFRAMES -----
@@ -352,11 +372,13 @@ $padMaxWidth: 991px;
 
 @keyframes focusShow {
     0% {
-        transform: scale(1);
+        // transform: scale(1);
+        filter: saturate(0);
         overflow: hidden;
     }
     100% {
-        transform: scale(0.97);
+        // transform: scale(0.97);
+        filter: saturate(1);
         overflow: hidden;
     }
 }
@@ -389,23 +411,23 @@ $padMaxWidth: 991px;
         opacity: 0; 
     }
     50% { 
-        max-height: 1000px;
+        max-height: 1500px;
         opacity: 0;
     }
 
     100% { 
-        max-height: 1000px;
+        max-height: 1500px;
         opacity: 1;
     }
 }
 
 @keyframes closeCollapseChildren {
     0% {  
-        max-height: 1000px;
+        max-height: 1500px;
         opacity: 1;
     }
     50% {  
-        max-height: 1000px;
+        max-height: 1500px;
         opacity: 0;
     }
 

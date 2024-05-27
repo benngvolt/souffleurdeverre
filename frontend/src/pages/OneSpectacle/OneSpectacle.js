@@ -1,5 +1,5 @@
 import './OneSpectacle.scss'
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import { API_URL } from '../../utils/constants'
 import { useParams } from 'react-router-dom'
 import { Context } from '../../utils/Context'
@@ -17,7 +17,7 @@ function OneSpectacle() {
     const { id } = useParams();
     const { productionFunctions, residencyTypes } = useContext(Context);
     const cleanedDescription = DOMPurify.sanitize(project.description);
-    
+    const parallaxRef = useRef(null);
     
     useEffect(() => {
         fetch(`${API_URL}/api/projects/${id}`)
@@ -46,13 +46,15 @@ function OneSpectacle() {
                     {project.description &&        
                     <p className='oneSpectacle_mainDatas_description' dangerouslySetInnerHTML={{__html:cleanedDescription}}></p>
                     }
-                    {project.images && project.images?.length > 0 &&
+                    {project.images && project.images?.length >= 1 &&
                     <div
-                        className={`oneSpectacle_imagesGrid_parallaxContainer oneSpectacle_imagesGrid_item oneSpectacle_imagesGrid_${project.images.length}_item_0`}
+                        className={`oneSpectacle_imagesGrid_parallaxContainer oneSpectacle_imagesGrid_${project.images.length}_item_0`}
                     >
                         <div 
-                            className='oneSpectacle_imagesGrid_parallax'
-                            style={{ backgroundImage: `url(${project.images[0].imageUrl})` }}>
+                            className='oneSpectacle_imagesGrid_parallaxContainer_parallax'
+                            ref={parallaxRef}
+                            style={{ backgroundImage: `url(${project.images[0].imageUrl})` }}
+                            >
                         </div>
                     </div>
                     }

@@ -6,7 +6,7 @@
     flex-direction: column;
     justify-content: center;
     margin: auto;
-    width: 50%;
+    width: 100%;
     height: 100vh;
     align-items: center;
 
@@ -17,15 +17,18 @@
         justify-content: center;
         align-items: center;
         margin: 40px 0;
-        animation: pageAppearing 4s ease forwards 3s;
+        
         &_logoMask {
             position: relative;
-            width: 100%;
+            width: 50%;
             @include colorDuo3big;
-
-            &--loaded {
-                animation: pageAppearing 5s ease forwards;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                width: 70%;
+                
             }
+            @media only screen and (max-width:$mobileMaxWidth){
+                width: 70%;
+            } 
         }
           
         &_logoMask img {
@@ -48,18 +51,33 @@
             font-size: 17px;
             margin: auto;
         }
+        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            
+        }   
+        @media only screen and (max-width:$mobileMaxWidth){
         
+        }      
     }
 
     &_nav {
         display: flex;
         flex-direction: column;
         row-gap: 30px;
-        margin: auto;
+        margin: 0 auto;
+    
         &_menu {
             display: flex;
             flex-direction: row;
             column-gap: 22px;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                column-gap: 17px;
+                
+            }
+            
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 17px;
+                flex-wrap: wrap;
+            } 
             &_item, h2, p {
                 margin: auto;
                 color: $colorDarkGrey;
@@ -71,6 +89,13 @@
                     font-style: italic;
                     font-weight: bold;
                 }
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    font-size: 17px;
+                }
+                
+                @media only screen and (max-width:$mobileMaxWidth){
+                    font-size: 17px;
+                } 
             }
         }
 

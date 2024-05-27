@@ -22,12 +22,20 @@
         &--light {
             border: none;
             background-color: $colorLightGrey;
+            
         }
 
         &--white {
             border: none;
             background-color: $colorLightGrey;
             color: $colorDarkGrey;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                background-color: $colorDarkGrey;
+                color: $colorLightGrey;
+            } 
         }
 
         h5 {
@@ -37,6 +45,12 @@
             font-size: 30px;
             font-weight: 200;
             color: $colorDarkGrey;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                color: $colorLightGrey;
+            } 
         }
 
         &_icon {
@@ -44,6 +58,12 @@
             display: flex;
             margin: auto 0 auto 16px;
             color: $colorDarkGrey;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                color: $colorLightGrey;
+            } 
             
             &--closed {
                 animation: closeCollapseArrow 0.5s ease forwards;

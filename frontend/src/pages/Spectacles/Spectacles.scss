@@ -36,7 +36,6 @@
         &_filtersStateContainer {
             padding: 0;
             width: 50%;
-            
 
             &_item {
                 list-style-type: none;
@@ -45,11 +44,17 @@
                     @include FilterButton;
                     text-align: right;
                     width: 100%;
+                    &:hover {
+                        cursor: pointer;
+                        background-color: $colorTwo;
+                        color: $colorDarkGrey;  
+                    }
                 }
 
                 &--displayOn {
                     button {
-                        background-color: $colorSix;    
+                        background-color: $colorDarkGrey;
+                        color: $colorLightGrey;    
                     }
                 }
             }
@@ -67,14 +72,15 @@
                     width: 100%;
                     &:hover {
                         cursor: pointer;
-                        background-color: $colorFive;
-                        color: $colorLightGrey;
+                        background-color: $colorTwo;
+                        color: $colorDarkGrey;  
                     }
                 }
                 &--displayOn {
                     button {
                         width: 100%;
-                        background-color: $colorFive;
+                        background-color: $colorDarkGrey;
+                        color: $colorLightGrey;  
                     }
                 }
             }
@@ -90,75 +96,102 @@
         list-style-type: none;
         grid-gap: 3px;
         width: 70%;
+        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            grid-template-columns: 1fr 1fr 1fr;
+
+        }
+        @media only screen and (max-width:$mobileMaxWidth){
+            grid-template-columns: 1fr 1fr;
+        } 
+        
 
         li {
-            width: auto;
+            width: 100%;
+            
         }
         
         &_projectItem {
             animation: pageAppearing 2s ease forwards;
             padding: 0;
-            width: auto;
+            width: 100%;
             display: flex;
             flex-direction: column;
             row-gap: 0px;
             text-decoration: none;
-            margin-bottom: 35px;
+            
 
             &:hover {
                 cursor: pointer;
-                background-color: $colorSix;
-
+                background-color: $colorTwo;
+            
                 .spectacles_projectsList_projectItem_img {
                    animation: focusShow 0.5s ease forwards;
+                    
                 }
 
             }
 
             &_img {
                 width: 100%;
-                aspect-ratio: 1/1.15;
+                aspect-ratio: 1/1.25;
                 object-fit: cover;
+                filter: saturate(0);
             } 
 
             &_mainDatas {
                 
                 display: flex;
-                flex-direction: column;
-                justify-content: flex-start;
+                // flex-direction: column;
+                // justify-content: flex-start;
                 padding-bottom: 22px;
-                padding-left: 10px;
-                height: 130px;
-
+                height: 110px;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    height: 54px;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    height: 45px;
+                } 
+                
                 &_title {
                     font-family: 'SpecialFont_regular';
-                    font-size: 54px;
+                    font-size: 30px;
                     color: $colorDarkGrey;
                     margin: 10px 0 0 0;
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
                     text-transform: uppercase;
+                    text-align: center;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        font-size: 22px;
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        font-size: 19px;
+                    } 
+                }
+
+                // &_subtitle {
+                //     font-family: 'MainFont_light';
+                //     font-size: 14px;
+                //     font-weight: bold;
+                //     color: $colorDarkGrey;
+                //     margin:  0 0 10px 0;
                     
-                }
-                &_subtitle {
-                    font-family: 'MainFont_light';
-                    font-size: 19px;
-                    color: $colorDarkGrey;
-                    margin:  0 0 10px 0;
+                // }
+                // &_creationDate {
+                //     font-family: 'MainFont_light';
+                //     font-size: 14px;
+                //     color: $colorDarkGrey;
+                //     margin: 0;
                     
-                }
-                &_creationDate {
-                    font-family: 'MainFont_light';
-                    font-size: 14px;
-                    color: $colorDarkGrey;
-                    margin: 0;
-                    
-                }
-                &_state {
-                    font-family: 'MainFont_light';
-                    font-style: italic;
-                    font-size: 14px;
-                    color: $colorDarkGrey;
-                    margin: 0;
-                }
+                // }
+                // &_state {
+                //     font-family: 'MainFont_light';
+                //     font-style: italic;
+                //     font-size: 14px;
+                //     color: $colorDarkGrey;
+                //     margin: 0;
+                // }
             }
         }
     }

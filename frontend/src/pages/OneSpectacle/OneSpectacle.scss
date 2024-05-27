@@ -11,6 +11,7 @@
         width: 100%;
         margin: 180px auto;
     }
+
     &_mainDatas {
 
         margin: 3px 0 ;
@@ -20,9 +21,15 @@
             @include Title;
             @include SidePaddings;
             @include DropColorFilter;
-            font-size: 200px;
+            font-size: 120px;
             margin: 0;
             text-transform: uppercase;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 98px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                height: 60px;
+            } 
         }
 
         &_subtitle {
@@ -30,6 +37,12 @@
             font-family: 'MainFont_light';
             font-size: 30px;
             margin: 0 0 54px 0;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 22px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 19px;
+            } 
         }
 
         &_creationDate {
@@ -48,11 +61,17 @@
         }
         
         &_description {
-            padding: 73px 25%;
+            padding: 73px 15%;
             box-sizing: border-box;
             @include TextBloc;
             margin: 54px auto;
             width: 100%;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                padding: 30px 10%;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                padding: 22px 5%;
+            } 
         }
 
         &_paragraphs {
@@ -365,6 +384,7 @@
                                 text-align: right;
                                 justify-content: flex-end;
                                 display: flex;
+                                flex-direction: column;
                                 column-gap: 5px;
 
                                 &_day {
@@ -372,6 +392,7 @@
                                     margin: 0;
                                 }
                                 &_time {
+                                    display: none;
                                     @include LightType;
                                     margin: 0;
                                 }
@@ -414,26 +435,34 @@
     &_imagesGrid {
         margin: 30px 0 0 0;
         width: 100%;
-        display: grid;
         padding: 0;
         grid-gap: 2px;
+        display: grid;
         grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 800px auto auto;
+        grid-template-rows: 60% auto auto;
 
         &_parallaxContainer {
             position: relative;
             overflow: hidden;
+            
+            &_parallax {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%; /* Hauteur de l'image */
+                background-size: cover; /* Ajuste la taille de l'image pour couvrir toute la div */
+                background-attachment: fixed; /* Fixe l'image pendant le défilement */
+                z-index: 2;
+            }
         }
 
-        &_parallax {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%; /* Hauteur de l'image */
-            background-size: cover; /* Ajuste la taille de l'image pour couvrir toute la div */
-            background-attachment: fixed; /* Fixe l'image pendant le défilement */
-            z-index: 2;
+        &_3, &_2 {
+
+        }
+
+        &_6, &_5, &_4  {
+
         }
         
         //pour 6 images
@@ -442,9 +471,8 @@
             &_item_0 {
                 aspect-ratio: 2/1;
                 width: 100%;
-                grid-column-start: 1;
-                grid-column-end: 4;
             }
+
             &_item_1 {
                 width: 100%;
                 height: 100%;
@@ -484,8 +512,6 @@
             &_item_0 {
                 aspect-ratio: 2/1;
                 width: 100%;
-                grid-column-start: 1;
-                grid-column-end: 4;
             }
             &_item_1 {
                 overflow: hidden;
@@ -524,8 +550,6 @@
             &_item_0 {
                 aspect-ratio: 2/1;
                 width: 100%;
-                grid-column-start: 1;
-                grid-column-end: 4;
             }
             &_item_1 {
                 overflow: hidden;
@@ -556,8 +580,6 @@
             &_item_0 {
                 aspect-ratio: 2/1;
                 width: 100%;
-                grid-column-start: 1;
-                grid-column-end: 4;
             }
             &_item_1 {
                 overflow: hidden;
@@ -596,7 +618,6 @@
             &_item_0 {
                 aspect-ratio: 2/1;
                 width: 100%;
-                // height: 1000px;
                 grid-column-start: 1;
                 grid-column-end: 4;
             }
@@ -611,7 +632,6 @@
             list-style-type: none;
 
             img {
-                
                 width: 100%;
                 height: 100%;
                 object-fit: cover;

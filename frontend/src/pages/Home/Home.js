@@ -27,13 +27,13 @@ function Home() {
     const [displayContactModal, setdisplayContactModal]= useState(false);
     const imageLogoRef = useRef(null);
 
-    useEffect(() => {
-        displayLoader();
-        const timeout = setTimeout(() => {
-            hideLoader();
-        }, 3000);
-        return () => clearTimeout(timeout);
-    }, []);
+    // useEffect(() => {
+    //     displayLoader();
+    //     const timeout = setTimeout(() => {
+    //         hideLoader();
+    //     }, 3000);
+    //     return () => clearTimeout(timeout);
+    // }, []);
 
     return  (      
         <section className='home'>
