@@ -25,7 +25,7 @@
             margin: 0;
             text-transform: uppercase;
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                font-size: 98px;
+                font-size: 81px;
             }
             @media only screen and (max-width:$mobileMaxWidth){
                 font-size: 60px;

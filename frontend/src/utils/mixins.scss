@@ -287,15 +287,57 @@ $padMaxWidth: 991px;
 @keyframes openHeader {
     0% {
         height: 50px;
+        
     }
     100% {
 		height: 71px;    
 	}
+    
+}
+
+@keyframes openHeaderMobile {
+    0% {
+        height: 50px;
+        
+    }
+    100% {
+		height: 120px;    
+	}
+    
+}
+
+@keyframes openHeaderMobileMax {
+    0% {
+        height: 50px;
+        
+    }
+    100% {
+		height: 200px;    
+	}
+    
 }
 
 @keyframes closeHeader {
     0% {
         height: 71px;
+    }
+    100% {
+		height: 50px;    
+	}
+}
+
+@keyframes closeHeaderMobile {
+    0% {
+        height: 120px;    
+    }
+    100% {
+		height: 50px;    
+	}
+}
+
+@keyframes closeHeaderMobileMax {
+    0% {
+        height: 200px;    
     }
     100% {
 		height: 50px;    
