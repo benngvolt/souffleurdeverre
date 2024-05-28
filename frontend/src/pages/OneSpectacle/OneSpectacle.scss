@@ -28,7 +28,7 @@
                 font-size: 98px;
             }
             @media only screen and (max-width:$mobileMaxWidth){
-                height: 60px;
+                font-size: 60px;
             } 
         }
 
@@ -39,9 +39,11 @@
             margin: 0 0 54px 0;
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
                 font-size: 22px;
+                margin: 0 0 35px 0;
             }
             @media only screen and (max-width:$mobileMaxWidth){
                 font-size: 19px;
+                margin: 0 0 19px 0;
             } 
         }
 
@@ -50,6 +52,13 @@
             font-family: 'MainFont_light';
             font-size: 18px;
             margin-bottom: 0;
+
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 16px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 15px;
+            }
         }
 
         &_duration {
@@ -58,6 +67,12 @@
             font-style: italic;
             font-size: 18px;
             margin-top: 0;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 16px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 15px;
+            }
         }
         
         &_description {
@@ -67,10 +82,12 @@
             margin: 54px auto;
             width: 100%;
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                padding: 30px 10%;
+                @include SidePaddings;
+                margin: 35px auto;
             }
             @media only screen and (max-width:$mobileMaxWidth){
-                padding: 22px 5%;
+                @include SidePaddings;
+                margin: 19px auto;
             } 
         }
 
@@ -80,12 +97,20 @@
             grid-template-columns: 1fr 1fr;
             column-gap: 35px;
             row-gap: 16px;
-            // flex-direction: row;
-            // justify-content: space-between;
-            // align-items: flex-start;
-            // flex-wrap: wrap;
             width: 90%;
             margin: 54px auto 22px auto;
+
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                display: flex;
+                flex-direction: column;
+                margin: 0 auto;
+                width: 100%;
+            } 
 
             &_paragraphContainer {
 
@@ -96,6 +121,13 @@
                 height: auto;
                 margin: 0 auto;
                 @include TextBloc;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    display: none;
+                    
+                }
 
                 &_paragraphTitle {
                     @include TextTitle;
@@ -113,6 +145,12 @@
             width: 100%;
             padding: 73px 0; 
             background-color: $colorTwo;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                padding: 45px 0; 
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                padding: 22px 0; 
+            } 
         
             &_artistsList {
                 @include SidePaddings;
@@ -138,12 +176,24 @@
                         @include BoldType;
                         text-align: end;
                         margin: 0;
+                        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                            width: 50%;
+                        }
+                        @media only screen and (max-width:$mobileMaxWidth){
+                            width: 50%;
+                        } 
                     }
                     &_names {
                         width: 30%;
                         @include LightType;
                         text-align: start;
                         margin: 0;
+                        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                            width: 50%;
+                        }
+                        @media only screen and (max-width:$mobileMaxWidth){
+                            width: 50%;
+                        } 
                     }
                 }
             }
@@ -156,6 +206,16 @@
             flex-direction: column;
             column-gap: 10px;
             row-gap: 4px;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                margin: 45px auto;
+                flex-direction: column;
+                padding: 0;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                margin: 22px auto;
+                flex-direction: column;
+                padding: 0;
+            } 
 
             &_videosContainer, &_pdfsContainer {
                 display: flex;
@@ -164,6 +224,12 @@
                 column-gap: 4px;
                 flex-wrap: wrap;
                 row-gap: 4px;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    flex-direction: column;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    flex-direction: column;
+                } 
 
 
                 &_video, &_pdf {
@@ -195,7 +261,13 @@
             flex-direction: column;
             @include SidePaddings;
             padding: 73px 0;
-            // background-color: $colorThree;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                padding: 0;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                padding: 0;
+            } 
+            
             
             &_prodTypeContainer {
                 width: 50%;
@@ -203,6 +275,16 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    width: 100%;
+                    @include SidePaddings;
+                    text-align: center;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    width: 100%;
+                    @include SidePaddings;
+                    text-align: center;
+                } 
                 &_prodType {
                     @include BoldType;  
                 }
@@ -228,12 +310,29 @@
             height: auto;
             overflow: hidden;
             margin: 98px auto;
+
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                margin: 45px auto;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                margin: 45px auto;
+            } 
+            
             &_pressList {
-                
                 display: flex;
                 flex-direction: column;
                 width: 70%;
                 margin: auto;
+
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    width: 100%;
+                    @include SidePaddings;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    width: 100%;
+                    @include SidePaddings;
+                } 
+                
                 &_title {
                     @include SecondTitle;
                     margin: 30px auto;
@@ -256,6 +355,7 @@
                         display: flex;
                         flex-direction: column;
                         justify-content: flex-start;
+                        
                         &_mediaName {
                             text-align: justify;
                             font-family: 'MainFont_light';
@@ -266,9 +366,8 @@
 
                         &_quote {
                             text-align: justify;
-                            font-family: 'MainFont_light';
                             font-style: italic;
-                            font-size: 16px;
+                            @include TextBloc;
                         }
                     }
                 }
@@ -289,12 +388,26 @@
                 flex-wrap: wrap;
                 column-gap: 45px;
                 padding: 73px 0;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    flex-direction: column;
+                    text-align: center;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    flex-direction: column;
+                    text-align: center;
+                } 
                 &_typeContainer {
                     width: auto;
                     display: flex;
                     flex-direction: column;
                     &_title {
                         @include SecondTitle;
+                        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                            margin: 0 auto;
+                        }
+                        @media only screen and (max-width:$mobileMaxWidth){
+                            margin: 0 auto;
+                        } 
                     }
                     &_list {
                         display: flex;
@@ -344,10 +457,22 @@
                 padding: 40px;
                 box-sizing: border-box;
                 margin: auto;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    padding: 20px;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    padding: 20px;
+                } 
 
                 &_title {
                     @include SecondTitle;
                     margin: 30px auto;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        margin: 30px auto;
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        margin: 20px auto;
+                    } 
                 }
                 &_listContainer {
                     width: 100%;
@@ -361,7 +486,13 @@
                     justify-content: center;
                     list-style-type: none;
                     padding: 0;
-                    grid-gap: 22px;
+                    row-gap: 22px;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        row-gap: 19px;
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        row-gap: 10px;
+                    }
                     
                     &_item {
                         width: 100%;
@@ -377,7 +508,7 @@
                             flex-direction: column;
                             column-gap: 5px;
                             margin: 0;
-                            width: 50%;
+                            width: 100%;
     
                             &_singleDate {
                                 width: 100%;
@@ -399,7 +530,7 @@
                             }
                         }
                         &_places {
-                            width: 50%;
+                            width: 100%;
                             margin: 0;
                             display: flex;
                             flex-direction: column;
@@ -421,11 +552,7 @@
                                 color: $colorDarkGrey;
                                 margin: 0;
                             }
-            
                         }
-
-                        
-                        
                     }
                 }
             }

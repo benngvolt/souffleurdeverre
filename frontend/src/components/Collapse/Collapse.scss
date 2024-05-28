@@ -21,7 +21,8 @@
         
         &--light {
             border: none;
-            background-color: $colorLightGrey;
+            background-color: $colorDarkGrey;
+            color: $colorLightGrey;
             
         }
 
@@ -44,22 +45,16 @@
             font-family: 'SpecialFont_regular';
             font-size: 30px;
             font-weight: 200;
-            color: $colorDarkGrey;
-            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                
-            }
-            @media only screen and (max-width:$mobileMaxWidth){
-                color: $colorLightGrey;
-            } 
+            color: $colorLightGrey;
         }
 
         &_icon {
             height: 16px;
             display: flex;
             margin: auto 0 auto 16px;
-            color: $colorDarkGrey;
+            color: $colorLightGrey;
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                
+                color: $colorLightGrey;
             }
             @media only screen and (max-width:$mobileMaxWidth){
                 color: $colorLightGrey;
