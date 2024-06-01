@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/souffleurdeverre/static/css/main.6f5044be.css",
-    "main.js": "/souffleurdeverre/static/js/main.d6ddafb7.js",
+    "main.js": "/souffleurdeverre/static/js/main.6ad09cb5.js",
     "static/js/655.5e62bcaf.chunk.js": "/souffleurdeverre/static/js/655.5e62bcaf.chunk.js",
     "static/js/787.9e9f4ffd.chunk.js": "/souffleurdeverre/static/js/787.9e9f4ffd.chunk.js",
     "static/media/ProximaNova-LightIt.ttf": "/souffleurdeverre/static/media/ProximaNova-LightIt.5a76d7bf8d6b966c72a6.ttf",
@@ -13,12 +13,12 @@
     "static/media/logoSouffleur.svg": "/souffleurdeverre/static/media/logoSouffleur.c2e3a9c35e7bf4afbf0b08fd73a8db05.svg",
     "index.html": "/souffleurdeverre/index.html",
     "main.6f5044be.css.map": "/souffleurdeverre/static/css/main.6f5044be.css.map",
-    "main.d6ddafb7.js.map": "/souffleurdeverre/static/js/main.d6ddafb7.js.map",
+    "main.6ad09cb5.js.map": "/souffleurdeverre/static/js/main.6ad09cb5.js.map",
     "655.5e62bcaf.chunk.js.map": "/souffleurdeverre/static/js/655.5e62bcaf.chunk.js.map",
     "787.9e9f4ffd.chunk.js.map": "/souffleurdeverre/static/js/787.9e9f4ffd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6f5044be.css",
-    "static/js/main.d6ddafb7.js"
+    "static/js/main.6ad09cb5.js"
   ]
 }
