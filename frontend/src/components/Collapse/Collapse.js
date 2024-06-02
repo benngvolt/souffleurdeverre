@@ -28,7 +28,7 @@ function Collapse({children, title, style}) {
                 aria-label={`ouvrir la section ${title}`}
                 aria-expanded={isCollapseOpened===false? false : true}
                 aria-controls={`collapsible${title}`}>
-                <h5>{title}</h5>
+                <h4>{title}</h4>
                 <FontAwesomeIcon icon={faChevronDown} className={isCollapseOpened===false?'collapse_collapseButton_icon collapse_collapseButton_icon--closed':'collapse_collapseButton_icon collapse_collapseButton_icon--opened'}/>
             </button>
             <div id={`collapsible${title}`}className={isCollapseOpened===false?'collapse_children collapse_children--closed':'collapse_children collapse_children--opened'}>

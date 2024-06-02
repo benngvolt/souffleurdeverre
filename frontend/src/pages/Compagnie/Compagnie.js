@@ -7,13 +7,11 @@ import BioCard from '../../components/BioCard/BioCard'
 import BioSheet from '../../components/BioSheet/BioSheet'
 import Equipe from '../../components/Equipe/Equipe'
 import Collapse from '../../components/Collapse/Collapse'
-
 import julienRocha from '../../assets/Julien_Rocha_Julien_Bruhat.webp'
 import cedricVeschambre from '../../assets/Cedric_Veschambre_Julien_Bruhat.webp'
-// import React, { useContext, useEffect } from 'react'
-// import { Context } from '../../utils/Context'
-// import { useNavigate } from 'react-router-dom'
-
+import logoAra from '../../assets/logo_region_Auvergne_Rhone-Alpes.png'
+import logoClermont from '../../assets/logo_clermont.png'
+import logoMinistere from '../../assets/logo_ministere.png'
  
 function Compagnie() {
 
@@ -21,6 +19,23 @@ function Compagnie() {
     const [bioVeschambre, setBioVeschambre] = useState([]);
     const [displayBioAside, setDisplayBioAside] = useState(false);
     const [bioAside, setBioAside] = useState([]);
+    const partners = [
+        {
+            'name':'Préfète de la Région Auvergne Rhône-Alpes',
+            'logo': `${logoMinistere}`,
+            'class':'min'
+        },
+        {
+            'name':'Ville de Clermont-Ferrand',
+            'logo': `${logoClermont}`,
+            'class':'cle'
+        },
+        {
+            'name':'Région Auvergne Rhône-Alpes',
+            'logo': `${logoAra}`,
+            'class':'ara'
+        }
+    ]
 
     useEffect(() => {
         fetch(`${API_URL}/api/biographies/Veschambre`)
@@ -39,6 +54,10 @@ function Compagnie() {
         .catch((error)=>console.log(error.message))
     },[]);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    },[]);
+
     function closeBioAside () {
         setDisplayBioAside(false);
     }
@@ -48,7 +67,7 @@ function Compagnie() {
         <section className='compagnieSection'>
             <h2 className='compagnieSection_title'>La Compagnie</h2>
             <div className='compagnieSection_intro'>
-                <p className='compagnieSection_intro_leftbloc'> La Compagnie Le Souffleur de Verre a vu le jour en Auvergne en juillet 2003.Sa responsabilité artistique est assumée par Julien Rocha et Cédric Veschambre, à la fois metteurs en scène et acteurs.En résidence à Cournon d’Auvergne 2004/11, à Monistrol sur Loire 2012/15, associée à la Comédie de Saint-Étienne 2013/16, Artiste Associée et responsable de l’École du jeune spectateur au Caméléon, scène labellisée pour l’émergence et la création en Auvergne-Rhône-Alpes 2020/23.<br/><br/>
+                <p className='compagnieSection_intro_leftbloc'>La Compagnie Le Souffleur de Verre a vu le jour en Auvergne en juillet 2003. Sa responsabilité artistique est assumée par Julien Rocha et Cédric Veschambre, à la fois metteurs en scène et acteurs.En résidence à Cournon d’Auvergne 2004/11, à Monistrol sur Loire 2012/15, associée à la Comédie de Saint-Étienne 2013/16, Artiste Associée et responsable de l’École du jeune spectateur au Caméléon, scène labellisée pour l’émergence et la création en Auvergne-Rhône-Alpes 2020/23.<br/><br/>
                     Avec leurs univers complémentaires, ils donnent une place centrale dans leur démarche au travail de l’Acteur.« Le théâtre nous parle du monde et de nous-mêmes d’un peu de côté. C’est par cet un peu de côté qui met de la distance entre nous-mêmes et notre actualité que nous pouvons redonner épaisseur et perspective à notre présent. Et commencer à y voir clair à nouveau.Avoir un rapport certain à l’Histoire. S’y référer, offrir des points de vue. S’impliquer dans une certaine exigence. Sans hermétisme, cette cohérence éthique tend vers un théâtre citoyen.<br/><br/>
                     Déployer ainsi des problématiques qui appartiennent au monde et faire du plateau, un lieu de l’écrit, un lieu de parole et un lieu de plaisir qui s’adresse à tous.<br/><br/>
                     Vers un théâtre de l’anomalie ?<br/><br/>
@@ -74,7 +93,7 @@ function Compagnie() {
             <div className={displayBioAside=== true ? 'compagnieSection_bioSheetContainer compagnieSection_bioSheetContainer--displayOn' : 'compagnieSection_bioSheetContainer compagnieSection_bioSheetContainer--displayOff'}>
                 <BioSheet biography={bioAside} closeBioAside={closeBioAside} className='compagnieSection_bioSheetContainer'/>
             </div>
-            <Collapse title="COLLABORATIONS" style='white'>
+            <Collapse title="COLLABORATIONS" style='light'>
                 <div className='compagnieSection_teamCollapse'>
                     <Equipe className='compagnieSection_teamCollapse'/>
                 </div>
@@ -84,6 +103,19 @@ function Compagnie() {
                 <p className='compagnieSection_AA_text'> La compagnie Le Souffleur de Verre a vu le jour en 2003 en Auvergne et est implantée à Clermont-Ferrand. Ces projets artistiques et ces envies de travail sur les territoires que compte la région Auvergne-Rhône-Aples l’a mené à s’impliquer dans le Puy-de-Dôme (8 ans de résidence dite « association », menant à la fois créations et projets de médiation artistique, en vue du développement des publics à Cournon d’Auvergne), en Haute-Loire (3 ans résidence de territoire avec la municipalité et les établissements scolaires et associatifs de Monistrol-sur-Loire), et la Loire (3 ans comme compagnie associée au projet d’Arnaud Meunier, directeur de La Comédie de Saint-Étienne – Centre Dramatique National et 5 ans comme membres de l’ensemble artistique).<br/>
                     Elle a été Artiste Associée au Caméléon, scène labellisée pour l’émergence et la création en Auvergne-Rhône-Alpes pour 3 ans (2020-2023).
                 </p>
+            </div>
+            <div className='compagnieSection_partners'>
+                <p className='compagnieSection_partners_text'>La Compagnie Le Souffleur de Verre est conventionnée <br/>
+                avec le Ministère de la Culture/Drac Auvergne-Rhône-Alpes, <br/>
+                la Région Auvergne-Rhône-Alpes, et la Ville de Clermont-Ferrand.
+                </p>
+                <ul className='compagnieSection_partners_list'>
+                    {partners.map((partner)=> (
+                        <li className='compagnieSection_partners_list_item'>
+                            <img className={`compagnieSection_partners_list_item_${partner.class}`} src={partner.logo} alt={`logo ${partner.logo}`}/>
+                        </li>
+                    ))}
+                </ul>
             </div>
             <Footer/>
         </section>

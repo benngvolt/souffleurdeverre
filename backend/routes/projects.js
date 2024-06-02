@@ -1,6 +1,7 @@
 const express = require ('express');
 const projectsCtrl = require ('../controllers/projects');
 const router = express.Router();
+const auth = require('../middlewares/auth');
 const multer = require('../middlewares/multer-config');
 // const auth = require('../middlewares/auth');
 const uploadImages = require('../middlewares/uploadImages').uploadImages;
@@ -16,23 +17,25 @@ const deleteProjectFiles = require('../middlewares/deleteImages').deleteProjectF
 // Dans cet exemple, il envoie une réponse JSON contenant le message "Votre requête a bien été reçue !" à chaque requête entrante.
 // l'argument next permet de passer au middleware suivant
 
-router.post('/', 
-    multer.fields([{ name: 'images' }, { name: 'pdfFiles' }]), 
-    uploadImages, 
-    uploadPdfs, 
+router.post('/',
+    auth,
+    multer.fields([{ name: 'images' }, { name: 'pdfFiles' }]),
+    uploadImages,
+    uploadPdfs,
     projectsCtrl.createProject);
-router.get('/', 
+router.get('/',
     projectsCtrl.getAllProjects);
-router.get('/:id', 
+router.get('/:id',
     projectsCtrl.getOneProject);
-router.delete ('/:id', 
-    // auth, 
+router.delete ('/:id',
+    auth,
     projectsCtrl.deleteOneProject,
     deleteProjectFiles);
-router.put ('/:id', 
-    multer.fields([{ name: 'images' }, { name: 'pdfFiles' }]), 
-    uploadImages, 
-    uploadPdfs, 
+router.put ('/:id',
+    auth,
+    multer.fields([{ name: 'images' }, { name: 'pdfFiles' }]),
+    uploadImages,
+    uploadPdfs,
     projectsCtrl.updateOneProject,
     deleteProjectFiles
     );

@@ -11,9 +11,15 @@
     &_show, &_residency {
         margin: 0 auto 54px auto;
         @include SidePaddings;
-        width: 40%;
+        width: 50%;
         display: flex;
         flex-direction: column;
+        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            width: 75%;
+        }
+        @media only screen and (max-width:$mobileMaxWidth){
+            width: 100%;
+        } 
        
 
         &_titleContainer {
@@ -31,6 +37,12 @@
                 margin: 0;
                 justify-content: flex-end;
                 font-size: 98px;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    font-size: 81px;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    font-size: 60px;
+                } 
                 &:hover {
                     cursor: pointer;
                     @include colorDuo3;
@@ -42,6 +54,12 @@
                 font-style: italic;
                 margin: 0;
                 font-size: 19px;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    font-size: 16px;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    font-size: 14px;
+                } 
             }
         }
 
@@ -50,9 +68,15 @@
             text-transform: uppercase;
             font-weight: bold;
             color: $colorLightGrey;
-            font-size: 22px;
+            font-size: 19px;
             margin: 16px 0 0 0;
             padding-left: 9px;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 16px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 14px;
+            } 
         }
 
         &_datesContainer {
@@ -64,10 +88,16 @@
             &_item {
                 margin: 16px 0;
                 &_placeName {
-                    font-size: 22px;
+                    font-size: 19px;
                     font-weight: bold;
                     font-family: 'MainFont_light';
                     text-transform: uppercase;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        font-size: 16px;
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        font-size: 14px;
+                    } 
 
                     &_link {
                         color: $colorDarkGrey;
@@ -81,6 +111,14 @@
                             height: 16px;
                             padding-bottom: 3px;
                             margin: 0 9px;
+                            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                                height: 14px;
+                                padding-bottom: 1px;
+                            }
+                            @media only screen and (max-width:$mobileMaxWidth){
+                                height: 12px;
+                                padding-bottom: 2px;
+                            } 
                         }
                     }
 
@@ -92,6 +130,12 @@
                     font-family: 'MainFont_light';
                     font-size: 19px;
                     margin: 0;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        font-size: 16px;
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        font-size: 14px;
+                    } 
                 }
                 &_dates {
                     display: flex;
@@ -111,6 +155,12 @@
                             text-transform: uppercase;
                             margin: 0;
                             color: $colorDarkGrey;
+                            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                                font-size: 16px;
+                            }
+                            @media only screen and (max-width:$mobileMaxWidth){
+                                font-size: 14px;
+                            } 
                         }
                         &_residencyDay {
                             
@@ -123,6 +173,12 @@
                             text-transform: uppercase;
                             margin: 0;
                             color: $colorDarkGrey;
+                            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                                font-size: 16px;
+                            }
+                            @media only screen and (max-width:$mobileMaxWidth){
+                                font-size: 14px;
+                            } 
                         }
                         &_time {
                             display: flex;
@@ -131,6 +187,12 @@
                             font-size: 19px;
                             font-family: 'MainFont_light';
                             margin: 0 19px;
+                            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                                font-size: 16px;
+                            }
+                            @media only screen and (max-width:$mobileMaxWidth){
+                                font-size: 14px;
+                            } 
                         }
                    }
 
@@ -140,6 +202,12 @@
                     font-family: 'MainFont_light';
                     font-style: italic;
                     font-size: 19px;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        font-size: 16px;
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        font-size: 14px;
+                    } 
                 }
 
                 
@@ -152,6 +220,12 @@
             text-align: justify;
             width: 100%;
             margin: 0;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 14px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 13px;
+            } 
         }
         &_img {
             width: 100%;

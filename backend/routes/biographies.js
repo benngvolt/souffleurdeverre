@@ -3,7 +3,7 @@ const router = express.Router();
 const biographiesCtrl = require ('../controllers/biographies');
 const multer = require('../middlewares/multer-config');
 const deleteBiographyImageFiles = require('../middlewares/deleteImages').deleteBiographyImageFiles;
-// const auth = require('../middlewares/auth');
+const auth = require('../middlewares/auth');
 // const uploadImages = require('../middlewares/uploadImages').uploadImages;
 const uploadImage = require('../middlewares/uploadImages').uploadImage;
 
@@ -15,6 +15,7 @@ const uploadImage = require('../middlewares/uploadImages').uploadImage;
 // l'argument next permet de passer au middleware suivant
 
 router.post('/', 
+    auth, 
     multer.single('image'), 
     uploadImage, 
     biographiesCtrl.createBiography,
@@ -25,10 +26,11 @@ router.get('/',
 router.get('/:id', 
     biographiesCtrl.getOneBiography);
 router.delete ('/:id',
-    // auth, 
+    auth, 
     biographiesCtrl.deleteOneBiography,
     deleteBiographyImageFiles);
-router.put ('/:id', 
+router.put ('/:id',
+    auth,  
     multer.single('image'), 
     uploadImage, 
     biographiesCtrl.updateOneBiography,

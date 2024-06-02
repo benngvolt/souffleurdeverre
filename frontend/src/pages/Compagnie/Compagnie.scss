@@ -401,4 +401,74 @@
         }
     }
 
+    &_partners {
+        width: 100%;
+        @include SidePaddings;
+        margin: auto;
+        text-align: center;
+        &_text {
+            font-size: 14px;
+            color: $colorDarkGrey;
+            font-family: 'MainFont_light';
+            margin: 45px auto;
+        }
+        &_list {
+            margin: auto;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            padding: 0;
+            column-gap: 30px;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                flex-direction: column;
+                row-gap: 35px;
+            } 
+            &_item {
+                list-style-type: none;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+
+                &_cle, &_ara, &_min {
+                    object-fit: cover;
+                    margin: auto;
+                }
+                &_cle {
+                    height: 50px;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        height: 25px;
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        width: 120px;
+                        height: auto;
+                    } 
+                }
+                &_ara {
+                    height: 55px;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        height: 27px;
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        width: 150px;
+                        height: auto;
+                    } 
+                }
+                &_min {
+                    height: 100px;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        height: 50px;
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        width: 80px;
+                        height: auto;
+                    } 
+                }
+            }
+        }
+    }
+
 }

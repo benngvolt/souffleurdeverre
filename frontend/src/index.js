@@ -10,6 +10,7 @@ import Spectacles from './pages/Spectacles/Spectacles';
 import OneSpectacle from './pages/OneSpectacle/OneSpectacle';
 import Edit from './pages/Edit/Edit';
 import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -26,6 +27,7 @@ root.render(
           <Route path="/spectacles/:id" element={<OneSpectacle/>} />
           <Route path="/edit" element={<Edit/>} />
         </Routes>
+        <Footer/>
       </Router>
     </Provider>
   </React.StrictMode>

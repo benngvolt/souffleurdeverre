@@ -356,7 +356,7 @@ function ProjectForm({
             const dateB = new Date(b.dates[0]?.day);
             return dateA - dateB;
          });
-        // const token = window.sessionStorage.getItem('1');
+        const token = window.sessionStorage.getItem('1');
         const projectFormData = new FormData();
         projectFormData.append('title', inputProjectTitleRef.current.value);
         projectFormData.append('subtitle', inputProjectSubtitleRef.current.value);
@@ -407,7 +407,7 @@ function ProjectForm({
                     method: "POST",
                     headers: {
                         // 'Content-Type': 'application/json',
-                        // 'Authorization': 'Bearer ' + token,
+                        'Authorization': 'Bearer ' + token,
                     },
                     body: projectFormData,
                     })
@@ -435,7 +435,7 @@ function ProjectForm({
                     method: "PUT",
                     headers: {
                         // 'Content-Type': 'application/json',
-                        // 'Authorization': 'Bearer ' + token,
+                        'Authorization': 'Bearer ' + token,
                     },
                     body: projectFormData,
                     })

@@ -21,10 +21,9 @@
         &_logoMask {
             position: relative;
             width: 50%;
-            @include colorDuo3big;
+            @include colorDuo2big;
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
                 width: 70%;
-                
             }
             @media only screen and (max-width:$mobileMaxWidth){
                 width: 70%;
@@ -45,11 +44,18 @@
             margin: auto;
             animation: float 6s ease-in-out infinite;
             @include colorDuo3;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+               
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                width: 200px;
+            }
         }
         &_text {
             font-family: 'MainFont_light';
             font-size: 17px;
             margin: auto;
+            font-weight: normal;
         }
         @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
             
@@ -70,32 +76,39 @@
             flex-direction: row;
             column-gap: 22px;
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                column-gap: 17px;
-                
+                column-gap: 13px;  
             }
             
             @media only screen and (max-width:$mobileMaxWidth){
                 font-size: 17px;
                 flex-wrap: wrap;
+  
             } 
-            &_item, h2, p {
-                margin: auto;
-                color: $colorDarkGrey;
-                font-family: 'MainFont_light';
-                font-size: 22px;
-                font-weight: normal;
-                &:hover {
-                    cursor: pointer;
-                    font-style: italic;
-                    font-weight: bold;
+            &_item {
+                h2, p {
+                    width: 130px;
+                    margin: auto;
+                    color: $colorDarkGrey;
+                    font-family: 'MainFont_light';
+                    font-size: 22px;
+                    font-weight: normal;
+                    &:hover {
+                        cursor: pointer;
+
+                        // font-style: italic;
+                        font-weight: bold;
+                    }
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        font-size: 17px;
+                        width: 95px;
+                    }
+                    
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        font-size: 17px;
+                        width: 120px;
+                        text-align: center;
+                    } 
                 }
-                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                    font-size: 17px;
-                }
-                
-                @media only screen and (max-width:$mobileMaxWidth){
-                    font-size: 17px;
-                } 
             }
         }
 

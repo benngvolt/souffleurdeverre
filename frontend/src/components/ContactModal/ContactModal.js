@@ -22,7 +22,7 @@ function ContactModal({setdisplayContactModal}) {
             <div className='contactModal_container'>
                 <div className='home_title'>
                     <img className='home_title_logo' src={logoSouffleur} alt="logo souffleur de verre"/>
-                    <h1 className='home_title_text'> LE SOUFFLEUR DE VERRE</h1>
+                    <p className='home_title_text'> LE SOUFFLEUR DE VERRE</p>
                 </div>
                 <div className='contactModal_container_datas'>
                     <div className='contactModal_container_datas_block'>
@@ -54,16 +54,11 @@ function ContactModal({setdisplayContactModal}) {
                         63100 Clermont-Ferrand
                         </p>
                     </div>
-                    <div className='contactModal_container_datas_block_block'>
+                    <div className='contactModal_container_datas_block'>
                         <p className='contactModal_container_datas_block_title'>Crédit</p>
                         <p className='contactModal_container_datas_block_text--light'>Identité visuelle et logo Compagnie Souffleur de Verre © Ben Gibert <br/>
-                        www.bengibert.com
+                        <a href='https://www.bengibert.com'>www.bengibert.com</a>
                         </p> 
-                    </div>
-                    <div className='contactModal_container_datas_block'>
-                        <p className='contactModal_container_datas_block_text--light'>La Compagnie Le Souffleur de Verre est conventionnée <br/>
-                        avec le Ministère de la Culture/Drac Auvergne-Rhône-Alpes, <br/>
-                        la Région Auvergne-Rhône-Alpes, et la Ville de Clermont-Ferrand.</p>
                     </div>
                 </div>
             </div>

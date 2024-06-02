@@ -1,14 +1,11 @@
 import './Spectacles.scss'
 import { Link } from 'react-router-dom'
 import React, { useState, useEffect, useContext } from 'react'
-
 import { Context } from '../../utils/Context'
-// import { useNavigate } from 'react-router-dom'
 
  
 function Spectacles() {
 
-    // const [projects, setProjects] = useState([]);
     const { projects, projectTypes, projectStates, fullCurrentDate } = useContext(Context);
     const [sortedProjects, setSortedProjects] = useState(projects);
     const [chronologicalSortedProjects, setChronologicalSortedProjects] = useState([]);
@@ -19,9 +16,10 @@ function Spectacles() {
     
     const visibleProjects = projects.filter((project)=>(project.projectState !== "*non visible*"));
 
-    useEffect(()=> {
+    useEffect(() => {
+        window.scrollTo(0, 0);
         setSortedProjects(visibleProjects);
-    }, []);
+    },[]);
 
     useEffect(()=> {
         const updatedSortedProjects = visibleProjects.filter ((project) => (sortedProjectsByState.includes(project)) && (sortedProjectsByType.includes(project)))
@@ -114,12 +112,7 @@ function Spectacles() {
                         <Link to={`/spectacles/${project._id}`} className='spectacles_projectsList_projectItem'>
                             <img src={project.images[project.mainImageIndex]?.imageUrl} alt={project.title} className='spectacles_projectsList_projectItem_img' />
                             <div className='spectacles_projectsList_projectItem_mainDatas'>
-                                <p className='spectacles_projectsList_projectItem_mainDatas_title'>{project.title}</p>
-                                {/* {project.subtitle &&
-                                    <p className='spectacles_projectsList_projectItem_mainDatas_subtitle'>{project.subtitle}</p>
-                                } */}
-                                {/* <p className='spectacles_projectsList_projectItem_mainDatas_creationDate'>{project.creationDate}</p> */}
-                                {/* <p className='spectacles_projectsList_projectItem_mainDatas_state'>{project.projectState}</p> */}
+                                <h3 className='spectacles_projectsList_projectItem_mainDatas_title'>{project.title}</h3>
                             </div>
                         </Link>
                     </li>

@@ -1,0 +1,36 @@
+@import '../../utils/mixins';
+
+.oneSpectacle {
+
+        &_parallaxContainer {
+            width: 100%;
+            height: auto;
+            position: relative;
+            aspect-ratio: 2/1;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                aspect-ratio: 1.5/1;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                aspect-ratio: 1.25/1;
+            } 
+            
+            &_parallax {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%; /* Hauteur de l'image */
+                background-size: cover; /* Ajuste la taille de l'image pour couvrir toute la div */
+                background-attachment: fixed; /* Fixe l'image pendant le défilement */
+                z-index: 2;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    aspect-ratio: 1.5/1;
+                    background-attachment: scroll;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    aspect-ratio: 1.25/1;
+                    background-attachment: scroll;
+                } 
+            }
+        }
+    }

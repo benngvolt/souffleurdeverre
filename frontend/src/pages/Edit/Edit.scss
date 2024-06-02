@@ -2,6 +2,16 @@
 
 .editSection {
     animation: pageAppearing 2s ease forwards;
+
+    &_unauthText {
+        color: $colorDarkGrey;
+        width: 100%;
+        @include SidePaddings;
+        font-size: 19px;
+        font-family: 'MainFont_light';
+        margin: 120px auto;
+        text-align: center;
+    }
     &_mainContainer {
         display: flex;
         flex-direction: column;

@@ -9,6 +9,7 @@ import IsALink from '../../components/IsALink/IsALink';
  
 function Actualite() {
     
+    
     const { projects, fullCurrentDate } = useContext(Context);
 
     const currentDate = new Date(fullCurrentDate)
@@ -24,6 +25,9 @@ function Actualite() {
             residency.endDates && residency.endDates !== null && 
             new Date(residency.endDates) > currentDate)
     );
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    },[]);
 
     return  (      
         <section className='actualite'>
@@ -42,7 +46,7 @@ function Actualite() {
                         show.dates.some(date => new Date(date.day) > currentDate)) &&
 
                     <div>
-                        <p className='actualite_show_precision'> représentations </p>
+                        <h4 className='actualite_show_precision'> représentations </h4>
                         <ul className='actualite_show_datesContainer'>
                             {project.showsList.filter(show => show.dates.some(date => new Date(date.day) > currentDate)).map(show => (
                             <li className='actualite_show_datesContainer_item'>
@@ -65,7 +69,7 @@ function Actualite() {
                         residency.endDates && residency.endDates !== null && 
                         new Date(residency.endDates) > currentDate) &&
                     <div>
-                        <p className='actualite_residency_precision'> résidences </p>
+                        <h4 className='actualite_residency_precision'> résidences </h4>
                         <ul className='actualite_residency_datesContainer'>
                             {project.residenciesList.filter(residency => new Date(residency.endDates) > currentDate).map(residency => (
                             <li className='actualite_residency_datesContainer_item'>

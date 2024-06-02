@@ -1,0 +1,102 @@
+@import '../../utils/mixins';
+
+.authModal {  
+        position: fixed;
+        z-index: 1;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:rgba(0, 0, 0, 0.8);
+    
+
+    &--displayOff {
+        display: none;
+    };
+    &--displayOn {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &_form {
+        display: flex;
+        flex-direction: column;
+        background-color: $colorLightGrey;
+        width: 30%;
+        height: auto;
+        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            width: 70%;
+        }
+        @media only screen and (max-width: $mobileMaxWidth){
+            width: 90%;
+        }              
+
+        &_usernameField, &_passwordField {
+            display: flex;
+            flex-direction: column;
+            width: 70%;
+            margin: 0 auto 10px auto;
+
+            label {
+                font-family: 'MainFont_light';
+                border: none;
+                background: none;
+                color: $colorDarkGrey;
+                width: 50%;
+                margin: 5% auto 0 0;
+                padding: 2% 0;
+                font-size: 18px;
+            }
+
+            input {
+                width: 50%;
+                max-width: 100%;
+                min-width: 100%;
+                height: 25px;
+                border: none;
+                padding: 10px 0 10px 10px;
+                background-color: $colorTwo;
+                font-family: 'MainFont_light';
+                box-sizing: border-box;
+                font-size: 14px;
+            }
+        }
+
+        &_button {
+            font-family: 'MainFont_light';
+            border: none;
+            background: none;
+            color: $colorDarkGrey;
+            width: auto;
+            margin: 22px auto;
+            height: 35px;
+            padding: auto;
+            font-size: 18px;
+            &:hover {
+                cursor: pointer;
+                color: $colorLightGrey;
+                background-color: $colorDarkGrey;
+            }
+        }    
+    }
+
+
+    &_button {
+        font-family: 'MainFont_light';
+        border: none;
+        color: $colorDarkGrey;
+        background-color: $colorLightGrey;
+        width: auto;
+        height: 35px;
+        margin: 22px auto 0 auto;
+        padding: auto;
+        font-size: 18px;
+        &:hover {
+            cursor: pointer;
+            color: $colorLightGrey;
+            background-color: $colorDarkGrey;
+        }
+    }    
+}

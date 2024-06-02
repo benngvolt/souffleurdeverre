@@ -12,7 +12,7 @@
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Compagnie de théâtre contemporain et spectacle vivant basée à Clermont-Ferrand."
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
@@ -29,7 +29,31 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Compagnie Le Souffleur de Verre</title>
+    <script type='application/ld+json'>
+			{
+			  	"@context": "http://www.schema.org",
+			 	  "@type": "ProfessionalService",
+			  	"name": "Compagnie Le Souffleur de Verre",
+			  	"url": "https://souffleurdeverre.fr",
+			  	"description": "Compagnie de théâtre contemporain et spectacle vivant basée à Clermont-Ferrand.",
+			  	"address": {
+            "@type": "PostalAddress",
+            "streetAddress": "36 rue de Blanzat",
+            "addressLocality": "Clermont-Ferrand",
+            "postalCode": "63000",
+            "addressCountry": "France"
+          },
+			  	"telephone": "+33(0)7 86 55 81 26"
+			}
+		</script>
+    <!-- Open Graph meta pour Facebook -->
+		<meta property="og:title" content="Compagnie Le Souffleur de Verre">
+		<meta property="og:url" content="https://souffleurdeverre.fr">
+		<meta property="og:image" content="./assets/facebook_cover.jpg">
+		<meta property="og:description" content="Compagnie de théâtre contemporain et spectacle vivant basée à Clermont-Ferrand.">
+		<meta property="og:site_name" content="Site web de la Compagnie Le Souffleur de Verre">
+		<meta property="og:type" content="article">
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

@@ -107,6 +107,10 @@
     filter: drop-shadow(2px 2px 1px $colorTwo) drop-shadow(-2px -2px 1px $colorThree) ;
 }
 
+@mixin DropColorFilter3 {
+    filter: drop-shadow(3px 3px 0px $colorLightGrey) drop-shadow(-3px -3px 0px $colorLightGrey) ;
+}
+
 @mixin ButtonType {
     padding: 10px;
     box-sizing: border-box;
@@ -301,7 +305,7 @@ $padMaxWidth: 991px;
         
     }
     100% {
-		height: 120px;    
+		height: 200px;    
 	}
     
 }
@@ -312,7 +316,7 @@ $padMaxWidth: 991px;
         
     }
     100% {
-		height: 200px;    
+		height: 150px;    
 	}
     
 }
@@ -328,7 +332,7 @@ $padMaxWidth: 991px;
 
 @keyframes closeHeaderMobile {
     0% {
-        height: 120px;    
+        height: 200px;    
     }
     100% {
 		height: 50px;    
@@ -337,7 +341,7 @@ $padMaxWidth: 991px;
 
 @keyframes closeHeaderMobileMax {
     0% {
-        height: 200px;    
+        height: 150px;    
     }
     100% {
 		height: 50px;    
@@ -377,14 +381,26 @@ $padMaxWidth: 991px;
 }
 
 @keyframes hide {
-	29% {
+	0% {
 		opacity: 1;
 	}
-	30% {
+	50% {
 		opacity: 0;
 	}
 	100% {
 		opacity: 0;
+	}
+}
+
+@keyframes appear {
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
 	}
 }
 
@@ -440,12 +456,12 @@ $padMaxWidth: 991px;
 @keyframes focusShow {
     0% {
         // transform: scale(1);
-        filter: saturate(0);
+        zoom: 100%;
         overflow: hidden;
     }
     100% {
         // transform: scale(0.97);
-        filter: saturate(1);
+        zoom: 200%;
         overflow: hidden;
     }
 }

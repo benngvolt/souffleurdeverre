@@ -18,6 +18,21 @@ export const Provider = ({ children }) => {
     const productionFunctions = ['Production','Co-production','Soutien','Remerciements', 'Aide à la création', 'Partenariat', 'Aide à la résidence d’écriture'];
     const residencyTypes = ['Laboratoires','Résidences d\'écriture','Résidences de création', 'Répétitions', "Lectures et rencontres"];
 
+    /*---------------------------------
+    ----- MISE À JOUR ÉTAT D'AUTH -----
+    ---------------------------------*/
+
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    function setLoggedIn () {
+        setIsAuthenticated(true) ;
+    };
+
+    function setLoggedOut () {
+        window.sessionStorage.removeItem('1');
+        setIsAuthenticated(false) ;
+    };    
+
     /*---------------------------------------------
     ----- Chargement des projets et stockage ------
     ---------------------------------------------*/
@@ -77,7 +92,26 @@ export const Provider = ({ children }) => {
 
     
     return (
-        <Context.Provider value={{ projects, setProjects, biographies, setBiographies, handleLoadProjects, handleLoadBiographies, loadProjects, loaderDisplay, displayLoader, hideLoader, bioFields, projectTypes, projectStates, fullCurrentDate, productionFunctions, residencyTypes}}>
+        <Context.Provider value={{ 
+            projects, 
+            setProjects, 
+            biographies, 
+            setBiographies, 
+            handleLoadProjects, 
+            handleLoadBiographies, 
+            loadProjects, 
+            loaderDisplay, 
+            displayLoader, 
+            hideLoader, 
+            bioFields, 
+            projectTypes, 
+            projectStates, 
+            fullCurrentDate, 
+            productionFunctions, 
+            residencyTypes, 
+            setLoggedIn, 
+            setLoggedOut, 
+            isAuthenticated}}>
             {children}
         </Context.Provider>
     )

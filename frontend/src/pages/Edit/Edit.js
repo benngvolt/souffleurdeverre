@@ -36,8 +36,12 @@ function Edit() {
     const [imageFiles, setImageFiles] = useState([]);
     const [pdfFiles, setPdfFiles]= useState([]);
 
-    const { projects, biographies, handleLoadBiographies, handleLoadProjects } = useContext(Context);
+    const { projects, biographies, handleLoadBiographies, handleLoadProjects, isAuthenticated } = useContext(Context);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    },[]);
+    
     /*-------------------------------------
     ---------- CONFIRMBOX -----------------
     -------------------------------------*/
@@ -66,7 +70,7 @@ function Edit() {
         fetch(`${API_URL}/api/biographies/${bioToDelete}`, {
             method: 'DELETE',
             headers: {
-                // Authorization: `Bearer ${sessionStorage.getItem('1')}`,
+                Authorization: `Bearer ${sessionStorage.getItem('1')}`,
             },
         })
         .then((response) => {
@@ -85,7 +89,7 @@ function Edit() {
         fetch(`${API_URL}/api/projects/${project._id}`, {
             method: 'DELETE',
             headers: {
-                // Authorization: `Bearer ${sessionStorage.getItem('1')}`,
+                Authorization: `Bearer ${sessionStorage.getItem('1')}`,
               },
         })
         .then ((response) => {
@@ -149,83 +153,91 @@ function Edit() {
         setMainImageIndex(project.mainImageIndex);
     }
     
-    return  (      
-        <div className='editSection'>
-            <div className='editSection_mainContainer'>
-                <div className='editSection_mainContainer_projects'>
-                    <p className='editSection_mainContainer_projects_title'>PROJETS</p>
-                    <ul className='editSection_mainContainer_projects_projectsList'>
-                        {projects.map((project)=>(
-                            <li className='editSection_mainContainer_projects_projectsList_item'>
-                                <p className='editSection_mainContainer_projects_projectsList_item_name'>{project.title}</p>
-                                <div className='editSection_mainContainer_projects_projectsList_item_buttons'>
-                                    <button onClick={() => editProject(project)}>MODIFIER</button>
-                                    <button onClick={() => handleProjectDeleteMode (project)}>SUPPRIMER</button>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                    <button className='editSection_mainContainer_projects_addButton' onClick={() => addProject()}>AJOUTER UN PROJET</button>
+    return  (
+        <div>
+            {isAuthenticated ? (
+            <div className='editSection'>
+                <div className='editSection_mainContainer'>
+                    <div className='editSection_mainContainer_projects'>
+                        <p className='editSection_mainContainer_projects_title'>PROJETS</p>
+                        <ul className='editSection_mainContainer_projects_projectsList'>
+                            {projects.map((project)=>(
+                                <li className='editSection_mainContainer_projects_projectsList_item'>
+                                    <p className='editSection_mainContainer_projects_projectsList_item_name'>{project.title}</p>
+                                    <div className='editSection_mainContainer_projects_projectsList_item_buttons'>
+                                        <button onClick={() => editProject(project)}>MODIFIER</button>
+                                        <button onClick={() => handleProjectDeleteMode (project)}>SUPPRIMER</button>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                        <button className='editSection_mainContainer_projects_addButton' onClick={() => addProject()}>AJOUTER UN PROJET</button>
+                    </div>
+                    <div className='editSection_mainContainer_bios'>
+                        <p className='editSection_mainContainer_bios_title'>BIOGRAPHIES</p>
+                        <ul className='editSection_mainContainer_bios_biosList'>
+                            {biographies.map((biography)=>(
+                                <li className='editSection_mainContainer_bios_biosList_item'>
+                                    <p className='editSection_mainContainer_bios_biosList_item_name'> {biography.name} {biography.surname}</p>
+                                    <div className='editSection_mainContainer_bios_biosList_item_buttons'>
+                                        <button onClick={() => editBio(biography)}>MODIFIER</button>
+                                        <button onClick={() => handleBioDeleteMode(biography)}>SUPPRIMER</button>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                        <button onClick={() => addBio()} className='editSection_mainContainer_bios_addButton'>AJOUTER UN.E COLLABORA.TEUR.TRICE</button>
+                    </div>            
                 </div>
-                <div className='editSection_mainContainer_bios'>
-                    <p className='editSection_mainContainer_bios_title'>BIOGRAPHIES</p>
-                    <ul className='editSection_mainContainer_bios_biosList'>
-                        {biographies.map((biography)=>(
-                            <li className='editSection_mainContainer_bios_biosList_item'>
-                                <p className='editSection_mainContainer_bios_biosList_item_name'> {biography.name} {biography.surname}</p>
-                                <div className='editSection_mainContainer_bios_biosList_item_buttons'>
-                                    <button onClick={() => editBio(biography)}>MODIFIER</button>
-                                    <button onClick={() => handleBioDeleteMode(biography)}>SUPPRIMER</button>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                    <button onClick={() => addBio()} className='editSection_mainContainer_bios_addButton'>AJOUTER UN.E COLLABORA.TEUR.TRICE</button>
-                </div>            
-            </div>
-            <div className={handleDisplayProjectForm===false ? "editSection_forms--displayOff" : "editSection_forms--displayOn"}>
-                <ProjectForm 
-                    projectEdit={projectEdit} 
-                    projectFormMode={projectFormMode}
-                    setHandleDisplayProjectForm = {setHandleDisplayProjectForm}
-                    handleDisplayProjectForm = {handleDisplayProjectForm}
-                    artistsList={artistsList} 
-                    setArtistsList={setArtistsList} 
-                    productionList={productionList} 
-                    setProductionList={setProductionList} 
-                    pressList={pressList} 
-                    setPressList={setPressList} 
-                    paragraphList={paragraphList}
-                    setParagraphList={setParagraphList}
-                    videoList={videoList} 
-                    setVideoList={setVideoList} 
-                    residenciesList={residenciesList} 
-                    setResidenciesList={setResidenciesList}
-                    showsList={showsList} 
-                    setShowsList={setShowsList}
-                    imageFiles = {imageFiles}
-                    setImageFiles = {setImageFiles}
-                    mainImageIndex = {mainImageIndex}
-                    setMainImageIndex = {setMainImageIndex}
-                    setPdfFiles = {setPdfFiles}
-                    pdfFiles = {pdfFiles}
-                    editProject = {editProject}
-                    addProject = {addProject}
+                <div className={handleDisplayProjectForm===false ? "editSection_forms--displayOff" : "editSection_forms--displayOn"}>
+                    <ProjectForm 
+                        projectEdit={projectEdit} 
+                        projectFormMode={projectFormMode}
+                        setHandleDisplayProjectForm = {setHandleDisplayProjectForm}
+                        handleDisplayProjectForm = {handleDisplayProjectForm}
+                        artistsList={artistsList} 
+                        setArtistsList={setArtistsList} 
+                        productionList={productionList} 
+                        setProductionList={setProductionList} 
+                        pressList={pressList} 
+                        setPressList={setPressList} 
+                        paragraphList={paragraphList}
+                        setParagraphList={setParagraphList}
+                        videoList={videoList} 
+                        setVideoList={setVideoList} 
+                        residenciesList={residenciesList} 
+                        setResidenciesList={setResidenciesList}
+                        showsList={showsList} 
+                        setShowsList={setShowsList}
+                        imageFiles = {imageFiles}
+                        setImageFiles = {setImageFiles}
+                        mainImageIndex = {mainImageIndex}
+                        setMainImageIndex = {setMainImageIndex}
+                        setPdfFiles = {setPdfFiles}
+                        pdfFiles = {pdfFiles}
+                        editProject = {editProject}
+                        addProject = {addProject}
+                    />
+                </div>
+                <div className={handleDisplayBioForm===false ? "editSection_forms--displayOff" : "editSection_forms--displayOn"}>
+                    <BioForm 
+                        biographyEdit={biographyEdit} 
+                        bioFormMode={bioFormMode}
+                        setHandleDisplayBioForm = {setHandleDisplayBioForm}
+                        handleDisplayBioForm={handleDisplayBioForm}
+                    />
+                </div>
+                <ConfirmBox 
+                    affirmativeChoice={deleteMode==='bio' ? deleteBio : deleteProject} 
+                    confirmBoxState={confirmBoxState}
+                    negativeChoice={closeConfirmBox}
                 />
+                
             </div>
-            <div className={handleDisplayBioForm===false ? "editSection_forms--displayOff" : "editSection_forms--displayOn"}>
-                <BioForm 
-                    biographyEdit={biographyEdit} 
-                    bioFormMode={bioFormMode}
-                    setHandleDisplayBioForm = {setHandleDisplayBioForm}
-                    handleDisplayBioForm={handleDisplayBioForm}
-                />
-            </div>
-            <ConfirmBox 
-                affirmativeChoice={deleteMode==='bio' ? deleteBio : deleteProject} 
-                confirmBoxState={confirmBoxState}
-                negativeChoice={closeConfirmBox}
-            />
+            ):(
+            <p className='editSection_unauthText'>Accès non-autorisé</p>
+            )
+            }
         </div>
     )
 }

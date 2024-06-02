@@ -26,14 +26,10 @@ function Home() {
 
     const [displayContactModal, setdisplayContactModal]= useState(false);
     const imageLogoRef = useRef(null);
-
-    // useEffect(() => {
-    //     displayLoader();
-    //     const timeout = setTimeout(() => {
-    //         hideLoader();
-    //     }, 3000);
-    //     return () => clearTimeout(timeout);
-    // }, []);
+    
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    },[]);
 
     return  (      
         <section className='home'>
@@ -41,15 +37,15 @@ function Home() {
                 <div ref={imageLogoRef} class="home_title_logoMask">
                     <img src={cedricVeschambre} alt="logo souffleur de verre"/>
                 </div>
-                <h1 className='home_title_text'> LE SOUFFLEUR DE VERRE</h1>
+                <h1 className='home_title_text'>COMPAGNIE LE SOUFFLEUR DE VERRE</h1>
             </div>
             <nav className='home_nav'>
                 <div className='home_nav_menu'>
                     <Link to="/compagnie" className='home_nav_menu_item'><h2>COMPAGNIE</h2></Link>
                     <Link to="/actualite" className='home_nav_menu_item'><h2>ACTUALITÉ</h2></Link>
                     <Link to="/spectacles" className='home_nav_menu_item'><h2>SPECTACLES</h2></Link>
-                    <button aria-label='Afficher la fenêtre Contact' type='button' className='home_nav_menu_item' onClick={()=>setdisplayContactModal(true)}>CONTACT</button>
-                    <Link to="/edit" className='home_nav_menu_item'><p>EDIT</p></Link>
+                    <button aria-label='Afficher la fenêtre Contact' type='button' className='home_nav_menu_item' onClick={()=>setdisplayContactModal(true)}><p>CONTACT</p></button>
+                    {/* <Link to="/edit" className='home_nav_menu_item'><p>EDIT</p></Link> */}
                 </div>
                 <div className='home_nav_socials'>
                     <a href="https://www.facebook.com/souffleurdeverre" target="_blank" rel="noreferrer" className='home_nav_socials_item'>

@@ -8,6 +8,12 @@
     position: relative;
     animation: appearOpacity 2s ease forwards;
     position: relative;
+    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+        
+    }
+    @media only screen and (max-width:$mobileMaxWidth){
+        width: 90%;
+    } 
     
     &_container {
         
@@ -17,15 +23,21 @@
         padding: 35px 54px;
         height: auto;
         margin: 0 auto;
+        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            padding: 22px 22px;
+        }
+        @media only screen and (max-width:$mobileMaxWidth){
+            padding: 22px 22px;
+        } 
 
-            &_datas {
-                
-                &_block  {
-                
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    margin: auto;
+        &_datas {
+            
+            &_block  {
+            
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin: auto;
 
                 &_title {
                     display: flex;
@@ -36,6 +48,13 @@
                     font-size: 19px;
                     margin: 22px auto;
                     text-align: center;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        font-size: 16px;
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        font-size: 14px;
+                    } 
+                    
                 }
 
                 &_text {
@@ -47,6 +66,12 @@
                         font-family: 'MainFont_light';
                         font-size: 16px;
                         text-align: center;
+                        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                            font-size: 14px;
+                        }
+                        @media only screen and (max-width:$mobileMaxWidth){
+                            font-size: 13px;
+                        } 
                     }
 
                     &--bold {
@@ -55,6 +80,10 @@
                         margin: 16px auto;
                     }
 
+                }
+
+                a {
+                    color: $colorDarkGrey
                 }
             }
         }

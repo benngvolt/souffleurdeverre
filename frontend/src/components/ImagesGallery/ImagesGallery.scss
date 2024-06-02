@@ -1,0 +1,170 @@
+@import '../../utils/mixins';
+
+.oneSpectacle {
+
+    &_imagesGrid {
+        margin: 30px 0 0 0;
+        width: 100%;
+        padding: 0;
+        grid-gap: 2px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+
+        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            
+        }
+        @media only screen and (max-width:$mobileMaxWidth){
+            display: flex;
+            flex-direction: column;
+            row-gap: 2px;
+            margin: 0;
+        } 
+        
+        &_item {
+            list-style-type: none;
+            overflow: hidden;
+
+            img {
+                width: 100%; 
+                object-fit: cover; 
+                height: 100%;
+            }
+
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                aspect-ratio: 1.25/1;
+            } 
+        }
+
+        &_5 {
+            grid-template-rows: 60% 40%;
+            aspect-ratio: 1.25/1;
+        }
+
+        &_4 {
+            grid-template-rows: 50% 50%;
+            aspect-ratio: 1.25/1;
+        }
+
+        &_3 {
+            grid-template-rows: 100%;
+            aspect-ratio: 2.5/1;
+        }
+
+        &_2 {
+            grid-template-rows: 100%;
+            aspect-ratio: 2.5/1;
+        }
+
+        &_1 {
+            grid-template-rows: 100%;
+            aspect-ratio: 2/1;
+        }
+   
+        //pour 5 images
+        &_5 {
+            &_item_0 {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+            &_item_1 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+            &_item_2 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_3 {
+                grid-column-start: 2;
+                grid-column-end: 3;
+            }
+            &_item_4 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+        }
+
+        //pour 4 images
+        &_4 {
+            
+            &_item_0 {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+            &_item_1 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+            &_item_2 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_3 {
+                grid-column-start: 2;
+                grid-column-end: 4;
+            }
+        }
+
+        //pour 3 images
+        &_3 {
+            
+            &_item_0 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_1 {      
+                grid-column-start: 2;
+                grid-column-end: 3;
+            }
+            &_item_2 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+        }
+
+        //pour 2 images
+        &_2 {
+            &_item_0 {
+                
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+            &_item_1 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+        }
+
+        //pour 1 image
+        &_1 {
+            &_item_0 {
+                grid-column-start: 1;
+                grid-column-end: 4;
+            }
+        }
+
+        //pour 0 image
+        &_0 {
+            display: none;
+        }
+
+        // &_parallaxContainer {
+        //     position: relative;
+        //     overflow: hidden;
+            
+        //     &_parallax {
+        //         position: absolute;
+        //         top: 0;
+        //         left: 0;
+        //         width: 100%;
+        //         height: 100%; /* Hauteur de l'image */
+        //         background-size: cover; /* Ajuste la taille de l'image pour couvrir toute la div */
+        //         background-attachment: fixed; /* Fixe l'image pendant le défilement */
+        //         z-index: 2;
+        //     }
+        // }
+    }
+}

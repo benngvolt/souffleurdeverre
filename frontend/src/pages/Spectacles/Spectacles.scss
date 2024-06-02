@@ -123,19 +123,18 @@
             &:hover {
                 cursor: pointer;
                 background-color: $colorTwo;
+                
             
                 .spectacles_projectsList_projectItem_img {
                    animation: focusShow 0.5s ease forwards;
-                    
                 }
-
             }
 
             &_img {
                 width: 100%;
                 aspect-ratio: 1/1.25;
                 object-fit: cover;
-                filter: saturate(0);
+                // filter: saturate(0);
             } 
 
             &_mainDatas {

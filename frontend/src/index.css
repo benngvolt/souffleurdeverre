@@ -10,6 +10,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+strong {
+	font-weight: bold;
+}
+
+em {
+	font-style: italic;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

@@ -9,6 +9,8 @@ import FullPeriodDate from '../../components/FullPeriodDate/FullPeriodDate'
 import FullPonctualDates from '../../components/FullPonctualDates/FullPonctualDates'
 import FullUniqueDate from '../../components/FullUniqueDate/FullUniqueDate'
 import Collapse from '../../components/Collapse/Collapse'
+import ImagesGallery from '../../components/ImagesGallery/ImagesGallery'
+import ParallaxImage from '../../components/ParallaxImage/ParallaxImage'
 
  
 function OneSpectacle() {
@@ -17,7 +19,6 @@ function OneSpectacle() {
     const { id } = useParams();
     const { productionFunctions, residencyTypes } = useContext(Context);
     const cleanedDescription = DOMPurify.sanitize(project.description);
-    const parallaxRef = useRef(null);
     
     useEffect(() => {
         fetch(`${API_URL}/api/projects/${id}`)
@@ -28,12 +29,16 @@ function OneSpectacle() {
             .catch((error) => console.log(error.message));
     }, []);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    },[]);
+
     return  (      
         <section className='oneSpectacle'>
             {project.projectState !== "*non visible*" &&
             <div>
                 <div className='oneSpectacle_mainDatas'>
-                    <p className='oneSpectacle_mainDatas_title'>{project.title}</p>
+                    <h3 className='oneSpectacle_mainDatas_title'>{project.title}</h3>
                     {project.subtitle &&
                     <p className='oneSpectacle_mainDatas_subtitle'>{project.subtitle}</p>
                     }
@@ -47,16 +52,7 @@ function OneSpectacle() {
                     <p className='oneSpectacle_mainDatas_description' dangerouslySetInnerHTML={{__html:cleanedDescription}}></p>
                     }
                     {project.images && project.images?.length >= 1 &&
-                    <div
-                        className={`oneSpectacle_imagesGrid_parallaxContainer oneSpectacle_imagesGrid_${project.images.length}_item_0`}
-                    >
-                        <div 
-                            className='oneSpectacle_imagesGrid_parallaxContainer_parallax'
-                            ref={parallaxRef}
-                            style={{ backgroundImage: `url(${project.images[0].imageUrl})` }}
-                            >
-                        </div>
-                    </div>
+                        <ParallaxImage image={project.images[0]}/>
                     }
                     {project.artistsList && project.artistsList.length !== 0 &&
                     <div className='oneSpectacle_mainDatas_teamList'>
@@ -96,15 +92,7 @@ function OneSpectacle() {
                     }       
                 </div>
                 { project.images && project.images?.length > 1 && 
-                <ul className={`oneSpectacle_imagesGrid oneSpectacle_imagesGrid_${project.images?.length}`}>
-                    {project.images
-                        ?.filter((image, index) => index > 0)
-                        .map((image, index) => (
-                        <li className={`oneSpectacle_imagesGrid_item oneSpectacle_imagesGrid_${project.images?.length}_item_${index + 1}`}>
-                            <img key={image._id} alt={project.title + image._id} src={image.imageUrl}/>
-                        </li>
-                    ))}
-                </ul>
+                    <ImagesGallery project={project}/>
                 }
                 {project.showsList && project.showsList.length !== 0 &&
                 <div className='oneSpectacle_mainDatas_residenciesAndShows'>
