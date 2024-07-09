@@ -1,4 +1,9 @@
-build:
+name: Déploiement du site Le Souffleur de Verre
+on:
+  push:
+    branches: [ "test" ]
+jobs:
+  build:
     runs-on: ubuntu-latest
 
     steps:
