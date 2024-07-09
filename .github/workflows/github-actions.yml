@@ -1,19 +1,24 @@
-name: Déploiement du site Le Souffleur de Verre
-on:
-  push:
-    branches: [ "test" ]
-jobs:
-  build:
+build:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout du dépôt
       uses: actions/checkout@v4
 
+    - name: Vérification du contenu du dépôt
+      run: ls -l
+      shell: bash
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22'  # Remplacez par la version de Node.js que vous souhaitez utiliser
+        cache: 'npm'
+
     - name: Installation et démarrage de npm dans le dossier frontend
       run: |
+        ls -l frontend  # Vérifiez si le dossier frontend est présent
         cd frontend
         npm install
         npm start
-      working-directory: ./frontend
       shell: bash
