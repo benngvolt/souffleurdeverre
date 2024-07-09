@@ -15,12 +15,12 @@ jobs:
       shell: bash
 
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '22'  # Remplacez par la version de Node.js que vous souhaitez utiliser
         cache: 'npm'
 
-      - name: Installation des dépendances et démarrage de l'application
+    - name: Installation des dépendances et démarrage de l'application
       working-directory: ./frontend
       run: |
         npm install
