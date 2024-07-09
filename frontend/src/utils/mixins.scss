@@ -219,8 +219,8 @@ $colorLightGrey: #E9E9E9;
 
 $colorOne: #ff0030;
 $colorTwo: #00f0ff;
-$colorThree: rgba(255, 0, 255, 1);
-$colorFour: rgba(0, 255, 0, 1);
+$colorThree: #ff00ff;
+$colorFour: #00ff00;
 $colorFive: #fea201;
 $colorSix: #019cff;
 
@@ -383,24 +383,31 @@ $padMaxWidth: 991px;
 @keyframes hide {
 	0% {
 		opacity: 1;
+        display: flex;
 	}
 	50% {
 		opacity: 0;
+        display: flex;
 	}
 	100% {
 		opacity: 0;
+        display: none;
 	}
 }
 
 @keyframes appear {
 	0% {
 		opacity: 0;
+        display: none;
+        
 	}
 	50% {
 		opacity: 0;
+        display: flex;
 	}
 	100% {
 		opacity: 1;
+        display: flex;
 	}
 }
 

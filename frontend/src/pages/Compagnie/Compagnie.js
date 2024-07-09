@@ -80,7 +80,7 @@ function Compagnie() {
                 Julien Rocha & Cédric Veschambre
                 </p>
             </div>
-            <img src={julienRocha} alt="logo souffleur de verre" className='compagnieSection_image'/>
+            <img src={julienRocha} alt="photo de Julien Rocha par Julien Bruhat" className='compagnieSection_image'/>
             <ul className='compagnieSection_biosList' >
                 <li className='compagnieSection_biosList_bioItem'>
                     <BioCard biography={bioRocha} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
@@ -89,11 +89,11 @@ function Compagnie() {
                     <BioCard biography={bioVeschambre} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
                 </li>
             </ul>
-            <img src={cedricVeschambre} alt="logo souffleur de verre" className='compagnieSection_image'/>
+            <img src={cedricVeschambre} alt="photo de Cédric Veschambre par Julien Bruhat" className='compagnieSection_image'/>
             <div className={displayBioAside=== true ? 'compagnieSection_bioSheetContainer compagnieSection_bioSheetContainer--displayOn' : 'compagnieSection_bioSheetContainer compagnieSection_bioSheetContainer--displayOff'}>
                 <BioSheet biography={bioAside} closeBioAside={closeBioAside} className='compagnieSection_bioSheetContainer'/>
             </div>
-            <Collapse title="COLLABORATIONS" style='light'>
+            <Collapse title="COLLABORATIONS" style='white'>
                 <div className='compagnieSection_teamCollapse'>
                     <Equipe className='compagnieSection_teamCollapse'/>
                 </div>

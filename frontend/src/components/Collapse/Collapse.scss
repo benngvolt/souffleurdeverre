@@ -3,9 +3,7 @@
 
 .collapse {
 
-    &--light {
-
-    }
+    
     &_collapseButton {
         width: 100%;
         height: 80px;
@@ -22,21 +20,24 @@
         &--light {
             border: none;
             background-color: $colorDarkGrey;
-            color: $colorLightGrey;
-            
+                h4 {
+                color: $colorLightGrey;
+            }
+            svg {
+                color: $colorLightGrey;
+            }
         }
 
         &--white {
             border: none;
             background-color: $colorLightGrey;
-            color: $colorDarkGrey;
-            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                
+                h4 {
+                color: $colorDarkGrey;
             }
-            @media only screen and (max-width:$mobileMaxWidth){
-                background-color: $colorDarkGrey;
-                color: $colorLightGrey;
-            } 
+
+            svg {
+                color: $colorDarkGrey;
+            }
         }
 
         h4 {
@@ -45,7 +46,6 @@
             font-family: 'SpecialFont_regular';
             font-size: 30px;
             font-weight: 200;
-            color: $colorLightGrey;
         }
 
         &_icon {
@@ -53,12 +53,6 @@
             display: flex;
             margin: auto 0 auto 16px;
             color: $colorLightGrey;
-            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                color: $colorLightGrey;
-            }
-            @media only screen and (max-width:$mobileMaxWidth){
-                color: $colorLightGrey;
-            } 
             
             &--closed {
                 animation: closeCollapseArrow 0.5s ease forwards;

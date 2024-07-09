@@ -92,13 +92,16 @@ function Header() {
 
     return  (      
         <header className={location.pathname!=='/'? (displayMenu===true? 'header header--opened' : 'header header--closed') : 'header--displayOff'} 
-        onMouseLeave={()=>{
-            handleMouseLeave()
-        }}
-        onMouseOver={()=>{
-            handleMouseOver()
-        }} >
-            
+                onMouseLeave={()=>{
+                    handleMouseLeave()
+                }}
+                onMouseOver={()=>{
+                    handleMouseOver()
+                }} 
+                aria-label='Ouvrir la barre de menu'
+                aria-controls='header_nav' 
+                aria-expanded={displayMenu===false? false : true}
+                >
             <svg id="hamburger" className={displayMenu===true? 'header_icon header_icon--opened':'header_icon header_icon--closed'} viewbox="0 0 60 30">
                 <g stroke="#232323" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path id="top-line" d="M10,10 L50,10 Z"></path>
@@ -109,44 +112,44 @@ function Header() {
             <nav className={displayMenu===false?'header_nav header_nav--displayOff':'header_nav header_nav--displayOn'}>
                 <ul className='header_nav_socials'>
                     <li className='header_nav_socials_item'>
-                        <a href="https://www.facebook.com/souffleurdeverre" target="_blank" rel="noreferrer">
+                        <a aria-label='Accéder à la page Facebook de la compagnie' href="https://www.facebook.com/souffleurdeverre" target="_blank" rel="noreferrer">
                             <img src={facebookLogo} alt="lien facebook"/>
                         </a>
                     </li>
                     <li className='header_nav_socials_item'>
-                        <a href="https://twitter.com/ciesouffleur" target="_blank" rel="noreferrer">
+                        <a aria-label='Accéder à la page X (Twitter) de la compagnie' href="https://twitter.com/ciesouffleur" target="_blank" rel="noreferrer">
                             <img src={xLogo} alt="lien x"/>
                         </a>
                     </li>
                     <li className='header_nav_socials_item'>
-                        <a href="https://www.youtube.com/@compagnielesouffleurdeverr6312" target="_blank" rel="noreferrer">
+                        <a aria-label='Accéder à la page Youtube de la compagnie' href="https://www.youtube.com/@compagnielesouffleurdeverr6312" target="_blank" rel="noreferrer">
                             <img src={youtubeLogo} alt="lien youtube"/>
                         </a>
                     </li>
                     <li className='header_nav_socials_item'>
-                        <a href="https://www.instagram.com/ciesouffleur" target="_blank" rel="noreferrer">
+                        <a aria-label='Accéder à la page Instagram de la compagnie' href="https://www.instagram.com/ciesouffleur" target="_blank" rel="noreferrer">
                             <img src={instagramLogo} alt="lien instagram"/>
                         </a>
                     </li>
                 </ul>
                 <ul className='header_nav_menu'>
                     <li className='header_nav_menu_item header_nav_menu_item--light'>
-                        <Link to="/"><p>ACCUEIL</p></Link>
+                        <Link aria-label='Accéder à la page Accueil' to="/"><p>ACCUEIL</p></Link>
                     </li>
                     <li className={location.pathname!=='/compagnie'?'header_nav_menu_item header_nav_menu_item--light':'header_nav_menu_item header_nav_menu_item--bold'}>
-                        <Link to="/compagnie"><h2>COMPAGNIE</h2></Link>
+                        <Link aria-label='Accéder à la page Compagnie' to="/compagnie"><h2>COMPAGNIE</h2></Link>
                     </li>
                     <li className={location.pathname!=='/actualite'?'header_nav_menu_item header_nav_menu_item--light':'header_nav_menu_item header_nav_menu_item--bold'}>
-                        <Link to="/actualite"><h2>ACTUALITÉ</h2></Link>
+                        <Link aria-label='Accéder à la page Actualité' to="/actualite"><h2>ACTUALITÉ</h2></Link>
                     </li>
                     <li className={location.pathname!=='/spectacles'?'header_nav_menu_item header_nav_menu_item--light':'header_nav_menu_item header_nav_menu_item--bold'}>
-                        <Link to="/spectacles"><h2>SPECTACLES</h2></Link>
+                        <Link aria-label='Accéder à la page Spectacles' to="/spectacles"><h2>SPECTACLES</h2></Link>
                     </li>
                     <li className='header_nav_menu_item header_nav_menu_item--light'>
                         <button aria-label='Afficher la fenêtre Contact' type='button' onClick={()=>setdisplayContactModal(true)}>CONTACT</button>
                     </li>
                     <li className={isAuthenticated===true?(location.pathname!=='/edit'?'header_nav_menu_item header_nav_menu_item--edit header_nav_menu_item--light':'header_nav_menu_item header_nav_menu_item--edit header_nav_menu_item--bold'):'header_nav_menu_item--displayOff'}>
-                        <Link to="/edit"><p>EDIT</p></Link>
+                        <Link aria-label="Accéder à la page d'édition" to="/edit"><p>EDIT</p></Link>
                     </li>
                     <li className={isAuthenticated===true?'header_nav_menu_item':'header_nav_menu_item--displayOff'}>
                         <button aria-label='Se déconnecter' type='button' 

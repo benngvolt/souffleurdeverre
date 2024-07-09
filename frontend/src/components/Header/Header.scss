@@ -139,6 +139,7 @@
                 justify-content: flex-end;
                 column-gap: 1.2em;
                 padding: 0;
+                box-sizing: border-box;
                 @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
                     width: auto;
                     justify-content: center;
@@ -157,7 +158,7 @@
                 &_item {
                     list-style-type: none;
                     margin: auto 0;
-                    // width: 10%;
+                    width: auto;
                     height: auto;
 
                     @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){

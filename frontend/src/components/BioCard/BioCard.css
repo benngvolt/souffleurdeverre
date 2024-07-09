@@ -85,6 +85,38 @@
     height: 71px;
   }
 }
+@-webkit-keyframes openHeaderMobile {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 200px;
+  }
+}
+@keyframes openHeaderMobile {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 200px;
+  }
+}
+@-webkit-keyframes openHeaderMobileMax {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 150px;
+  }
+}
+@keyframes openHeaderMobileMax {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 150px;
+  }
+}
 @-webkit-keyframes closeHeader {
   0% {
     height: 71px;
@@ -96,6 +128,38 @@
 @keyframes closeHeader {
   0% {
     height: 71px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@-webkit-keyframes closeHeaderMobile {
+  0% {
+    height: 200px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@keyframes closeHeaderMobile {
+  0% {
+    height: 200px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@-webkit-keyframes closeHeaderMobileMax {
+  0% {
+    height: 150px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@keyframes closeHeaderMobileMax {
+  0% {
+    height: 150px;
   }
   100% {
     height: 50px;
@@ -170,25 +234,59 @@
   }
 }
 @-webkit-keyframes hide {
-  29% {
+  0% {
     opacity: 1;
+    display: flex;
   }
-  30% {
+  50% {
     opacity: 0;
+    display: flex;
   }
   100% {
     opacity: 0;
+    display: none;
   }
 }
 @keyframes hide {
-  29% {
+  0% {
     opacity: 1;
+    display: flex;
   }
-  30% {
+  50% {
     opacity: 0;
+    display: flex;
   }
   100% {
     opacity: 0;
+    display: none;
+  }
+}
+@-webkit-keyframes appear {
+  0% {
+    opacity: 0;
+    display: none;
+  }
+  50% {
+    opacity: 0;
+    display: flex;
+  }
+  100% {
+    opacity: 1;
+    display: flex;
+  }
+}
+@keyframes appear {
+  0% {
+    opacity: 0;
+    display: none;
+  }
+  50% {
+    opacity: 0;
+    display: flex;
+  }
+  100% {
+    opacity: 1;
+    display: flex;
   }
 }
 @-webkit-keyframes openCollapse {
@@ -281,21 +379,21 @@
 }
 @-webkit-keyframes focusShow {
   0% {
-    transform: scale(1);
+    zoom: 100%;
     overflow: hidden;
   }
   100% {
-    transform: scale(0.97);
+    zoom: 200%;
     overflow: hidden;
   }
 }
 @keyframes focusShow {
   0% {
-    transform: scale(1);
+    zoom: 100%;
     overflow: hidden;
   }
   100% {
-    transform: scale(0.97);
+    zoom: 200%;
     overflow: hidden;
   }
 }
@@ -304,7 +402,7 @@
     transform: rotate(180deg);
   }
   100% {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
   }
 }
 @keyframes closeCollapseArrow {
@@ -312,12 +410,12 @@
     transform: rotate(180deg);
   }
   100% {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
   }
 }
 @-webkit-keyframes openCollapseArrow {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
   }
   100% {
     transform: rotate(180deg);
@@ -325,7 +423,7 @@
 }
 @keyframes openCollapseArrow {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
   }
   100% {
     transform: rotate(180deg);
@@ -337,11 +435,11 @@
     opacity: 0;
   }
   50% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 0;
   }
   100% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
   }
 }
@@ -351,21 +449,21 @@
     opacity: 0;
   }
   50% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 0;
   }
   100% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
   }
 }
 @-webkit-keyframes closeCollapseChildren {
   0% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
   }
   50% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 0;
   }
   100% {
@@ -375,11 +473,11 @@
 }
 @keyframes closeCollapseChildren {
   0% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
   }
   50% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 0;
   }
   100% {
@@ -389,32 +487,67 @@
 }
 .bioCard {
   width: auto;
+  margin: 0;
 }
 .bioCard_card {
   display: flex;
   flex-direction: row;
-  -moz-column-gap: 60px;
-       column-gap: 60px;
+  -moz-column-gap: 7%;
+       column-gap: 7%;
   border: none;
   background: none;
   padding: 0 54px 0 0;
   box-sizing: border-box;
-  height: 272px;
   width: 100%;
+}
+@media only screen and (min-width: 481px) and (max-width: 991px) {
+  .bioCard_card {
+    flex-direction: column;
+    padding: 0 0 35px 0;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .bioCard_card {
+    flex-direction: column;
+    padding: 0 0 35px 0;
+  }
 }
 .bioCard_card:hover {
   cursor: pointer;
-  background-color: rgba(255, 0, 255, 0.8);
+  background-color: #ff00ff;
 }
 .bioCard_card:hover .bioCard_card_caption {
   -webkit-animation: moveDown ease 1s forwards;
           animation: moveDown ease 1s forwards;
 }
+@media only screen and (min-width: 481px) and (max-width: 991px) {
+  .bioCard_card:hover .bioCard_card_caption {
+    -webkit-animation: none;
+            animation: none;
+    padding-top: 19px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .bioCard_card:hover .bioCard_card_caption {
+    -webkit-animation: none;
+            animation: none;
+  }
+}
 .bioCard_card_image {
-  width: 330px;
-  height: 272px;
+  width: 50%;
+  aspect-ratio: 1.25/1;
   -o-object-fit: cover;
      object-fit: cover;
+}
+@media only screen and (min-width: 481px) and (max-width: 991px) {
+  .bioCard_card_image {
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .bioCard_card_image {
+    width: 100%;
+  }
 }
 .bioCard_card_caption {
   display: flex;
@@ -424,13 +557,53 @@
   -webkit-animation: reverseMoveDown ease 1s forwards;
           animation: reverseMoveDown ease 1s forwards;
 }
+@media only screen and (min-width: 481px) and (max-width: 991px) {
+  .bioCard_card_caption {
+    -webkit-animation: none;
+            animation: none;
+    padding-top: 19px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .bioCard_card_caption {
+    -webkit-animation: none;
+            animation: none;
+    padding-top: 19px;
+  }
+}
 .bioCard_card_caption_name {
   font-family: "SpecialFont_regular";
-  font-size: 54px;
+  font-size: 35px;
   text-transform: uppercase;
   margin: 0;
+  color: #232323;
+}
+@media only screen and (min-width: 481px) and (max-width: 991px) {
+  .bioCard_card_caption_name {
+    text-align: center;
+    font-size: 30px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .bioCard_card_caption_name {
+    text-align: center;
+    font-size: 30px;
+  }
 }
 .bioCard_card_caption_role {
   font-family: "MainFont_light";
-  font-size: 19px;
+  font-size: 16px;
+  color: #232323;
+}
+@media only screen and (min-width: 481px) and (max-width: 991px) {
+  .bioCard_card_caption_role {
+    text-align: center;
+    padding: 0 19px;
+    box-sizing: border-box;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .bioCard_card_caption_role {
+    text-align: center;
+  }
 }/*# sourceMappingURL=BioCard.css.map */

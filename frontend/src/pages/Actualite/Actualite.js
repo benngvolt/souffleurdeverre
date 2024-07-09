@@ -2,7 +2,6 @@ import './Actualite.scss'
 import { Link } from 'react-router-dom'
 import React, { useContext, useEffect, useState } from 'react'
 import { Context } from '../../utils/Context'
-// import { useNavigate } from 'react-router-dom'
 import FullPeriodDate from '../../components/FullPeriodDate/FullPeriodDate';
 import FullPonctualDates from '../../components/FullPonctualDates/FullPonctualDates';
 import IsALink from '../../components/IsALink/IsALink';
@@ -39,12 +38,10 @@ function Actualite() {
                         </Link>
                         <p className='actualite_show_titleContainer_type'>{project.projectType}</p>
                     </div>
-
                     { project.showsList && project.showsList.length > 0 &&
                         project.showsList.some(show => 
                         show.dates && show.dates.length > 0 && 
                         show.dates.some(date => new Date(date.day) > currentDate)) &&
-
                     <div>
                         <h4 className='actualite_show_precision'> représentations </h4>
                         <ul className='actualite_show_datesContainer'>
@@ -73,9 +70,7 @@ function Actualite() {
                         <ul className='actualite_residency_datesContainer'>
                             {project.residenciesList.filter(residency => new Date(residency.endDates) > currentDate).map(residency => (
                             <li className='actualite_residency_datesContainer_item'>
-                                
                                 <IsALink className='actualite_residency_datesContainer_item_placeName' link={residency.placeLink} name={residency.placeName}/>
-                                
                                 <FullPeriodDate
                                     className={'actualite_residency_datesContainer_item_dates_singleDate_residencyDay'}
                                     key={residency._id} 

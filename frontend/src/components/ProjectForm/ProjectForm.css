@@ -85,6 +85,38 @@
     height: 71px;
   }
 }
+@-webkit-keyframes openHeaderMobile {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 200px;
+  }
+}
+@keyframes openHeaderMobile {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 200px;
+  }
+}
+@-webkit-keyframes openHeaderMobileMax {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 150px;
+  }
+}
+@keyframes openHeaderMobileMax {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 150px;
+  }
+}
 @-webkit-keyframes closeHeader {
   0% {
     height: 71px;
@@ -96,6 +128,38 @@
 @keyframes closeHeader {
   0% {
     height: 71px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@-webkit-keyframes closeHeaderMobile {
+  0% {
+    height: 200px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@keyframes closeHeaderMobile {
+  0% {
+    height: 200px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@-webkit-keyframes closeHeaderMobileMax {
+  0% {
+    height: 150px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@keyframes closeHeaderMobileMax {
+  0% {
+    height: 150px;
   }
   100% {
     height: 50px;
@@ -170,25 +234,59 @@
   }
 }
 @-webkit-keyframes hide {
-  29% {
+  0% {
     opacity: 1;
+    display: flex;
   }
-  30% {
+  50% {
     opacity: 0;
+    display: flex;
   }
   100% {
     opacity: 0;
+    display: none;
   }
 }
 @keyframes hide {
-  29% {
+  0% {
     opacity: 1;
+    display: flex;
   }
-  30% {
+  50% {
     opacity: 0;
+    display: flex;
   }
   100% {
     opacity: 0;
+    display: none;
+  }
+}
+@-webkit-keyframes appear {
+  0% {
+    opacity: 0;
+    display: none;
+  }
+  50% {
+    opacity: 0;
+    display: flex;
+  }
+  100% {
+    opacity: 1;
+    display: flex;
+  }
+}
+@keyframes appear {
+  0% {
+    opacity: 0;
+    display: none;
+  }
+  50% {
+    opacity: 0;
+    display: flex;
+  }
+  100% {
+    opacity: 1;
+    display: flex;
   }
 }
 @-webkit-keyframes openCollapse {
@@ -281,21 +379,21 @@
 }
 @-webkit-keyframes focusShow {
   0% {
-    transform: scale(1);
+    zoom: 100%;
     overflow: hidden;
   }
   100% {
-    transform: scale(0.97);
+    zoom: 200%;
     overflow: hidden;
   }
 }
 @keyframes focusShow {
   0% {
-    transform: scale(1);
+    zoom: 100%;
     overflow: hidden;
   }
   100% {
-    transform: scale(0.97);
+    zoom: 200%;
     overflow: hidden;
   }
 }
@@ -304,7 +402,7 @@
     transform: rotate(180deg);
   }
   100% {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
   }
 }
 @keyframes closeCollapseArrow {
@@ -312,12 +410,12 @@
     transform: rotate(180deg);
   }
   100% {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
   }
 }
 @-webkit-keyframes openCollapseArrow {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
   }
   100% {
     transform: rotate(180deg);
@@ -325,7 +423,7 @@
 }
 @keyframes openCollapseArrow {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
   }
   100% {
     transform: rotate(180deg);
@@ -337,11 +435,11 @@
     opacity: 0;
   }
   50% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 0;
   }
   100% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
   }
 }
@@ -351,21 +449,21 @@
     opacity: 0;
   }
   50% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 0;
   }
   100% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
   }
 }
 @-webkit-keyframes closeCollapseChildren {
   0% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
   }
   50% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 0;
   }
   100% {
@@ -375,11 +473,11 @@
 }
 @keyframes closeCollapseChildren {
   0% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
   }
   50% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 0;
   }
   100% {
@@ -444,6 +542,7 @@
 }
 .projectForm_projectImageField_imageFile_sampleContainer img {
   width: 200px;
+  margin-top: 22px;
 }
 .projectForm_projectImageField_imageFile_sampleContainer_buttonsSystem--displayOff {
   display: none;
@@ -455,7 +554,13 @@
   font-family: "MainFont_light";
   background: none;
   border: none;
-  font-size: 19px;
+  font-size: 16px;
+  margin: 16px auto 0 auto;
+  box-sizing: border-box;
+}
+.projectForm_projectImageField_imageFile_sampleContainer_buttonsSystem--displayOn button:hover {
+  font-weight: bold;
+  cursor: pointer;
 }
 .projectForm_projectTitle, .projectForm_projectSubtitle, .projectForm_projectState, .projectForm_projectType, .projectForm_projectDuration, .projectForm_projectCreationDate, .projectForm_projectDescription, .projectForm_projectMoreInfos {
   width: 80%;
@@ -688,7 +793,7 @@
   font-family: "MainFont_light";
   font-size: 14px;
   border: none;
-  background-color: rgba(255, 0, 255, 0.8);
+  background-color: #ff00ff;
 }
 .projectForm_projectShowsList_container_dates_gridDisplay_singleDay_supprButton:hover {
   background-color: #232323;

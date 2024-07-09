@@ -22,7 +22,7 @@ function BioSheet({biography, closeBioAside, className}) {
                 </div>
             </div>  
             <button className={`${className}_button`} type='button' onClick={()=>closeBioAside()}>
-                <FontAwesomeIcon className={`${className}_button_icon`} icon={faXmark}/>
+                <FontAwesomeIcon className={`${className}_button_icon`} aria-label="fermer" icon={faXmark}/>
             </button>
         </aside>
     )

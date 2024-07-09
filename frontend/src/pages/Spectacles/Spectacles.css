@@ -85,6 +85,38 @@
     height: 71px;
   }
 }
+@-webkit-keyframes openHeaderMobile {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 200px;
+  }
+}
+@keyframes openHeaderMobile {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 200px;
+  }
+}
+@-webkit-keyframes openHeaderMobileMax {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 150px;
+  }
+}
+@keyframes openHeaderMobileMax {
+  0% {
+    height: 50px;
+  }
+  100% {
+    height: 150px;
+  }
+}
 @-webkit-keyframes closeHeader {
   0% {
     height: 71px;
@@ -96,6 +128,38 @@
 @keyframes closeHeader {
   0% {
     height: 71px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@-webkit-keyframes closeHeaderMobile {
+  0% {
+    height: 200px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@keyframes closeHeaderMobile {
+  0% {
+    height: 200px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@-webkit-keyframes closeHeaderMobileMax {
+  0% {
+    height: 150px;
+  }
+  100% {
+    height: 50px;
+  }
+}
+@keyframes closeHeaderMobileMax {
+  0% {
+    height: 150px;
   }
   100% {
     height: 50px;
@@ -170,25 +234,59 @@
   }
 }
 @-webkit-keyframes hide {
-  29% {
+  0% {
     opacity: 1;
+    display: flex;
   }
-  30% {
+  50% {
     opacity: 0;
+    display: flex;
   }
   100% {
     opacity: 0;
+    display: none;
   }
 }
 @keyframes hide {
-  29% {
+  0% {
     opacity: 1;
+    display: flex;
   }
-  30% {
+  50% {
     opacity: 0;
+    display: flex;
   }
   100% {
     opacity: 0;
+    display: none;
+  }
+}
+@-webkit-keyframes appear {
+  0% {
+    opacity: 0;
+    display: none;
+  }
+  50% {
+    opacity: 0;
+    display: flex;
+  }
+  100% {
+    opacity: 1;
+    display: flex;
+  }
+}
+@keyframes appear {
+  0% {
+    opacity: 0;
+    display: none;
+  }
+  50% {
+    opacity: 0;
+    display: flex;
+  }
+  100% {
+    opacity: 1;
+    display: flex;
   }
 }
 @-webkit-keyframes openCollapse {
@@ -281,21 +379,21 @@
 }
 @-webkit-keyframes focusShow {
   0% {
-    transform: scale(1);
+    zoom: 100%;
     overflow: hidden;
   }
   100% {
-    transform: scale(0.97);
+    zoom: 200%;
     overflow: hidden;
   }
 }
 @keyframes focusShow {
   0% {
-    transform: scale(1);
+    zoom: 100%;
     overflow: hidden;
   }
   100% {
-    transform: scale(0.97);
+    zoom: 200%;
     overflow: hidden;
   }
 }
@@ -304,7 +402,7 @@
     transform: rotate(180deg);
   }
   100% {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
   }
 }
 @keyframes closeCollapseArrow {
@@ -312,12 +410,12 @@
     transform: rotate(180deg);
   }
   100% {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
   }
 }
 @-webkit-keyframes openCollapseArrow {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
   }
   100% {
     transform: rotate(180deg);
@@ -325,7 +423,7 @@
 }
 @keyframes openCollapseArrow {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
   }
   100% {
     transform: rotate(180deg);
@@ -337,11 +435,11 @@
     opacity: 0;
   }
   50% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 0;
   }
   100% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
   }
 }
@@ -351,21 +449,21 @@
     opacity: 0;
   }
   50% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 0;
   }
   100% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
   }
 }
 @-webkit-keyframes closeCollapseChildren {
   0% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
   }
   50% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 0;
   }
   100% {
@@ -375,11 +473,11 @@
 }
 @keyframes closeCollapseChildren {
   0% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 1;
   }
   50% {
-    max-height: 1000px;
+    max-height: 2000px;
     opacity: 0;
   }
   100% {
@@ -390,7 +488,7 @@
 .spectacles_filtersHandler {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   -moz-column-gap: 3px;
        column-gap: 3px;
@@ -418,6 +516,7 @@
 }
 .spectacles_filtersHandler_filtersStateContainer {
   padding: 0;
+  width: 50%;
 }
 .spectacles_filtersHandler_filtersStateContainer_item {
   list-style-type: none;
@@ -439,13 +538,33 @@
 }
 .spectacles_filtersHandler_filtersStateContainer_item button:hover {
   cursor: pointer;
-  background-color: #019cff;
-  color: #E9E9E9;
+  background-color: #00f0ff;
+}
+@media only screen and (min-width: 481px) and (max-width: 991px) {
+  .spectacles_filtersHandler_filtersStateContainer_item button {
+    padding: 0px 20px;
+    font-size: 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .spectacles_filtersHandler_filtersStateContainer_item button {
+    padding: 0px 6px;
+    font-size: 13px;
+  }
+}
+.spectacles_filtersHandler_filtersStateContainer_item button:hover {
+  cursor: pointer;
+  background-color: #00f0ff;
+  color: #232323;
 }
 .spectacles_filtersHandler_filtersStateContainer_item--displayOn button {
-  background-color: #019cff;
+  background-color: #232323;
+  color: #E9E9E9;
 }
 .spectacles_filtersHandler_filtersTypeContainer {
+  -webkit-animation: pageAppearing 1s ease forwards;
+          animation: pageAppearing 1s ease forwards;
+  width: 50%;
   padding: 0;
 }
 .spectacles_filtersHandler_filtersTypeContainer_item {
@@ -468,45 +587,67 @@
 }
 .spectacles_filtersHandler_filtersTypeContainer_item button:hover {
   cursor: pointer;
-  background-color: #019cff;
-  color: #E9E9E9;
+  background-color: #00f0ff;
+}
+@media only screen and (min-width: 481px) and (max-width: 991px) {
+  .spectacles_filtersHandler_filtersTypeContainer_item button {
+    padding: 0px 20px;
+    font-size: 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .spectacles_filtersHandler_filtersTypeContainer_item button {
+    padding: 0px 6px;
+    font-size: 13px;
+  }
 }
 .spectacles_filtersHandler_filtersTypeContainer_item button:hover {
   cursor: pointer;
-  background-color: #fea201;
-  color: #E9E9E9;
+  background-color: #00f0ff;
+  color: #232323;
 }
 .spectacles_filtersHandler_filtersTypeContainer_item--displayOn button {
   width: 100%;
-  background-color: #fea201;
+  background-color: #232323;
+  color: #E9E9E9;
 }
 .spectacles_projectsList {
   -webkit-animation: pageAppearing 2s ease forwards;
           animation: pageAppearing 2s ease forwards;
-  margin-top: 19px;
+  margin: 19px auto;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   padding: 0 40px;
   list-style-type: none;
   grid-gap: 3px;
+  width: 70%;
+}
+@media only screen and (min-width: 481px) and (max-width: 991px) {
+  .spectacles_projectsList {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .spectacles_projectsList {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 .spectacles_projectsList li {
-  width: auto;
+  width: 100%;
 }
 .spectacles_projectsList_projectItem {
   -webkit-animation: pageAppearing 2s ease forwards;
           animation: pageAppearing 2s ease forwards;
   padding: 0;
-  width: auto;
+  width: 100%;
   display: flex;
   flex-direction: column;
   row-gap: 0px;
   text-decoration: none;
-  margin-bottom: 35px;
 }
 .spectacles_projectsList_projectItem:hover {
   cursor: pointer;
-  background-color: #019cff;
+  background-color: #00f0ff;
 }
 .spectacles_projectsList_projectItem:hover .spectacles_projectsList_projectItem_img {
   -webkit-animation: focusShow 0.5s ease forwards;
@@ -514,41 +655,43 @@
 }
 .spectacles_projectsList_projectItem_img {
   width: 100%;
-  aspect-ratio: 1/1.15;
+  aspect-ratio: 1/1.25;
   -o-object-fit: cover;
      object-fit: cover;
 }
 .spectacles_projectsList_projectItem_mainDatas {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   padding-bottom: 22px;
-  padding-left: 10px;
-  height: 130px;
+  height: 110px;
+}
+@media only screen and (min-width: 481px) and (max-width: 991px) {
+  .spectacles_projectsList_projectItem_mainDatas {
+    height: 54px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .spectacles_projectsList_projectItem_mainDatas {
+    height: 45px;
+  }
 }
 .spectacles_projectsList_projectItem_mainDatas_title {
   font-family: "SpecialFont_regular";
-  font-size: 54px;
+  font-size: 30px;
   color: #232323;
   margin: 10px 0 0 0;
+  display: flex;
+  width: 100%;
+  justify-content: center;
   text-transform: uppercase;
+  text-align: center;
 }
-.spectacles_projectsList_projectItem_mainDatas_subtitle {
-  font-family: "MainFont_light";
-  font-size: 19px;
-  color: #232323;
-  margin: 0 0 10px 0;
+@media only screen and (min-width: 481px) and (max-width: 991px) {
+  .spectacles_projectsList_projectItem_mainDatas_title {
+    font-size: 22px;
+  }
 }
-.spectacles_projectsList_projectItem_mainDatas_creationDate {
-  font-family: "MainFont_light";
-  font-size: 14px;
-  color: #232323;
-  margin: 0;
-}
-.spectacles_projectsList_projectItem_mainDatas_state {
-  font-family: "MainFont_light";
-  font-style: italic;
-  font-size: 14px;
-  color: #232323;
-  margin: 0;
+@media only screen and (max-width: 480px) {
+  .spectacles_projectsList_projectItem_mainDatas_title {
+    font-size: 19px;
+  }
 }/*# sourceMappingURL=Spectacles.css.map */
