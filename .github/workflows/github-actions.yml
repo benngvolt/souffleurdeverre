@@ -7,11 +7,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - run: cd frontend
-    - uses: actions/checkout@v4
-    - name: Use Node.js 22
-      uses: actions/setup-node@v3
-      with:
-        node-version: '22'
-        cache: 'npm'
-    - run: npm start
+    - name: Checkout du dépôt
+      uses: actions/checkout@v4
+
+    - name: Installation et démarrage de npm dans le dossier frontend
+      run: |
+        cd frontend
+        npm install
+        npm start
+      working-directory: ./frontend
+      shell: bash
