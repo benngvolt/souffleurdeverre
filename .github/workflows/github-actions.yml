@@ -7,20 +7,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout du dépôt
+    - name: Checkout du dépôt et installation des dépendances
       uses: actions/checkout@v4
-
-    - name: Vérification du contenu du dépôt
-      run: ls -l
-      shell: bash
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
       with:
-        node-version: '22'  # Remplacez par la version de Node.js que vous souhaitez utiliser
-        cache: 'npm'
+        path: frontend  # Spécifiez le chemin où vous souhaitez effectuer le checkout
 
-    - name: Installation des dépendances et démarrage de l'application
+    - name: Setup Node.js et démarrage de l'application
       working-directory: ./frontend
       run: |
         npm install
