@@ -20,10 +20,8 @@ jobs:
         node-version: '22'  # Remplacez par la version de Node.js que vous souhaitez utiliser
         cache: 'npm'
 
-    - name: Installation et démarrage de npm dans le dossier frontend
+      - name: Installation des dépendances et démarrage de l'application
+      working-directory: ./frontend
       run: |
-        ls -l frontend  # Vérifiez si le dossier frontend est présent
-        cd frontend
         npm install
         npm start
-      shell: bash
