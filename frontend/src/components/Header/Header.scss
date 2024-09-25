@@ -179,7 +179,8 @@
                         text-decoration: none;
                         background: none;
                         border: none;
-                        margin: auto 0;
+                        margin: auto;
+                        box-sizing: border-box;
                         
                         &:hover {
                             cursor: pointer;

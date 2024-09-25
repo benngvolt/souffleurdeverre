@@ -41,7 +41,7 @@ function Home() {
                     </div>
                     <h1 className='home_title_text'>COMPAGNIE LE SOUFFLEUR DE VERRE</h1>
                 </div>
-                <ActualiteCarousel />
+                {/* <ActualiteCarousel /> */}
                 <nav className='home_nav'>
                     <ul className='home_nav_menu'>
                         <li>
