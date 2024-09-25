@@ -1,0 +1,81 @@
+@import '../../utils/mixins';
+
+.actualiteCarousel {
+    margin: 0px auto 40px auto;
+    &_item {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        column-gap: 9px;
+        text-transform: uppercase;
+        margin: auto;
+        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            flex-direction: column;
+            text-align: center;
+            margin: 22px auto;
+        }
+        @media only screen and (max-width:$mobileMaxWidth){
+            flex-direction: column;
+            text-align: center;
+            margin: 22px auto;
+        }
+        
+        &_date, &_title, &_city, &_link{
+            font-family:'SpecialFont_regular';
+            font-size: 30px;
+            color: $colorDarkGrey;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 17px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 17px;
+            }
+        }
+
+        &_date {
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 25px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 25px;
+            }
+        }
+        &_title {
+            &:hover {
+                color: $colorTwo
+            }
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 25px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 25px;
+            }
+        }
+        &_city {
+            
+        }
+        &_link {
+            
+            a {
+                color: $colorDarkGrey;
+
+                svg {
+                  height: 17px;
+                  margin: 0 0 4px 6px;
+                  @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    height: 10px;
+                    margin: 0 0 2px 6px;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    height: 10px;
+                }
+                }
+
+            }
+            :hover {
+                color: $colorThree
+            }
+        }
+    }
+}

@@ -5,9 +5,9 @@ import '../../pages/Actualite/Actualite.scss'
 function FullPonctualDates({datesArray, className}) {
 
     const monthNames = [
-        "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-        "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-    ];
+        "janvier", "février", "mars", "avril", "mai", "juin",
+        "juillet", "août", "septembre", "octobre", "novembre", "décembre"
+      ];
 
     const formatDay = (dateString, index, totalDates) => {
         const date = new Date(dateString);

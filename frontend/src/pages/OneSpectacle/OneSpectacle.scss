@@ -47,6 +47,21 @@
             } 
         }
 
+        &_moreInfos {
+            @include SidePaddings;
+            font-family: 'MainFont_light';
+            font-size: 18px;
+            margin: 0 0 29px 0;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 16px;
+                // margin: 0 0 35px 0;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 15px;
+                // margin: 0 0 19px 0;
+            } 
+        }
+
         &_creationDate {
             @include SidePaddings;
             font-family: 'MainFont_light';
@@ -67,6 +82,7 @@
             font-style: italic;
             font-size: 18px;
             margin-top: 0;
+            margin-bottom:25px;
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
                 font-size: 16px;
             }

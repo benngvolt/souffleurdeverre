@@ -13,7 +13,7 @@ jobs:
         path: frontend  # Spécifiez le chemin où vous souhaitez effectuer le checkout
 
     - name: Setup Node.js et démarrage de l'application
-      working-directory: ../frontend
+      working-directory: ./frontend
       run: |
         npm install
         npm start

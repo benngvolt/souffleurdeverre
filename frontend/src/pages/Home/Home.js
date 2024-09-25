@@ -9,6 +9,7 @@ import instagramLogo from '../../assets/instagram_black.png'
 import cedricVeschambre from '../../assets/Cedric_Veschambre_Julien_Bruhat.webp'
 import ContactModal from '../../components/ContactModal/ContactModal'
 import Loader from '../../components/Loader/Loader'
+import ActualiteCarousel from '../../components/ActualiteCarousel/ActualiteCarousel'
 
 
 function Home() {
@@ -24,6 +25,7 @@ function Home() {
         = useContext(Context);
 
     const [displayContactModal, setdisplayContactModal]= useState(false);
+
     const imageLogoRef = useRef(null);
     
     useEffect(() => {
@@ -39,13 +41,14 @@ function Home() {
                     </div>
                     <h1 className='home_title_text'>COMPAGNIE LE SOUFFLEUR DE VERRE</h1>
                 </div>
+                <ActualiteCarousel />
                 <nav className='home_nav'>
                     <ul className='home_nav_menu'>
                         <li>
                             <Link aria-label='Accéder à la page Compagnie' to="/compagnie" className='home_nav_menu_item'><h2>COMPAGNIE</h2></Link>
                         </li>
                         <li>
-                            <Link aria-label='Accéder à la page Actualité' to="/actualite" className='home_nav_menu_item'><h2>ACTUALITÉ</h2></Link>
+                            <Link aria-label='Accéder à la page Actualité' to="/actualite" className='home_nav_menu_item'><h2>CALENDRIER</h2></Link>
                         </li>
                         <li>
                             <Link aria-label='Accéder à la page Spectacles' to="/spectacles" className='home_nav_menu_item'><h2>SPECTACLES</h2></Link>

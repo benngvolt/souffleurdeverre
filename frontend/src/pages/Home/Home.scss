@@ -80,8 +80,10 @@
             }
             
             @media only screen and (max-width:$mobileMaxWidth){
-                font-size: 17px;
-                flex-wrap: wrap;
+                flex-direction: column;
+                font-size: 18px;
+                margin: 5px auto; 
+
   
             } 
             &_item {
@@ -107,6 +109,7 @@
                         font-size: 17px;
                         width: 120px;
                         text-align: center;
+                        margin: 5px auto; 
                     } 
                 }
             }

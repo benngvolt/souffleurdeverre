@@ -7,242 +7,357 @@
     justify-content: space-between;
     align-items: flex-start;
     row-gap: 54px;
+    @include SidePaddings;
+    
 
-    &_show, &_residency {
-        margin: 0 auto 54px auto;
-        @include SidePaddings;
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-            width: 75%;
-        }
-        @media only screen and (max-width:$mobileMaxWidth){
-            width: 100%;
-        } 
+    &_container {
+         &_yearContainer {
+            margin: 45px auto;
+            
+
+            &_year {
+                font-family: 'SpecialFont_regular';
+                font-size: 150px;
+            }
+
+            &_monthContainer {
+                display: flex;
+                flex-direction: row;
+                margin: 25px auto;
+                column-gap: 50px;
+                flex-wrap: wrap;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    flex-direction: column;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    flex-direction: column;
+                }
+
+                &_month {
+                    font-family: 'SpecialFont_regular';
+                    font-size: 60px;
+                    text-transform: uppercase;
+                    width: 20%;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        width: 100%;
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        width: 100%;
+                    }
+
+                    &_eventContainer {
+                        display: flex;
+                        flex-direction: column;
+                        width: 20%;
+                        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                            width: 100%;
+                        }
+                        @media only screen and (max-width:$mobileMaxWidth){
+                            width: 100%;
+                        }
+
+                        &_showTitle {
+                            font-family: 'specialFont_regular';
+                            font-size: 35px;
+                            color: $colorDarkGrey;
+                            text-transform: uppercase;
+
+                            &:hover {
+                                color: $colorFive;
+                            }
+                        }
+
+                        &_residenciesBox, &_showsBox {
+                            
+                            font-family: 'mainFont_light';
+                            font-size: 18px;
+
+                            &_dates {
+                                font-weight: bold;
+                            }
+
+                            &_link {
+                                a {
+                                    color: $colorDarkGrey;
+                                    // text-decoration: underline;
+                                    svg {
+                                        height: 12px;
+                                        margin: 0 10px
+                                    }
+                                    
+                                    &:hover {
+                                        color: $colorThree;
+                                    }
+                                }
+                            }
+                        }
+
+                        &_residenciesBox{
+
+                            &_type {
+                                width: 200px;
+                                padding-left: 9px;
+                                background-color: $colorTwo;     
+                            }
+                            
+                           
+                        }
+
+                        &_showsBox {
+                            &_datesBox {
+                                display: flex;
+                                flex-direction: row;
+                                column-gap: 15px;
+                            }
+
+                            &_type {
+                                width: 200px;
+                                padding-left: 9px;
+                                background-color: $colorFour;     
+                            }
+                        }
+                    }
+                }
+            }
+         }
+    }
+
+    // &_show, &_residency {
+    //     margin: 0 auto 54px auto;
+    //     @include SidePaddings;
+    //     width: 50%;
+    //     display: flex;
+    //     flex-direction: column;
+    //     @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+    //         width: 75%;
+    //     }
+    //     @media only screen and (max-width:$mobileMaxWidth){
+    //         width: 100%;
+    //     } 
        
 
-        &_titleContainer {
-            display: flex;
-            flex-direction: column;
-            margin: 0;
+    //     &_titleContainer {
+    //         display: flex;
+    //         flex-direction: column;
+    //         margin: 0;
 
-            a {
-                text-decoration: none;
-                color: $colorDarkGrey;
-            }
+    //         a {
+    //             text-decoration: none;
+    //             color: $colorDarkGrey;
+    //         }
     
-            &_title {
-                @include Title;
-                margin: 0;
-                justify-content: flex-end;
-                font-size: 98px;
-                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                    font-size: 81px;
-                }
-                @media only screen and (max-width:$mobileMaxWidth){
-                    font-size: 60px;
-                } 
-                &:hover {
-                    cursor: pointer;
-                    @include colorDuo3;
-                }
-            }
+    //         &_title {
+    //             @include Title;
+    //             text-transform: uppercase;
+    //             margin: 0;
+    //             justify-content: flex-end;
+    //             font-size: 98px;
+    //             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+    //                 font-size: 81px;
+    //             }
+    //             @media only screen and (max-width:$mobileMaxWidth){
+    //                 font-size: 60px;
+    //             } 
+    //             &:hover {
+    //                 cursor: pointer;
+    //                 @include colorDuo3;
+    //             }
+    //         }
 
-            &_type {
-                font-family: 'MainFont_light';
-                font-style: italic;
-                margin: 0;
-                font-size: 19px;
-                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                    font-size: 16px;
-                }
-                @media only screen and (max-width:$mobileMaxWidth){
-                    font-size: 14px;
-                } 
-            }
-        }
+    //         &_type {
+    //             font-family: 'MainFont_light';
+    //             font-style: italic;
+    //             margin: 0;
+    //             font-size: 19px;
+    //             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+    //                 font-size: 16px;
+    //             }
+    //             @media only screen and (max-width:$mobileMaxWidth){
+    //                 font-size: 14px;
+    //             } 
+    //         }
+    //     }
 
-        &_precision {
-            font-family: 'MainFont_light';
-            text-transform: uppercase;
-            font-weight: bold;
-            color: $colorLightGrey;
-            font-size: 19px;
-            margin: 16px 0 0 0;
-            padding-left: 9px;
-            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                font-size: 16px;
-            }
-            @media only screen and (max-width:$mobileMaxWidth){
-                font-size: 14px;
-            } 
-        }
+    //     &_precision {
+    //         font-family: 'MainFont_light';
+    //         text-transform: uppercase;
+    //         font-weight: bold;
+    //         color: $colorLightGrey;
+    //         font-size: 19px;
+    //         margin: 16px 0 0 0;
+    //         padding-left: 9px;
+    //         @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+    //             font-size: 16px;
+    //         }
+    //         @media only screen and (max-width:$mobileMaxWidth){
+    //             font-size: 14px;
+    //         } 
+    //     }
 
-        &_datesContainer {
-            display: flex;
-            flex-direction: column;
-            list-style-type: none;
-            padding: 0;
+    //     &_datesContainer {
+    //         display: flex;
+    //         flex-direction: column;
+    //         list-style-type: none;
+    //         padding: 0;
 
-            &_item {
-                margin: 16px 0;
-                &_placeName {
-                    font-size: 19px;
-                    font-weight: bold;
-                    font-family: 'MainFont_light';
-                    text-transform: uppercase;
-                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                        font-size: 16px;
-                    }
-                    @media only screen and (max-width:$mobileMaxWidth){
-                        font-size: 14px;
-                    } 
+    //         &_item {
+    //             margin: 16px 0;
+    //             &_placeName {
+    //                 font-size: 19px;
+    //                 font-weight: bold;
+    //                 font-family: 'MainFont_light';
+    //                 text-transform: uppercase;
+    //                 @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+    //                     font-size: 16px;
+    //                 }
+    //                 @media only screen and (max-width:$mobileMaxWidth){
+    //                     font-size: 14px;
+    //                 } 
 
-                    &_link {
-                        color: $colorDarkGrey;
-                        text-decoration: none;
-                        margin: 0;
-                        &:hover {
-                            color: $colorTwo;
-                        }
+    //                 &_link {
+    //                     color: $colorDarkGrey;
+    //                     text-decoration: none;
+    //                     margin: 0;
+    //                     &:hover {
+    //                         color: $colorTwo;
+    //                     }
 
-                        &_icon {
-                            height: 16px;
-                            padding-bottom: 3px;
-                            margin: 0 9px;
-                            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                                height: 14px;
-                                padding-bottom: 1px;
-                            }
-                            @media only screen and (max-width:$mobileMaxWidth){
-                                height: 12px;
-                                padding-bottom: 2px;
-                            } 
-                        }
-                    }
+    //                     &_icon {
+    //                         height: 16px;
+    //                         padding-bottom: 3px;
+    //                         margin: 0 9px;
+    //                         @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+    //                             height: 14px;
+    //                             padding-bottom: 1px;
+    //                         }
+    //                         @media only screen and (max-width:$mobileMaxWidth){
+    //                             height: 12px;
+    //                             padding-bottom: 2px;
+    //                         } 
+    //                     }
+    //                 }
 
-                    &_noLink {
-                        margin: 0;
-                    }
-                }
-                &_showCity {
-                    font-family: 'MainFont_light';
-                    font-size: 19px;
-                    margin: 0;
-                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                        font-size: 16px;
-                    }
-                    @media only screen and (max-width:$mobileMaxWidth){
-                        font-size: 14px;
-                    } 
-                }
-                &_dates {
-                    display: flex;
-                    flex-direction: column;
-                    margin: 0;
-                    &_singleDate {
-                        display: flex;
-                        flex-direction: row;
-                        &_day {
+    //                 &_noLink {
+    //                     margin: 0;
+    //                 }
+    //             }
+    //             &_showCity {
+    //                 font-family: 'MainFont_light';
+    //                 font-size: 19px;
+    //                 margin: 0;
+    //                 @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+    //                     font-size: 16px;
+    //                 }
+    //                 @media only screen and (max-width:$mobileMaxWidth){
+    //                     font-size: 14px;
+    //                 } 
+    //             }
+    //             &_dates {
+    //                 display: flex;
+    //                 flex-direction: column;
+    //                 margin: 0;
+    //                 &_singleDate {
+    //                     display: flex;
+    //                     flex-direction: row;
+    //                     &_day {
                             
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: flex-end;
-                            font-size: 19px;
-                            font-family: 'MainFont_light';
-                            font-weight: bold;
-                            text-transform: uppercase;
-                            margin: 0;
-                            color: $colorDarkGrey;
-                            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                                font-size: 16px;
-                            }
-                            @media only screen and (max-width:$mobileMaxWidth){
-                                font-size: 14px;
-                            } 
-                        }
-                        &_residencyDay {
+    //                         display: flex;
+    //                         flex-direction: column;
+    //                         justify-content: flex-end;
+    //                         font-size: 19px;
+    //                         font-family: 'MainFont_light';
+    //                         font-weight: bold;
+    //                         text-transform: uppercase;
+    //                         margin: 0;
+    //                         color: $colorDarkGrey;
+    //                         @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+    //                             font-size: 16px;
+    //                         }
+    //                         @media only screen and (max-width:$mobileMaxWidth){
+    //                             font-size: 14px;
+    //                         } 
+    //                     }
+    //                     &_residencyDay {
                             
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: flex-end;
-                            font-size: 19px;
-                            font-family: 'MainFont_light';
-                            font-weight: bold;
-                            text-transform: uppercase;
-                            margin: 0;
-                            color: $colorDarkGrey;
-                            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                                font-size: 16px;
-                            }
-                            @media only screen and (max-width:$mobileMaxWidth){
-                                font-size: 14px;
-                            } 
-                        }
-                        &_time {
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: flex-end;
-                            font-size: 19px;
-                            font-family: 'MainFont_light';
-                            margin: 0 19px;
-                            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                                font-size: 16px;
-                            }
-                            @media only screen and (max-width:$mobileMaxWidth){
-                                font-size: 14px;
-                            } 
-                        }
-                   }
+    //                         display: flex;
+    //                         flex-direction: column;
+    //                         justify-content: flex-end;
+    //                         font-size: 19px;
+    //                         font-family: 'MainFont_light';
+    //                         font-weight: bold;
+    //                         text-transform: uppercase;
+    //                         margin: 0;
+    //                         color: $colorDarkGrey;
+    //                         @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+    //                             font-size: 16px;
+    //                         }
+    //                         @media only screen and (max-width:$mobileMaxWidth){
+    //                             font-size: 14px;
+    //                         } 
+    //                     }
+    //                     &_time {
+    //                         display: flex;
+    //                         flex-direction: column;
+    //                         justify-content: flex-end;
+    //                         font-size: 19px;
+    //                         font-family: 'MainFont_light';
+    //                         margin: 0 19px;
+    //                         @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+    //                             font-size: 16px;
+    //                         }
+    //                         @media only screen and (max-width:$mobileMaxWidth){
+    //                             font-size: 14px;
+    //                         } 
+    //                     }
+    //                }
 
-                }
-                &_residencyType  {
-                    margin: 0;
-                    font-family: 'MainFont_light';
-                    font-style: italic;
-                    font-size: 19px;
-                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                        font-size: 16px;
-                    }
-                    @media only screen and (max-width:$mobileMaxWidth){
-                        font-size: 14px;
-                    } 
-                }
+    //             }
+    //             &_residencyType  {
+    //                 margin: 0;
+    //                 font-family: 'MainFont_light';
+    //                 font-style: italic;
+    //                 font-size: 19px;
+    //                 @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+    //                     font-size: 16px;
+    //                 }
+    //                 @media only screen and (max-width:$mobileMaxWidth){
+    //                     font-size: 14px;
+    //                 } 
+    //             }
 
                 
-            }
-        }
+    //         }
+    //     }
 
-        &_description {
-            font-family: 'MainFont_light';
-            font-size: 16px;
-            text-align: justify;
-            width: 100%;
-            margin: 0;
-            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                font-size: 14px;
-            }
-            @media only screen and (max-width:$mobileMaxWidth){
-                font-size: 13px;
-            } 
-        }
-        &_img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: cover;
-        }
-    }
+    //     &_description {
+    //         font-family: 'MainFont_light';
+    //         font-size: 16px;
+    //         text-align: justify;
+    //         width: 100%;
+    //         margin: 0;
+    //         @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+    //             font-size: 14px;
+    //         }
+    //         @media only screen and (max-width:$mobileMaxWidth){
+    //             font-size: 13px;
+    //         } 
+    //     }
+    //     &_img {
+    //         width: 100%;
+    //         aspect-ratio: 1/1;
+    //         object-fit: cover;
+    //     }
+    // }
 
-    &_show {
-        &_precision  {
-            background-color: $colorFive;
-        }
-    }
+    // &_show {
+    //     &_precision  {
+    //         background-color: $colorFive;
+    //     }
+    // }
 
-    &_residency {
-        &_precision  {
-            background-color: $colorThree;
-        }
-    }
+    // &_residency {
+    //     &_precision  {
+    //         background-color: $colorThree;
+    //     }
+    // }
 }

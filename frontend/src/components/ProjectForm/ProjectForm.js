@@ -594,7 +594,7 @@ function ProjectForm({
                     id='inputProjectDescription' 
                     input="trix-description" 
                     ref={inputProjectDescriptionRef}
-                    />
+                />
             </div>
             <TitleAndParagraphInput 
                 setList={setParagraphList} 

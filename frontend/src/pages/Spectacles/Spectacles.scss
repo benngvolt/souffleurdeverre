@@ -118,6 +118,9 @@
             flex-direction: column;
             row-gap: 0px;
             text-decoration: none;
+            @media only screen and (max-width:$mobileMaxWidth){
+                margin-bottom: 15px;
+            } 
             
 
             &:hover {
@@ -140,8 +143,9 @@
             &_mainDatas {
                 
                 display: flex;
-                // flex-direction: column;
-                // justify-content: flex-start;
+                flex-direction: column;
+                justify-content: flex-start;
+                margin: auto;
                 padding-bottom: 22px;
                 height: 110px;
                 @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
@@ -167,6 +171,13 @@
                     @media only screen and (max-width:$mobileMaxWidth){
                         font-size: 19px;
                     } 
+                }
+
+                &_date {
+                    margin: 0 auto;
+                    color: $colorDarkGrey;
+                    font-family: 'MainFont_light';
+                    font-style: italic;
                 }
 
                 // &_subtitle {

@@ -27,7 +27,7 @@ function Spectacles() {
     }, [sortedProjectsByState, sortedProjectsByType]);
 
     useEffect(()=> {
-        setChronologicalSortedProjects (sortedProjects.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate) ))
+        setChronologicalSortedProjects (sortedProjects.sort((a, b) => new Date(b.creationDate ? b.creationDate : 0) - new Date(a.creationDate ? a.creationDate : 0) ))
     }, [sortedProjects]);
 
     function handleFilterProjectState (state) {
@@ -113,6 +113,7 @@ function Spectacles() {
                             <img src={project.images[project.mainImageIndex]?.imageUrl} alt={project.title} className='spectacles_projectsList_projectItem_img' />
                             <div className='spectacles_projectsList_projectItem_mainDatas'>
                                 <h3 className='spectacles_projectsList_projectItem_mainDatas_title'>{project.title}</h3>
+                                <p className='spectacles_projectsList_projectItem_mainDatas_date'>{project.creationDate ? `${project.creationDate.split('-')[0]}` : 'en chantier...'}</p>
                             </div>
                         </Link>
                     </li>

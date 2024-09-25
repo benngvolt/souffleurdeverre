@@ -1,14 +1,22 @@
-FROM node:18-alpine
+# pull official base image
+FROM node:20.15.0-alpine
 
-WORKDIR /frontend/
-COPY public/ /frontend/public
-COPY src/ /frontend/src
-COPY package.json /frontend/
+# set working directory
+WORKDIR /app
 
-RUN npm install
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+ENV PORT 3000
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm install --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+
+# add app
+COPY . ./
 
 EXPOSE 3000
-CMD ["npm", "start"]
 
-#démarrer le serveur avec:
-#docker run -d -p 3000:3000 --name frontend-container frontend_image
+# start app
+CMD ["npm", "start"]

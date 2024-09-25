@@ -140,7 +140,7 @@ function Header() {
                         <Link aria-label='Accéder à la page Compagnie' to="/compagnie"><h2>COMPAGNIE</h2></Link>
                     </li>
                     <li className={location.pathname!=='/actualite'?'header_nav_menu_item header_nav_menu_item--light':'header_nav_menu_item header_nav_menu_item--bold'}>
-                        <Link aria-label='Accéder à la page Actualité' to="/actualite"><h2>ACTUALITÉ</h2></Link>
+                        <Link aria-label='Accéder à la page Actualité' to="/actualite"><h2>CALENDRIER</h2></Link>
                     </li>
                     <li className={location.pathname!=='/spectacles'?'header_nav_menu_item header_nav_menu_item--light':'header_nav_menu_item header_nav_menu_item--bold'}>
                         <Link aria-label='Accéder à la page Spectacles' to="/spectacles"><h2>SPECTACLES</h2></Link>

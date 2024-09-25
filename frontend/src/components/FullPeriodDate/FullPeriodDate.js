@@ -8,8 +8,8 @@ let endDate = new Date(endISODate);
 
 // Tableau des noms des mois
 const monthNames = [
-  "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-  "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+  "janvier", "février", "mars", "avril", "mai", "juin",
+  "juillet", "août", "septembre", "octobre", "novembre", "décembre"
 ];
 
 // Obtenir les composants de date de début

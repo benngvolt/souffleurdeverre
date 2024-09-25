@@ -42,6 +42,9 @@ function OneSpectacle() {
                     {project.subtitle &&
                     <p className='oneSpectacle_mainDatas_subtitle'>{project.subtitle}</p>
                     }
+                    {project.subtitle &&
+                    <p className='oneSpectacle_mainDatas_moreInfos'>{project.moreInfos}</p>
+                    }
                     {project.creationDate &&
                     <FullUniqueDate creationDate={project.creationDate}/>
                     }

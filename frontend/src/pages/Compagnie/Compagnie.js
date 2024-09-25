@@ -23,18 +23,21 @@ function Compagnie() {
         {
             'name':'Préfète de la Région Auvergne Rhône-Alpes',
             'logo': `${logoMinistere}`,
-            'class':'min'
-        },
-        {
-            'name':'Ville de Clermont-Ferrand',
-            'logo': `${logoClermont}`,
-            'class':'cle'
+            'class':'min',
+            'website':'https://www.culture.gouv.fr/regions/drac-auvergne-rhone-alpes'
         },
         {
             'name':'Région Auvergne Rhône-Alpes',
             'logo': `${logoAra}`,
-            'class':'ara'
-        }
+            'class':'ara',
+            'website':'https://www.auvergnerhonealpes.fr/'
+        },
+        {
+            'name':'Ville de Clermont-Ferrand',
+            'logo': `${logoClermont}`,
+            'class':'cle',
+            'website':'https://clermont-ferrand.fr/'
+        },
     ]
 
     useEffect(() => {
@@ -100,8 +103,8 @@ function Compagnie() {
             </Collapse>
             <div className='compagnieSection_AA'>
                 <h3 className='compagnieSection_AA_title'>Artiste Associé</h3>
-                <p className='compagnieSection_AA_text'> La compagnie Le Souffleur de Verre a vu le jour en 2003 en Auvergne et est implantée à Clermont-Ferrand. Ces projets artistiques et ces envies de travail sur les territoires que compte la région Auvergne-Rhône-Aples l’a mené à s’impliquer dans le Puy-de-Dôme (8 ans de résidence dite « association », menant à la fois créations et projets de médiation artistique, en vue du développement des publics à Cournon d’Auvergne), en Haute-Loire (3 ans résidence de territoire avec la municipalité et les établissements scolaires et associatifs de Monistrol-sur-Loire), et la Loire (3 ans comme compagnie associée au projet d’Arnaud Meunier, directeur de La Comédie de Saint-Étienne – Centre Dramatique National et 5 ans comme membres de l’ensemble artistique).<br/>
-                    Elle a été Artiste Associée au Caméléon, scène labellisée pour l’émergence et la création en Auvergne-Rhône-Alpes pour 3 ans (2020-2023).
+                <p className='compagnieSection_AA_text'> La compagnie Le Souffleur de Verre a vu le jour en 2003 en Auvergne et est implantée à Clermont-Ferrand. Ces projets artistiques et ces envies de travail sur les territoires que compte la région Auvergne-Rhône-Alpes l’ont amenée à s’impliquer dans le Puy-de-Dôme (8 ans de résidence dite « association », menant à la fois créations et projets de médiation artistique, en vue du développement des publics à Cournon d’Auvergne), en Haute-Loire (3 ans de résidence de territoire avec la municipalité et les établissements scolaires et associatifs de Monistrol-sur-Loire), et dans la Loire (3 ans en tant que compagnie associée au projet d’Arnaud Meunier, directeur de La Comédie de Saint-Étienne – Centre Dramatique National et 5 ans comme membres de l’ensemble artistique).<br/>
+                    Elle a été Artiste Associée au Caméléon, scène labellisée pour l’émergence et la création en Auvergne-Rhône-Alpes pour 4 ans (2020-2023).
                 </p>
             </div>
             <div className='compagnieSection_partners'>
@@ -112,7 +115,9 @@ function Compagnie() {
                 <ul className='compagnieSection_partners_list'>
                     {partners.map((partner)=> (
                         <li className='compagnieSection_partners_list_item'>
-                            <img className={`compagnieSection_partners_list_item_${partner.class}`} src={partner.logo} alt={`logo ${partner.logo}`}/>
+                            <a href={partner.website} target='_blank' rel='noreferrer'>
+                                <img className={`compagnieSection_partners_list_item_${partner.class}`} src={partner.logo} alt={`logo ${partner.logo}`}/>
+                            </a>
                         </li>
                     ))}
                 </ul>
