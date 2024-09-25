@@ -66,13 +66,13 @@ function ActualiteCarousel({}) {
 
     return (     
         <div className="actualiteCarousel"> 
-            {nextThreeEvents.map((item) => (
-                <Link to={`/spectacles/${item._id}`} className="actualiteCarousel_item" key={item._id} >
+            {nextThreeEvents.map((item, index) => (
+                <div className="actualiteCarousel_item" key={`${item._id}${index}`} >
                     <p className="actualiteCarousel_item_date">{item.date.split('/')[0]} {monthNames[item.date.split('/')[1]-1]} {item.date.split('/')[2]}</p> {/* Utilise 'fr-FR' pour le format français */}
-                    <p className="actualiteCarousel_item_title">***{item.title}***</p>
+                    <Link to={`/spectacles/${item._id}`} className="actualiteCarousel_item_title">***{item.title}***</Link>
                     <p className="actualiteCarousel_item_city">{item.city}</p>
                     <IsALink link={item.placeLink} name={item.placeName} className={'actualiteCarousel_item_link'}/>
-                </Link>
+                </div>
             ))}
         </div>
     )   
