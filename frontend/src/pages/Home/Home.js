@@ -6,9 +6,13 @@ import facebookLogo from '../../assets/facebook_black.png'
 import xLogo from '../../assets/x_black.png'
 import youtubeLogo from '../../assets/youtube_black.png'
 import instagramLogo from '../../assets/instagram_black.png'
-import cedricVeschambre from '../../assets/Cedric_Veschambre_Julien_Bruhat.webp'
+import bgImage from '../../assets/souffleur2.webp'
 import ContactModal from '../../components/ContactModal/ContactModal'
 import Loader from '../../components/Loader/Loader'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
+
+
 import ActualiteCarousel from '../../components/ActualiteCarousel/ActualiteCarousel'
 
 
@@ -37,9 +41,9 @@ function Home() {
             <section className='home'>
                 <div className='home_title'>
                     <div ref={imageLogoRef} class="home_title_logoMask">
-                        <img src={cedricVeschambre} alt="logo souffleur de verre"/>
+                        <img src={bgImage} alt="logo souffleur de verre"/>
                     </div>
-                    <h1 className='home_title_text'>COMPAGNIE LE SOUFFLEUR DE VERRE</h1>
+                    <h1 className='home_title_text'>LE SOUFFLEUR DE VERRE</h1>
                 </div>
                 {/* <ActualiteCarousel /> */}
                 <nav className='home_nav'>
@@ -47,12 +51,15 @@ function Home() {
                         <li>
                             <Link aria-label='Accéder à la page Compagnie' to="/compagnie" className='home_nav_menu_item'><h2>COMPAGNIE</h2></Link>
                         </li>
+                        <FontAwesomeIcon className='home_nav_menu_dotIcon home_nav_menu_dotIcon--one' icon={faCircle} />
                         <li>
                             <Link aria-label='Accéder à la page Actualité' to="/actualite" className='home_nav_menu_item'><h2>CALENDRIER</h2></Link>
                         </li>
+                        <FontAwesomeIcon className='home_nav_menu_dotIcon home_nav_menu_dotIcon--two' icon={faCircle} />
                         <li>
                             <Link aria-label='Accéder à la page Spectacles' to="/spectacles" className='home_nav_menu_item'><h2>SPECTACLES</h2></Link>
                         </li>
+                        <FontAwesomeIcon className='home_nav_menu_dotIcon home_nav_menu_dotIcon--three' icon={faCircle} />
                         <li>
                             <button aria-label='Afficher la fenêtre Contact' type='button' className='home_nav_menu_item' onClick={()=>setdisplayContactModal(true)}><p>CONTACT</p></button>
                         </li>

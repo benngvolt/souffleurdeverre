@@ -9,9 +9,10 @@
     width: 100%;
     height: 100vh;
     align-items: center;
-    background: linear-gradient(-45deg, $colorFive, $colorLightGrey, $colorTwo);
+    // background: linear-gradient(-45deg, $colorFive, $colorLightGrey, $colorTwo);
+    background: $colorDarkGrey;
 	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
+	// animation: gradient 15s ease infinite;
 	height: 100vh;
 
     &_title {
@@ -20,12 +21,12 @@
         row-gap: 20px;
         justify-content: center;
         align-items: center;
-        margin: 40px 0;
+        margin: 30px 0 50px 0;
         
         &_logoMask {
             position: relative;
-            width: 50%;
-            @include colorDuo2big;
+            width: 40%;
+            @include colorDuo3big;
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
                 width: 70%;
             }
@@ -60,12 +61,13 @@
             font-size: 17px;
             margin: auto;
             font-weight: normal;
+            color: $colorLightGrey;
         }
         @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-            
+            font-size: 17px;
         }   
         @media only screen and (max-width:$mobileMaxWidth){
-        
+            
         }      
     }
 
@@ -78,7 +80,7 @@
         &_menu {
             display: flex;
             flex-direction: row;
-            column-gap: 22px;
+            column-gap: 30px;
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
                 column-gap: 13px;  
             }
@@ -86,35 +88,54 @@
             @media only screen and (max-width:$mobileMaxWidth){
                 flex-direction: column;
                 font-size: 18px;
-                margin: 5px auto; 
-
-  
+                margin: 5px auto;
             } 
+
             &_item {
-                h2, p {
-                    width: 130px;
+                
+                h2, p {  
+                    width: auto;
                     margin: auto;
-                    color: $colorDarkGrey;
-                    font-family: 'MainFont_light';
-                    font-size: 22px;
+                    // color: $colorDarkGrey;
+                    color: $colorLightGrey;
+                    // font-family: 'MainFont_light';
+                    font-family: 'SpecialFont_regular';
+                    // font-size: 22px;
+                    font-size: 30px;
                     font-weight: normal;
+                    text-align: center;
                     &:hover {
                         cursor: pointer;
-
-                        // font-style: italic;
-                        font-weight: bold;
+                        color: $colorFive;
                     }
                     @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                        font-size: 17px;
-                        width: 95px;
+                        font-size: 25px;
+                        margin: 0 10px;
+                        width: auto;
                     }
                     
                     @media only screen and (max-width:$mobileMaxWidth){
-                        font-size: 17px;
+                        font-size: 25px;
                         width: 120px;
                         text-align: center;
                         margin: 5px auto; 
                     } 
+                }
+            }
+
+            &_dotIcon {
+
+                font-size: 10px;
+                margin: auto 0;
+
+                &--one {
+                    color: $colorFour
+                }
+                &--two {
+                    color: $colorTwo
+                }
+                &--three {
+                    color: $colorThree
                 }
             }
         }
@@ -126,6 +147,9 @@
             width: auto;
             border-radius: 50%;
             margin: auto;
+            // color: $colorDarkGrey;
+            color: $colorLightGrey;
+            
             &_item {
                 img {
                     width: 30px;
@@ -150,6 +174,7 @@
             border: none;
             background: none;
             font-family: 'MainFont_light';
+     
         }
     }
 }

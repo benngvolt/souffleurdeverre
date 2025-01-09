@@ -9,6 +9,7 @@ import DNDGallery from '../../components/DNDGallery/DNDGallery'
 import TitleAndParagraphInput from '../TitleAndParagraphInput/TitleAndParagraphInput'
 import ConfirmBox from '../ConfirmBox/ConfirmBox'
 import Loader from '../Loader/Loader'
+import Collapse from '../../components/Collapse/Collapse'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faXmark} from '@fortawesome/free-solid-svg-icons'
 import ErrorText from '../ErrorText/ErrorText'
@@ -596,404 +597,413 @@ function ProjectForm({
                     ref={inputProjectDescriptionRef}
                 />
             </div>
-            <TitleAndParagraphInput 
-                setList={setParagraphList} 
-                topic="PARAGRAPHES"
-                paragraphTopic="PARAGRAPHE"
-                titleTopic="TITRE DU PARAGRAPHE"
-                list={paragraphList}
-                paragraphProp="paragraphText"
-                titleProp="paragraphTitle"
-                trixRefs={paragraphRefs}
-                displayForm={handleDisplayProjectForm}
-            />
-            
+            <Collapse title="PARAGRAPHES" style='edit'>
+                <TitleAndParagraphInput 
+                    setList={setParagraphList} 
+                    topic="PARAGRAPHES"
+                    paragraphTopic="PARAGRAPHE"
+                    titleTopic="TITRE DU PARAGRAPHE"
+                    list={paragraphList}
+                    paragraphProp="paragraphText"
+                    titleProp="paragraphTitle"
+                    trixRefs={paragraphRefs}
+                    displayForm={handleDisplayProjectForm}
+                />
+            </Collapse>
             {/* -----CRÉATION D'UN TABLEAU D'OBJETS  */}
-
-            <div className='projectForm_projectArtistsList'>
-                <p className='projectForm_projectArtistsList_title'> ARTISTES </p>
-                {artistsList.map((artist, index) => (
-                    <div key={index} className='projectForm_projectArtistsList_line'>
-                        <div className='projectForm_projectArtistsList_line_artistFunction'>
-                            <label htmlFor={`inputProjectArtistFunction${index}`}>FONCTION</label>
-                            <input
-                                type='text'
-                                id={`inputProjectArtistFunction${index}`}
-                                value={artist.artistFunction}
-                                onChange={(e) => {
-                                    const updatedArtistsList = [...artistsList];
-                                    updatedArtistsList[index].artistFunction = e.target.value;
-                                    setArtistsList(updatedArtistsList);
-                                }}
-                            ></input>
-                        </div>
-                        <div className='projectForm_projectArtistsList_line_artistName'>
-                            <label htmlFor={`inputProjectArtistName${index}`}>NOMS</label>
-                            <input
-                                type='text'
-                                id={`inputProjectArtistName${index}`}
-                                value={artist.artistName}
-                                onChange={(e) => {
-                                    const updatedArtistsList = [...artistsList];
-                                    updatedArtistsList[index].artistName = e.target.value;
-                                    setArtistsList(updatedArtistsList);
-                                }}
-                            ></input>
-                        </div>
-                        <button type='button' onClick={() => handleSupprArtist(index)}>SUPPRIMER</button>
-                    </div>              
-                ))}
-                <button className='projectForm_projectArtistsList_addButton' type='button' onClick={() =>handleAddArtist()} >+ AJOUTER UN ARTISTE</button>
-            </div>
-
-            <div className='projectForm_projectProductionList'>
-                <p className='projectForm_projectProductionList_title'> PRODUCTION </p>
-                {productionList.map((production, index) => (
-                    <div key={index} className='projectForm_projectProductionList_line'>
-                        <div className='projectForm_projectProductionList_line_prodFunction'>
-                            <label htmlFor={`inputProjectProductionFunction${index}`}>FONCTION</label>
-                            <select value={production.productionFunction}
+            <Collapse title="ARTISTES" style='edit'>
+                <div className='projectForm_projectArtistsList'>
+                    {/* <p className='projectForm_projectArtistsList_title'> ARTISTES </p> */}
+                    {artistsList.map((artist, index) => (
+                        <div key={index} className='projectForm_projectArtistsList_line'>
+                            <div className='projectForm_projectArtistsList_line_artistFunction'>
+                                <label htmlFor={`inputProjectArtistFunction${index}`}>FONCTION</label>
+                                <input
+                                    type='text'
+                                    id={`inputProjectArtistFunction${index}`}
+                                    value={artist.artistFunction}
+                                    onChange={(e) => {
+                                        const updatedArtistsList = [...artistsList];
+                                        updatedArtistsList[index].artistFunction = e.target.value;
+                                        setArtistsList(updatedArtistsList);
+                                    }}
+                                ></input>
+                            </div>
+                            <div className='projectForm_projectArtistsList_line_artistName'>
+                                <label htmlFor={`inputProjectArtistName${index}`}>NOMS</label>
+                                <input
+                                    type='text'
+                                    id={`inputProjectArtistName${index}`}
+                                    value={artist.artistName}
+                                    onChange={(e) => {
+                                        const updatedArtistsList = [...artistsList];
+                                        updatedArtistsList[index].artistName = e.target.value;
+                                        setArtistsList(updatedArtistsList);
+                                    }}
+                                ></input>
+                            </div>
+                            <button type='button' onClick={() => handleSupprArtist(index)}>SUPPRIMER</button>
+                        </div>              
+                    ))}
+                    <button className='projectForm_projectArtistsList_addButton' type='button' onClick={() =>handleAddArtist()} >+ AJOUTER UN ARTISTE</button>
+                </div>
+            </Collapse>
+            <Collapse title="PRODUCTION" style='edit'>
+                <div className='projectForm_projectProductionList'>
+                    {/* <p className='projectForm_projectProductionList_title'> PRODUCTION </p> */}
+                    {productionList.map((production, index) => (
+                        <div key={index} className='projectForm_projectProductionList_line'>
+                            <div className='projectForm_projectProductionList_line_prodFunction'>
+                                <label htmlFor={`inputProjectProductionFunction${index}`}>FONCTION</label>
+                                <select value={production.productionFunction}
+                                        onChange={(e) => {
+                                            const updatedProductionList = [...productionList];
+                                            updatedProductionList[index].productionFunction = e.target.value;
+                                            setProductionList(updatedProductionList);
+                                        }}>
+                                    <option value=""></option>
+                                    {productionFunctions.map((productionFunction) => (
+                                        <option value={productionFunction}>{productionFunction}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className='projectForm_projectProductionList_line_prodName'>
+                                <label htmlFor={`inputProjectProductionName${index}`}>NOMS</label>
+                                <input
+                                    type='text'
+                                    id={`inputProjectProductionName${index}`}
+                                    value={production.productionName}
                                     onChange={(e) => {
                                         const updatedProductionList = [...productionList];
-                                        updatedProductionList[index].productionFunction = e.target.value;
+                                        updatedProductionList[index].productionName = e.target.value;
                                         setProductionList(updatedProductionList);
-                                    }}>
-                                <option value=""></option>
-                                {productionFunctions.map((productionFunction) => (
-                                    <option value={productionFunction}>{productionFunction}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className='projectForm_projectProductionList_line_prodName'>
-                            <label htmlFor={`inputProjectProductionName${index}`}>NOMS</label>
-                            <input
-                                type='text'
-                                id={`inputProjectProductionName${index}`}
-                                value={production.productionName}
-                                onChange={(e) => {
-                                    const updatedProductionList = [...productionList];
-                                    updatedProductionList[index].productionName = e.target.value;
-                                    setProductionList(updatedProductionList);
-                                }}
-                            ></input>
-                        </div>
-                        <button type='button' onClick={() => handleSupprProduction(index)}>SUPPRIMER</button>
-                    </div>              
-                ))}
-                <button className='projectForm_projectProductionList_addButton' type='button' onClick={() =>handleAddProduction()} >+ AJOUTER PRODUCTION</button>
-            </div>
-            
-            <TitleAndParagraphInput 
-                setList={setPressList} 
-                topic="PRESSE"
-                paragraphTopic="EXTRAIT"
-                titleTopic="NOM DU MEDIA"
-                list={pressList}
-                paragraphProp="quote"
-                titleProp="mediaName"
-                trixRefs={pressRefs}
-                displayForm={handleDisplayProjectForm}
-            />
-            <div className='projectForm_projectVideoList'>
-                <p className='projectForm_projectVideoList_title'> EXTRAITS VIDEO </p>
-                {videoList.map((video, index) => (
-                    <div key={index} className='projectForm_projectVideoList_line'>
-                        <div>
-                            <label htmlFor={`inputProjectVideoName${index}`}>NOM DE LA VIDEO</label>
-                            <input
-                                type='text'
-                                id={`inputProjectVideoName${index}`}
-                                value={video.videoName}
-                                onChange={(e) => {
-                                    const updatedVideoList = [...videoList];
-                                    updatedVideoList[index].videoName = e.target.value;
-                                    setVideoList(updatedVideoList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectVideoLink${index}`}>LIEN VERS LA VIDEO</label>
-                            <input
-                                type='text'
-                                id={`inputProjectVideoLink${index}`}
-                                value={video.videoLink}
-                                onChange={(e) => {
-                                    const updatedVideoList = [...videoList];
-                                    updatedVideoList[index].videoLink = e.target.value;
-                                    setVideoList(updatedVideoList);
-                                }}
-                            ></input>
-                        </div>
-                        <button type='button' onClick={() => handleSupprVideo(index)}>SUPPRIMER</button>
-                    </div>              
-                ))}
-                <button className='projectForm_projectVideoList_addButton' type='button' onClick={() =>handleAddVideo()} >+ AJOUTER EXTRAIT VIDEO</button>
-            </div>
-
-            <div className='projectForm_projectResidenciesList'>
-                <p className='projectForm_projectResidenciesList_title'> RÉSIDENCES </p>
-                <div className='projectForm_projectResidenciesList_container'>
-                {residenciesList.map((residency, index) => (
-                    <div key={index} className='projectForm_projectResidenciesList_line'>
-                        <div>
-                            <label htmlFor={`inputProjectResidencyType${index}`}>TYPE DE RÉSIDENCE</label>
-                            <select value={residency.residencyType}
-                                onChange={(e) => {
-                                    const updatedResidenciesList = [...residenciesList];
-                                    updatedResidenciesList[index].residencyType = e.target.value;
-                                    setResidenciesList(updatedResidenciesList);
-                                }}>
-                                <option value=""></option>
-                                {residencyTypes.map((residencyType)=>(
-                                <option value={residencyType}>{residencyType}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectResidencyStartDates${index}`}>DÉBUT RÉSIDENCE</label>
-                            <input
-                                type='date'
-                                id={`inputProjectResidencyStartDates${index}`}
-                                value={residency.startDates}
-                                onChange={(e) => {
-                                    const updatedResidenciesList = [...residenciesList];
-                                    updatedResidenciesList[index].startDates = e.target.value;
-
-                                    // Mettre à jour la date de fin de résidence avec le jour suivant
-                                    const nextDay = new Date(e.target.value);
-                                    nextDay.setDate(nextDay.getDate() + 1);
-                                    updatedResidenciesList[index].endDates = nextDay.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
-                                    setResidenciesList(updatedResidenciesList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectResidencyEndDates${index}`}>FIN RÉSIDENCE</label>
-                            <input
-                                type='date'
-                                id={`inputProjectResidencyEndDates${index}`}
-                                value={residency.endDates}
-                                min={residency.startDates}
-                                onChange={(e) => {
-                                    const updatedResidenciesList = [...residenciesList];
-                                    updatedResidenciesList[index].endDates = e.target.value;
-                                    setResidenciesList(updatedResidenciesList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectResidencyCity${index}`}>COMMUNE</label>
-                            <input
-                                type='text'
-                                id={`inputProjectResidencyCity${index}`}
-                                value={residency.city}
-                                onChange={(e) => {
-                                    const updatedResidenciesList = [...residenciesList];
-                                    updatedResidenciesList[index].city = e.target.value;
-                                    setResidenciesList(updatedResidenciesList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectResidencyInfos${index}`}>INFOS+</label>
-                            <input
-                                type='text'
-                                id={`inputProjectResidencyInfos${index}`}
-                                value={residency.moreInfos}
-                                onChange={(e) => {
-                                    const updatedResidenciesList = [...residenciesList];
-                                    updatedResidenciesList[index].moreInfos = e.target.value;
-                                    setResidenciesList(updatedResidenciesList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectResidencyPlaceName${index}`}>SALLE, LIEU</label>
-                            <input
-                                type='text'
-                                id={`inputProjectResidencyPlaceName${index}`}
-                                value={residency.placeName}
-                                onChange={(e) => {
-                                    const updatedResidenciesList = [...residenciesList];
-                                    updatedResidenciesList[index].placeName = e.target.value;
-                                    setResidenciesList(updatedResidenciesList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectResidencyPlaceLink${index}`}>LIEN DE LA SALLE, DU LIEU</label>
-                            <input
-                                type='text'
-                                id={`inputProjectResidencyPlaceLink${index}`}
-                                value={residency.placeLink}
-                                onChange={(e) => {
-                                    const updatedResidenciesList = [...residenciesList];
-                                    updatedResidenciesList[index].placeLink = e.target.value;
-                                    setResidenciesList(updatedResidenciesList);
-                                }}
-                            ></input>
-                        </div>
-                        <button className='projectForm_projectResidenciesList_line_supprButton' type='button' onClick={() => handleSupprResidency(index)}>SUPPRIMER</button>
-                    </div>              
-                ))}
+                                    }}
+                                ></input>
+                            </div>
+                            <button type='button' onClick={() => handleSupprProduction(index)}>SUPPRIMER</button>
+                        </div>              
+                    ))}
+                    <button className='projectForm_projectProductionList_addButton' type='button' onClick={() =>handleAddProduction()} >+ AJOUTER PRODUCTION</button>
                 </div>
-                <button className='projectForm_projectResidenciesList_addButton' type='button' onClick={() =>handleAddResidency()} >+ AJOUTER UNE RÉSIDENCE</button>
-            </div>
-
-            <div className='projectForm_projectShowsList'>
-                <p className='projectForm_projectShowsList_title'> REPRÉSENTATIONS </p>
-                <div className='projectForm_projectShowsList_container'>
-                {showsList?.map((show, index) => (
-                <div key={index}>
-                    <div className='projectForm_projectShowsList_container_infos'>
-                        <div>
-                            <label htmlFor={`inputProjectShowCity${index}`}>COMMUNE DE REPRÉSENTATION:</label>
-                            <input
-                                type='text'
-                                id={`inputProjectShowCity${index}`}
-                                value={show.city}
-                                onChange={(e) => {
-                                    const updatedShowsList = [...showsList];
-                                    updatedShowsList[index].city = e.target.value;
-                                    setShowsList(updatedShowsList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectShowPlaceName${index}`}>LIEU DE REPRÉSENTATION</label>
-                            <input
-                                type='text'
-                                id={`inputProjectShowPlaceName${index}`}
-                                value={show.placeName}
-                                onChange={(e) => {
-                                    const updatedShowsList = [...showsList];
-                                    updatedShowsList[index].placeName = e.target.value;
-                                    setShowsList(updatedShowsList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectShowPlaceLink${index}`}>LIEN VERS LE LIEU</label>
-                            <input
-                                type='text'
-                                id={`inputProjectShowPlaceLink${index}`}
-                                value={show.placeLink}
-                                onChange={(e) => {
-                                    const updatedShowsList = [...showsList];
-                                    updatedShowsList[index].placeLink = e.target.value;
-                                    setShowsList(updatedShowsList);
-                                }}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor={`inputProjectShowInfos${index}`}>INFOS+</label>
-                            <input
-                                type='text'
-                                id={`inputProjectShowInfos${index}`}
-                                value={show.moreInfos}
-                                onChange={(e) => {
-                                    const updatedShowsList = [...showsList];
-                                    updatedShowsList[index].moreInfos = e.target.value;
-                                    setShowsList(updatedShowsList);
-                                }}
-                            ></input>
-                        </div>
-                    </div>
-                    <div className='projectForm_projectShowsList_container_dates'>
-                        <label htmlFor={`inputProjectShowDates${index}`}>DATES DE REPRÉSENTATION:</label>
-                        <div className='projectForm_projectShowsList_container_dates_gridDisplay'>
-                            {show.dates?.map((date, dateIndex)=>(
-                            <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay'> 
+            </Collapse>
+            <Collapse title="PRESSE" style='edit'>
+                <TitleAndParagraphInput 
+                    setList={setPressList} 
+                    topic="PRESSE"
+                    paragraphTopic="EXTRAIT"
+                    titleTopic="NOM DU MEDIA"
+                    list={pressList}
+                    paragraphProp="quote"
+                    titleProp="mediaName"
+                    trixRefs={pressRefs}
+                    displayForm={handleDisplayProjectForm}
+                />
+            </Collapse>
+            <Collapse title="EXTRAITS VIDEOS" style='edit'>
+                <div className='projectForm_projectVideoList'>
+                    {/* <p className='projectForm_projectVideoList_title'> EXTRAITS VIDEOS </p> */}
+                    {videoList.map((video, index) => (
+                        <div key={index} className='projectForm_projectVideoList_line'>
+                            <div>
+                                <label htmlFor={`inputProjectVideoName${index}`}>NOM DE LA VIDEO</label>
                                 <input
-                                    className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_date'
-                                    key={dateIndex}
+                                    type='text'
+                                    id={`inputProjectVideoName${index}`}
+                                    value={video.videoName}
+                                    onChange={(e) => {
+                                        const updatedVideoList = [...videoList];
+                                        updatedVideoList[index].videoName = e.target.value;
+                                        setVideoList(updatedVideoList);
+                                    }}
+                                ></input>
+                            </div>
+                            <div>
+                                <label htmlFor={`inputProjectVideoLink${index}`}>LIEN VERS LA VIDEO</label>
+                                <input
+                                    type='text'
+                                    id={`inputProjectVideoLink${index}`}
+                                    value={video.videoLink}
+                                    onChange={(e) => {
+                                        const updatedVideoList = [...videoList];
+                                        updatedVideoList[index].videoLink = e.target.value;
+                                        setVideoList(updatedVideoList);
+                                    }}
+                                ></input>
+                            </div>
+                            <button type='button' onClick={() => handleSupprVideo(index)}>SUPPRIMER</button>
+                        </div>              
+                    ))}
+                    <button className='projectForm_projectVideoList_addButton' type='button' onClick={() =>handleAddVideo()} >+ AJOUTER EXTRAIT VIDEO</button>
+                </div>
+            </Collapse>
+            <Collapse title="RÉSIDENCES" style='edit'>
+                <div className='projectForm_projectResidenciesList'>
+                    {/* <p className='projectForm_projectResidenciesList_title'> RÉSIDENCES </p> */}
+                    <div className='projectForm_projectResidenciesList_container'>
+                    {residenciesList.map((residency, index) => (
+                        <div key={index} className='projectForm_projectResidenciesList_line'>
+                            <div>
+                                <label htmlFor={`inputProjectResidencyType${index}`}>TYPE DE RÉSIDENCE</label>
+                                <select value={residency.residencyType}
+                                    onChange={(e) => {
+                                        const updatedResidenciesList = [...residenciesList];
+                                        updatedResidenciesList[index].residencyType = e.target.value;
+                                        setResidenciesList(updatedResidenciesList);
+                                    }}>
+                                    <option value=""></option>
+                                    {residencyTypes.map((residencyType)=>(
+                                    <option value={residencyType}>{residencyType}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label htmlFor={`inputProjectResidencyStartDates${index}`}>DÉBUT RÉSIDENCE</label>
+                                <input
                                     type='date'
-                                    id={`inputProjectShowDates${index}`}
-                                    value={date.day}
+                                    id={`inputProjectResidencyStartDates${index}`}
+                                    value={residency.startDates}
+                                    onChange={(e) => {
+                                        const updatedResidenciesList = [...residenciesList];
+                                        updatedResidenciesList[index].startDates = e.target.value;
+
+                                        // Mettre à jour la date de fin de résidence avec le jour suivant
+                                        const nextDay = new Date(e.target.value);
+                                        nextDay.setDate(nextDay.getDate() + 1);
+                                        updatedResidenciesList[index].endDates = nextDay.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
+                                        setResidenciesList(updatedResidenciesList);
+                                    }}
+                                ></input>
+                            </div>
+                            <div>
+                                <label htmlFor={`inputProjectResidencyEndDates${index}`}>FIN RÉSIDENCE</label>
+                                <input
+                                    type='date'
+                                    id={`inputProjectResidencyEndDates${index}`}
+                                    value={residency.endDates}
+                                    min={residency.startDates}
+                                    onChange={(e) => {
+                                        const updatedResidenciesList = [...residenciesList];
+                                        updatedResidenciesList[index].endDates = e.target.value;
+                                        setResidenciesList(updatedResidenciesList);
+                                    }}
+                                ></input>
+                            </div>
+                            <div>
+                                <label htmlFor={`inputProjectResidencyCity${index}`}>COMMUNE</label>
+                                <input
+                                    type='text'
+                                    id={`inputProjectResidencyCity${index}`}
+                                    value={residency.city}
+                                    onChange={(e) => {
+                                        const updatedResidenciesList = [...residenciesList];
+                                        updatedResidenciesList[index].city = e.target.value;
+                                        setResidenciesList(updatedResidenciesList);
+                                    }}
+                                ></input>
+                            </div>
+                            <div>
+                                <label htmlFor={`inputProjectResidencyInfos${index}`}>INFOS+</label>
+                                <input
+                                    type='text'
+                                    id={`inputProjectResidencyInfos${index}`}
+                                    value={residency.moreInfos}
+                                    onChange={(e) => {
+                                        const updatedResidenciesList = [...residenciesList];
+                                        updatedResidenciesList[index].moreInfos = e.target.value;
+                                        setResidenciesList(updatedResidenciesList);
+                                    }}
+                                ></input>
+                            </div>
+                            <div>
+                                <label htmlFor={`inputProjectResidencyPlaceName${index}`}>SALLE, LIEU</label>
+                                <input
+                                    type='text'
+                                    id={`inputProjectResidencyPlaceName${index}`}
+                                    value={residency.placeName}
+                                    onChange={(e) => {
+                                        const updatedResidenciesList = [...residenciesList];
+                                        updatedResidenciesList[index].placeName = e.target.value;
+                                        setResidenciesList(updatedResidenciesList);
+                                    }}
+                                ></input>
+                            </div>
+                            <div>
+                                <label htmlFor={`inputProjectResidencyPlaceLink${index}`}>LIEN DE LA SALLE, DU LIEU</label>
+                                <input
+                                    type='text'
+                                    id={`inputProjectResidencyPlaceLink${index}`}
+                                    value={residency.placeLink}
+                                    onChange={(e) => {
+                                        const updatedResidenciesList = [...residenciesList];
+                                        updatedResidenciesList[index].placeLink = e.target.value;
+                                        setResidenciesList(updatedResidenciesList);
+                                    }}
+                                ></input>
+                            </div>
+                            <button className='projectForm_projectResidenciesList_line_supprButton' type='button' onClick={() => handleSupprResidency(index)}>SUPPRIMER</button>
+                        </div>              
+                    ))}
+                    </div>
+                    <button className='projectForm_projectResidenciesList_addButton' type='button' onClick={() =>handleAddResidency()} >+ AJOUTER UNE RÉSIDENCE</button>
+                </div>
+            </Collapse>
+            <Collapse title="REPRÉSENTATIONS" style='edit'>
+                <div className='projectForm_projectShowsList'>
+                    {/* <p className='projectForm_projectShowsList_title'> REPRÉSENTATIONS </p> */}
+                    <div className='projectForm_projectShowsList_container'>
+                    {showsList?.map((show, index) => (
+                    <div key={index}>
+                        <div className='projectForm_projectShowsList_container_infos'>
+                            <div>
+                                <label htmlFor={`inputProjectShowCity${index}`}>COMMUNE DE REPRÉSENTATION:</label>
+                                <input
+                                    type='text'
+                                    id={`inputProjectShowCity${index}`}
+                                    value={show.city}
                                     onChange={(e) => {
                                         const updatedShowsList = [...showsList];
-                                        updatedShowsList[index].dates[dateIndex].day = e.target.value;
+                                        updatedShowsList[index].city = e.target.value;
                                         setShowsList(updatedShowsList);
                                     }}
-                                />
-                                <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times'>
-                                    {date.times?.map((time, timeIndex) => (
-                                    <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer'>
-                                        <input
-                                            className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer_singleTime'
-                                            key={`inputProjectShowDatesTimesTime${timeIndex}`}
-                                            type='time'
-                                            id={`inputProjectShowDatesTimesTime${timeIndex}`}
-                                            value={time.time}
-                                            onChange={(e) => {
-                                                const updatedShowsList = [...showsList];
-                                                updatedShowsList[index].dates[dateIndex].times[timeIndex].time = e.target.value;
-                                                setShowsList(updatedShowsList);
-                                            }}
-                                        />
-                                        <label>INFOS SUPP.:</label>
-                                        <input
-                                            className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer_moreInfosInput'
-                                            key={`inputProjectShowDatesTimesInfos${timeIndex}`}
-                                            type='text'
-                                            id={`inputProjectShowDatesTimesInfos${timeIndex}`}
-                                            value={time.timeInfos}
-                                            onChange={(e) => {
-                                                const updatedShowsList = [...showsList];
-                                                updatedShowsList[index].dates[dateIndex].times[timeIndex].timeInfos = e.target.value;
-                                                setShowsList(updatedShowsList);
-                                            }}
-                                        />
-                                        <button className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer_supprButton' type="button" onClick={() =>handleSupprSameDateTime(index, dateIndex, timeIndex)} >SUPPR HORAIRE</button>
-                                    </div>
-                                    ))}
-                                    <button className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_addButton' type="button" onClick={() =>handleAddSameDateTime(index, dateIndex)} >+HORAIRE</button>
-                                </div>
-                                <button className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_supprButton' type="button" onClick={() =>handleSupprSameShowDate(index, dateIndex)} >SUPPRIMER DATE</button>
+                                ></input>
                             </div>
-                            ))}
-                            <button className='projectForm_projectShowsList_container_dates_gridDisplay_addButton' type="button" onClick={() =>handleAddSameShowDate(index)} >+AJOUTER UNE DATE</button>
+                            <div>
+                                <label htmlFor={`inputProjectShowPlaceName${index}`}>LIEU DE REPRÉSENTATION</label>
+                                <input
+                                    type='text'
+                                    id={`inputProjectShowPlaceName${index}`}
+                                    value={show.placeName}
+                                    onChange={(e) => {
+                                        const updatedShowsList = [...showsList];
+                                        updatedShowsList[index].placeName = e.target.value;
+                                        setShowsList(updatedShowsList);
+                                    }}
+                                ></input>
+                            </div>
+                            <div>
+                                <label htmlFor={`inputProjectShowPlaceLink${index}`}>LIEN VERS LE LIEU</label>
+                                <input
+                                    type='text'
+                                    id={`inputProjectShowPlaceLink${index}`}
+                                    value={show.placeLink}
+                                    onChange={(e) => {
+                                        const updatedShowsList = [...showsList];
+                                        updatedShowsList[index].placeLink = e.target.value;
+                                        setShowsList(updatedShowsList);
+                                    }}
+                                ></input>
+                            </div>
+                            <div>
+                                <label htmlFor={`inputProjectShowInfos${index}`}>INFOS+</label>
+                                <input
+                                    type='text'
+                                    id={`inputProjectShowInfos${index}`}
+                                    value={show.moreInfos}
+                                    onChange={(e) => {
+                                        const updatedShowsList = [...showsList];
+                                        updatedShowsList[index].moreInfos = e.target.value;
+                                        setShowsList(updatedShowsList);
+                                    }}
+                                ></input>
+                            </div>
+                        </div>
+                        <div className='projectForm_projectShowsList_container_dates'>
+                            <label htmlFor={`inputProjectShowDates${index}`}>DATES DE REPRÉSENTATION:</label>
+                            <div className='projectForm_projectShowsList_container_dates_gridDisplay'>
+                                {show.dates?.map((date, dateIndex)=>(
+                                <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay'> 
+                                    <input
+                                        className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_date'
+                                        key={dateIndex}
+                                        type='date'
+                                        id={`inputProjectShowDates${index}`}
+                                        value={date.day}
+                                        onChange={(e) => {
+                                            const updatedShowsList = [...showsList];
+                                            updatedShowsList[index].dates[dateIndex].day = e.target.value;
+                                            setShowsList(updatedShowsList);
+                                        }}
+                                    />
+                                    <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times'>
+                                        {date.times?.map((time, timeIndex) => (
+                                        <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer'>
+                                            <input
+                                                className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer_singleTime'
+                                                key={`inputProjectShowDatesTimesTime${timeIndex}`}
+                                                type='time'
+                                                id={`inputProjectShowDatesTimesTime${timeIndex}`}
+                                                value={time.time}
+                                                onChange={(e) => {
+                                                    const updatedShowsList = [...showsList];
+                                                    updatedShowsList[index].dates[dateIndex].times[timeIndex].time = e.target.value;
+                                                    setShowsList(updatedShowsList);
+                                                }}
+                                            />
+                                            <label>INFOS SUPP.:</label>
+                                            <input
+                                                className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer_moreInfosInput'
+                                                key={`inputProjectShowDatesTimesInfos${timeIndex}`}
+                                                type='text'
+                                                id={`inputProjectShowDatesTimesInfos${timeIndex}`}
+                                                value={time.timeInfos}
+                                                onChange={(e) => {
+                                                    const updatedShowsList = [...showsList];
+                                                    updatedShowsList[index].dates[dateIndex].times[timeIndex].timeInfos = e.target.value;
+                                                    setShowsList(updatedShowsList);
+                                                }}
+                                            />
+                                            <button className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer_supprButton' type="button" onClick={() =>handleSupprSameDateTime(index, dateIndex, timeIndex)} >SUPPR HORAIRE</button>
+                                        </div>
+                                        ))}
+                                        <button className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_addButton' type="button" onClick={() =>handleAddSameDateTime(index, dateIndex)} >+HORAIRE</button>
+                                    </div>
+                                    <button className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_supprButton' type="button" onClick={() =>handleSupprSameShowDate(index, dateIndex)} >SUPPRIMER DATE</button>
+                                </div>
+                                ))}
+                                <button className='projectForm_projectShowsList_container_dates_gridDisplay_addButton' type="button" onClick={() =>handleAddSameShowDate(index)} >+AJOUTER UNE DATE</button>
+                            </div>
+                        </div>
+                        <button className='projectForm_projectShowsList_container_supprButton' type='button' onClick={() => handleSupprShow(index)}>SUPPRIMER LIEU</button>
+                    </div>              
+                    ))}
+                    </div>
+                    <button className='projectForm_projectShowsList_addButton' type='button' onClick={() =>handleAddShow()} >+ AJOUTER UN LIEU</button>
+                </div>
+            </Collapse>
+            <Collapse title="DOSSIERS" style='edit'>
+                <div className='projectForm_projectPdfFile'>
+                    {/* <p className='projectForm_projectPdfFile_title'>DOSSIERS</p> */}
+                    <div className='projectForm_projectPdfFile_pdfContainer'>
+                    {pdfFiles?.map((pdf, index) => (
+                        <div key={index}>
+                            <p>{pdf.pdfName}</p>
+                            <label htmlFor='inputProjectPdfName'>NOM DU PDF</label>
+                            <input 
+                                type='text' 
+                                id='inputProjectPdfName'
+                                name="pdfName"
+                                value={projectFormMode === 'edit' ? (pdf.pdfName || "") : ''} 
+                                onChange={(e) => {
+                                    const updatedChangedPdfFiles = [...pdfFiles];
+                                    updatedChangedPdfFiles[index].pdfName = e.target.value;
+                                    setPdfFiles(updatedChangedPdfFiles);
+                                }}
+                            />
+                            <button type='button' onClick={() => handleSupprPdf(index)}>SUPPRIMER</button>
+                        </div>
+                    ))}
+                    </div>
+                    <div  className="projectForm_projectPdfFile_sampleContainer">
+                        <img id='pdfSample' ref={projectPdfSampleRef} src='' alt=''/>
+                        <div className={isPdfLoaded ? "projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOn" : "projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOff"}>
+                            <button aria-label="Ajouter le PDF" onClick={handleAddPdfFile} type="button">AJOUTER</button>
+                            <button aria-label="Annuler" onClick={cancelAddPdfFile} type="button">ANNULER</button>
                         </div>
                     </div>
-                    <button className='projectForm_projectShowsList_container_supprButton' type='button' onClick={() => handleSupprShow(index)}>SUPPRIMER LIEU</button>
-                </div>              
-                ))}
+                    <label className={isPdfLoaded ? 'projectForm_projectPdfFile_addButton--displayOff' : 'projectForm_projectPdfFile_addButton'} htmlFor='inputProjectPdfFile'>+ AJOUTER UN FICHIER</label>
+                    <input type='file' id='inputProjectPdfFile' name="pdfFiles" ref={inputProjectPdfFileRef} onChange={displayPdfSample}></input>
                 </div>
-                <button className='projectForm_projectShowsList_addButton' type='button' onClick={() =>handleAddShow()} >+ AJOUTER UN LIEU</button>
-            </div>
-
-            <div className='projectForm_projectPdfFile'>
-                <p className='projectForm_projectPdfFile_title'>DOSSIERS</p>
-                <div className='projectForm_projectPdfFile_pdfContainer'>
-                {pdfFiles?.map((pdf, index) => (
-                    <div key={index}>
-                        <p>{pdf.pdfName}</p>
-                        <label htmlFor='inputProjectPdfName'>NOM DU PDF</label>
-                        <input 
-                            type='text' 
-                            id='inputProjectPdfName'
-                            name="pdfName"
-                            value={projectFormMode === 'edit' ? (pdf.pdfName || "") : ''} 
-                            onChange={(e) => {
-                                const updatedChangedPdfFiles = [...pdfFiles];
-                                updatedChangedPdfFiles[index].pdfName = e.target.value;
-                                setPdfFiles(updatedChangedPdfFiles);
-                            }}
-                        />
-                        <button type='button' onClick={() => handleSupprPdf(index)}>SUPPRIMER</button>
-                    </div>
-                ))}
-                </div>
-                <div  className="projectForm_projectPdfFile_sampleContainer">
-                    <img id='pdfSample' ref={projectPdfSampleRef} src='' alt=''/>
-                    <div className={isPdfLoaded ? "projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOn" : "projectForm_projectPdfFile_sampleContainer_buttonsSystem--displayOff"}>
-                        <button aria-label="Ajouter le PDF" onClick={handleAddPdfFile} type="button">AJOUTER</button>
-                        <button aria-label="Annuler" onClick={cancelAddPdfFile} type="button">ANNULER</button>
-                    </div>
-                </div>
-                <label className={isPdfLoaded ? 'projectForm_projectPdfFile_addButton--displayOff' : 'projectForm_projectPdfFile_addButton'} htmlFor='inputProjectPdfFile'>+ AJOUTER UN FICHIER</label>
-                <input type='file' id='inputProjectPdfFile' name="pdfFiles" ref={inputProjectPdfFileRef} onChange={displayPdfSample}></input>
-            </div>
+            </Collapse>
             <ErrorText errorText={"Une erreur s\'est produite"} state={displayServerError}/>
             <ErrorText errorText={"Tous les champs marqués d'une * doivent être remplis"} state={displayError}/>
             <div className='projectForm_buttons'>

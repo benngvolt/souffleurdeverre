@@ -1,22 +1,29 @@
-# pull official base image
-FROM node:20.15.0-alpine
+# Étape 1 : Utiliser une image Node.js pour builder l'application React
+FROM node:16 AS build
 
-# set working directory
+# Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
-ENV PORT 3000
-# install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install --silent
-RUN npm install react-scripts@3.4.1 -g --silent
+# Copier les fichiers package.json et package-lock.json (ou yarn.lock)
+COPY package*.json ./
 
-# add app
-COPY . ./
+# Installer les dépendances du projet
+RUN npm install
 
-EXPOSE 3000
+# Copier tous les fichiers de l'application
+COPY . .
 
-# start app
-CMD ["npm", "start"]
+# Builder l'application React
+RUN npm run build
+
+# Étape 2 : Utiliser une image Nginx pour servir l'application
+FROM nginx:alpine
+
+# Copier les fichiers du build de l'application React vers le dossier Nginx pour servir les fichiers
+COPY --from=build /app/build/ /usr/share/nginx/html/
+
+# Exposer le port 8080 pour l'accès HTTP
+EXPOSE 80
+
+# Lancer Nginx
+CMD ["nginx", "-g", "daemon off;"]

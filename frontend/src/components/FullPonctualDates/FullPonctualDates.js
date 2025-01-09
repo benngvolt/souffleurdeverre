@@ -9,20 +9,34 @@ function FullPonctualDates({datesArray, className}) {
         "juillet", "août", "septembre", "octobre", "novembre", "décembre"
       ];
 
-    const formatDay = (dateString, index, totalDates) => {
-        const date = new Date(dateString);
-        const day = ("0" + date.getDate()).slice(-2); // Ajoute un zéro devant si nécessaire
+    // const formatDay = (dateString, index, totalDates) => {
+    //     const date = new Date(dateString);
+    //     const day = ("0" + date.getDate()).slice(-2); // Ajoute un zéro devant si nécessaire
 
-        if (index === totalDates - 1) {
-            const month = monthNames[date.getMonth()];
-            const year = date.getFullYear();
-            return `${day} ${month} ${year}`;
-        } else if (new Date(datesArray[index + 1].day).getMonth() !== date.getMonth() || new Date(datesArray[index + 1].day).getFullYear() !== date.getFullYear()) {
-            const month = monthNames[date.getMonth()];
-            const year = date.getFullYear();
+    //     if (index === totalDates - 1) {
+    //         const month = monthNames[date.getMonth()];
+    //         const year = date.getFullYear();
+    //         return `${day} ${month} ${year}`;
+    //     } else if (new Date(datesArray[index + 1].day).getMonth() !== date.getMonth() || new Date(datesArray[index + 1].day).getFullYear() !== date.getFullYear()) {
+    //         const month = monthNames[date.getMonth()];
+    //         const year = date.getFullYear();
+    //         return `${day} ${month} ${year}`;
+    //     } else {
+    //         const month = monthNames[date.getMonth()];
+    //         return `${day} ${month}`;
+    //     }
+    // };
+    const formatDay = (dateString, index, totalDates) => {
+        const date = new Date(dateString + "T00:00:00Z"); // Interprète toujours comme UTC
+        const day = date.getUTCDate();
+        const month = monthNames[date.getUTCMonth()];
+        const year = date.getUTCFullYear();
+    
+        if (index === totalDates - 1 || 
+            new Date(datesArray[index + 1].day + "T00:00:00Z").getUTCMonth() !== date.getUTCMonth() || 
+            new Date(datesArray[index + 1].day + "T00:00:00Z").getUTCFullYear() !== date.getUTCFullYear()) {
             return `${day} ${month} ${year}`;
         } else {
-            const month = monthNames[date.getMonth()];
             return `${day} ${month}`;
         }
     };
@@ -42,9 +56,11 @@ function FullPonctualDates({datesArray, className}) {
             {sortedDatesArray.map((date, index) => (
                 <div className={`${className}_dates_singleDate`} key={index}>
                     <p className={`${className}_dates_singleDate_day`}> {`${formatDay(date.day, index, totalDates)}`} </p>
+                   
                     {date.times.length > 0 && (
-                    <p className={`${className}_dates_singleDate_time`}>{formatTimes(date.times)}</p>
-                    )}
+                        <p className={`${className}_dates_singleDate_time`}>{formatTimes(date.times)}</p>
+                        )}
+                    
                 </div>
             ))}
         </div> 

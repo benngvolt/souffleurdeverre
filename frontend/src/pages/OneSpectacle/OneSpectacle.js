@@ -42,7 +42,7 @@ function OneSpectacle() {
                     {project.subtitle &&
                     <p className='oneSpectacle_mainDatas_subtitle'>{project.subtitle}</p>
                     }
-                    {project.subtitle &&
+                    {project.moreInfos &&
                     <p className='oneSpectacle_mainDatas_moreInfos'>{project.moreInfos}</p>
                     }
                     {project.creationDate &&

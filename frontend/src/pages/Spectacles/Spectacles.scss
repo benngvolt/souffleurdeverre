@@ -166,10 +166,27 @@
                     text-transform: uppercase;
                     text-align: center;
                     @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                        font-size: 22px;
+                        font-size: 20px;
                     }
                     @media only screen and (max-width:$mobileMaxWidth){
                         font-size: 19px;
+                    } 
+                }
+
+                &_subtitle {
+                    font-family: 'MainFont_light';
+                    font-size: 14px;
+                    color: $colorDarkGrey;
+                    display: flex;
+                    width: 100%;
+                    justify-content: center;
+                    text-transform: uppercase;
+                    text-align: center;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        font-size: 12px;
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        font-size: 12px;
                     } 
                 }
 

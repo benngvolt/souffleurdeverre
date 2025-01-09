@@ -19,8 +19,9 @@
         background: none;
         border: none;
         position: sticky;
-        top: 60px;
+        top: 80px;
         left: 60px;
+        z-index: 100;
         
         &_icon {
             height: 2em;
@@ -119,7 +120,7 @@
     &_projectResidenciesList,
     &_projectPdfFile {
         width: 80%;
-        margin: auto;
+        margin: 45px auto;
         display: flex;
         flex-direction: column;
         row-gap: 19px;
@@ -161,10 +162,21 @@
             }
 
             button {
-                @include FormButtonType;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                padding: 0;
+                // @include FormButtonType;
+                color: $colorOne;
+                width: 100px;
                 background: none;
+                margin: 0;
+                font-weight: bold;
                 border: none;
-                padding:0; 
+                &:hover {
+                    color: $colorDarkGrey;
+                    cursor: pointer;
+                }
             }
 
             &_prodFunction {
@@ -184,15 +196,23 @@
         } 
         &_addButton {
             @include FormButtonType;
-            background: none;
             width: 300px;
-            margin: auto;
+            background-color: $colorDarkGrey;
+            color: $colorLightGrey;
+            margin: 10px auto;
+            border: none;
+            &:hover {
+                background-color: $colorThree;
+                color: $colorDarkGrey;
+                cursor: pointer;
+            }
         }
+        
     }
     &_projectShowsList {
 
         width: 80%;
-        margin: auto;
+        margin: 45px auto;
         display: flex;
         flex-direction: column;
         row-gap: 19px;
@@ -241,7 +261,7 @@
                 label {
                     font-size: 16px;
                     font-family: 'MainFont_light';
-                    margin: 22px 0 0 0;
+                    margin: 22px 0 11px 0;
                 }
 
                 &_gridDisplay {
@@ -255,7 +275,7 @@
                         display: flex;
                         flex-direction: column;
                         row-gap: 5px;
-                        margin: 5px 0 22px 0;
+                        margin: 0 0 22px 0;
                         width: auto;
 
                         &_date {
@@ -272,8 +292,10 @@
                             justify-content: flex-start;
                             row-gap: 10px;
                             column-gap: 9px;
+                            
 
                             &_timeContainer {
+                                background-color: $colorTwo;
                                 display: flex;
                                 flex-direction: column;
                                 
@@ -282,6 +304,7 @@
                                     font-family: 'MainFont_light';
                                     font-size: 14px;
                                     font-weight: bold;
+                                    background-color: rgba($color: #ffffff, $alpha: 0.6)
                                 }
 
                                 label {
@@ -297,66 +320,125 @@
                                     font-size: 13px;
                                     background: none;
                                     border: none;
+                                    font-weight: bold;
+                                    color: $colorOne;
+                                    
                                     &:hover {
-                                        color: $colorTwo;
+                                        color: $colorDarkGrey;
                                         cursor: pointer;
                                     }
                                 }
                             }
                             &_addButton {
-                                border: solid 1px $colorDarkGrey;
-                                font-family: 'MainFont_light';
-                                margin: 0 0 0 0;
-                                padding: 0;
-                                background: none;
-                                width: 100%;
+                                // border: solid 1px $colorDarkGrey;
+                                // font-family: 'MainFont_light';
+                                // margin: 0 0 0 0;
+                                // padding: 0;
+                                // background: none;
+                                // width: 100%;
+                                // &:hover {
+                                //     color: $colorTwo;
+                                //     cursor: pointer;
+                                // }
+                                @include FormButtonType;
+                                
+                                background-color: $colorDarkGrey;
+                                color: $colorLightGrey;
+                                font-weight: bold;
+                                
+                                padding: 8px;
+                                margin: 0;
+                                width: 102px;
+                                border: none;
                                 &:hover {
-                                    color: $colorTwo;
+                                    background-color: $colorThree;
+                                    color: $colorDarkGrey;
                                     cursor: pointer;
                                 }
                             }
                         }
 
                         &_supprButton {
-                            margin: 9px auto 9px auto;
-                            width: 100%;
-                            text-align: center;
-                            padding: 0;
-                            font-family: 'MainFont_light';
-                            font-size: 14px;
-                            border: none;
-                            background-color: $colorThree;
+                            // margin: 9px auto 9px auto;
+                            // width: 100%;
+                            // text-align: center;
+                            // padding: 0;
+                            // font-family: 'MainFont_light';
+                            // font-size: 14px;
+                            // border: none;
+                            // background-color: $colorThree;
+                            // &:hover {
+                            //     background-color: $colorDarkGrey;
+                            //     color: $colorLightGrey;
+                            //     cursor: pointer;
+                            // }
+                            @include FormButtonType;
+                            color: $colorOne;
+                            width: auto;
+                            padding: 7px;
+                            background: none;
+                            margin: 10px 0;
+                            font-weight: bold;
+                            border: 1px solid $colorOne;
                             &:hover {
-                                background-color: $colorDarkGrey;
                                 color: $colorLightGrey;
+                                background-color: $colorOne; 
                                 cursor: pointer;
                             }
                         }
                     }
 
                     &_addButton {
-                        font-family: 'MainFont_light';
-                        font-weight: bold;
-                        border: none;
-                        &:hover {
-                            color: $colorSix;
-                            cursor: pointer;
-                        }
-                        background: none;
-                        margin: 16px auto 35px auto;
+                        // font-family: 'MainFont_light';
+                        // font-weight: bold;
+                        // border: none;
+                        // &:hover {
+                        //     color: $colorSix;
+                        //     cursor: pointer;
+                        // }
+                        // background: none;
+                        // margin: 16px auto 35px auto;
+                        @include FormButtonType;
+                        height: 32px;
+                                background-color: $colorDarkGrey;
+                                color: $colorLightGrey;
+                                font-weight: bold;
+                                padding: 8px;
+                                margin: 0 0 45px 0;
+                                width: auto;
+                                border: none;
+                                &:hover {
+                                    background-color: $colorThree;
+                                    color: $colorDarkGrey;
+                                    cursor: pointer;
+                                }
                     }
                 }
             }
 
             &_supprButton {
+                // @include FormButtonType;
+                // background-color: $colorFive;
+                // border: none;
+                // width: 100%;
+                // margin: 0 auto 35px auto;
+                // &:hover {
+                //     background-color: $colorDarkGrey;
+                //     color: $colorLightGrey;
+                //     cursor: pointer;
+                // }
                 @include FormButtonType;
-                background-color: $colorFive;
-                border: none;
+                color: $colorLightGrey;
                 width: 100%;
-                margin: 0 auto 35px auto;
+                padding: 7px;
+                background: none;
+                margin: 10px 0;
+                font-weight: bold;
+                border: 1px solid $colorOne;
+                background-color: $colorOne; 
                 &:hover {
-                    background-color: $colorDarkGrey;
-                    color: $colorLightGrey;
+                    
+                    background-color: $colorLightGrey; 
                     cursor: pointer;
                 }
             }
@@ -369,16 +451,30 @@
             }
         } 
         &_addButton {
+            // @include FormButtonType;
+            // background: none;
+            // width: 300px;
+            // margin: auto;
             @include FormButtonType;
-            background: none;
+            height: 32px;
+            background-color: $colorDarkGrey;
+            color: $colorLightGrey;
+            
+            padding: 8px;
+            margin: 10px auto;
             width: 300px;
-            margin: auto;
+            border: none;
+            &:hover {
+                background-color: $colorThree;
+                color: $colorDarkGrey;
+                cursor: pointer;
+            }
         }
     }
 
     &_projectParagraphList {
         width: 80%;
-        margin: 98px auto 0 auto;
+        margin: 45px auto;
         display: flex;
         flex-direction: column;
         row-gap: 19px;
@@ -387,6 +483,7 @@
             font-size: 19px;
             font-family: 'MainFont_light';
             font-weight: bold;
+
         }
 
         input, select {
@@ -400,6 +497,7 @@
             justify-content: space-between;
             column-gap: 9px;
             width: 100%;
+            margin-bottom: 20px;
 
             label {
                 font-size: 16px;
@@ -420,6 +518,7 @@
                     font-family: 'MainFont_light';
                     font-weight: bold;
                     font-size: 14px;
+                    margin-bottom: 20px;
             }
             }
 
@@ -435,17 +534,32 @@
 
             &_supprButton {
                 @include FormButtonType;
+                color: $colorOne;
                 width: 100px;
                 background: none;
                 margin: 10px 0;
+                font-weight: bold;
+                border: 1px solid $colorOne;
+                &:hover {
+                    color: $colorLightGrey;
+                    background-color: $colorOne; 
+                    cursor: pointer;
+                }
             }
         }
 
         &_addButton {
             @include FormButtonType;
             width: 300px;
-            background: none;
+            background-color: $colorDarkGrey;
+            color: $colorLightGrey;
             margin: 10px auto;
+            border: none;
+            &:hover {
+                background-color: $colorThree;
+                color: $colorDarkGrey;
+                cursor: pointer;
+            }
         }
     }
 
@@ -455,6 +569,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             column-gap: 35px;
+            row-gap: 35px;
         }
 
         &_line {
@@ -467,18 +582,26 @@
                 }
             }
 
-            &_supprButton {
-                font-size: 16px;
+            &_supprButton, button {
+                 
                 font-family: 'MainFont_light';
-                margin: 16px auto 54px auto;
+                margin: 15px 0;
+                font-size: 15px;
             }
         }
 
         &_addButton {
             @include FormButtonType;
             width: 300px;
-            background: none;
+            background-color: $colorDarkGrey;
+            color: $colorLightGrey;
             margin: 10px auto;
+            border: none;
+            &:hover {
+                background-color: $colorThree;
+                color: $colorDarkGrey;
+                cursor: pointer;
+            }
         }
     }
 

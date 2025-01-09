@@ -17,7 +17,7 @@
             cursor: pointer;
         }
         
-        &--light {
+        &--light, &--light--open {
             border: none;
             background-color: $colorDarkGrey;
                 h4 {
@@ -28,7 +28,7 @@
             }
         }
 
-        &--white {
+        &--white, &--white--open {
             border: none;
             background-color: $colorLightGrey;
                 h4 {
@@ -38,6 +38,28 @@
             svg {
                 color: $colorDarkGrey;
             }
+        }
+
+        &--edit, &--edit--open {
+            border: none;
+            height: 45px;
+            width: 80%;
+                h4 {
+                color: $colorDarkGrey;
+      
+            }
+
+            svg {
+                color: $colorDarkGrey;
+            }
+        }
+
+        &--edit {
+            background-color: $colorFour;
+        }
+
+        &--edit--open {
+            background-color: $colorFive;
         }
 
         h4 {

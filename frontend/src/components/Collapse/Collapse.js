@@ -23,7 +23,7 @@ function Collapse({children, title, style}) {
     return (     
         <section className={`collapse collapse--${style}`}> 
             <button type='button' 
-                className={`collapse_collapseButton collapse_collapseButton--${style}`} 
+                className={isCollapseOpened===false?`collapse_collapseButton collapse_collapseButton--${style}`:`collapse_collapseButton collapse_collapseButton--${style}--open`} 
                 onClick={handleCollapseState}
                 aria-label={`ouvrir la section ${title}`}
                 aria-expanded={isCollapseOpened===false? false : true}

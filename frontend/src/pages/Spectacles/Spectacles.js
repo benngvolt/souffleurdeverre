@@ -113,6 +113,7 @@ function Spectacles() {
                             <img src={project.images[project.mainImageIndex]?.imageUrl} alt={project.title} className='spectacles_projectsList_projectItem_img' />
                             <div className='spectacles_projectsList_projectItem_mainDatas'>
                                 <h3 className='spectacles_projectsList_projectItem_mainDatas_title'>{project.title}</h3>
+                                <p className='spectacles_projectsList_projectItem_mainDatas_subtitle'>{project.subtitle ? project.subtitle : ''}</p>
                                 <p className='spectacles_projectsList_projectItem_mainDatas_date'>{project.creationDate ? `${project.creationDate.split('-')[0]}` : 'en chantier...'}</p>
                             </div>
                         </Link>

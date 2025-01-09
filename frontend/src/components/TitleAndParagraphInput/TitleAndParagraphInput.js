@@ -50,7 +50,7 @@ function TitleAndParagraphInput({ setList, topic, list, paragraphTopic, titleTop
 
     return (
         <div className='projectForm_projectParagraphList'>
-            <p className='projectForm_projectParagraphList_topic'>{topic}</p>
+            {/* <p className='projectForm_projectParagraphList_topic'>{topic}</p> */}
             {list.map((item, index) => (
             <div key={index} className='projectForm_projectParagraphList_line'>
                 <div className='projectForm_projectParagraphList_line_title'>

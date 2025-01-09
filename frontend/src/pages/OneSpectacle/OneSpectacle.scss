@@ -148,6 +148,7 @@
                 &_paragraphTitle {
                     @include TextTitle;
                     text-transform: uppercase;
+                    margin: 15px 0;
                 };
 
                 &_paragraphText {
@@ -378,7 +379,7 @@
                             font-family: 'MainFont_light';
                             font-weight: bold;
                             font-size: 16px;
-                            margin: auto;
+                            margin: 22px auto;
                         }
 
                         &_quote {
@@ -418,13 +419,14 @@
                     display: flex;
                     flex-direction: column;
                     &_title {
+                        margin-bottom: 8px;
                         @include SecondTitle;
                         @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
                             margin: 0 auto;
                         }
                         @media only screen and (max-width:$mobileMaxWidth){
                             margin: 0 auto;
-                        } 
+                        }
                     }
                     &_list {
                         display: flex;
@@ -534,15 +536,17 @@
                                 display: flex;
                                 flex-direction: column;
                                 column-gap: 5px;
+                                
 
                                 &_day {
                                     @include BoldType;
                                     margin: 0;
                                 }
                                 &_time {
-                                    display: none;
+                                    display: block;
                                     @include LightType;
                                     margin: 0;
+                                    font-weight: regular;
                                 }
                             }
                         }
