@@ -50,6 +50,10 @@ function Edit() {
         setConfirmBoxState(false);
     }
 
+    const sortedProjects = projects.sort((a, b) => {
+        return a.title.localeCompare(b.title);
+    });
+
     /*----------------------------------------------
     ---------- DELETE ----- BIO /PROJECT -----------
     ----------------------------------------------*/
@@ -161,9 +165,12 @@ function Edit() {
                     <div className='editSection_mainContainer_projects'>
                         <p className='editSection_mainContainer_projects_title'>PROJETS</p>
                         <ul className='editSection_mainContainer_projects_projectsList'>
-                            {projects.map((project)=>(
+                            {sortedProjects.map((project)=>(
                                 <li className='editSection_mainContainer_projects_projectsList_item'>
-                                    <p className='editSection_mainContainer_projects_projectsList_item_name'>{project.title}</p>
+                                    <p className={project.projectState==="*non visible*"?'editSection_mainContainer_projects_projectsList_item_name editSection_mainContainer_projects_projectsList_item_name--invisible':'editSection_mainContainer_projects_projectsList_item_name editSection_mainContainer_projects_projectsList_item_name--visible'}>{project.title}{project.projectState==="*non visible*" && 
+                                    <span className="editSection_mainContainer_projects_projectsList_item_unpublished">*non-publié</span>
+                                    }</p>
+                                    
                                     <div className='editSection_mainContainer_projects_projectsList_item_buttons'>
                                         <button onClick={() => editProject(project)}>MODIFIER</button>
                                         <button onClick={() => handleProjectDeleteMode (project)}>SUPPRIMER</button>
@@ -171,7 +178,7 @@ function Edit() {
                                 </li>
                             ))}
                         </ul>
-                        <button className='editSection_mainContainer_projects_addButton' onClick={() => addProject()}>AJOUTER UN PROJET</button>
+                        <button className='editSection_mainContainer_projects_addButton' onClick={() => addProject()}>+ AJOUTER UN PROJET</button>
                     </div>
                     <div className='editSection_mainContainer_bios'>
                         <p className='editSection_mainContainer_bios_title'>BIOGRAPHIES</p>

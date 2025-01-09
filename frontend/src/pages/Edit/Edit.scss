@@ -23,7 +23,7 @@
             &_title {
                 font-family: 'MainFont_light';
                 font-size: 35px;
-                margin: 0;
+                margin: 45px 0;
             }
 
             &_biosList, &_projectsList {
@@ -43,9 +43,27 @@
                         font-size: 30px;
                         background: none;
                         border: none;
-                        margin: 16px 0;
+                        // margin: 16px 0;
                         text-transform: uppercase;
+
+                        &--visible {
+                            color: $colorDarkGrey;
+                        }
+
+                        &--invisible {
+                            color: $colorOne;
+                            font-style: italic;
+                        }
                         
+                    }
+                    &_unpublished {
+                        color: $colorOne;
+                        font-family: "Mainfont_light";
+                        font-weight: bold;
+                        font-style: italic;
+                        font-size: 17px;
+                        text-transform: lowercase;
+                        margin-left: 15px;
                     }
                     &_buttons {
                         display: flex;
@@ -53,6 +71,7 @@
                         column-gap: 15px;
                         justify-content: flex-start;
                         z-index: 1;
+                        margin: 10px 0;
                         
                         button {
                             margin: 0;
@@ -72,7 +91,7 @@
 
             }
             &_addButton {
-                width: auto;
+                width: 100%;
                 margin: 40px auto;
                 @include Button2;
             }
