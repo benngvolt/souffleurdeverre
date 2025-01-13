@@ -31,7 +31,7 @@ function Collapse({children, title, style}) {
                 <h4>{title}</h4>
                 <FontAwesomeIcon icon={faChevronDown} className={isCollapseOpened===false?'collapse_collapseButton_icon collapse_collapseButton_icon--closed':'collapse_collapseButton_icon collapse_collapseButton_icon--opened'}/>
             </button>
-            <div id={`collapsible${title}`}className={isCollapseOpened===false?'collapse_children collapse_children--closed':'collapse_children collapse_children--opened'}>
+            <div id={`collapsible${title}`} className={isCollapseOpened===false?'collapse_children collapse_children--closed':'collapse_children collapse_children--opened'}>
                 {children}
             </div>
         </section>

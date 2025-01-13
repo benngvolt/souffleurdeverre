@@ -240,7 +240,6 @@ $padMaxWidth: 991px;
 
 @mixin colorDuo3 {
     filter: drop-shadow(3px 3px 0px $colorFive) drop-shadow(-3px -3px 0px $colorSix) ;
-    //filter: drop-shadow(3px 3px 0px $colorFive);
 }
 
 @mixin colorDuo1big {
@@ -248,25 +247,16 @@ $padMaxWidth: 991px;
 }
 
 @mixin colorDuo2big {
-    // filter: drop-shadow(2px 2px 0px $colorThree) drop-shadow(2px 2px 0px $colorFour) ;
-    filter: drop-shadow(2px 2px 0px $colorThree) ;
+    filter: drop-shadow(10px 10px 1px $colorThree) drop-shadow(-10px -10px 1px $colorFour) ;
 }
 
 @mixin colorDuo3big {
-    // filter: drop-shadow(5px 5px 0px $colorFive) drop-shadow(-5px -5px 0px $colorSix) ;
-    // @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-    //     filter: drop-shadow(3px 3px 0px $colorFive) drop-shadow(-3px -3px 0px $colorSix) ;
-    // }
-    // @media only screen and (max-width:$mobileMaxWidth){
-    //     filter: drop-shadow(2px 2px 0px $colorFive) drop-shadow(-2px -2px 0px $colorSix) ;
-    // } 
-
-    filter: drop-shadow(5px 5px 0px $colorLightGrey);
+    filter: drop-shadow(8px 8px 1px $colorFive) drop-shadow(-8px -8px 1px $colorSix) ;
     @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-        filter: drop-shadow(3px 3px 0px $colorLightGrey);
+        filter: drop-shadow(5px 5px 0.75px $colorFive) drop-shadow(-5px -5px 0.75px $colorSix) ;
     }
     @media only screen and (max-width:$mobileMaxWidth){
-        filter: drop-shadow(2px 2px 0px $colorLightGrey);
+        filter: drop-shadow(3px 3px 0.5px $colorFive) drop-shadow(-3px -3px 0.5px $colorSix) ;
     } 
 }   
 
@@ -511,23 +501,23 @@ $padMaxWidth: 991px;
         opacity: 0; 
     }
     50% { 
-        max-height: 10000px;
+        max-height: 2000px;
         opacity: 0;
     }
 
     100% { 
-        max-height: 10000px;
+        max-height: 2000px;
         opacity: 1;
     }
 }
 
 @keyframes closeCollapseChildren {
     0% {  
-        max-height: 10000px;
+        max-height: 2000px;
         opacity: 1;
     }
     50% {  
-        max-height: 10000px;
+        max-height: 2000px;
         opacity: 0;
     }
 
