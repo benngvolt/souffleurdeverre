@@ -17,7 +17,7 @@ function OneSpectacle() {
 
     const [project, setProject] = useState([]);
     const { id } = useParams();
-    const { productionFunctions, residencyTypes } = useContext(Context);
+    const { productionFunctions, residencyTypes, isAuthenticated } = useContext(Context);
     const cleanedDescription = DOMPurify.sanitize(project.description);
     
     useEffect(() => {
@@ -35,7 +35,7 @@ function OneSpectacle() {
 
     return  (      
         <section className='oneSpectacle'>
-            {project.projectState !== "*non visible*" &&
+            {(project.projectState !== "*non visible*" ||  (project.projectState==="*non visible*" && isAuthenticated===true)) &&
             <div>
                 <div className='oneSpectacle_mainDatas'>
                     <h3 className='oneSpectacle_mainDatas_title'>{project.title}</h3>
@@ -188,8 +188,8 @@ function OneSpectacle() {
                 }
             </div>
             }
-            {project.projectState === "*non visible*" &&
-            <p className='oneSpectacle_invisible'>Ce projet n'est pas accessible pour l'instant...</p>
+            {project.projectState === "*non visible*" && isAuthenticated===false &&
+                <p className='oneSpectacle_invisible'>Ce projet n'est pas accessible pour l'instant...</p>
             }
         </section>
     )

@@ -330,16 +330,7 @@
                                 }
                             }
                             &_addButton {
-                                // border: solid 1px $colorDarkGrey;
-                                // font-family: 'MainFont_light';
-                                // margin: 0 0 0 0;
-                                // padding: 0;
-                                // background: none;
-                                // width: 100%;
-                                // &:hover {
-                                //     color: $colorTwo;
-                                //     cursor: pointer;
-                                // }
+          
                                 @include FormButtonType;
                                 
                                 background-color: $colorDarkGrey;
@@ -359,19 +350,7 @@
                         }
 
                         &_supprButton {
-                            // margin: 9px auto 9px auto;
-                            // width: 100%;
-                            // text-align: center;
-                            // padding: 0;
-                            // font-family: 'MainFont_light';
-                            // font-size: 14px;
-                            // border: none;
-                            // background-color: $colorThree;
-                            // &:hover {
-                            //     background-color: $colorDarkGrey;
-                            //     color: $colorLightGrey;
-                            //     cursor: pointer;
-                            // }
+
                             @include FormButtonType;
                             color: $colorOne;
                             width: auto;
@@ -389,15 +368,7 @@
                     }
 
                     &_addButton {
-                        // font-family: 'MainFont_light';
-                        // font-weight: bold;
-                        // border: none;
-                        // &:hover {
-                        //     color: $colorSix;
-                        //     cursor: pointer;
-                        // }
-                        // background: none;
-                        // margin: 16px auto 35px auto;
+
                         @include FormButtonType;
                         height: 32px;
                                 background-color: $colorDarkGrey;
@@ -417,16 +388,7 @@
             }
 
             &_supprButton {
-                // @include FormButtonType;
-                // background-color: $colorFive;
-                // border: none;
-                // width: 100%;
-                // margin: 0 auto 35px auto;
-                // &:hover {
-                //     background-color: $colorDarkGrey;
-                //     color: $colorLightGrey;
-                //     cursor: pointer;
-                // }
+
                 @include FormButtonType;
                 color: $colorLightGrey;
                 width: 100%;
@@ -451,10 +413,6 @@
             }
         } 
         &_addButton {
-            // @include FormButtonType;
-            // background: none;
-            // width: 300px;
-            // margin: auto;
             @include FormButtonType;
             height: 32px;
             background-color: $colorDarkGrey;
@@ -478,7 +436,7 @@
         display: flex;
         flex-direction: column;
         row-gap: 19px;
-
+       
         &_topic {
             font-size: 19px;
             font-family: 'MainFont_light';

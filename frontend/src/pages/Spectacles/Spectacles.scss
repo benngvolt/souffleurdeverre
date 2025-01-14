@@ -1,7 +1,11 @@
 @import '../../utils/mixins';
 
+.redColor {
+    color: $colorOne !important;
+}
+
 .spectacles {
-    
+
     &_filtersHandler {
         
         display: flex;
@@ -9,6 +13,23 @@
         justify-content: flex-start;
         width: 100%;
         column-gap: 3px;
+
+        &_mediationText {
+            animation: pageAppearing 2s ease forwards;
+            margin: 30px auto;
+            padding-bottom: 90px;
+            text-align: justify;
+            font-family: 'MainFont_light';
+            font-size: 16px;
+            color: $colorDarkGrey;
+            width: 70%;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 15px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 14px;
+            } 
+        }
 
         &_errorText {
             display: flex;
@@ -89,7 +110,7 @@
 
     &_projectsList {
         animation: pageAppearing 2s ease forwards;
-        margin: 19px auto;
+        margin: 60px auto 20px auto;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         padding: 0 40px;

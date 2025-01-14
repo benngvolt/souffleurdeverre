@@ -217,7 +217,7 @@
                                 }
                                 @media only screen and (max-width:$mobileMaxWidth){
                                     justify-content: flex-start;
-                                    font-size: 16px;
+                                    font-size: 18px;
                                     // margin: 2px 0;
                                 } 
                                 
@@ -244,7 +244,7 @@
                         a, button {
                             width: auto;
                             margin: auto 0;
-                            h2, p {
+                            h2, p, button {
                                 font-family: 'MainFont_light';
                                 font-size: 18px;
                                 color: $colorDarkGrey;
@@ -258,7 +258,7 @@
                                 }
                                 @media only screen and (max-width:$mobileMaxWidth){
                                     justify-content: flex-start;
-                                    font-size: 16px;
+                                    font-size: 18px;
                                     margin: auto 0;
                                 } 
                                 
