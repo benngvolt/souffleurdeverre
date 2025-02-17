@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/static/css/main.81f18582.css",
-    "main.js": "/static/js/main.6bda182e.js",
-    "static/js/453.8ab44547.chunk.js": "/static/js/453.8ab44547.chunk.js",
-    "static/js/124.172f4ff4.chunk.js": "/static/js/124.172f4ff4.chunk.js",
-    "static/media/logo_ministere.png": "/static/media/logo_ministere.1dea6bbc2a66c10a5856.png",
-    "static/media/logo_region_Auvergne_Rhone-Alpes.png": "/static/media/logo_region_Auvergne_Rhone-Alpes.7215f1d19b024a565a1d.png",
-    "static/media/ProximaNova-LightIt.ttf": "/static/media/ProximaNova-LightIt.5a76d7bf8d6b966c72a6.ttf",
-    "static/media/ProximaNova-Light.ttf": "/static/media/ProximaNova-Light.4e6430d1b1cdd53aab1d.ttf",
-    "static/media/ProximaNova-Bold.ttf": "/static/media/ProximaNova-Bold.f3c7fec78a9f7f598801.ttf",
-    "static/media/WarsawGothic.otf": "/static/media/WarsawGothic.6f0a07fe7cb1bf37e7b0.otf",
-    "static/media/Cedric_Veschambre_Julien_Bruhat.webp": "/static/media/Cedric_Veschambre_Julien_Bruhat.efbe1da3b1135e54162e.webp",
-    "static/media/Julien_Rocha_Julien_Bruhat.webp": "/static/media/Julien_Rocha_Julien_Bruhat.0b814c3d916f01ff8323.webp",
-    "index.html": "/index.html",
-    "static/media/logoSouffleur.svg": "/static/media/logoSouffleur.c2e3a9c35e7bf4afbf0b08fd73a8db05.svg",
-    "main.81f18582.css.map": "/static/css/main.81f18582.css.map",
-    "main.6bda182e.js.map": "/static/js/main.6bda182e.js.map",
-    "453.8ab44547.chunk.js.map": "/static/js/453.8ab44547.chunk.js.map",
-    "124.172f4ff4.chunk.js.map": "/static/js/124.172f4ff4.chunk.js.map"
+    "main.css": "/souffleurdeverre/static/css/main.869e96f1.css",
+    "main.js": "/souffleurdeverre/static/js/main.50b80a9c.js",
+    "static/js/453.8ab44547.chunk.js": "/souffleurdeverre/static/js/453.8ab44547.chunk.js",
+    "static/js/124.172f4ff4.chunk.js": "/souffleurdeverre/static/js/124.172f4ff4.chunk.js",
+    "static/media/logo_ministere.png": "/souffleurdeverre/static/media/logo_ministere.1dea6bbc2a66c10a5856.png",
+    "static/media/logo_region_Auvergne_Rhone-Alpes.png": "/souffleurdeverre/static/media/logo_region_Auvergne_Rhone-Alpes.7215f1d19b024a565a1d.png",
+    "static/media/ProximaNova-LightIt.ttf": "/souffleurdeverre/static/media/ProximaNova-LightIt.5a76d7bf8d6b966c72a6.ttf",
+    "static/media/ProximaNova-Light.ttf": "/souffleurdeverre/static/media/ProximaNova-Light.4e6430d1b1cdd53aab1d.ttf",
+    "static/media/ProximaNova-Bold.ttf": "/souffleurdeverre/static/media/ProximaNova-Bold.f3c7fec78a9f7f598801.ttf",
+    "static/media/WarsawGothic.otf": "/souffleurdeverre/static/media/WarsawGothic.6f0a07fe7cb1bf37e7b0.otf",
+    "static/media/Cedric_Veschambre_Julien_Bruhat.webp": "/souffleurdeverre/static/media/Cedric_Veschambre_Julien_Bruhat.efbe1da3b1135e54162e.webp",
+    "static/media/Julien_Rocha_Julien_Bruhat.webp": "/souffleurdeverre/static/media/Julien_Rocha_Julien_Bruhat.0b814c3d916f01ff8323.webp",
+    "index.html": "/souffleurdeverre/index.html",
+    "static/media/logoSouffleur.svg": "/souffleurdeverre/static/media/logoSouffleur.c2e3a9c35e7bf4afbf0b08fd73a8db05.svg",
+    "main.869e96f1.css.map": "/souffleurdeverre/static/css/main.869e96f1.css.map",
+    "main.50b80a9c.js.map": "/souffleurdeverre/static/js/main.50b80a9c.js.map",
+    "453.8ab44547.chunk.js.map": "/souffleurdeverre/static/js/453.8ab44547.chunk.js.map",
+    "124.172f4ff4.chunk.js.map": "/souffleurdeverre/static/js/124.172f4ff4.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.81f18582.css",
-    "static/js/main.6bda182e.js"
+    "static/css/main.869e96f1.css",
+    "static/js/main.50b80a9c.js"
   ]
 }
