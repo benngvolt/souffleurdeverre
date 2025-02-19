@@ -38,7 +38,7 @@ function FullPeriodDate({ startISODate, endISODate, className }) {
   };
 
   return (
-    <span className={className}>du {fullStartDateString()} au {fullEndDateString()}</span>
+    <span className={className}>{fullStartDateString()} au {fullEndDateString()}</span>
   );
 }
 

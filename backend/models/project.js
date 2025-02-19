@@ -57,6 +57,10 @@ const projectSchema = mongoose.Schema({
         dates: [ 
             {
                 day: {type: String, required: false},
+                period: {
+                    startDate: {type: String, required: false},
+                    endDate: {type: String, required: false}
+                },
                 times: [
                     {
                         time: {type: String, required: false},

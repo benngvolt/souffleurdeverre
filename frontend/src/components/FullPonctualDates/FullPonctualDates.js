@@ -1,5 +1,6 @@
 import '../../pages/OneSpectacle/OneSpectacle.scss'
 import '../../pages/Actualite/Actualite.scss'
+import FullPeriodDate from '../FullPeriodDate/FullPeriodDate';
 
 
 function FullPonctualDates({datesArray, className}) {
@@ -55,8 +56,16 @@ function FullPonctualDates({datesArray, className}) {
         <div className={`${className}_dates`}>
             {sortedDatesArray.map((date, index) => (
                 <div className={`${className}_dates_singleDate`} key={index}>
+                    {date.day &&
                     <p className={`${className}_dates_singleDate_day`}> {`${formatDay(date.day, index, totalDates)}`} </p>
-                   
+                    }
+                    {date.period &&
+                    <FullPeriodDate
+                        startISODate={date.period.startDate}
+                        endISODate={date.period.endDate}
+                        className={`${className}_dates_singleDate_day`}
+                    />
+                    }
                     {date.times.length > 0 && (
                         <p className={`${className}_dates_singleDate_time`}>{formatTimes(date.times)}</p>
                         )}

@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 // import DOMPurify from 'dompurify';
 import DNDGallery from '../../components/DNDGallery/DNDGallery'
 import TitleAndParagraphInput from '../TitleAndParagraphInput/TitleAndParagraphInput'
+import DateInputSwitch from '../DateInputSwitch/DateInputSwitch'
 import ConfirmBox from '../ConfirmBox/ConfirmBox'
 import Loader from '../Loader/Loader'
 import Collapse from '../../components/Collapse/Collapse'
@@ -167,7 +168,7 @@ function ProjectForm({
     ----- SHOWS LIST -----------
     -------------------------*/
     const handleAddShow = () => {
-        setShowsList([...showsList, { dates: [{day:'', times:[{time: '', timeInfos: ''}] }], city: '', placeName: '', placeLink: '', showsNumber:'', moreInfos:''}]);
+        setShowsList([...showsList, { dates: [{day:'', period:{startDate:'', endDate:''}, times:[{time: '', timeInfos: ''}] }], city: '', placeName: '', placeLink: '', showsNumber:'', moreInfos:''}]);
     };
     const handleSupprShow = (index) => {
         setShowsList (showsList.filter((_, i) => i !== index));
@@ -175,9 +176,9 @@ function ProjectForm({
     const handleAddSameShowDate = (index) => {
         const updatedShowsList = [...showsList];
         if (!updatedShowsList[index].dates) {
-            updatedShowsList[index].dates = [{ day: '', times: [{ time: '', timeInfos: '' }] }]; // Créez un tableau contenant un objet vide avec les propriétés appropriées
+            updatedShowsList[index].dates = [{ day: '', period: {startDate:'', endDate:''}, times: [{ time: '', timeInfos: '' }] }]; // Créez un tableau contenant un objet vide avec les propriétés appropriées
         } else {
-            updatedShowsList[index].dates.push({ day: '', times: [{ time: '', timeInfos: '' }] }); // Ajoutez un nouvel objet vide avec les propriétés appropriées
+            updatedShowsList[index].dates.push({ day: '', period: {startDate:'', endDate:''}, times: [{ time: '', timeInfos: '' }] }); // Ajoutez un nouvel objet vide avec les propriétés appropriées
         }
         setShowsList(updatedShowsList);
     };
@@ -341,6 +342,7 @@ function ProjectForm({
         displayLoader();
         setDisplayServerError(false);
         setDisplayError(false);
+       
         const sortedResidenciesList = residenciesList.sort((a, b) => {
             const dateA = new Date(a.startDates);
             const dateB = new Date(b.startDates);
@@ -912,7 +914,7 @@ function ProjectForm({
                             <div className='projectForm_projectShowsList_container_dates_gridDisplay'>
                                 {show.dates?.map((date, dateIndex)=>(
                                 <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay'> 
-                                    <input
+                                    {/* <input
                                         className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_date'
                                         key={dateIndex}
                                         type='date'
@@ -924,6 +926,46 @@ function ProjectForm({
                                             setShowsList(updatedShowsList);
                                         }}
                                     />
+                                    <div> 
+                                        <input
+                                            className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_date'
+                                            key={`inputProjectShowPeriodStartDate${dateIndex}`}
+                                            type='date'
+                                            id={`inputProjectShowPeriodStartdate${index}`}
+                                            value={date.period?.startDate || ''}
+                                            onChange={(e) => {
+                                                const updatedShowsList = [...showsList];
+                                                if (!updatedShowsList[index].dates[dateIndex].period) {
+                                                    updatedShowsList[index].dates[dateIndex].period = {};
+                                                }
+                                                updatedShowsList[index].dates[dateIndex].period.startDate = e.target.value;
+                                                setShowsList(updatedShowsList);
+                                            }}
+                                        />
+                                        <input
+                                            className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_date'
+                                            key={`inputProjectShowPeriodEndDate${dateIndex}`}
+                                            type='date'
+                                            id={`inputProjectShowPeriodEnddate${index}`}
+                                            value={date.period?.endDate || ''}
+                                            onChange={(e) => {
+                                                const updatedShowsList = [...showsList];
+                                                if (!updatedShowsList[index].dates[dateIndex].period) {
+                                                    updatedShowsList[index].dates[dateIndex].period = {};
+                                                }
+                                                updatedShowsList[index].dates[dateIndex].period.endDate = e.target.value;
+                                                setShowsList(updatedShowsList);
+                                            }}
+                                        />
+                                    </div> */}
+                                    <DateInputSwitch
+                                        dateIndex={dateIndex}
+                                        index={index}
+                                        date={date}
+                                        showsList={showsList}
+                                        setShowsList={setShowsList}
+                                    />
+                                    
                                     <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times'>
                                         {date.times?.map((time, timeIndex) => (
                                         <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer'>

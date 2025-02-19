@@ -286,6 +286,24 @@
                             margin-bottom: 9px;
                         }
 
+                        &_switchButton {
+                            cursor: pointer;
+                            font-family: 'MainFont_light';
+                            color: $colorDarkGrey;
+                            font-size: 10px;
+
+                            &:hover {
+                                color: $colorFour;
+                            }
+                        }
+
+                        &_fromTo {
+                            cursor: pointer;
+                            font-family: 'MainFont_light';
+                            color: $colorDarkGrey;
+                            font-size: 12px;
+                        }
+
                         &_times {
                             display: flex;
                             flex-direction: column;

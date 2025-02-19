@@ -105,6 +105,7 @@ function OneSpectacle() {
                             {project.showsList?.map((show) => (
                                 <li key={show.id} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item'>
                                     <FullPonctualDates datesArray={show.dates} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item'/>
+                                    {}
                                     <p className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_places'>
                                         <IsALink className="oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item_places" link={show.placeLink} name={show.placeName}/>   
                                         {`/ ${show.city ? show.city : ""}`}
