@@ -148,6 +148,20 @@
                                 font-size: 35px;
                             }
 
+                            &_calendarLink {
+                                color: black;
+                                :hover {
+                                    color: $colorFive;
+                                    cursor: pointer;
+                                }
+
+                                svg {
+                                    padding-top: 7px;
+                                }
+                            }
+
+                            
+
                             &_link {
                                 font-weight: bold;
                                 // padding-left: 9px;

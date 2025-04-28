@@ -7,6 +7,7 @@ import Home from './pages/Home/Home';
 import Compagnie from './pages/Compagnie/Compagnie';
 import Actualite from './pages/Actualite/Actualite';
 import Spectacles from './pages/Spectacles/Spectacles';
+import Mediations from './pages/Mediations/Mediations';
 import OneSpectacle from './pages/OneSpectacle/OneSpectacle';
 import Edit from './pages/Edit/Edit';
 import Header from './components/Header/Header';
@@ -24,6 +25,7 @@ root.render(
           <Route path="/compagnie" element={<Compagnie/>} />
           <Route path="/actualite" element={<Actualite/>} />
           <Route path="/spectacles" element={<Spectacles/>} />
+          <Route path="/mediations" element={<Mediations/>} />
           <Route path="/spectacles/:id" element={<OneSpectacle/>} />
           <Route path="/edit" element={<Edit/>} />
         </Routes>

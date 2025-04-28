@@ -9,6 +9,45 @@
     gap: 5px;
 
     //pour 6 images
+    &_7 {
+        &_item_0 {
+            height: 1000px;
+            grid-column-start: 1;
+            grid-column-end: 4;
+        }
+        &_item_1 {
+            height: 800px;
+            grid-column-start: 1;
+            grid-column-end: 3;
+        }
+        &_item_2 {
+            height: 800px;
+            grid-column-start: 3;
+            grid-column-end: 4;
+        }
+        &_item_3 {
+            height: 400px;
+            grid-column-start: 1;
+            grid-column-end: 2;
+        }
+        &_item_4 {
+            height: 400px;
+            grid-column-start: 2;
+            grid-column-end: 3;
+        }
+        &_item_5 {
+            height: 400px;
+            grid-column-start: 3;
+            grid-column-end: 4;
+        }
+        &_item_6 {
+            height: 400px;
+            grid-column-start: 1;
+            grid-column-end: 3;
+        }
+    }
+
+    //pour 6 images
     &_6 {
         &_item_0 {
             height: 1000px;

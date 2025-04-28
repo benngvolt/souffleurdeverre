@@ -145,6 +145,9 @@ function Header() {
                     <li className={location.pathname!=='/spectacles'?'header_nav_menu_item header_nav_menu_item--light':'header_nav_menu_item header_nav_menu_item--bold'}>
                         <Link aria-label='Accéder à la page Spectacles' to="/spectacles"><h2>SPECTACLES</h2></Link>
                     </li>
+                    <li className={location.pathname!=='/mediations'?'header_nav_menu_item header_nav_menu_item--light':'header_nav_menu_item header_nav_menu_item--bold'}>
+                        <Link aria-label='Accéder à la page Médiations' to="/mediations"><h2>MÉDIATIONS</h2></Link>
+                    </li>
                     <li className='header_nav_menu_item header_nav_menu_item--light'>
                         <button aria-label='Afficher la fenêtre Contact' type='button' onClick={()=>setdisplayContactModal(true)}>CONTACT</button>
                     </li>

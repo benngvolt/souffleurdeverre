@@ -23,12 +23,16 @@
         &_item {
             list-style-type: none;
             overflow: hidden;
+            position: relative; /* Important pour certains navigateurs */
 
             img {
-                width: 100%; 
-                object-fit: cover; 
+                width: 100%;
                 height: 100%;
-            }
+                object-fit: cover;
+                cursor: pointer; /* Ajoute la main pour montrer que c’est cliquable */
+                display: block; /* Important pour éviter les comportements inline de l'image */
+                pointer-events: auto; /* Juste au cas où */
+              }
 
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
             
@@ -36,6 +40,31 @@
             @media only screen and (max-width:$mobileMaxWidth){
                 aspect-ratio: 1.25/1;
             } 
+        }
+
+        &_10 {
+            grid-template-rows: 27% 23% 27% 23%;
+            aspect-ratio: 0.7/1;
+        }
+
+        &_9 {
+            grid-template-rows: 27% 23% 25% 25%;
+            aspect-ratio: 0.7/1;
+        }
+
+        &_8 {
+            grid-template-rows: 25% 23% 25% 27%;
+            aspect-ratio: 0.7/1;
+        }
+
+        &_7 {
+            grid-template-rows: 34% 32% 34%;
+            aspect-ratio: 0.9/1;
+        }
+
+        &_6 {
+            grid-template-rows: 34% 31% 35%;
+            aspect-ratio: 0.9/1;
         }
 
         &_5 {
@@ -62,7 +91,187 @@
             grid-template-rows: 100%;
             aspect-ratio: 2/1;
         }
+
+        &_10 {
+            &_item_0 {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+            &_item_1 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+            &_item_2 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_3 {
+                grid-column-start: 2;
+                grid-column-end: 3;
+            }
+            &_item_4 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+            &_item_5 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_6 {
+                grid-column-start: 2;
+                grid-column-end: 4;
+            }
+            &_item_7 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_8 {
+                grid-column-start: 2;
+                grid-column-end: 3;
+            }
+            &_item_9 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+        }
+
+        //pour 9 images
+        &_9 {
+            &_item_0 {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+            &_item_1 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+            &_item_2 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_3 {
+                grid-column-start: 2;
+                grid-column-end: 3;
+            }
+            &_item_4 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+            &_item_5 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_6 {
+                grid-column-start: 2;
+                grid-column-end: 4;
+            }
+            &_item_7 {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+            &_item_8 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+        }
+
+        //pour 8 images
+        &_8 {
+            &_item_0 {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+            &_item_1 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+            &_item_2 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_3 {
+                grid-column-start: 2;
+                grid-column-end: 3;
+            }
+            &_item_4 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+            &_item_5 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_6 {
+                grid-column-start: 2;
+                grid-column-end: 4;
+            }
+            &_item_7 {
+                grid-column-start: 1;
+                grid-column-end: 4;
+            }
+        }
+
+        //pour 7 images
+        &_7 {
+            &_item_0 {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+            &_item_1 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+            &_item_2 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_3 {
+                grid-column-start: 2;
+                grid-column-end: 3;
+            }
+            &_item_4 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+            &_item_5 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_6 {
+                grid-column-start: 2;
+                grid-column-end: 4;
+            }
+        }
    
+
+        //pour 6 images
+        &_6 {
+            &_item_0 {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+            &_item_1 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+            &_item_2 {
+                grid-column-start: 1;
+                grid-column-end: 2;
+            }
+            &_item_3 {
+                grid-column-start: 2;
+                grid-column-end: 3;
+            }
+            &_item_4 {
+                grid-column-start: 3;
+                grid-column-end: 4;
+            }
+            &_item_5 {
+                grid-column-start: 1;
+                grid-column-end: 4;
+            }
+        }
+
         //pour 5 images
         &_5 {
             &_item_0 {
@@ -166,5 +375,17 @@
         //         z-index: 2;
         //     }
         // }
+    }
+}
+
+.imageGallery {
+    &_imageBox {
+        z-index: 1000;
+        background-color: rgba(0, 0 , 0 , 0.8);
+        width: 100vw;
+        top: 0;
+        position: fixed;
+        margin: auto;
+        height: 100vh;
     }
 }

@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import React, { useContext } from 'react';
 import { Context } from '../../utils/Context';
 import IsALink from '../../components/IsALink/IsALink';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faCalendarPlus, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 
 function Actualite() {
     const numericMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -13,6 +15,33 @@ function Actualite() {
     const currentDate = new Date(fullCurrentDate);
     const today = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
     const groupedEvents = {};
+
+    const googleEventCalendarUrlMount = (eventData) => {
+        const eventDate = eventData.startDate;
+    
+        const formatDate = (dateStr, timeStr) => {
+            const date = dateStr.substring(0, 10).replace(/-/g, "");
+            const time = timeStr ? timeStr.replace(':', '') : '1200'; // par défaut 12:00
+            return `${date}T${time}00`;
+        }
+    
+        let startTime = '12:00'; // Valeur par défaut si pas de time renseigné
+        if (eventData.times && eventData.times[0] && eventData.times[0].time) {
+            startTime = eventData.times[0].time;
+        }
+    
+        const startDateFormatted = formatDate(eventDate, startTime);
+    
+        // On ajoute une durée : exemple 2 heures (en ms)
+        const startDateObj = new Date(`${eventDate.substring(0, 10)}T${startTime}`);
+        const endDateObj = new Date(startDateObj.getTime() + 2 * 60 * 60 * 1000); // +2 heures
+    
+        const endDateFormatted = formatDate(endDateObj.toISOString(), endDateObj.toISOString().substring(11,16));
+    
+        const googleEventCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=Le Souffleur de Verre - ${eventData.project.title}&dates=${startDateFormatted}/${endDateFormatted}&details=${eventData.project.description}&location=${eventData.show.placeName} - ${eventData.show.city}&trp=false&sprop=&sprop=name:`;
+    
+        return googleEventCalendarUrl;
+    }
     
     projects.forEach(project => {
         if (project.showsList) {
@@ -21,6 +50,8 @@ function Actualite() {
                     show.dates.forEach(date => {
                         let startDate = date.day || date.period?.startDate;
                         let endDate = date.period?.endDate || date.day;
+                        let period = date.period?.startDate && date.period?.endDate ? true : false;
+                        
                         if (startDate && endDate && new Date(endDate) >= today) {
                             const key = `${startDate}_${endDate}_${project._id}`;
                             if (!groupedEvents[key]) {
@@ -30,7 +61,8 @@ function Actualite() {
                                     show,
                                     times: date.times,
                                     startDate,
-                                    endDate
+                                    endDate,
+                                    period: period
                                 };
                             }
                         }
@@ -59,6 +91,7 @@ function Actualite() {
     });
 
     const sortedEvents = Object.values(groupedEvents).sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+    
     const uniqueYears = [...new Set(sortedEvents.map(event => event.startDate.split('-')[0]))];
 
     return (      
@@ -94,19 +127,18 @@ function Actualite() {
                                             </p>
                                             }
                                             {event.type === 'show' ? (
-                                                // <div className='actualite_container_yearContainer_monthContainer_events_eventContainer_show'>
-                                                //     <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_showsBox_type'>Représentation</p>
-                                                //     <Link to={`/spectacles/${event.project._id}`}>
-                                                //         <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_showTitle'>{event.project.title}</p>
-                                                //         <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_showSubtitle'>{event.project.subtitle}</p>
-                                                //     </Link>
-                                                // </div>
                                                 <div key={event.project._id} className='actualite_container_yearContainer_monthContainer_events_eventContainer_show'>
                                                     <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_showsBox_type'>Représentation</p>
                                                     <Link to={`/spectacles/${event.project._id}`}>
                                                         <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_showTitle'>{event.project.title}</p>
                                                         <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_showSubtitle'>{event.project.subtitle}</p>
                                                     </Link>
+                                                    {!event.period &&
+                                                    <a className='actualite_container_yearContainer_monthContainer_events_eventContainer_showsBox_calendarLink' target="_blank" rel="noreferrer"
+                                                        href={googleEventCalendarUrlMount(event)}>
+                                                        <FontAwesomeIcon icon={faCalendarPlus}/>
+                                                    </a>
+                                                    }
                                                     <div className='actualite_container_yearContainer_monthContainer_events_eventContainer_showsBox'>
                                                         {event.times.map(time => (
                                                             <div className='actualite_container_yearContainer_monthContainer_events_eventContainer_showsBox_timeContainer'>

@@ -45,10 +45,13 @@ function Home() {
                             <Link aria-label='Accéder à la page Compagnie' to="/compagnie" className='home_nav_menu_item'><h2>COMPAGNIE</h2></Link>
                         </li>
                         <li>
-                            <Link aria-label='Accéder à la page Actualité' to="/actualite" className='home_nav_menu_item'><h2>ACTUALITÉ</h2></Link>
+                            <Link aria-label='Accéder à la page Actualité' to="/actualite" className='home_nav_menu_item'><h2>CALENDRIER</h2></Link>
                         </li>
                         <li>
                             <Link aria-label='Accéder à la page Spectacles' to="/spectacles" className='home_nav_menu_item'><h2>SPECTACLES</h2></Link>
+                        </li>
+                        <li>
+                            <Link aria-label='Accéder à la page Spectacles' to="/mediations" className='home_nav_menu_item'><h2>MÉDIATIONS</h2></Link>
                         </li>
                         <li>
                             <button aria-label='Afficher la fenêtre Contact' type='button' className='home_nav_menu_item' onClick={()=>setdisplayContactModal(true)}><p>CONTACT</p></button>

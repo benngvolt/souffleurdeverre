@@ -532,7 +532,7 @@ function ProjectForm({
             </button>
             <div className='projectForm_projectImageField'>
                 <DNDGallery imageFiles={imageFiles} setImageFiles={setImageFiles} mainImageIndex={mainImageIndex} setMainImageIndex={setMainImageIndex} />
-                <div className={imageFiles.length < 6 ? 'projectForm_projectImageField_imageFile' : 'projectForm_projectImageField_imageFile--displayOff'}>
+                <div className={imageFiles.length < 11 ? 'projectForm_projectImageField_imageFile' : 'projectForm_projectImageField_imageFile--displayOff'}>
                     <label htmlFor='inputProjectImageFile'>{ isImageLoaded ? 'CHANGER D\'IMAGE' : '+ AJOUTER UNE IMAGE' }</label>
                     <input type='file' id='inputProjectImageFile' name="images" ref={inputProjectImageFileRef} onChange={displaySample} style={{ display: 'none' }}></input>
                     <div  className="projectForm_projectImageField_imageFile_sampleContainer">
