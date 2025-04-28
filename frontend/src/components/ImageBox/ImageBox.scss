@@ -1,0 +1,21 @@
+@import '../../utils/mixins';
+
+.imageBox {
+    height: 100%;
+    margin: auto;
+   
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    img {
+        padding-top: 50px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin: auto;
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: cover;
+    }
+}
