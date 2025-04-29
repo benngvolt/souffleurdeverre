@@ -8,14 +8,40 @@
     flex-direction: column;
     justify-content: center;
     
-    img {
-        padding-top: 50px;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        margin: auto;
-        max-width: 90%;
-        max-height: 90%;
-        object-fit: cover;
+    
+    &_imageWrapper {
+        
+            margin-top: 100px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin: auto;
+            max-width: 90%;
+            max-height: 85%;
+            position: relative;
+        
+        img {
+            width: 100%;
+            object-fit: cover;
+        }
+
+        svg {
+            color: $colorLightGrey;
+            z-index: 100;
+            position: absolute;
+            font-size: 22px;
+            top: 12px;
+            right: 12px;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 17px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 15px;
+            } 
+            &:hover {
+                cursor: pointer;
+                color: $colorFive;
+            }
+        }
     }
 }
