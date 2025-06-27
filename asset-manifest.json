@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/souffleurdeverre/static/css/main.502c2370.css",
-    "main.js": "/souffleurdeverre/static/js/main.40210a4b.js",
+    "main.css": "/souffleurdeverre/static/css/main.4418a2e7.css",
+    "main.js": "/souffleurdeverre/static/js/main.7e6775f0.js",
     "static/js/453.8ab44547.chunk.js": "/souffleurdeverre/static/js/453.8ab44547.chunk.js",
     "static/js/581.059be49d.chunk.js": "/souffleurdeverre/static/js/581.059be49d.chunk.js",
     "static/media/teaserFakeShort.mp4": "/souffleurdeverre/static/media/teaserFakeShort.a24dc7872813fd8d1528.mp4",
@@ -16,13 +16,13 @@
     "static/media/Julien_Rocha_Julien_Bruhat.webp": "/souffleurdeverre/static/media/Julien_Rocha_Julien_Bruhat.0b814c3d916f01ff8323.webp",
     "index.html": "/souffleurdeverre/index.html",
     "static/media/logoSouffleur.svg": "/souffleurdeverre/static/media/logoSouffleur.c2e3a9c35e7bf4afbf0b08fd73a8db05.svg",
-    "main.502c2370.css.map": "/souffleurdeverre/static/css/main.502c2370.css.map",
-    "main.40210a4b.js.map": "/souffleurdeverre/static/js/main.40210a4b.js.map",
+    "main.4418a2e7.css.map": "/souffleurdeverre/static/css/main.4418a2e7.css.map",
+    "main.7e6775f0.js.map": "/souffleurdeverre/static/js/main.7e6775f0.js.map",
     "453.8ab44547.chunk.js.map": "/souffleurdeverre/static/js/453.8ab44547.chunk.js.map",
     "581.059be49d.chunk.js.map": "/souffleurdeverre/static/js/581.059be49d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.502c2370.css",
-    "static/js/main.40210a4b.js"
+    "static/css/main.4418a2e7.css",
+    "static/js/main.7e6775f0.js"
   ]
 }
