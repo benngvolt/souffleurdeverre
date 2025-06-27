@@ -6,12 +6,13 @@ import {faXmark} from '@fortawesome/free-solid-svg-icons'
  
 function ImageBox({imageUrl, setHandleDisplayImage}) {
 
-
     return  (      
         <div className='imageBox' >
             <div class="imageBox_imageWrapper">
                 <img src={imageUrl} onClick={(e) => e.stopPropagation()}/>
-                <FontAwesomeIcon icon={faXmark}/>
+                <div onClick={() => setHandleDisplayImage(false)}>
+                    <FontAwesomeIcon icon={faXmark}/>
+                </div>
             </div>
         </div>
     )

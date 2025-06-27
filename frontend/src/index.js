@@ -4,6 +4,7 @@ import './index.css';
 import { Provider } from './utils/Context';
 import reportWebVitals from './reportWebVitals';
 import Home from './pages/Home/Home';
+import HomeSpecial from './pages/HomeSpecial/HomeSpecial';
 import Compagnie from './pages/Compagnie/Compagnie';
 import Actualite from './pages/Actualite/Actualite';
 import Spectacles from './pages/Spectacles/Spectacles';
@@ -21,7 +22,7 @@ root.render(
       <Router>
         <Header/>
         <Routes>
-          <Route path="/" element={<Home/>} />
+          <Route path="/" element={<HomeSpecial/>} />
           <Route path="/compagnie" element={<Compagnie/>} />
           <Route path="/actualite" element={<Actualite/>} />
           <Route path="/spectacles" element={<Spectacles/>} />
