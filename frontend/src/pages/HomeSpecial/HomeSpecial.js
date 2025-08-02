@@ -46,29 +46,34 @@ function HomeSpecial() {
                     <img src={logoSouffleur} alt="logo souffleur de verre"/>
                     <h1 className='home_title_text'>LE SOUFFLEUR DE VERRE</h1>
                 </div>
-                <div class="home_infosAvignon">
-                <Link class="home_linkFake" aria-label='Accéder à la page Fake' to="/spectacles/6620e4813aaa89d07200b431">
-                    <h3>FAKE</h3>
-                    <p>MICROFICTIONS</p>
-                </Link>
-                <a href='https://lafactory.vostickets.net/billet/FR/representation-LA_FACTORY-26908-0.wb?REFID=GBc2AAAAAADNAA' target='_blank' rel='noreferrer' >
-                    <img src={avignonInfos} alt="logo souffleur de verre"/>
-                </a>
-                </div>
+                {/* <div className="home_infosAvignon">
+                    <Link className="home_linkFake" aria-label='Accéder à la page Fake' to="/spectacles/6620e4813aaa89d07200b431">
+                        <h3>FAKE</h3>
+                        <p>MICROFICTIONS</p>
+                    </Link>
+                    <a className="home_linkTeaser" href='https://youtu.be/fpUCM4xwDCs' target='_blank' rel='noreferrer'>+ VOIR LE TEASER +</a>
+                    <a href='https://lafactory.vostickets.net/billet/FR/representation-LA_FACTORY-26908-0.wb?REFID=GBc2AAAAAADNAA' target='_blank' rel='noreferrer' >
+                        <img src={avignonInfos} alt="lien vers la billeterie"/>
+                    </a>
+                </div> */}
                 <nav className='home_nav'>
                     <ul className='home_nav_menu'>
                         <li>
                             <Link aria-label='Accéder à la page Compagnie' to="/compagnie" className='home_nav_menu_item'><h2>COMPAGNIE</h2></Link>
                         </li>
+                        <span>-</span>
                         <li>
                             <Link aria-label='Accéder à la page Actualité' to="/actualite" className='home_nav_menu_item'><h2>CALENDRIER</h2></Link>
                         </li>
+                        <span>-</span>
                         <li>
                             <Link aria-label='Accéder à la page Spectacles' to="/spectacles" className='home_nav_menu_item'><h2>SPECTACLES</h2></Link>
                         </li>
+                        <span>-</span>
                         <li>
                             <Link aria-label='Accéder à la page Spectacles' to="/mediations" className='home_nav_menu_item'><h2>MÉDIATIONS</h2></Link>
                         </li>
+                        <span>-</span>
                         <li>
                             <button aria-label='Afficher la fenêtre Contact' type='button' className='home_nav_menu_item' onClick={()=>setdisplayContactModal(true)}><p>CONTACT</p></button>
                         </li>

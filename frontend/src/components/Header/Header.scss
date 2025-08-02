@@ -162,7 +162,8 @@
                     margin: auto 0;
                     width: auto;
                     height: auto;
-
+                    
+                    
                     @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
                         
                         margin: 0;
@@ -186,10 +187,11 @@
                         border: none;
                         margin: auto;
                         box-sizing: border-box;
+                        font-weight: bold;
                         
                         &:hover {
                             cursor: pointer;
-                            font-weight: bold;
+                            color: $colorLightGrey;
                             box-sizing: border-box;
                         }
                     }
@@ -203,10 +205,11 @@
                         a, button {
                             width: auto;
                             margin: auto 0;
+                            
                             h2, p {
                                 font-family: 'MainFont_light';
                                 font-size: 18px;
-                                color: $colorDarkGrey;
+                                color: $colorLightGrey;
                                 font-weight: bold;
                                 display: flex;
                                 width: auto;
@@ -223,6 +226,7 @@
                                 
                                 &:hover {
                                     cursor: pointer;
+                                    color: $colorLightGrey;
                                     font-weight: bold;
                                     box-sizing: border-box;
                                 }
@@ -241,14 +245,17 @@
 
                     &--light {
                         margin: auto 0;
+                        
                         a, button {
+                            font-weight: bold;
+                            color: $colorDarkGrey;
                             width: auto;
                             margin: auto 0;
                             h2, p, button {
                                 font-family: 'MainFont_light';
                                 font-size: 18px;
                                 color: $colorDarkGrey;
-                                font-weight: 200;
+                                // font-weight: 200;
                                 display: flex;
                                 width: auto;
                                 @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
@@ -264,7 +271,7 @@
                                 
                                 &:hover {
                                     cursor: pointer;
-                                    font-weight: bold;
+                                    color: $colorLightGrey;
                                     box-sizing: border-box;
                                 }
                             }
