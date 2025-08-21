@@ -180,15 +180,22 @@
             font-family: 'MainFont_light';
             font-size: 17px;
             margin: auto;
-            font-weight: normal;
-            color: white;
+            font-weight: bold;
+            color: $colorLightGrey;
+            z-index: 10;
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
             
             }   
             @media only screen and (max-width:$mobileMaxWidth){
-                font-size: 13px;
+                font-size: 17px;
             }      
         }
+        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            
+        }   
+        @media only screen and (max-width:$mobileMaxWidth){
+            margin: 15px 0;
+        }      
         
     }
 
@@ -214,8 +221,10 @@
                 font-size: 17px;
                 flex-wrap: wrap;
                 flex-direction: column;
+                justify-content: center;
                 margin: 0;
-                row-gap: 15px;
+                row-gap: 5px;
+                height: auto;
   
             } 
             &_item {
@@ -239,6 +248,7 @@
                         font-size: 17px;
                         width: 120px;
                         text-align: center;
+                        
                     } 
                 }
             }
