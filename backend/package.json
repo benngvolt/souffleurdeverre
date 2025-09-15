@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/storage": "^7.3.1",
+    "axios": "^1.12.2",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dompurify": "^3.0.8",
@@ -24,11 +25,11 @@
     "nodemailer": "^6.9.3",
     "nodemon": "^3.0.1",
     "sharp": "^0.32.4",
+    "uuid": "^9.0.1",
     "valid-url": "^1.0.9",
-    "validator": "^13.9.0",
-    "uuid": "^9.0.1"
+    "validator": "^13.9.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   }
 }
