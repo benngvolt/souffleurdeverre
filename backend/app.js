@@ -22,6 +22,7 @@ const SECRET_MONGODBKEY = process.env.SECRET_MONGODBKEY;
 const projectsRoutes = require('./routes/projects');
 const biographiesRoutes = require('./routes/biographies');
 const usersRoutes = require('./routes/users');
+const newslettersRoutes = require('./routes/newsletters')
 
 /* --------------------------------------------------------
 
@@ -71,12 +72,15 @@ app.use(express.json());
 ----------- A CONFIGURER ----------------------------------
 
 ----------------------------------------------------------*/
-
+app.use((req, res, next) => {
+  console.log('[API] ', req.method, req.originalUrl);
+  next();
+});
 // on utilise les routers importés
 app.use ('/api/users', usersRoutes);
 app.use ('/api/projects', projectsRoutes);
 app.use ('/api/biographies', biographiesRoutes);
-// app.use ('/api/maininfos', maininfosRoutes);
+app.use ('/api/newsletters', newslettersRoutes);
 // app.use ('/api/events', eventsRoutes);
 // app.use ('/api/email', emailRoutes);
 

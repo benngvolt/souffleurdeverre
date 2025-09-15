@@ -122,6 +122,7 @@
         height: 100%;
         z-index: -1; /* derrière tout le reste */
         overflow: hidden;
+        filter: blur(3px);
 
         video {
             width: 100%;

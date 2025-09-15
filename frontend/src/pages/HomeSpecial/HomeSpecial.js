@@ -37,9 +37,10 @@ function HomeSpecial() {
         <main>
             <section className='home'>
                 <div class="home_video">
-                    <video autoPlay muted loop>
+                    <img src={cedricVeschambre} alt="logo souffleur de verre"/>
+                    {/* <video autoPlay muted loop>
                         <source src={video} type="video/mp4"/>
-                    </video>
+                    </video> */}
                 </div>
                 <div className="home_overlay"></div>
                 <div className='home_title'>

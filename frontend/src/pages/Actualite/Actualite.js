@@ -11,10 +11,8 @@ function Actualite() {
     const numericYears = ['2024', '2025', '2026', '2027', '2028', '2029', '2030'];
     const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
 
-    const { projects, fullCurrentDate } = useContext(Context);
+    const { sortedEvents, projects, fullCurrentDate } = useContext(Context);
     const currentDate = new Date(fullCurrentDate);
-    const today = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-    const groupedEvents = {};
 
     const googleEventCalendarUrlMount = (eventData) => {
         const eventDate = eventData.startDate;
@@ -42,55 +40,6 @@ function Actualite() {
     
         return googleEventCalendarUrl;
     }
-    
-    projects.forEach(project => {
-        if (project.showsList) {
-            project.showsList.forEach(show => {
-                if (show.dates) {
-                    show.dates.forEach(date => {
-                        let startDate = date.day || date.period?.startDate;
-                        let endDate = date.period?.endDate || date.day;
-                        let period = date.period?.startDate && date.period?.endDate ? true : false;
-                        
-                        if (startDate && endDate && new Date(endDate) >= today) {
-                            const key = `${startDate}_${endDate}_${project._id}`;
-                            if (!groupedEvents[key]) {
-                                groupedEvents[key] = {
-                                    type: 'show',
-                                    project,
-                                    show,
-                                    times: date.times,
-                                    startDate,
-                                    endDate,
-                                    period: period
-                                };
-                            }
-                        }
-                    });
-                }
-            });
-        }
-        if (project.residenciesList) {
-            project.residenciesList.forEach(residency => {
-                let startDate = residency.startDates;
-                let endDate = residency.endDates;
-                if (startDate && endDate && new Date(endDate) >= today) {
-                    const key = `${startDate}_${endDate}_${project._id}_residency`;
-                    if (!groupedEvents[key]) {
-                        groupedEvents[key] = {
-                            type: 'residency',
-                            project,
-                            residency,
-                            startDate,
-                            endDate
-                        };
-                    }
-                }
-            });
-        }
-    });
-
-    const sortedEvents = Object.values(groupedEvents).sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
     
     const uniqueYears = [...new Set(sortedEvents.map(event => event.startDate.split('-')[0]))];
 

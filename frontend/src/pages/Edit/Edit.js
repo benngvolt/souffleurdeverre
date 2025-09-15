@@ -2,6 +2,7 @@ import './Edit.scss'
 import BioForm from '../../components/BioForm/BioForm'
 import ConfirmBox from '../../components/ConfirmBox/ConfirmBox'
 import ProjectForm from '../../components/ProjectForm/ProjectForm'
+import Newsletter from '../../components/Newsletter/Newsletter'
 import { API_URL } from '../../utils/constants'
 import { Context } from '../../utils/Context'
 import React, { useEffect, useState, useContext } from 'react'
@@ -24,6 +25,7 @@ function Edit() {
     const [projectFormMode, setProjectFormMode] = useState('add');
     const [projectEdit, setProjectEdit] = useState('');
     const [handleDisplayProjectForm, setHandleDisplayProjectForm] = useState(false);
+    const [handleDisplayNewsletter, setHandleDisplayNewsletter] = useState(false);
 
     const [artistsList, setArtistsList] = useState([]);
     const [productionList, setProductionList] = useState([]);
@@ -180,6 +182,10 @@ function Edit() {
                         </ul>
                         <button className='editSection_mainContainer_projects_addButton' onClick={() => addProject()}>+ AJOUTER UN PROJET</button>
                     </div>
+                    <div className='editSection_mainContainer_newsletter'>
+                        <p className='editSection_mainContainer_newsletter_title'>NEWSLETTER</p>
+                        <button className='editSection_mainContainer_newsletter_addButton' onClick={() => setHandleDisplayNewsletter(true)}>GÉNÉRER UNE NEWSLETTER</button>
+                    </div>    
                     <div className='editSection_mainContainer_bios'>
                         <p className='editSection_mainContainer_bios_title'>BIOGRAPHIES</p>
                         <ul className='editSection_mainContainer_bios_biosList'>
@@ -194,7 +200,7 @@ function Edit() {
                             ))}
                         </ul>
                         <button onClick={() => addBio()} className='editSection_mainContainer_bios_addButton'>AJOUTER UN.E COLLABORA.TEUR.TRICE</button>
-                    </div>            
+                    </div>           
                 </div>
                 <div className={handleDisplayProjectForm===false ? "editSection_forms--displayOff" : "editSection_forms--displayOn"}>
                     <ProjectForm 
@@ -232,6 +238,12 @@ function Edit() {
                         bioFormMode={bioFormMode}
                         setHandleDisplayBioForm = {setHandleDisplayBioForm}
                         handleDisplayBioForm={handleDisplayBioForm}
+                    />
+                </div>
+                <div className={handleDisplayNewsletter===false ? "editSection_newsletter--displayOff" : "editSection_newsletter--displayOn"}>
+                    <Newsletter 
+                        setHandleDisplayNewsletter = {setHandleDisplayNewsletter}
+                        handleDisplayNewsletter={handleDisplayNewsletter}
                     />
                 </div>
                 <ConfirmBox 

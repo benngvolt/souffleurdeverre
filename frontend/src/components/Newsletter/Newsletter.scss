@@ -1,0 +1,296 @@
+@import '../../utils/mixins';
+
+.newsletter {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    row-gap: 9px;
+    width: 80%;
+    overflow: scroll;
+    margin: auto;
+    background-color: white;
+
+    &_intro {
+        color: black;
+        font-size: 18px;
+        text-align: center;
+        margin: 50px auto;
+        width: 60%;
+    }
+
+    &_stickyCancelButton {
+        width: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        color: $colorDarkGrey;
+        background: none;
+        border: none;
+        position: sticky;
+        top: 80px;
+        left: 60px;
+        z-index: 100;
+        
+        &_icon {
+            height: 2em;
+            margin-right: 15px;
+            
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &_buttons {
+
+        display: flex;
+        flex-direction: row;
+        margin: 0 auto 54px auto;
+        width: 100%;
+        justify-content: center;
+        column-gap: 16px;
+
+        button {
+            font-size: 22px;
+            font-family: 'MainFont_light';
+            font-weight: bold;
+            color: $colorDarkGrey;
+            border-radius: 0;
+            border: 1px solid $colorDarkGrey;
+            background: none;
+            width: 170px;
+            padding: 15px;
+            &:hover {
+                color: $colorLightGrey;
+                background-color: $colorDarkGrey;
+                border: none;
+                cursor: pointer;
+            }
+        }
+        
+    }
+    &_htmlbodyContainer {
+        width: 50%;
+        margin: 80px auto;
+        
+    }
+
+    &_htmlbody {
+        width: 100%;
+        
+        &_header {
+            width: 100%;
+            margin: auto;
+            background: $colorTwo;
+            padding: 30px 0;
+
+            &_logo {
+                width: 30%;
+                margin: auto;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+            }
+            &_title {
+                
+                margin: auto;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                margin: 20px auto;
+                font-size: 35px;
+                color: rgb(0, 0, 0);
+                font-weight: bold;
+                // font-family:'MainFont_light';
+            }
+            &_actu {
+                margin: auto;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                font-size: 20px;
+                color: rgb(0, 0, 0);
+                font-weight: bolder;
+                // font-family:'MainFont_light';
+            }
+
+            &_networks {
+                margin: 50px auto 0 auto;
+                display: flex;
+                flex-direction: row;
+                column-gap: 15px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+
+                &_item {
+                    a img {
+                        width: 40px;
+
+                    }
+                }
+            }
+        }
+    }
+
+    &_project {
+        width: 100%;
+        margin: 60px auto 0 auto;
+
+        &_image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+        &_title {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+
+        &_mainDatasContainer {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            column-gap: 15px;
+            margin: 10px 0 20px 0;
+
+            &_title {
+                font-weight: bolder;
+                color: $colorThree;
+                font-size: 20px;
+            }
+            &_subtitle {
+                font-size: 20px;
+                color: $colorThree;
+            }
+            &_state {
+                font-size: 20px;
+                font-weight: bolder;
+                background-color: $colorThree;
+                color: white;
+                padding: 0 5px;
+                line-height: 100%;
+            }
+            &_type {
+                
+                color: $colorThree;
+                font-size: 18px;
+                font-style: italic;
+            }
+        }
+
+        &_summary {
+            width: 100%;
+            font-size: 16px;
+            text-align: justify;
+        }
+
+        &_showslist, &_residencieslist {
+            margin: 20px 0;
+            width: 100%;
+            font-size: 16px;
+
+            a {
+                color: black;
+                font-style: italic;
+
+                &:hover {
+                    color: $colorFive;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        &_link {
+
+            color: $colorThree;
+            font-weight: bolder;
+            font-style: italic;
+            
+            &:hover {
+                color: $colorFour;
+                cursor: pointer;
+            }
+        }
+
+    }
+
+    &_footer {
+        width: 100%;
+        margin: 40px auto 0 auto;
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.5;
+    
+        &_brand {
+          background: $colorFive; // orange demandé
+          color: #000; // sur ta capture c'est noir sur fond orange
+          font-weight: bold;
+          text-transform: uppercase;
+          letter-spacing: .5px;
+          padding: 8px 12px;
+          width: 100%;
+          margin: 0 auto 24px auto;
+        }
+    
+        &_section {
+          width: 100%;
+          margin: 0 auto 22px auto;
+    
+          &_title {
+            margin: 0 0 10px 0;
+            color: $colorFive; // titres orange
+            font-weight: 700;
+            text-transform: uppercase;
+          }
+    
+          p {
+            margin: 4px 0;
+          }
+    
+          a {
+            color: #000;
+            text-decoration: underline;
+    
+            &:hover {
+              color: #444; // discret
+              cursor: pointer;
+            }
+          }
+        }
+    
+        &_address {
+          width: 100%;
+          margin: 8px auto 26px auto;
+    
+          p { margin: 4px 0; }
+    
+          a {
+            color: #000;
+            text-decoration: underline;
+    
+            &:hover {
+              color: #444;
+              cursor: pointer;
+            }
+          }
+        }
+    
+        &_notice {
+          width: 100%;
+          margin: 0 auto 24px auto;
+          background: $colorFive; // bandeau orange
+          color: #fff;           // texte blanc (comme sur la capture)
+          padding: 14px 16px;
+          text-align: center;
+    
+          p {
+            margin: 0;
+            line-height: 1.4;
+          }
+        }
+      }
+
+
+}

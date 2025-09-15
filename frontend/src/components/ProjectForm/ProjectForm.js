@@ -45,9 +45,6 @@ function ProjectForm({
         setPdfFiles
     }) {
 
-    
-    
-
     /* ---------------------------
     ----- RÉCUPÉRATION CONTEXT ---
     ----------------------------*/
@@ -123,7 +120,6 @@ function ProjectForm({
         }
     }
 
-
     /* ---------------------------
     ----- ARTISTS LIST -----------
     ----------------------------*/
@@ -176,9 +172,9 @@ function ProjectForm({
     const handleAddSameShowDate = (index) => {
         const updatedShowsList = [...showsList];
         if (!updatedShowsList[index].dates) {
-            updatedShowsList[index].dates = [{ day: '', period: {startDate:'', endDate:''}, times: [{ time: '', timeInfos: '' }] }]; // Créez un tableau contenant un objet vide avec les propriétés appropriées
+            updatedShowsList[index].dates = [{ day: '', period: {startDate:'', endDate:''}, times: [{ time: '', timeInfos: '' }] }];
         } else {
-            updatedShowsList[index].dates.push({ day: '', period: {startDate:'', endDate:''}, times: [{ time: '', timeInfos: '' }] }); // Ajoutez un nouvel objet vide avec les propriétés appropriées
+            updatedShowsList[index].dates.push({ day: '', period: {startDate:'', endDate:''}, times: [{ time: '', timeInfos: '' }] });
         }
         setShowsList(updatedShowsList);
     };
@@ -186,9 +182,9 @@ function ProjectForm({
     const handleAddSameDateTime = (index, dateIndex) => {
         const updatedShowsList = [...showsList];
         if (!updatedShowsList[index].dates[dateIndex].times) {
-            updatedShowsList[index].dates[dateIndex].times = ['']; // Si show.dates n'existe pas encore, créez-le comme un tableau avec une date vide
+            updatedShowsList[index].dates[dateIndex].times = [''];
         } else {
-            updatedShowsList[index].dates[dateIndex].times.push({ time: '', timeInfos: '' }); // Sinon, ajoutez simplement une date vide
+            updatedShowsList[index].dates[dateIndex].times.push({ time: '', timeInfos: '' });
         }
         setShowsList(updatedShowsList);
     };
@@ -218,33 +214,25 @@ function ProjectForm({
         const pdfData = new Uint8Array(await pdf.arrayBuffer());
         const loadingTask = pdfjsLib.getDocument({ data: pdfData });
         const pdfDocument = await loadingTask.promise;
-        // Charger la première page
         const pageNumber = 1;
         const page = await pdfDocument.getPage(pageNumber);
-        // Définir la taille de l'aperçu (facultatif)
         const scale = 1.5;
         const viewport = page.getViewport({ scale });
-        // Créer un élément canvas pour le rendu de l'aperçu
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         canvas.width = viewport.width;
         canvas.height = viewport.height;
-        // Rendu de la première page sur le canvas
         await page.render({ canvasContext: context, viewport }).promise;
-        // Convertir le canvas en data URL (image au format base64)
         const dataUrl = canvas.toDataURL('image/jpeg');
         return dataUrl;
     }
     async function displayPdfSample() {
         const pdf = inputProjectPdfFileRef.current.files[0];
         if (pdf) {
-        const id = uuidv4(); // Générez un identifiant unique
+        const id = uuidv4();
         pdf._id = id;
         setNewPdf(pdf);
-        // Générer l'aperçu de la première page du PDF
         const previewUrl = await generatePdfPreview(pdf);
-    
-        // Afficher l'aperçu
         projectPdfSampleRef.current.setAttribute('src', previewUrl);
         projectPdfSampleRef.current.setAttribute('alt', '');
         setIsPdfLoaded(true);
@@ -262,18 +250,14 @@ function ProjectForm({
     }
 
     function handleSupprPdf(index) {
-        // Créer une copie du tableau pdfFiles sans l'élément à l'index spécifié
         const updatedSupprPdfFiles = pdfFiles.filter((_, i) => i !== index);
-        // Mettre à jour l'état avec le nouveau tableau sans l'élément supprimé
         setPdfFiles(updatedSupprPdfFiles);
     }
 
     function cancelAddPdfFile() {
         setNewPdf (null);
         setIsPdfLoaded(false);
-        // Réinitialiser l'élément input
         inputProjectPdfFileRef.current.value = '';
-        // Réinitialiser les fichiers sélectionnés
         inputProjectPdfFileRef.current.files = null;
         projectPdfSampleRef.current.setAttribute("src", "");
         projectPdfSampleRef.current.setAttribute("alt", "");
@@ -292,13 +276,11 @@ function ProjectForm({
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [newImage, setNewImage] = useState(null);
     
-    //CHARGEMENT DE L'IMAGE
     function displaySample() {
             const image = inputProjectImageFileRef.current.files[0];
             if (image) {
                 setNewImage (image);
                 const id = uuidv4(); 
-                // Générez un identifiant unique
                 image._id = id;
                 image.sampleImageUrl= URL.createObjectURL(image);
                 projectMainImageSampleRef.current.setAttribute("src", image.sampleImageUrl);
@@ -319,15 +301,11 @@ function ProjectForm({
             const updatedImageFiles = [...imageFiles, newImage];
             setImageFiles(updatedImageFiles);
         }
-        //ON SE RETROUVE AVEC UN TABLEAU IMAGEFILES COMPRENANT DES IMAGES EN INSTANCES DE FILES ET DES IMAGES AVEC URL
         setIsImageLoaded(false);
         cancelAddImageFile();
     }
 
-    //TRAITEMENT DU TABLEAU IMAGEFILES POUR ENVOI EN BACKEND
-    // ON RÉCUPÈRE D'ABORD IMAGEFILES EN UN NOOUVEAU TABLEAU
     const newImageFiles = Array.from(imageFiles);
-    // ON CRÉE UN NOUVEAU TABLEAU EN DONNANT À CHAQUE IMAGE UN INDEX
     const imagesWithIndex = newImageFiles.map((image, index) => ({
         index,
         image
@@ -338,27 +316,44 @@ function ProjectForm({
     -------------------------*/
     function projectFormSubmit(event) {
         event.preventDefault();
-        //RÉORGANISATION DES ELEMENTS 'RESIDENCY' PAR ORDRE CHRONOLOGIQUE
         displayLoader();
         setDisplayServerError(false);
         setDisplayError(false);
        
+        // RÉORGANISATION DES RÉSIDENCES PAR DÉBUT CHRONO
         const sortedResidenciesList = residenciesList.sort((a, b) => {
             const dateA = new Date(a.startDates);
             const dateB = new Date(b.startDates);
             return dateA - dateB;
         });
-        //NETTOYAGE DU TABLEAU DES DATES 'REPRÉSENTATIONS' POUR EVITER LES CHAMPS ""
+
+        // 1) Nettoyage simple : supprimer les dates vides
         const cleanedShowsList = showsList.map(show => ({
             ...show,
-            dates: show.dates.filter(date => date && date !== '')
+            dates: (show.dates || []).filter(d => d && d !== '')
         }));
-        //RÉORGANISATION DES ELEMENTS REPRÉSENTATIONS' PAR ORDRE CHRONOLOGIQUE
+
+        // 2) Tri des lieux par la première date (jour simple ou début de période)
         const sortedShowsList = cleanedShowsList.sort((a, b) => {
-            const dateA = new Date(a.dates[0]?.day);
-            const dateB = new Date(b.dates[0]?.day);
+            const a0 = a.dates?.[0];
+            const b0 = b.dates?.[0];
+            const dateA = new Date(a0?.day || a0?.period?.startDate || 0);
+            const dateB = new Date(b0?.day || b0?.period?.startDate || 0);
             return dateA - dateB;
-         });
+        });
+
+        // 3) Clone profond + suppression des périodes incomplètes (option "safe")
+        const payloadShowsList = structuredClone(sortedShowsList);
+        for (const show of payloadShowsList) {
+            for (const d of show.dates || []) {
+                const start = d?.period?.startDate;
+                const end = d?.period?.endDate;
+                if (!start || !end) {
+                    if (d?.period) delete d.period; // <- on enlève period si incomplet
+                }
+            }
+        }
+
         const token = window.sessionStorage.getItem('1');
         const projectFormData = new FormData();
         projectFormData.append('title', inputProjectTitleRef.current.value);
@@ -376,7 +371,9 @@ function ProjectForm({
         projectFormData.append('paragraphList', JSON.stringify(paragraphList));
         projectFormData.append('videoList', JSON.stringify(videoList));
         projectFormData.append('residenciesList', JSON.stringify(sortedResidenciesList));
-        projectFormData.append('showsList', JSON.stringify(sortedShowsList));
+
+        // 🔁 ICI on envoie la version nettoyée
+        projectFormData.append('showsList', JSON.stringify(payloadShowsList));
         
         pdfWithIndex.forEach(({ index, pdf }) => {
             if (pdf instanceof File) {
@@ -396,6 +393,7 @@ function ProjectForm({
                 projectFormData.append(`existingImages[${index}]`, JSON.stringify(image));
             }
         });
+
         if (
             !inputProjectTitleRef.current.value ||
             !inputProjectStateRef.current.value ||
@@ -409,7 +407,6 @@ function ProjectForm({
                 fetch(`${API_URL}/api/projects`, {
                     method: "POST",
                     headers: {
-                        // 'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + token,
                     },
                     body: projectFormData,
@@ -437,7 +434,6 @@ function ProjectForm({
                 fetch(`${API_URL}/api/projects/${projectEdit._id}`, {
                     method: "PUT",
                     headers: {
-                        // 'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + token,
                     },
                     body: projectFormData,
@@ -465,7 +461,6 @@ function ProjectForm({
     }
 
     function closeForm() {
-       
         clearTrixEditor();
         setHandleDisplayProjectForm(false);
         handleLoadProjects();
@@ -612,10 +607,8 @@ function ProjectForm({
                     displayForm={handleDisplayProjectForm}
                 />
             </Collapse>
-            {/* -----CRÉATION D'UN TABLEAU D'OBJETS  */}
             <Collapse title="ARTISTES" style='edit'>
                 <div className='projectForm_projectArtistsList'>
-                    {/* <p className='projectForm_projectArtistsList_title'> ARTISTES </p> */}
                     {artistsList.map((artist, index) => (
                         <div key={index} className='projectForm_projectArtistsList_line'>
                             <div className='projectForm_projectArtistsList_line_artistFunction'>
@@ -652,7 +645,6 @@ function ProjectForm({
             </Collapse>
             <Collapse title="PRODUCTION" style='edit'>
                 <div className='projectForm_projectProductionList'>
-                    {/* <p className='projectForm_projectProductionList_title'> PRODUCTION </p> */}
                     {productionList.map((production, index) => (
                         <div key={index} className='projectForm_projectProductionList_line'>
                             <div className='projectForm_projectProductionList_line_prodFunction'>
@@ -703,7 +695,6 @@ function ProjectForm({
             </Collapse>
             <Collapse title="EXTRAITS VIDEOS" style='edit'>
                 <div className='projectForm_projectVideoList'>
-                    {/* <p className='projectForm_projectVideoList_title'> EXTRAITS VIDEOS </p> */}
                     {videoList.map((video, index) => (
                         <div key={index} className='projectForm_projectVideoList_line'>
                             <div>
@@ -740,7 +731,6 @@ function ProjectForm({
             </Collapse>
             <Collapse title="RÉSIDENCES" style='edit'>
                 <div className='projectForm_projectResidenciesList'>
-                    {/* <p className='projectForm_projectResidenciesList_title'> RÉSIDENCES </p> */}
                     <div className='projectForm_projectResidenciesList_container'>
                     {residenciesList.map((residency, index) => (
                         <div key={index} className='projectForm_projectResidenciesList_line'>
@@ -768,10 +758,9 @@ function ProjectForm({
                                         const updatedResidenciesList = [...residenciesList];
                                         updatedResidenciesList[index].startDates = e.target.value;
 
-                                        // Mettre à jour la date de fin de résidence avec le jour suivant
                                         const nextDay = new Date(e.target.value);
                                         nextDay.setDate(nextDay.getDate() + 1);
-                                        updatedResidenciesList[index].endDates = nextDay.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
+                                        updatedResidenciesList[index].endDates = nextDay.toISOString().split('T')[0];
                                         setResidenciesList(updatedResidenciesList);
                                     }}
                                 ></input>
@@ -851,7 +840,6 @@ function ProjectForm({
             </Collapse>
             <Collapse title="REPRÉSENTATIONS" style='edit'>
                 <div className='projectForm_projectShowsList'>
-                    {/* <p className='projectForm_projectShowsList_title'> REPRÉSENTATIONS </p> */}
                     <div className='projectForm_projectShowsList_container'>
                     {showsList?.map((show, index) => (
                     <div key={index}>
@@ -913,51 +901,7 @@ function ProjectForm({
                             <label htmlFor={`inputProjectShowDates${index}`}>DATES DE REPRÉSENTATION:</label>
                             <div className='projectForm_projectShowsList_container_dates_gridDisplay'>
                                 {show.dates?.map((date, dateIndex)=>(
-                                <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay'> 
-                                    {/* <input
-                                        className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_date'
-                                        key={dateIndex}
-                                        type='date'
-                                        id={`inputProjectShowDates${index}`}
-                                        value={date.day}
-                                        onChange={(e) => {
-                                            const updatedShowsList = [...showsList];
-                                            updatedShowsList[index].dates[dateIndex].day = e.target.value;
-                                            setShowsList(updatedShowsList);
-                                        }}
-                                    />
-                                    <div> 
-                                        <input
-                                            className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_date'
-                                            key={`inputProjectShowPeriodStartDate${dateIndex}`}
-                                            type='date'
-                                            id={`inputProjectShowPeriodStartdate${index}`}
-                                            value={date.period?.startDate || ''}
-                                            onChange={(e) => {
-                                                const updatedShowsList = [...showsList];
-                                                if (!updatedShowsList[index].dates[dateIndex].period) {
-                                                    updatedShowsList[index].dates[dateIndex].period = {};
-                                                }
-                                                updatedShowsList[index].dates[dateIndex].period.startDate = e.target.value;
-                                                setShowsList(updatedShowsList);
-                                            }}
-                                        />
-                                        <input
-                                            className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_date'
-                                            key={`inputProjectShowPeriodEndDate${dateIndex}`}
-                                            type='date'
-                                            id={`inputProjectShowPeriodEnddate${index}`}
-                                            value={date.period?.endDate || ''}
-                                            onChange={(e) => {
-                                                const updatedShowsList = [...showsList];
-                                                if (!updatedShowsList[index].dates[dateIndex].period) {
-                                                    updatedShowsList[index].dates[dateIndex].period = {};
-                                                }
-                                                updatedShowsList[index].dates[dateIndex].period.endDate = e.target.value;
-                                                setShowsList(updatedShowsList);
-                                            }}
-                                        />
-                                    </div> */}
+                                <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay' key={dateIndex}> 
                                     <DateInputSwitch
                                         dateIndex={dateIndex}
                                         index={index}
@@ -968,7 +912,7 @@ function ProjectForm({
                                     
                                     <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times'>
                                         {date.times?.map((time, timeIndex) => (
-                                        <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer'>
+                                        <div className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer' key={timeIndex}>
                                             <input
                                                 className='projectForm_projectShowsList_container_dates_gridDisplay_singleDay_times_timeContainer_singleTime'
                                                 key={`inputProjectShowDatesTimesTime${timeIndex}`}
@@ -1014,7 +958,6 @@ function ProjectForm({
             </Collapse>
             <Collapse title="DOSSIERS" style='edit'>
                 <div className='projectForm_projectPdfFile'>
-                    {/* <p className='projectForm_projectPdfFile_title'>DOSSIERS</p> */}
                     <div className='projectForm_projectPdfFile_pdfContainer'>
                     {pdfFiles?.map((pdf, index) => (
                         <div key={index}>
@@ -1046,7 +989,7 @@ function ProjectForm({
                     <input type='file' id='inputProjectPdfFile' name="pdfFiles" ref={inputProjectPdfFileRef} onChange={displayPdfSample}></input>
                 </div>
             </Collapse>
-            <ErrorText errorText={"Une erreur s\'est produite"} state={displayServerError}/>
+            <ErrorText errorText={"Une erreur s'est produite"} state={displayServerError}/>
             <ErrorText errorText={"Tous les champs marqués d'une * doivent être remplis"} state={displayError}/>
             <div className='projectForm_buttons'>
                 <button type='submit'>VALIDER</button>
