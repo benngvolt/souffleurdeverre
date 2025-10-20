@@ -258,9 +258,10 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
                     .fs-16 { font-size:14px !important; }
                     .datasrow { flex-direction: column !important;}
                     .intro { width:92% !important; margin:24px auto !important; }
-                    .hero-img { height:auto !important; max-height:none !important; }
+                    .hero-img { height:275px !important; max-height:none !important; }
                     .badge { font-size:12px !important; }
-                    .footer-brand { padding:10px 12px; box-sizing: border-box, font-size: 14px !important; }
+                    .footer-brand { padding:10px 12px; box-sizing: border-box, font-size: 14px !important;
+                     }
                   }
                   @media only screen and (min-width:601px) {
                     .wrap { width:640px !important; }
@@ -351,33 +352,118 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
         <div ref={bodyRef}>
           {/* HEADER */}
           <div style={{width:'100%',margin:'0 auto',background:'#00f0ff',padding:'30px 0',textAlign:'center'}}>
-            <img src="https://storage.googleapis.com/website_ciesouffleur/assets/logoSouffleur.svg" alt="Cie Souffleur de Verre" style={{width:'30%',maxWidth:220,height:'auto',display:'block',margin:'0 auto'}}/>
+            <img src="https://storage.googleapis.com/website_ciesouffleur/assets/logoSouffleur.jpg" alt="Cie Souffleur de Verre" style={{width:'30%',maxWidth:220,height:'auto',display:'block',margin:'0 auto'}}/>
             <p className="fs-35" style={{margin:'20px auto 6px auto',fontSize:35,color:'#000',fontWeight:'700',lineHeight:1,letterSpacing:'.5px'}}>NEWSLETTER</p>
             <p className="fs-20" style={{margin:'0 auto',fontSize:20,color:'#000',fontWeight:700,lineHeight:1.2}}>Actualité de la compagnie</p>
             <p style={{margin:'2px auto 0 auto',fontSize:18,color:'#000',fontWeight:600,lineHeight:1.2}}>Le Souffleur de Verre</p>
             {/* Réseaux */}
-            <ul style={{listStyle:'none',padding:0,margin:'30px auto 0 auto',display:'flex',justifyContent:'center',gap:15}}>
-              <li>
-                <a aria-label="Accéder à la page Facebook de la compagnie" href="https://www.facebook.com/souffleurdeverre" target="_blank" rel="noreferrer" style={{display:'inline-block'}}>
-                  <img src={facebookLogo} alt="facebook" style={{width:40,height:40,display:'block'}}/>
-                </a>
-              </li>
-              <li>
-                <a aria-label="Accéder à la page X (Twitter) de la compagnie" href="https://twitter.com/ciesouffleur" target="_blank" rel="noreferrer" style={{display:'inline-block'}}>
-                  <img src={xLogo} alt="x" style={{width:40,height:40,display:'block'}}/>
-                </a>
-              </li>
-              <li>
-                <a aria-label="Accéder à la page Youtube de la compagnie" href="https://www.youtube.com/@compagnielesouffleurdeverr6312" target="_blank" rel="noreferrer" style={{display:'inline-block'}}>
-                  <img src={youtubeLogo} alt="youtube" style={{width:40,height:40,display:'block'}}/>
-                </a>
-              </li>
-              <li>
-                <a aria-label="Accéder à la page Instagram de la compagnie" href="https://www.instagram.com/ciesouffleur" target="_blank" rel="noreferrer" style={{display:'inline-block'}}>
-                  <img src={instagramLogo} alt="instagram" style={{width:40,height:40,display:'block'}}/>
-                </a>
-              </li>
-            </ul>
+            <table
+              role="presentation"
+              align="center"
+              style={{
+                margin: '30px auto 0 auto',
+                borderCollapse: 'collapse',
+                'mso-table-lspace': '0pt',
+                'mso-table-rspace': '0pt',
+              }}
+            >
+              <tbody>
+                <tr>
+                  <td style={{ padding: '0 8px' }}>
+                    <a
+                      aria-label="Accéder à la page Facebook de la compagnie"
+                      href="https://www.facebook.com/souffleurdeverre"
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ textDecoration: 'none', display: 'block' }}
+                    >
+                      <img
+                        src="https://storage.googleapis.com/website_ciesouffleur/assets/facebook_black.jpg"
+                        alt="facebook"
+                        width={40}
+                        height={40}
+                        style={{
+                          display: 'block',
+                          border: 0,
+                          outline: 'none',
+                          textDecoration: 'none',
+                          msInterpolationMode: 'bicubic',
+                        }}
+                      />
+                    </a>
+                  </td>
+                  <td style={{ padding: '0 8px' }}>
+                    <a
+                      aria-label="Accéder à la page X (Twitter) de la compagnie"
+                      href="https://twitter.com/ciesouffleur"
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ textDecoration: 'none', display: 'block' }}
+                    >
+                      <img
+                        src="https://storage.googleapis.com/website_ciesouffleur/assets/x_black.jpg"
+                        alt="x"
+                        width={40}
+                        height={40}
+                        style={{
+                          display: 'block',
+                          border: 0,
+                          outline: 'none',
+                          textDecoration: 'none',
+                          msInterpolationMode: 'bicubic',
+                        }}
+                      />
+                    </a>
+                  </td>
+                  <td style={{ padding: '0 8px' }}>
+                    <a
+                      aria-label="Accéder à la page Youtube de la compagnie"
+                      href="https://www.youtube.com/@compagnielesouffleurdeverr6312"
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ textDecoration: 'none', display: 'block' }}
+                    >
+                      <img
+                        src="https://storage.googleapis.com/website_ciesouffleur/assets/youtube_black.jpg"
+                        alt="youtube"
+                        width={40}
+                        height={40}
+                        style={{
+                          display: 'block',
+                          border: 0,
+                          outline: 'none',
+                          textDecoration: 'none',
+                          msInterpolationMode: 'bicubic',
+                        }}
+                      />
+                    </a>
+                  </td>
+                  <td style={{ padding: '0 8px' }}>
+                    <a
+                      aria-label="Accéder à la page Instagram de la compagnie"
+                      href="https://www.instagram.com/ciesouffleur"
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ textDecoration: 'none', display: 'block' }}
+                    >
+                      <img
+                        src="https://storage.googleapis.com/website_ciesouffleur/assets/instagram_black.jpg"
+                        alt="instagram"
+                        width={40}
+                        height={40}
+                        style={{
+                          display: 'block',
+                          border: 0,
+                          outline: 'none',
+                          textDecoration: 'none',
+                          msInterpolationMode: 'bicubic',
+                        }}
+                      />
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
           {/* INTRO */}
@@ -392,7 +478,7 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
                 <tr>
                   <td style={{padding:0}}>
                     {project.heroImageUrl && (
-                      <img src={project.heroImageUrl} alt={project.title || 'Illustration'} className="hero-img" style={{width:'100%', height:'auto', aspectRatio: '1.6/1', objectFit:'cover', display:'block'}}/>
+                      <img src={project.heroImageUrl} alt={project.title || 'Illustration'} className="hero-img" style={{width:'100%', height:'400px', objectFit:'cover', display:'block'}}/>
                     )}
 
                     {/* Titre + méta */}
@@ -474,30 +560,31 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
             <div className="footer-brand" style={{background:'#ff8a00',color:'#000',fontWeight:700,textTransform:'uppercase',letterSpacing:'.5px',padding:'8px 12px', boxSizing:'border-box', width:'100%',margin:'0 auto 24px auto'}}>COMPAGNIE LE SOUFFLEUR DE VERRE</div>
 
             <div style={{width:'100%',margin:'0 auto 22px auto'}}>
-              <h4 style={{margin:'0 0 10px 0',color:'#ff8a00',fontWeight:700,textTransform:'uppercase'}}>RESPONSABLES ARTISTIQUES</h4>
-              <p style={{margin:'4px 0'}}>Julien Rocha et Cédric Veschambre</p>
+              <h4 style={{margin:'0 0 10px 0',color:'#ff8a00',fontWeight:700,textTransform:'uppercase'}}>RESPONSABLE ARTISTIQUE</h4>
+              <p style={{margin:'4px 0'}}>Julien Rocha</p>
               <p style={{margin:'4px 0'}}>06 61 19 39 35</p>
-              <p style={{margin:'4px 0'}}><a href="mailto:julien.rocha63@gmail.com" style={{color:'#000',textDecoration:'underline'}}>julien.rocha63@gmail.com</a></p>
+              <p style={{margin:'4px 0'}}><a href="mailto:julienrocha.souffleurdeverre@gmail.com" style={{color:'#000',textDecoration:'underline'}}>julienrocha.souffleurdeverre@gmail.com</a></p>
             </div>
 
             <div style={{width:'100%',margin:'0 auto 22px auto'}}>
-              <h4 style={{margin:'0 0 10px 0',color:'#ff8a00',fontWeight:700,textTransform:'uppercase'}}>PRODUCTION et RÉSERVATIONS PRO</h4>
-              <p style={{margin:'4px 0'}}>Marion Galon</p>
+              <h4 style={{margin:'0 0 10px 0',color:'#ff8a00',fontWeight:700,textTransform:'uppercase'}}>ADMINISTRATION DE PRODUCTION, RÉSERVATIONS PRO</h4>
+              <p style={{margin:'4px 0'}}>Cédric Veschambre</p>
               <p style={{margin:'4px 0'}}>07 86 55 81 26</p>
-              <p style={{margin:'4px 0'}}><a href="mailto:marion.souffleur@gmail.com" style={{color:'#000',textDecoration:'underline'}}>marion.souffleur@gmail.com</a></p>
+              <p style={{margin:'4px 0'}}><a href="mailto:ciesouffleur@gmail.com" style={{color:'#000',textDecoration:'underline'}}>ciesouffleur@gmail.com</a></p>
+              <p style={{margin:'4px 0'}}><a href="mailto:ciesouffleur@hotmail.fr" style={{color:'#000',textDecoration:'underline'}}>ciesouffleur@hotmail.fr</a></p>
             </div>
 
-            <div style={{width:'100%',margin:'0 auto 22px auto'}}>
+            {/* <div style={{width:'100%',margin:'0 auto 22px auto'}}>
               <h4 style={{margin:'0 0 10px 0',color:'#ff8a00',fontWeight:700,textTransform:'uppercase'}}>FICHE TECHNIQUE ET ADMINISTRATION</h4>
               <p style={{margin:'4px 0'}}><a href="mailto:ciesouffleur@hotmail.com" style={{color:'#000',textDecoration:'underline'}}>ciesouffleur@hotmail.com</a></p>
-            </div>
+            </div> */}
 
             <div style={{width:'100%',margin:'8px auto 26px auto'}}>
               <p style={{margin:'4px 0'}}>Compagnie Le <strong>Souffleur</strong> de Verre</p>
               <p style={{margin:'4px 0'}}>36 rue de Blanzat</p>
               <p style={{margin:'4px 0'}}>63100 Clermont-Ferrand</p>
-              <p style={{margin:'4px 0'}}><a href="mailto:ciesouffleur@hotmail.fr" style={{color:'#000',textDecoration:'underline'}}>ciesouffleur@hotmail.fr</a></p>
-              <p style={{margin:'4px 0'}}><a href="http://souffleurdeverre.fr/web/" style={{color:'#000',textDecoration:'underline'}}>http://souffleurdeverre.fr/web/</a></p>
+              {/* <p style={{margin:'4px 0'}}><a href="mailto:ciesouffleur@hotmail.fr" style={{color:'#000',textDecoration:'underline'}}>ciesouffleur@hotmail.fr</a></p> */}
+              <p style={{margin:'4px 0'}}><a href="https://souffleurdeverre.fr/" style={{color:'#000',textDecoration:'underline'}}>souffleurdeverre.fr</a></p>
             </div>
 
             <div style={{width:'100%',margin:'0 auto 24px auto',background:'#ff8a00',color:'#fff',padding:'14px 16px',boxSizing:'border-box',textAlign:'center'}}>

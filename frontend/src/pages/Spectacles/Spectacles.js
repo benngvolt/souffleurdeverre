@@ -222,7 +222,7 @@ function Spectacles() {
                   <h3 className="spectacles_projectsList_projectItem_mainDatas_title">{project.title}</h3>
                   <p className="spectacles_projectsList_projectItem_mainDatas_subtitle">{project.subtitle ? project.subtitle : ""}</p>
                   <p className="spectacles_projectsList_projectItem_mainDatas_date">
-                    {project.creationDate ? `${project.creationDate.split("-")[0]}` : "en chantier..."}
+                    {project.creationDate ? `${project.creationDate.split("-")[0]}` : ""}
                   </p>
                 </div>
               </Link>

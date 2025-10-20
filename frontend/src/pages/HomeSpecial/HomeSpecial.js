@@ -36,27 +36,10 @@ function HomeSpecial() {
     return  (  
         <main>
             <section className='home'>
-                <div class="home_video">
-                    <img src={cedricVeschambre} alt="logo souffleur de verre"/>
-                    {/* <video autoPlay muted loop>
-                        <source src={video} type="video/mp4"/>
-                    </video> */}
-                </div>
-                <div className="home_overlay"></div>
                 <div className='home_title'>
                     <img src={logoSouffleur} alt="logo souffleur de verre"/>
                     <h1 className='home_title_text'>LE SOUFFLEUR DE VERRE</h1>
                 </div>
-                {/* <div className="home_infosAvignon">
-                    <Link className="home_linkFake" aria-label='Accéder à la page Fake' to="/spectacles/6620e4813aaa89d07200b431">
-                        <h3>FAKE</h3>
-                        <p>MICROFICTIONS</p>
-                    </Link>
-                    <a className="home_linkTeaser" href='https://youtu.be/fpUCM4xwDCs' target='_blank' rel='noreferrer'>+ VOIR LE TEASER +</a>
-                    <a href='https://lafactory.vostickets.net/billet/FR/representation-LA_FACTORY-26908-0.wb?REFID=GBc2AAAAAADNAA' target='_blank' rel='noreferrer' >
-                        <img src={avignonInfos} alt="lien vers la billeterie"/>
-                    </a>
-                </div> */}
                 <nav className='home_nav'>
                     <ul className='home_nav_menu'>
                         <li>
