@@ -6,6 +6,9 @@ import Newsletter from '../../components/Newsletter/Newsletter'
 import { API_URL } from '../../utils/constants'
 import { Context } from '../../utils/Context'
 import React, { useEffect, useState, useContext } from 'react'
+import noelImg from '../../assets/noel.webp'
+import snowflakes from '../../assets/snowflakes.svg'
+
 
 function Edit() {
 
@@ -162,7 +165,12 @@ function Edit() {
     return  (
         <div>
             {isAuthenticated ? (
+                
             <div className='editSection'>
+                <img src={noelImg} className='editSection_specialImg'/>
+                <div className='editSection_snowflakesContainer'>
+                    <img className='editSection_snowflakesContainer_snowflakes' src={snowflakes}/>
+                </div>
                 <div className='editSection_mainContainer'>
                     <div className='editSection_mainContainer_projects'>
                         <p className='editSection_mainContainer_projects_title'>PROJETS</p>
