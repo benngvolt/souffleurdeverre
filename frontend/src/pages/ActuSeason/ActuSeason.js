@@ -5,6 +5,7 @@ import { Context } from '../../utils/Context';
 import IsALink from '../../components/IsALink/IsALink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarPlus } from '@fortawesome/free-solid-svg-icons';
+import FullUniqueDate from '../../components/FullUniqueDate/FullUniqueDate';
 
 function ActuSeason() {
   const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
@@ -175,6 +176,14 @@ function ActuSeason() {
                             name={event.residency.placeName}
                           />
                           <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_city'>{event.residency.city}</p>
+                          {event.residency.releaseDate && (
+                          <div className='actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_releaseContainer'>
+                              <p>      
+                              Sortie de résidence : 
+                              </p>
+                              <FullUniqueDate creationDate={event.residency.releaseDate} />
+                          </div>
+                          )}
                         </div>
                       )}
                     </div>

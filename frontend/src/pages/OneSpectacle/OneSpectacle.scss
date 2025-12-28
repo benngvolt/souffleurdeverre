@@ -61,9 +61,22 @@
                 // margin: 0 0 19px 0;
             } 
         }
+        &_creationDateContainer {
+            display: flex;
+            flex-direction: row;
+            column-gap: 5px;
+            @include SidePaddings;
+
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+               
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+             
+            }
+        }
 
         &_creationDate {
-            @include SidePaddings;
+            
             font-family: 'MainFont_light';
             font-size: 18px;
             margin-bottom: 0;
@@ -435,13 +448,31 @@
                         padding: 0;
                         
                         &_item {
+
+                            &_textContainer {
+                                display: flex;
+                                flex-direction: row;
+                                column-gap: 5px;
+                                font-family: 'MainFont_light';
+                                font-size: 16px;
+                                justify-content: center;
+                                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                                    font-size: 15px;
+                                }
+                                @media only screen and (max-width:$mobileMaxWidth){
+                                    font-size: 13px;
+                                } 
+                                
+                            }
                             
                             &_text {
                                 
                                 @include LightType;
+                               
                                 
                                 &_date {
-                                    @include BoldType;  
+                                    @include BoldType; 
+                                    font-size: 16px; 
                                 }
                                 &_link {
                                     text-decoration: none;

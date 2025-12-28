@@ -136,6 +136,7 @@ export const Provider = ({ children }) => {
         project.residenciesList.forEach(residency => {
           const startDate = residency.startDates;
           const endDate = residency.endDates;
+          const releaseDate = residency.releaseDate;
 
           if (!startDate || !endDate) return;
           if (onlyFuture && new Date(endDate) < today) return;
@@ -147,7 +148,8 @@ export const Provider = ({ children }) => {
               project,
               residency,
               startDate,
-              endDate
+              endDate,
+              releaseDate
             };
           }
         });

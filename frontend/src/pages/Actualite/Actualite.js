@@ -5,6 +5,7 @@ import { Context } from '../../utils/Context';
 import IsALink from '../../components/IsALink/IsALink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faCalendarPlus, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
+import FullUniqueDate from '../../components/FullUniqueDate/FullUniqueDate';
 
 function Actualite() {
     const numericMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -48,6 +49,7 @@ function Actualite() {
             <div className='actualite_container'>
                 {uniqueYears.map(year => {
                     const yearEvents = sortedEvents.filter(event => event.startDate.startsWith(year));
+                    console.log(yearEvents);
                     if (yearEvents.length === 0) return null;
 
                     return (
@@ -110,6 +112,14 @@ function Actualite() {
                                                     </Link>
                                                     <IsALink className='actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_link' link={event.residency.placeLink} name={event.residency.placeName}/>
                                                     <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_city'>{event.residency.city}</p>
+                                                    {event.residency.releaseDate && (
+                                                    <div className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_textContainer'>
+                                                        <p className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text'>      
+                                                        Sortie de résidence : 
+                                                        </p>
+                                                        <FullUniqueDate creationDate={event.residency.releaseDate} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item' />
+                                                    </div>
+                                                    )}
                                                 </div>
                                             )}
                                         </div>

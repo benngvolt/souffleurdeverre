@@ -93,8 +93,9 @@ function OneSpectacle() {
             )}
 
             {project.creationDate && (
-                <motion.div variants={fadeUp}>
-                <FullUniqueDate creationDate={project.creationDate} />
+                <motion.div variants={fadeUp} className='oneSpectacle_mainDatas_creationDateContainer oneSpectacle_mainDatas_creationDate'>
+                  <p className='oneSpectacle_mainDatas_creationDate'>création</p>
+                  <FullUniqueDate creationDate={project.creationDate} />
                 </motion.div>
             )}
 
@@ -285,6 +286,10 @@ function OneSpectacle() {
           )}
 
           {/* Résidences */}
+          {!project.residenciesList && (
+            <p>pas de résidence</p>
+          )
+          }
           {project.residenciesList && project.residenciesList.length !== 0 && (
             <motion.div variants={fadeUp} initial='hidden' whileInView='visible' viewport={viewportOnce}>
               <Collapse title='RÉSIDENCES' style='light'>
@@ -319,6 +324,14 @@ function OneSpectacle() {
                                   <IsALink className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text' link={residency.placeLink} name={residency.placeName} />
                                   {`/ ${residency.city ? residency.city : ''}`}
                                 </p>
+                                {residency.releaseDate && (
+                                  <div className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_textContainer'>
+                                    <p className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item_text'>      
+                                      Sortie de résidence : 
+                                    </p>
+                                    <FullUniqueDate creationDate={residency.releaseDate} className='oneSpectacle_mainDatas_residenciesAndShows_showsList_list_item' />
+                                  </div>
+                                )}
                               </motion.li>
                             ))}
                         </motion.ul>

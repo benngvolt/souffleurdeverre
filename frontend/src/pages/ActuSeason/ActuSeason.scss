@@ -200,6 +200,12 @@
                                 background-color: $colorTwo;   
                                 margin-top: 10px;  
                             } 
+
+                            &_releaseContainer {
+                                display: flex;
+                                flex-direction: column;
+                                font-family: 'mainFont_light';
+                            }
                         }
 
                         &_showsBox {
