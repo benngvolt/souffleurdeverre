@@ -26,22 +26,17 @@ function ContactModal({setdisplayContactModal}) {
                 </div>
                 <div className='contactModal_container_datas'>
                     <div className='contactModal_container_datas_block'>
-                        <p className='contactModal_container_datas_block_title'>Responsables artistiques</p>
+                        <p className='contactModal_container_datas_block_title'>Responsable artistique</p>
                         <p className='contactModal_container_datas_block_text--bold'>Julien Rocha</p>
                         <p className='contactModal_container_datas_block_text--light'>
                         06 61 19 39 35 <br/> 
                         julien.rocha63@gmail.com </p>
-                        <p className='contactModal_container_datas_block_text--bold'>Cédric Veschambre</p>
-                        <p className='contactModal_container_datas_block_text--light'>
-                        06 63 07 46 44 <br/> 
-                        cedric.veschambre@gmail.com </p>
                     </div>
                     <div className='contactModal_container_datas_block_block'>
                         <p className='contactModal_container_datas_block_title'>Administration de production</p>
-                        <p className='contactModal_container_datas_block_text--bold'>Cédric Veschambre et Marion Galon</p>
+                        <p className='contactModal_container_datas_block_text--bold'>Cédric Veschambre</p>
                         <p className='contactModal_container_datas_block_text--light'>
-                        07 86 55 81 26<br/> 
-                        marion.souffleur@gmail.com
+                        07 86 55 81 26
                         </p>
                     </div>
                     <div className='contactModal_container_datas_block'>

@@ -154,7 +154,7 @@ function ProjectForm({
     ----- RESIDENCIES LIST -----------
     -------------------------*/
     const handleAddResidency = () => {
-        setResidenciesList([...residenciesList, { residencyType: '', startDates: '', endDates: '', city: '', placeName: '', placeLink: '', moreInfos:''}]);
+        setResidenciesList([...residenciesList, { residencyType: '', startDates: '', endDates: '', releaseDate:'', city: '', placeName: '', placeLink: '', moreInfos:''}]);
     };
     const handleSupprResidency = (index) => {
         setResidenciesList (residenciesList.filter((_, i) => i !== index));
@@ -830,6 +830,20 @@ function ProjectForm({
                                         setResidenciesList(updatedResidenciesList);
                                     }}
                                 ></input>
+                            </div>
+                            <div>
+                                <label htmlFor={`inputProjectResidencyReleaseDate${index}`}>SORTIE DE RÉSIDENCE</label>
+                                <input
+                                    type="datetime-local"
+                                    id={`inputProjectResidencyReleaseDate${index}`}
+                                    value={residency.releaseDate}
+                                    min={residency.releaseDate}
+                                    onChange={(e) => {
+                                    const updatedResidenciesList = [...residenciesList];
+                                    updatedResidenciesList[index].releaseDate = e.target.value;
+                                    setResidenciesList(updatedResidenciesList);
+                                    }}
+                                />
                             </div>
                             <button className='projectForm_projectResidenciesList_line_supprButton' type='button' onClick={() => handleSupprResidency(index)}>SUPPRIMER</button>
                         </div>              
