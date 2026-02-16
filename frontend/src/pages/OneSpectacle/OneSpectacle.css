@@ -805,7 +805,7 @@
     padding: 0;
   }
 }
-.oneSpectacle_mainDatas_mediaLinks_videosContainer, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer {
+.oneSpectacle_mainDatas_mediaLinks_linksContainer, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -815,16 +815,16 @@
   row-gap: 4px;
 }
 @media only screen and (min-width: 481px) and (max-width: 991px) {
-  .oneSpectacle_mainDatas_mediaLinks_videosContainer, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer {
+  .oneSpectacle_mainDatas_mediaLinks_linksContainer, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer {
     flex-direction: column;
   }
 }
 @media only screen and (max-width: 480px) {
-  .oneSpectacle_mainDatas_mediaLinks_videosContainer, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer {
+  .oneSpectacle_mainDatas_mediaLinks_linksContainer, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer {
     flex-direction: column;
   }
 }
-.oneSpectacle_mainDatas_mediaLinks_videosContainer_video, .oneSpectacle_mainDatas_mediaLinks_videosContainer_pdf, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_video, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_pdf {
+.oneSpectacle_mainDatas_mediaLinks_linksContainer_link, .oneSpectacle_mainDatas_mediaLinks_linksContainer_pdf, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_video, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_pdf {
   padding: 10px;
   box-sizing: border-box;
   font-family: "SpecialFont_regular";
@@ -836,27 +836,27 @@
   border: none;
 }
 @media only screen and (min-width: 481px) and (max-width: 991px) {
-  .oneSpectacle_mainDatas_mediaLinks_videosContainer_video, .oneSpectacle_mainDatas_mediaLinks_videosContainer_pdf, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_video, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_pdf {
+  .oneSpectacle_mainDatas_mediaLinks_linksContainer_link, .oneSpectacle_mainDatas_mediaLinks_linksContainer_pdf, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_video, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_pdf {
     font-size: 22px;
   }
 }
 @media only screen and (max-width: 480px) {
-  .oneSpectacle_mainDatas_mediaLinks_videosContainer_video, .oneSpectacle_mainDatas_mediaLinks_videosContainer_pdf, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_video, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_pdf {
+  .oneSpectacle_mainDatas_mediaLinks_linksContainer_link, .oneSpectacle_mainDatas_mediaLinks_linksContainer_pdf, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_video, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_pdf {
     font-size: 16px;
   }
 }
-.oneSpectacle_mainDatas_mediaLinks_videosContainer_video, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_video {
+.oneSpectacle_mainDatas_mediaLinks_linksContainer_link, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_video {
   background-color: #ff00ff;
 }
-.oneSpectacle_mainDatas_mediaLinks_videosContainer_video:hover, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_video:hover {
+.oneSpectacle_mainDatas_mediaLinks_linksContainer_link:hover, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_video:hover {
   background-color: #fea201;
   color: #E9E9E9;
   cursor: pointer;
 }
-.oneSpectacle_mainDatas_mediaLinks_videosContainer_pdf, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_pdf {
+.oneSpectacle_mainDatas_mediaLinks_linksContainer_pdf, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_pdf {
   background-color: #00f0ff;
 }
-.oneSpectacle_mainDatas_mediaLinks_videosContainer_pdf:hover, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_pdf:hover {
+.oneSpectacle_mainDatas_mediaLinks_linksContainer_pdf:hover, .oneSpectacle_mainDatas_mediaLinks_pdfsContainer_pdf:hover {
   background-color: #00ff00;
   color: #E9E9E9;
   cursor: pointer;

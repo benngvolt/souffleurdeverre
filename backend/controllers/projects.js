@@ -58,7 +58,7 @@ exports.createProject = async (req, res) => {
     const productionList = JSON.parse(req.body.productionList);
     const pressList = JSON.parse(req.body.pressList);
     const paragraphList = JSON.parse(req.body.paragraphList);
-    const videoList = JSON.parse(req.body.videoList);
+    const linksList = JSON.parse(req.body.linksList);
     const residenciesList = JSON.parse(req.body.residenciesList);
     const showsList = JSON.parse(req.body.showsList);
   
@@ -94,7 +94,7 @@ exports.createProject = async (req, res) => {
           productionList: productionList,
           pressList: pressListWithBr,
           paragraphList: paragraphListWithBr,
-          videoList: videoList,
+          linksList: linksList,
           residenciesList: residenciesList,
           showsList: showsList,
           images: images,
@@ -131,7 +131,7 @@ exports.updateOneProject = async (req, res, next) => {
       const productionList = JSON.parse(req.body.productionList);
       const pressList = JSON.parse(req.body.pressList);
       const paragraphList = JSON.parse(req.body.paragraphList);
-      const videoList = JSON.parse(req.body.videoList);
+      const linksList = JSON.parse(req.body.linksList);
       const residenciesList = JSON.parse(req.body.residenciesList);
       const showsList = JSON.parse(req.body.showsList);
       
@@ -189,7 +189,7 @@ exports.updateOneProject = async (req, res, next) => {
           productionList: productionList,
           pressList: pressListWithBr,
           paragraphList: paragraphListWithBr,
-          videoList: videoList,
+          linksList: linksList,
           residenciesList: residenciesList,
           showsList: showsList,
           mainImageIndex: updatedMainImageIndex,

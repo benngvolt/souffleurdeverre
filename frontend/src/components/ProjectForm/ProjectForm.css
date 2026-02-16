@@ -587,26 +587,26 @@
   min-width: 100%;
   min-height: 300px;
 }
-.projectForm_projectArtistsList, .projectForm_projectProductionList, .projectForm_projectVideoList, .projectForm_projectResidenciesList, .projectForm_projectPdfFile {
+.projectForm_projectArtistsList, .projectForm_projectProductionList, .projectForm_projectlinksList, .projectForm_projectResidenciesList, .projectForm_projectPdfFile {
   width: 80%;
   margin: auto;
   display: flex;
   flex-direction: column;
   row-gap: 19px;
 }
-.projectForm_projectArtistsList_title, .projectForm_projectProductionList_title, .projectForm_projectVideoList_title, .projectForm_projectResidenciesList_title, .projectForm_projectPdfFile_title {
+.projectForm_projectArtistsList_title, .projectForm_projectProductionList_title, .projectForm_projectlinksList_title, .projectForm_projectResidenciesList_title, .projectForm_projectPdfFile_title {
   font-family: "MainFont_light";
   font-weight: bold;
   font-size: 19px;
 }
-.projectForm_projectArtistsList input, .projectForm_projectArtistsList select, .projectForm_projectProductionList input, .projectForm_projectProductionList select, .projectForm_projectVideoList input, .projectForm_projectVideoList select, .projectForm_projectResidenciesList input, .projectForm_projectResidenciesList select, .projectForm_projectPdfFile input, .projectForm_projectPdfFile select {
+.projectForm_projectArtistsList input, .projectForm_projectArtistsList select, .projectForm_projectProductionList input, .projectForm_projectProductionList select, .projectForm_projectlinksList input, .projectForm_projectlinksList select, .projectForm_projectResidenciesList input, .projectForm_projectResidenciesList select, .projectForm_projectPdfFile input, .projectForm_projectPdfFile select {
   font-family: "MainFont_light";
   font-size: 16px;
   width: 40%;
   border: none;
   background-color: #00f0ff;
 }
-.projectForm_projectArtistsList_line, .projectForm_projectProductionList_line, .projectForm_projectVideoList_line, .projectForm_projectResidenciesList_line, .projectForm_projectPdfFile_line {
+.projectForm_projectArtistsList_line, .projectForm_projectProductionList_line, .projectForm_projectlinksList_line, .projectForm_projectResidenciesList_line, .projectForm_projectPdfFile_line {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -614,14 +614,14 @@
        column-gap: 9px;
   width: 100%;
 }
-.projectForm_projectArtistsList_line label, .projectForm_projectProductionList_line label, .projectForm_projectVideoList_line label, .projectForm_projectResidenciesList_line label, .projectForm_projectPdfFile_line label {
+.projectForm_projectArtistsList_line label, .projectForm_projectProductionList_line label, .projectForm_projectlinksList_line label, .projectForm_projectResidenciesList_line label, .projectForm_projectPdfFile_line label {
   font-size: 16px;
   font-family: "MainFont_light";
 }
-.projectForm_projectArtistsList_line input, .projectForm_projectProductionList_line input, .projectForm_projectVideoList_line input, .projectForm_projectResidenciesList_line input, .projectForm_projectPdfFile_line input {
+.projectForm_projectArtistsList_line input, .projectForm_projectProductionList_line input, .projectForm_projectlinksList_line input, .projectForm_projectResidenciesList_line input, .projectForm_projectPdfFile_line input {
   width: 100%;
 }
-.projectForm_projectArtistsList_line div, .projectForm_projectProductionList_line div, .projectForm_projectVideoList_line div, .projectForm_projectResidenciesList_line div, .projectForm_projectPdfFile_line div {
+.projectForm_projectArtistsList_line div, .projectForm_projectProductionList_line div, .projectForm_projectlinksList_line div, .projectForm_projectResidenciesList_line div, .projectForm_projectPdfFile_line div {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -629,7 +629,7 @@
        column-gap: 15px;
   width: 100%;
 }
-.projectForm_projectArtistsList_line button, .projectForm_projectProductionList_line button, .projectForm_projectVideoList_line button, .projectForm_projectResidenciesList_line button, .projectForm_projectPdfFile_line button {
+.projectForm_projectArtistsList_line button, .projectForm_projectProductionList_line button, .projectForm_projectlinksList_line button, .projectForm_projectResidenciesList_line button, .projectForm_projectPdfFile_line button {
   font-family: "MainFont_light";
   border: 1px solid #232323;
   padding: 10px;
@@ -640,20 +640,20 @@
   border: none;
   padding: 0;
 }
-.projectForm_projectArtistsList_line button:hover, .projectForm_projectProductionList_line button:hover, .projectForm_projectVideoList_line button:hover, .projectForm_projectResidenciesList_line button:hover, .projectForm_projectPdfFile_line button:hover {
+.projectForm_projectArtistsList_line button:hover, .projectForm_projectProductionList_line button:hover, .projectForm_projectlinksList_line button:hover, .projectForm_projectResidenciesList_line button:hover, .projectForm_projectPdfFile_line button:hover {
   color: #019cff;
   cursor: pointer;
 }
-.projectForm_projectArtistsList_line_prodFunction select, .projectForm_projectProductionList_line_prodFunction select, .projectForm_projectVideoList_line_prodFunction select, .projectForm_projectResidenciesList_line_prodFunction select, .projectForm_projectPdfFile_line_prodFunction select {
+.projectForm_projectArtistsList_line_prodFunction select, .projectForm_projectProductionList_line_prodFunction select, .projectForm_projectlinksList_line_prodFunction select, .projectForm_projectResidenciesList_line_prodFunction select, .projectForm_projectPdfFile_line_prodFunction select {
   width: 100%;
   font-family: "MainFont_light";
   font-weight: bold;
 }
-.projectForm_projectArtistsList_line_artistFunction input, .projectForm_projectProductionList_line_artistFunction input, .projectForm_projectVideoList_line_artistFunction input, .projectForm_projectResidenciesList_line_artistFunction input, .projectForm_projectPdfFile_line_artistFunction input {
+.projectForm_projectArtistsList_line_artistFunction input, .projectForm_projectProductionList_line_artistFunction input, .projectForm_projectlinksList_line_artistFunction input, .projectForm_projectResidenciesList_line_artistFunction input, .projectForm_projectPdfFile_line_artistFunction input {
   font-family: "MainFont_light";
   font-weight: bold;
 }
-.projectForm_projectArtistsList_addButton, .projectForm_projectProductionList_addButton, .projectForm_projectVideoList_addButton, .projectForm_projectResidenciesList_addButton, .projectForm_projectPdfFile_addButton {
+.projectForm_projectArtistsList_addButton, .projectForm_projectProductionList_addButton, .projectForm_projectlinksList_addButton, .projectForm_projectResidenciesList_addButton, .projectForm_projectPdfFile_addButton {
   font-family: "MainFont_light";
   border: 1px solid #232323;
   padding: 10px;
@@ -664,7 +664,7 @@
   width: 300px;
   margin: auto;
 }
-.projectForm_projectArtistsList_addButton:hover, .projectForm_projectProductionList_addButton:hover, .projectForm_projectVideoList_addButton:hover, .projectForm_projectResidenciesList_addButton:hover, .projectForm_projectPdfFile_addButton:hover {
+.projectForm_projectArtistsList_addButton:hover, .projectForm_projectProductionList_addButton:hover, .projectForm_projectlinksList_addButton:hover, .projectForm_projectResidenciesList_addButton:hover, .projectForm_projectPdfFile_addButton:hover {
   color: #019cff;
   cursor: pointer;
 }

@@ -34,7 +34,7 @@ function Edit() {
     const [productionList, setProductionList] = useState([]);
     const [pressList, setPressList] = useState([]);
     const [paragraphList, setParagraphList] = useState([]);
-    const [videoList, setVideoList] = useState([]);
+    const [linksList, setLinksList] = useState([]);
     const [residenciesList, setResidenciesList] = useState([]);
     const [showsList, setShowsList] = useState([]);
 
@@ -126,7 +126,7 @@ function Edit() {
         setProductionList([]);
         setPressList([]);
         setParagraphList([]);
-        setVideoList([]);
+        setLinksList([]);
         setResidenciesList([]);
         setShowsList([]);
         setImageFiles([]);
@@ -153,7 +153,7 @@ function Edit() {
         setProductionList(project.productionList);
         setPressList(project.pressList);
         setParagraphList(project.paragraphList);
-        setVideoList(project.videoList)
+        setLinksList(project.linksList)
         setResidenciesList(project.residenciesList);
         setShowsList(project.showsList);
         setHandleDisplayProjectForm(true);
@@ -167,10 +167,6 @@ function Edit() {
             {isAuthenticated ? (
                 
             <div className='editSection'>
-                <img src={noelImg} className='editSection_specialImg'/>
-                <div className='editSection_snowflakesContainer'>
-                    <img className='editSection_snowflakesContainer_snowflakes' src={snowflakes}/>
-                </div>
                 <div className='editSection_mainContainer'>
                     <div className='editSection_mainContainer_projects'>
                         <p className='editSection_mainContainer_projects_title'>PROJETS</p>
@@ -224,8 +220,8 @@ function Edit() {
                         setPressList={setPressList} 
                         paragraphList={paragraphList}
                         setParagraphList={setParagraphList}
-                        videoList={videoList} 
-                        setVideoList={setVideoList} 
+                        linksList={linksList} 
+                        setLinksList={setLinksList} 
                         residenciesList={residenciesList} 
                         setResidenciesList={setResidenciesList}
                         showsList={showsList} 

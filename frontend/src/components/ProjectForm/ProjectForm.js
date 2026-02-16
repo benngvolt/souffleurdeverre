@@ -31,8 +31,8 @@ function ProjectForm({
         setPressList,
         paragraphList,
         setParagraphList,
-        videoList, 
-        setVideoList, 
+        linksList, 
+        setLinksList, 
         residenciesList, 
         setResidenciesList, 
         showsList, 
@@ -141,13 +141,13 @@ function ProjectForm({
     }
 
     /* ------------------------
-    ----- VIDEOS LIST -----------
+    ----- LINKS LIST -----------
     -------------------------*/
-    const handleAddVideo = () => {
-        setVideoList([...videoList, { videoName: '', videoLink: ''}]);
+    const handleAddLink = () => {
+        setLinksList([...linksList, { linkName: '', linkUrl: '', linkType: ''}]);
     };
-    const handleSupprVideo = (index) => {
-        setVideoList (videoList.filter((_, i) => i !== index));
+    const handleSupprLink = (index) => {
+        setLinksList (linksList.filter((_, i) => i !== index));
     }
 
     /* ------------------------
@@ -369,7 +369,7 @@ function ProjectForm({
         projectFormData.append('productionList', JSON.stringify(productionList));
         projectFormData.append('pressList', JSON.stringify(pressList));
         projectFormData.append('paragraphList', JSON.stringify(paragraphList));
-        projectFormData.append('videoList', JSON.stringify(videoList));
+        projectFormData.append('linksList', JSON.stringify(linksList));
         projectFormData.append('residenciesList', JSON.stringify(sortedResidenciesList));
 
         // 🔁 ICI on envoie la version nettoyée
@@ -693,40 +693,90 @@ function ProjectForm({
                     displayForm={handleDisplayProjectForm}
                 />
             </Collapse>
-            <Collapse title="EXTRAITS VIDEOS" style='edit'>
-                <div className='projectForm_projectVideoList'>
-                    {videoList.map((video, index) => (
-                        <div key={index} className='projectForm_projectVideoList_line'>
+            <Collapse title="LIEN DIVERS" style="edit">
+                <div className="projectForm_projectlinksList">
+                    {linksList.map((link, index) => (
+                        <div key={index} className="projectForm_projectlinksList_line">
+                            
                             <div>
-                                <label htmlFor={`inputProjectVideoName${index}`}>NOM DE LA VIDEO</label>
+                                <label htmlFor={`inputProjectLinkName${index}`}>
+                                    NOM DU LIEN
+                                </label>
                                 <input
-                                    type='text'
-                                    id={`inputProjectVideoName${index}`}
-                                    value={video.videoName}
+                                    type="text"
+                                    id={`inputProjectLinkName${index}`}
+                                    value={link.linkName}
                                     onChange={(e) => {
-                                        const updatedVideoList = [...videoList];
-                                        updatedVideoList[index].videoName = e.target.value;
-                                        setVideoList(updatedVideoList);
+                                        setLinksList(prev =>
+                                            prev.map((item, i) =>
+                                                i === index
+                                                    ? { ...item, linkName: e.target.value }
+                                                    : item
+                                            )
+                                        );
                                     }}
-                                ></input>
+                                />
                             </div>
+
                             <div>
-                                <label htmlFor={`inputProjectVideoLink${index}`}>LIEN VERS LA VIDEO</label>
+                                <label htmlFor={`inputProjectLinkUrl${index}`}>
+                                    URL DU LIEN
+                                </label>
                                 <input
-                                    type='text'
-                                    id={`inputProjectVideoLink${index}`}
-                                    value={video.videoLink}
+                                    type="text"
+                                    id={`inputProjectLinkUrl${index}`}
+                                    value={link.linkUrl}
                                     onChange={(e) => {
-                                        const updatedVideoList = [...videoList];
-                                        updatedVideoList[index].videoLink = e.target.value;
-                                        setVideoList(updatedVideoList);
+                                        setLinksList(prev =>
+                                            prev.map((item, i) =>
+                                                i === index
+                                                    ? { ...item, linkUrl: e.target.value }
+                                                    : item
+                                            )
+                                        );
                                     }}
-                                ></input>
+                                />
                             </div>
-                            <button type='button' onClick={() => handleSupprVideo(index)}>SUPPRIMER</button>
-                        </div>              
+
+                            <div>
+                                <label htmlFor={`inputProjectLinkType${index}`}>
+                                    TYPE DE LIEN
+                                </label>
+                                <select
+                                    id={`inputProjectLinkType${index}`}
+                                    value={link.linkType || "website"}
+                                    onChange={(e) => {
+                                        setLinksList(prev =>
+                                            prev.map((item, i) =>
+                                                i === index
+                                                    ? { ...item, linkType: e.target.value }
+                                                    : item
+                                            )
+                                        );
+                                    }}
+                                >
+                                    <option value="lien video">Lien vidéo</option>
+                                    <option value="lien audio">Lien audio</option>
+                                    <option value="website">Website</option>
+                                </select>
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={() => handleSupprLink(index)}
+                            >
+                                SUPPRIMER
+                            </button>
+                        </div>
                     ))}
-                    <button className='projectForm_projectVideoList_addButton' type='button' onClick={() =>handleAddVideo()} >+ AJOUTER EXTRAIT VIDEO</button>
+
+                    <button
+                        className="projectForm_projectlinksList_addButton"
+                        type="button"
+                        onClick={handleAddLink}
+                    >
+                        + AJOUTER LIEN
+                    </button>
                 </div>
             </Collapse>
             <Collapse title="RÉSIDENCES" style='edit'>

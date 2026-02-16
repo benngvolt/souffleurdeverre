@@ -35,10 +35,11 @@ const projectSchema = mongoose.Schema({
         mediaName: {type: String, required: false},
         }
     ],
-    videoList: [
+    linksList: [
         {   
-        videoName: {type: String, required: false},
-        videoLink: {type: String, required: false},
+        linkName: {type: String, required: false},
+        linkUrl: {type: String, required: false},
+        linkType: {type: String, required: false}
         }
     ],
     residenciesList: [
