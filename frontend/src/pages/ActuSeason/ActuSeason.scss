@@ -197,8 +197,16 @@
                             &_type {
                                 width: 200px;
                                 padding-left: 9px;
-                                background-color: $colorTwo;   
+                                
                                 margin-top: 10px;  
+
+                                &--normal {
+                                    background-color: $colorTwo;   
+                                }
+
+                                &--mediation {
+                                    background-color: $colorFive;   
+                                }
                             } 
 
                             &_releaseContainer {

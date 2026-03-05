@@ -112,6 +112,7 @@
         animation: pageAppearing 2s ease forwards;
         margin: 60px auto 20px auto;
         display: grid;
+        box-sizing: border-box;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         padding: 0 40px;
         list-style-type: none;
@@ -126,19 +127,20 @@
         } 
         
 
-        li {
-            width: 100%;
+       li {
+            width: 100% !important;
             
         }
         
         &_projectItem {
             animation: pageAppearing 2s ease forwards;
             padding: 0;
-            width: 100%;
+            width: auto;
             display: flex;
             flex-direction: column;
             row-gap: 0px;
             text-decoration: none;
+            min-height: 350px;
             @media only screen and (max-width:$mobileMaxWidth){
                 margin-bottom: 15px;
             } 

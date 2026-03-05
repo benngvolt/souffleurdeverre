@@ -161,7 +161,11 @@ function ActuSeason() {
                         </div>
                       ) : (
                         <div className='actualite_container_yearContainer_monthContainer_events_eventContainer_residency'>
-                          <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_type'>
+                          <p className={event.residency.residencyType === "Médiation" ||
+                                        event.residency.residencyType === "Formation" ||
+                                        event.residency.residencyType === "Stage" ? 
+                                          'actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_type actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_type--mediation' 
+                                          : 'actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_type actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_type--normal'}>
                             {event.residency.residencyType.replace(/Résidences/g, 'Résidence')}
                           </p>
 

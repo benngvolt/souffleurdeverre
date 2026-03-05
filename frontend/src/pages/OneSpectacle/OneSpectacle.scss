@@ -22,6 +22,7 @@
             @include SidePaddings;
             @include DropColorFilter;
             font-size: 120px;
+            word-break: break-word;
             margin: 0;
             text-transform: uppercase;
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){

@@ -15,7 +15,7 @@ export const Provider = ({ children }) => {
   const projectTypes = ['tout public', 'jeune public', 'public adolescent'];
   const projectStates = ['en tournée', 'en création', 'archivé', 'lecture-spectacle', 'lecture', 'médiation', 'laboratoire','*non visible*'];
   const productionFunctions = ['Production','Co-production','Soutien','Remerciements', 'Aide à la création', 'Partenariat', 'Aide à la résidence d’écriture', 'Diffusion', 'Pré-achat'];
-  const residencyTypes = ['Laboratoires','Résidences d\'écriture','Résidences de création', 'Répétitions', "Lectures et rencontres"];
+  const residencyTypes = ['Laboratoires','Résidences d\'écriture','Résidences de création', 'Répétitions', "Lectures et rencontres", "Médiation", "Formation", "Stage"];
 
   /*---------------------------------
   ----- MISE À JOUR ÉTAT D'AUTH -----
