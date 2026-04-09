@@ -41,7 +41,7 @@ function Compagnie() {
     ]
 
     useEffect(() => {
-        fetch(`${API_URL}/api/biographies/Veschambre`)
+        fetch(`${API_URL}/api/biographies/65a7a59a29c574d3654f88a4`)
         .then((res) => res.json())
         .then((data) => setBioVeschambre(data)
         )
@@ -49,7 +49,7 @@ function Compagnie() {
     },[]);
 
     useEffect(() => {
-        fetch(`${API_URL}/api/biographies/Rocha`)
+        fetch(`${API_URL}/api/biographies/65a7a54629c574d3654f8810`)
         .then((res) => res.json())
         .then((data) => setBioRocha(data),
             console.log('travaux chargés'),
@@ -98,7 +98,10 @@ function Compagnie() {
             </div>
             <Collapse title="COLLABORATIONS" style='white'>
                 <div className='compagnieSection_teamCollapse'>
-                    <Equipe className='compagnieSection_teamCollapse'/>
+                    <Equipe 
+                        className='compagnieSection_teamCollapse'
+                        setDisplayBioAside={setDisplayBioAside}
+                        setBioAside={setBioAside}/>
                 </div>
             </Collapse>
             <div className='compagnieSection_AA'>

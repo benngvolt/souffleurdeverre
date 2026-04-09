@@ -3,6 +3,8 @@ import '../../pages/Compagnie/Compagnie.scss'
 import { API_URL } from '../../utils/constants'
 import BioCard from '../BioCard/BioCard';
 import BioSheet from '../BioSheet/BioSheet';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faLink } from '@fortawesome/free-solid-svg-icons'
 // import { Link } from 'react-router-dom'
 import React, { useEffect, useState, useContext } from 'react'
 import { Context } from '../../utils/Context'
@@ -10,15 +12,15 @@ import { Context } from '../../utils/Context'
 // import { Context } from '../../utils/Context'
 // import { useNavigate } from 'react-router-dom'
 
-function Equipe({className}) {
+function Equipe({className, setBioAside, setDisplayBioAside}) {
 
     
     const [sortedBiographies, setSortedBiographies] = useState([]);
-    const [bioAside, setBioAside] = useState([]);
-    const [displayBioAside, setDisplayBioAside] = useState(false);
     const [selectedBioField, setSelectedBioField] = useState ('artistique');
 
     const { biographies, bioFields } = useContext(Context);
+
+
 
     useEffect(() => {
         const selectedBios = biographies.filter((biography) => biography.field===selectedBioField);
@@ -27,6 +29,7 @@ function Equipe({className}) {
 
     function closeBioAside () {
         setDisplayBioAside(false);
+        console.log('coucou')
     }
 
     function displayBios(biographies, bioField) {
@@ -34,7 +37,7 @@ function Equipe({className}) {
         setSortedBiographies(selectedBios);
         setSelectedBioField (bioField);
     }
-    
+
 
     return  (      
         <section className={`${className}_team`}>
@@ -58,7 +61,11 @@ function Equipe({className}) {
                         return 0; // Les noms sont égaux
                     })
                     .map((biography) => (
-                    <li className={`${className}_team_biosList_item`}>
+                    <li className={`${className}_team_biosList_item`} 
+                        onClick={() => {
+                        setBioAside(biography);
+                        setDisplayBioAside(true);
+                      }}>
                         <img src={biography.bioImageUrl} alt={biography.surname} className={`${className}_team_biosList_item_img`}/> 
                         <p className={`${className}_team_biosList_item_name`}>{biography.name} {biography.surname}</p>
                         <p className={`${className}_team_biosList_item_role`}>{biography.role}</p>
