@@ -98,65 +98,134 @@ export const Provider = ({ children }) => {
   /*-----------------------------------------
   ----- Helper : construire les events -------
   -----------------------------------------*/
-  const buildEventsFromProjects = (onlyFuture = false) => {
-    const grouped = {};
+  // const buildEventsFromProjects = (onlyFuture = false) => {
+  //   const grouped = {};
 
-    projects.forEach(project => {
+  //   projects.forEach(project => {
+  //     // SHOWS
+  //     if (project.showsList) {
+  //       project.showsList.forEach(show => {
+  //         if (show.dates) {
+  //           show.dates.forEach(d => {
+  //             const startDate = d.day || d.period?.startDate;
+  //             const endDate = d.period?.endDate || d.day;
+  //             const period = !!(d.period?.startDate && d.period?.endDate);
+
+  //             if (!startDate || !endDate) return;
+  //             if (onlyFuture && new Date(endDate) < today) return;
+
+  //             const key = `${startDate}_${endDate}_${project._id}_show`;
+  //             if (!grouped[key]) {
+  //               grouped[key] = {
+  //                 type: 'show',
+  //                 project,
+  //                 show,
+  //                 times: d.times,
+  //                 startDate,
+  //                 endDate,
+  //                 period
+  //               };
+  //             }
+  //           });
+  //         }
+  //       });
+  //     }
+
+  //     // RESIDENCIES
+  //     if (project.residenciesList) {
+  //       project.residenciesList.forEach(residency => {
+  //         const startDate = residency.startDates;
+  //         const endDate = residency.endDates;
+  //         const releaseDate = residency.releaseDate;
+
+  //         if (!startDate || !endDate) return;
+  //         if (onlyFuture && new Date(endDate) < today) return;
+
+  //         const key = `${startDate}_${endDate}_${project._id}_residency`;
+  //         if (!grouped[key]) {
+  //           grouped[key] = {
+  //             type: 'residency',
+  //             project,
+  //             residency,
+  //             startDate,
+  //             endDate,
+  //             releaseDate
+  //           };
+  //         }
+  //       });
+  //     }
+  //   });
+
+  //   return Object.values(grouped).sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+  // };
+  const buildEventsFromProjects = (onlyFuture = false) => {
+    const events = [];
+  
+    projects.forEach((project) => {
       // SHOWS
       if (project.showsList) {
-        project.showsList.forEach(show => {
+        project.showsList.forEach((show, showIndex) => {
           if (show.dates) {
-            show.dates.forEach(d => {
+            show.dates.forEach((d, dateIndex) => {
               const startDate = d.day || d.period?.startDate;
               const endDate = d.period?.endDate || d.day;
               const period = !!(d.period?.startDate && d.period?.endDate);
-
+  
               if (!startDate || !endDate) return;
               if (onlyFuture && new Date(endDate) < today) return;
-
-              const key = `${startDate}_${endDate}_${project._id}_show`;
-              if (!grouped[key]) {
-                grouped[key] = {
-                  type: 'show',
-                  project,
-                  show,
-                  times: d.times,
+  
+              events.push({
+                _eventKey: [
+                  'show',
+                  project._id,
+                  show._id || showIndex,
                   startDate,
                   endDate,
-                  period
-                };
-              }
+                  dateIndex
+                ].join('_'),
+                type: 'show',
+                project,
+                show,
+                times: d.times || [],
+                startDate,
+                endDate,
+                period
+              });
             });
           }
         });
       }
-
+  
       // RESIDENCIES
       if (project.residenciesList) {
-        project.residenciesList.forEach(residency => {
+        project.residenciesList.forEach((residency, residencyIndex) => {
           const startDate = residency.startDates;
           const endDate = residency.endDates;
           const releaseDate = residency.releaseDate;
-
+  
           if (!startDate || !endDate) return;
           if (onlyFuture && new Date(endDate) < today) return;
-
-          const key = `${startDate}_${endDate}_${project._id}_residency`;
-          if (!grouped[key]) {
-            grouped[key] = {
-              type: 'residency',
-              project,
-              residency,
+  
+          events.push({
+            _eventKey: [
+              'residency',
+              project._id,
+              residency._id || residencyIndex,
               startDate,
-              endDate,
-              releaseDate
-            };
-          }
+              endDate
+            ].join('_'),
+            type: 'residency',
+            project,
+            residency,
+            startDate,
+            endDate,
+            releaseDate
+          });
         });
       }
     });
-
-    return Object.values(grouped).sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+  
+    return events.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
   };
 
   /*-----------------------------------------

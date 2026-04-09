@@ -43,6 +43,7 @@ function Actualite() {
     }
     
     const uniqueYears = [...new Set(sortedEvents.map(event => event.startDate.split('-')[0]))];
+    
 
     return (      
         <section className='actualite'>

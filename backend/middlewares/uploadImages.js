@@ -1,208 +1,458 @@
-const { storage, bucket } = require('../config/storage');
- // should be your bucket name
-const sharp = require('sharp')
-const { format } = require('url'); 
+// const { storage, bucket } = require('../config/storage');
+//  // should be your bucket name
+// const sharp = require('sharp')
+// const { format } = require('url'); 
 
 
-function uploadImages(req, res, next) {
+// function uploadImages(req, res, next) {
     
-    const newImagesObjects = [];
-    const fileIndexes = req.body.fileIndexes;
-    const files = req.files.images;
+//     const newImagesObjects = [];
+//     const fileIndexes = req.body.fileIndexes;
+//     const files = req.files.images;
     
-    if (!files || files.length === 0) {
-      // Aucune image n'a été téléchargée, appeler next() et sortir de la fonction
-      return next();
-    }
-    // Créez un tableau de promesses pour gérer chaque fichier individuellement
-    const uploadPromises = files.map( (file, index) => {
-      return new Promise(async(resolve, reject) => {
-        try {
-          const { originalname, buffer } = file;
+//     if (!files || files.length === 0) {
+//       // Aucune image n'a été téléchargée, appeler next() et sortir de la fonction
+//       return next();
+//     }
+//     // Créez un tableau de promesses pour gérer chaque fichier individuellement
+//     const uploadPromises = files.map( (file, index) => {
+//       return new Promise(async(resolve, reject) => {
+//         try {
+//           const { originalname, buffer } = file;
     
-          // Redimensionnez et convertissez l'image avec Sharp
-          const resizedImageBuffer = await sharp(buffer)
-            .resize({
-              width: 1500,
-              fit: 'cover',
-              kernel: 'lanczos3',
-            })
-            .toFormat('webp')
-            .toBuffer();
+//           // Redimensionnez et convertissez l'image avec Sharp
+//           const resizedImageBuffer = await sharp(buffer)
+//             .resize({
+//               width: 1500,
+//               fit: 'cover',
+//               kernel: 'lanczos3',
+//             })
+//             .toFormat('webp')
+//             .toBuffer();
     
-          // Créez un blob dans le stockage Google Cloud Storage
-          const blob = bucket.file('projects_images/' + originalname);
-          const blobStream = blob.createWriteStream({
-            resumable: false
-          });
+//           // Créez un blob dans le stockage Google Cloud Storage
+//           const blob = bucket.file('projects_images/' + originalname);
+//           const blobStream = blob.createWriteStream({
+//             resumable: false
+//           });
     
-          blobStream.on('finish', () => {
-            const publicUrl = format(
-              `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-            );
+//           blobStream.on('finish', () => {
+//             const publicUrl = format(
+//               `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+//             );
     
-            // Pousser les données dans le tableau newImagesObject
-            if (fileIndexes) {
-              newImagesObjects.push({
-                imageUrl: publicUrl,
-                index: JSON.parse(fileIndexes[index])
-              });
-            } else {
-              newImagesObjects.push({
-                imageUrl: publicUrl,
-              });
-            }
+//             // Pousser les données dans le tableau newImagesObject
+//             if (fileIndexes) {
+//               newImagesObjects.push({
+//                 imageUrl: publicUrl,
+//                 index: JSON.parse(fileIndexes[index])
+//               });
+//             } else {
+//               newImagesObjects.push({
+//                 imageUrl: publicUrl,
+//               });
+//             }
   
-            // Continuer avec la prochaine promesse
-            resolve(publicUrl);
-          }).on('error', () => {
-            reject(`Unable to upload image: ${originalname}`);
-          }).end(resizedImageBuffer);
-        } catch (error) {
-          // Gérez les erreurs ici...
-          reject(`Unable to process image: ${file.originalname}`);
-        }
-      })
-    });
+//             // Continuer avec la prochaine promesse
+//             resolve(publicUrl);
+//           }).on('error', () => {
+//             reject(`Unable to upload image: ${originalname}`);
+//           }).end(resizedImageBuffer);
+//         } catch (error) {
+//           // Gérez les erreurs ici...
+//           reject(`Unable to process image: ${file.originalname}`);
+//         }
+//       })
+//     });
 
-    // Utilisez Promise.all pour attendre que toutes les promesses d'upload se terminent
-    Promise.all(uploadPromises)
-      .then(() => {
-        // Stockez newImagesObjects dans l'objet req pour qu'il soit disponible dans le contrôleur
-        req.newImagesObjects = newImagesObjects;
-        next(); // Passez au middleware suivant ou à la route
-      })
-      .catch((error) => {
-        // Gérez les erreurs ici...
-        res.status(500).json({ error: 'Erreur lors du traitement des images.' });
-      });
-  };
+//     // Utilisez Promise.all pour attendre que toutes les promesses d'upload se terminent
+//     Promise.all(uploadPromises)
+//       .then(() => {
+//         // Stockez newImagesObjects dans l'objet req pour qu'il soit disponible dans le contrôleur
+//         req.newImagesObjects = newImagesObjects;
+//         next(); // Passez au middleware suivant ou à la route
+//       })
+//       .catch((error) => {
+//         // Gérez les erreurs ici...
+//         res.status(500).json({ error: 'Erreur lors du traitement des images.' });
+//       });
+//   };
 
 
-  function uploadPdfs(req, res, next) {
+//   function uploadPdfs(req, res, next) {
     
-    const newPdfsObjects = [];
-    const pdfFileIndexes = req.body.pdfFileIndexes;
-    const files = req.files.pdfFiles;
-    let pdfNames = req.body.pdfNames;
-    if (!Array.isArray(pdfNames)) {
-        pdfNames = [pdfNames];
-    }
+//     const newPdfsObjects = [];
+//     const pdfFileIndexes = req.body.pdfFileIndexes;
+//     const files = req.files.pdfFiles;
+//     let pdfNames = req.body.pdfNames;
+//     if (!Array.isArray(pdfNames)) {
+//         pdfNames = [pdfNames];
+//     }
     
-    if (!files || files.length === 0) {
-      // Aucune image n'a été téléchargée, appeler next() et sortir de la fonction
-      return next();
-    }
+//     if (!files || files.length === 0) {
+//       // Aucune image n'a été téléchargée, appeler next() et sortir de la fonction
+//       return next();
+//     }
   
-    // Créez un tableau de promesses pour gérer chaque fichier individuellement
-    const uploadPromises = files.map( (file, index) => {
-      return new Promise(async(resolve, reject) => {
-        try {
-          const { originalname, buffer } = file;
-          const pdfName = pdfNames[index];
+//     // Créez un tableau de promesses pour gérer chaque fichier individuellement
+//     const uploadPromises = files.map( (file, index) => {
+//       return new Promise(async(resolve, reject) => {
+//         try {
+//           const { originalname, buffer } = file;
+//           const pdfName = pdfNames[index];
     
-          // Créez un blob dans le stockage Google Cloud Storage
-          const blob = bucket.file('pdfList/' + originalname);
-          const blobStream = blob.createWriteStream({
-            resumable: false
-          });
+//           // Créez un blob dans le stockage Google Cloud Storage
+//           const blob = bucket.file('pdfList/' + originalname);
+//           const blobStream = blob.createWriteStream({
+//             resumable: false
+//           });
   
-          blobStream.on('finish', () => {
-            const publicUrl = format(
-              `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-            );
+//           blobStream.on('finish', () => {
+//             const publicUrl = format(
+//               `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+//             );
             
             
-            // Pousser les données dans le tableau newImagesObject
-            if (pdfFileIndexes) {
-              newPdfsObjects.push({
-                pdfLink: publicUrl,
-                pdfName: pdfName,
-                index: JSON.parse(pdfFileIndexes[index])
-              });
-            } else {
-              newPdfsObjects.push({
-                pdfLink: publicUrl,
-                pdfName: pdfName,
-              });
-            }
-            // Continuer avec la prochaine promesse
-            resolve(publicUrl);
-          }).on('error', () => {
-            reject(`Unable to upload pdf: ${originalname}`);
-          }).end(buffer);
-        } catch (error) {
-          // Gérez les erreurs ici...
-          reject(`Unable to process pdf: ${file.originalname}`);
-        }
-      })
-    });
+//             // Pousser les données dans le tableau newImagesObject
+//             if (pdfFileIndexes) {
+//               newPdfsObjects.push({
+//                 pdfLink: publicUrl,
+//                 pdfName: pdfName,
+//                 index: JSON.parse(pdfFileIndexes[index])
+//               });
+//             } else {
+//               newPdfsObjects.push({
+//                 pdfLink: publicUrl,
+//                 pdfName: pdfName,
+//               });
+//             }
+//             // Continuer avec la prochaine promesse
+//             resolve(publicUrl);
+//           }).on('error', () => {
+//             reject(`Unable to upload pdf: ${originalname}`);
+//           }).end(buffer);
+//         } catch (error) {
+//           // Gérez les erreurs ici...
+//           reject(`Unable to process pdf: ${file.originalname}`);
+//         }
+//       })
+//     });
 
-    // Utilisez Promise.all pour attendre que toutes les promesses d'upload se terminent
-    Promise.all(uploadPromises)
-      .then(() => {
-        // Stockez newImagesObjects dans l'objet req pour qu'il soit disponible dans le contrôleur
-        req.newPdfsObjects = newPdfsObjects;
-        next(); // Passez au middleware suivant ou à la route
-      })
-      .catch((error) => {
-        // Gérez les erreurs ici...
-        res.status(500).json({ error: 'Erreur lors du traitement des pdfs.' });
-      });
-  };
+//     // Utilisez Promise.all pour attendre que toutes les promesses d'upload se terminent
+//     Promise.all(uploadPromises)
+//       .then(() => {
+//         // Stockez newImagesObjects dans l'objet req pour qu'il soit disponible dans le contrôleur
+//         req.newPdfsObjects = newPdfsObjects;
+//         next(); // Passez au middleware suivant ou à la route
+//       })
+//       .catch((error) => {
+//         // Gérez les erreurs ici...
+//         res.status(500).json({ error: 'Erreur lors du traitement des pdfs.' });
+//       });
+//   };
 
 
 
-  function uploadImage(req, res, next) {
-    try {
-      if (!req.file) {
-        next(); // Pas de fichier, passez directement au contrôleur suivant
-      } else if (req.file) {
-        const file = req.file;
-        const { originalname, buffer } = file;
+//   function uploadImage(req, res, next) {
+//     try {
+//       if (!req.file) {
+//         next(); // Pas de fichier, passez directement au contrôleur suivant
+//       } else if (req.file) {
+//         const file = req.file;
+//         const { originalname, buffer } = file;
       
-        // Redimensionnez et convertissez l'image avec Sharp
-        sharp(buffer)
-          .resize({
-            width: 1500,
-            fit: 'cover',
-            kernel: 'lanczos3',
-          })
-          .toFormat('webp')
-          .toBuffer()
-          .then((resizedImageBuffer) => {
-            // Créez un blob dans le stockage Google Cloud Storage
-            const blob = bucket.file('biographies_images/' + originalname);
-            const blobStream = blob.createWriteStream({
-              resumable: false
-            });
+//         // Redimensionnez et convertissez l'image avec Sharp
+//         sharp(buffer)
+//           .resize({
+//             width: 1500,
+//             fit: 'cover',
+//             kernel: 'lanczos3',
+//           })
+//           .toFormat('webp')
+//           .toBuffer()
+//           .then((resizedImageBuffer) => {
+//             // Créez un blob dans le stockage Google Cloud Storage
+//             const blob = bucket.file('biographies_images/' + originalname);
+//             const blobStream = blob.createWriteStream({
+//               resumable: false
+//             });
     
-            blobStream.on('finish', () => {
-              const publicUrl = format(
-                `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-              );
+//             blobStream.on('finish', () => {
+//               const publicUrl = format(
+//                 `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+//               );
     
-              // Stockez l'URL de l'image dans req
-              req.imageUrl = publicUrl;
-              next(); // Passez au middleware suivant ou à la route
-            }).on('error', (error) => {
-              console.error(error);
-              res.status(500).json({ error: `Unable to upload image: ${originalname}` });
-            }).end(resizedImageBuffer);
-          })
-          .catch((error) => {
-            console.error(error);
-            res.status(500).json({ error: `Unable to process image: ${file.originalname}` });
-          });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Erreur lors du traitement de l\'image.' });
-    }
+//               // Stockez l'URL de l'image dans req
+//               req.imageUrl = publicUrl;
+//               next(); // Passez au middleware suivant ou à la route
+//             }).on('error', (error) => {
+//               console.error(error);
+//               res.status(500).json({ error: `Unable to upload image: ${originalname}` });
+//             }).end(resizedImageBuffer);
+//           })
+//           .catch((error) => {
+//             console.error(error);
+//             res.status(500).json({ error: `Unable to process image: ${file.originalname}` });
+//           });
+//       }
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: 'Erreur lors du traitement de l\'image.' });
+//     }
+//   }
+
+//   module.exports = {
+//     uploadImages,
+//     uploadImage,
+//     uploadPdfs,
+//   };
+
+const { bucket } = require('../config/storage');
+const sharp = require('sharp');
+const { format } = require('url');
+const path = require('path');
+const crypto = require('crypto');
+
+/* ----------------------------
+   Helpers
+---------------------------- */
+
+function sanitizeFilename(filename) {
+  const ext = path.extname(filename);
+  const base = path.basename(filename, ext);
+
+  return base
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9_-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase();
+}
+
+function createUniqueFileName(folder, originalname, extension) {
+  const safeName = sanitizeFilename(originalname || 'file');
+  const uniqueSuffix = `${Date.now()}-${crypto.randomUUID()}`;
+  return `${folder}/${safeName}-${uniqueSuffix}.${extension}`;
+}
+
+function buildPublicUrl(filePath) {
+  return format(`https://storage.googleapis.com/${bucket.name}/${filePath}`);
+}
+
+function normalizeToArray(value) {
+  if (value === undefined || value === null) {
+    return [];
+  }
+  return Array.isArray(value) ? value : [value];
+}
+
+function parseOptionalIndex(indexValue) {
+  if (indexValue === undefined || indexValue === null || indexValue === '') {
+    return undefined;
   }
 
-  module.exports = {
-    uploadImages,
-    uploadImage,
-    uploadPdfs,
-  };
+  try {
+    return JSON.parse(indexValue);
+  } catch (error) {
+    return indexValue;
+  }
+}
+
+function uploadBufferToGCS(filePath, buffer, contentType) {
+  return new Promise((resolve, reject) => {
+    const blob = bucket.file(filePath);
+    const blobStream = blob.createWriteStream({
+      resumable: false,
+      metadata: {
+        contentType,
+      },
+    });
+
+    blobStream.on('finish', () => {
+      resolve(buildPublicUrl(filePath));
+    });
+
+    blobStream.on('error', (error) => {
+      reject(error);
+    });
+
+    blobStream.end(buffer);
+  });
+}
+
+/* ----------------------------
+   Upload multiple project images
+---------------------------- */
+
+async function uploadImages(req, res, next) {
+  try {
+    const newImagesObjects = [];
+    const fileIndexes = normalizeToArray(req.body.fileIndexes);
+    const files = req.files?.images;
+
+    if (!files || files.length === 0) {
+      return next();
+    }
+
+    const uploadPromises = files.map(async (file, index) => {
+      const { originalname, buffer } = file;
+
+      const resizedImageBuffer = await sharp(buffer)
+        .resize({
+          width: 1500,
+          fit: 'cover',
+          kernel: 'lanczos3',
+        })
+        .toFormat('webp')
+        .toBuffer();
+
+      const filePath = createUniqueFileName(
+        'projects_images',
+        originalname,
+        'webp'
+      );
+
+      const publicUrl = await uploadBufferToGCS(
+        filePath,
+        resizedImageBuffer,
+        'image/webp'
+      );
+
+      const parsedIndex = parseOptionalIndex(fileIndexes[index]);
+
+      if (parsedIndex !== undefined) {
+        newImagesObjects.push({
+          imageUrl: publicUrl,
+          index: parsedIndex,
+        });
+      } else {
+        newImagesObjects.push({
+          imageUrl: publicUrl,
+        });
+      }
+
+      return publicUrl;
+    });
+
+    await Promise.all(uploadPromises);
+
+    req.newImagesObjects = newImagesObjects;
+    return next();
+  } catch (error) {
+    console.error('Erreur uploadImages :', error);
+    return res.status(500).json({
+      error: 'Erreur lors du traitement des images.',
+    });
+  }
+}
+
+/* ----------------------------
+   Upload multiple PDFs
+---------------------------- */
+
+async function uploadPdfs(req, res, next) {
+  try {
+    const newPdfsObjects = [];
+    const pdfFileIndexes = normalizeToArray(req.body.pdfFileIndexes);
+    const pdfNames = normalizeToArray(req.body.pdfNames);
+    const files = req.files?.pdfFiles;
+
+    if (!files || files.length === 0) {
+      return next();
+    }
+
+    const uploadPromises = files.map(async (file, index) => {
+      const { originalname, buffer, mimetype } = file;
+      const pdfName = pdfNames[index] || '';
+
+      const filePath = createUniqueFileName(
+        'pdfList',
+        originalname,
+        'pdf'
+      );
+
+      const publicUrl = await uploadBufferToGCS(
+        filePath,
+        buffer,
+        mimetype || 'application/pdf'
+      );
+
+      const parsedIndex = parseOptionalIndex(pdfFileIndexes[index]);
+
+      if (parsedIndex !== undefined) {
+        newPdfsObjects.push({
+          pdfLink: publicUrl,
+          pdfName,
+          index: parsedIndex,
+        });
+      } else {
+        newPdfsObjects.push({
+          pdfLink: publicUrl,
+          pdfName,
+        });
+      }
+
+      return publicUrl;
+    });
+
+    await Promise.all(uploadPromises);
+
+    req.newPdfsObjects = newPdfsObjects;
+    return next();
+  } catch (error) {
+    console.error('Erreur uploadPdfs :', error);
+    return res.status(500).json({
+      error: 'Erreur lors du traitement des pdfs.',
+    });
+  }
+}
+
+/* ----------------------------
+   Upload single biography image
+---------------------------- */
+
+async function uploadImage(req, res, next) {
+  try {
+    if (!req.file) {
+      return next();
+    }
+
+    const { originalname, buffer } = req.file;
+
+    const resizedImageBuffer = await sharp(buffer)
+      .resize({
+        width: 1500,
+        fit: 'cover',
+        kernel: 'lanczos3',
+      })
+      .toFormat('webp')
+      .toBuffer();
+
+    const filePath = createUniqueFileName(
+      'biographies_images',
+      originalname,
+      'webp'
+    );
+
+    const publicUrl = await uploadBufferToGCS(
+      filePath,
+      resizedImageBuffer,
+      'image/webp'
+    );
+
+    req.imageUrl = publicUrl;
+    return next();
+  } catch (error) {
+    console.error('Erreur uploadImage :', error);
+    return res.status(500).json({
+      error: 'Erreur lors du traitement de l’image.',
+    });
+  }
+}
+
+module.exports = {
+  uploadImages,
+  uploadImage,
+  uploadPdfs,
+};

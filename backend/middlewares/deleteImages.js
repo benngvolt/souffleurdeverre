@@ -73,42 +73,88 @@ async function deleteProjectPdfFiles(req) {
   }
 }
   
-async function deleteBiographyImageFiles(req) {
-  // Obtenez la liste des URLs des images depuis Google Cloud Storage
-  async function getCloudImageUrls() {
-    const [files] = await bucket.getFiles({ prefix: 'biographies_images/' });
-    return files.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
-  }
+// async function deleteBiographyImageFiles(req) {
+//   // Obtenez la liste des URLs des images depuis Google Cloud Storage
+//   async function getCloudImageUrls() {
+//     const [files] = await bucket.getFiles({ prefix: 'biographies_images/' });
+//     return files.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
+//   }
     
-  // Obtenez la liste des URLs des images depuis MongoDB
-  async function getDbImageUrls() {
+//   // Obtenez la liste des URLs des images depuis MongoDB
+//   async function getDbImageUrls() {
 
-    // Récupérez toutes les séries depuis MongoDB
-    const biographies = await Biography.find();
+//     // Récupérez toutes les séries depuis MongoDB
+//     const biographies = await Biography.find();
     
-    const imageUrls = biographies.flatMap((biography) => decodeURIComponent(biography.bioImageUrl.replace(/\+/g, ' ')));
-    return imageUrls;
+//     const imageUrls = biographies.flatMap((biography) => decodeURIComponent(biography.bioImageUrl.replace(/\+/g, ' ')));
+//     return imageUrls;
+//   }
+    
+//   try {
+//     const cloudImageUrls = await getCloudImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
+//     const dbImageUrls = await getDbImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
+//     const imagesToDelete = cloudImageUrls.filter((url) => !dbImageUrls.includes(url));
+//     // Suppression des images non référencées dans le cloud
+//     for (const imageUrl of imagesToDelete) {
+//       // Divisez l'URL en parties en utilisant "/" comme séparateur
+//       const parts = imageUrl.split('/');
+//       // Récupérez la dernière partie qui contient le nom du fichier
+//       const fileToDeleteName = parts.pop();
+//       if (fileToDeleteName) {
+//         await bucket.file('biographies_images/' + fileToDeleteName).delete();
+//       }
+//     }
+
+//   } catch (error) {
+//     console.error(error.message);
+//   }
+// }
+
+/* -----------------------------
+   Helpers
+----------------------------- */
+
+function extractFilePathFromGcsUrl(fileUrl) {
+  if (!fileUrl || typeof fileUrl !== 'string') {
+    return null;
   }
-    
+
+  const baseUrl = `https://storage.googleapis.com/${bucket.name}/`;
+
+  if (!fileUrl.startsWith(baseUrl)) {
+    return null;
+  }
+
+  return fileUrl.replace(baseUrl, '');
+}
+
+/* -----------------------------------
+   Delete only targeted biography image
+----------------------------------- */
+
+async function deleteBiographyImageFiles(req, res, next) {
   try {
-    const cloudImageUrls = await getCloudImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
-    const dbImageUrls = await getDbImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
-    const imagesToDelete = cloudImageUrls.filter((url) => !dbImageUrls.includes(url));
-    // Suppression des images non référencées dans le cloud
-    for (const imageUrl of imagesToDelete) {
-      // Divisez l'URL en parties en utilisant "/" comme séparateur
-      const parts = imageUrl.split('/');
-      // Récupérez la dernière partie qui contient le nom du fichier
-      const fileToDeleteName = parts.pop();
-      if (fileToDeleteName) {
-        await bucket.file('biographies_images/' + fileToDeleteName).delete();
-      }
+    const imageUrlToDelete = req.oldBioImageUrl;
+
+    if (!imageUrlToDelete) {
+      return next();
     }
 
+    const filePath = extractFilePathFromGcsUrl(imageUrlToDelete);
+
+    if (!filePath) {
+      return next();
+    }
+
+    await bucket.file(filePath).delete({ ignoreNotFound: true });
+
+    return next();
   } catch (error) {
-    console.error(error.message);
+    console.error('Erreur suppression image biographie :', error.message);
+    return next();
   }
 }
+
 
 function deleteProjectFiles(req) {
   deleteProjectImageFiles();

@@ -486,7 +486,7 @@
   }
 }
 .editWorkModal_confirmBox {
-  z-index: 1;
+  z-index: 50;
   position: fixed;
   align-items: center;
   justify-content: center;
