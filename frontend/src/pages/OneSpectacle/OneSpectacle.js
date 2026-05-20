@@ -13,15 +13,33 @@ import ImagesGallery from '../../components/ImagesGallery/ImagesGallery'
 import ParallaxImage from '../../components/ParallaxImage/ParallaxImage'
 import { motion, useReducedMotion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faVideo, faMusic, faGlobe, faFilePdf } from '@fortawesome/free-solid-svg-icons'
+import { faVideo, faMusic, faGlobe, faFilePdf, faXmark, faFileZipper } from '@fortawesome/free-solid-svg-icons'
 
 function OneSpectacle() {
   // ⚠️ objet, pas tableau (sinon plein de checks bizarres)
   const [project, setProject] = useState(null)
+  const [handleProSpace, setHandleProSpace] = useState(false)
+  const [handleAuthPro, setHandleAuthPro] = useState(false)
+  const [proPasswordInput, setProPasswordInput] = useState('')
+  const [proPasswordError, setProPasswordError] = useState(false)
 
   const { id } = useParams()
   const { productionFunctions, residencyTypes, isAuthenticated } = useContext(Context)
   const reduceMotion = useReducedMotion()
+
+  // Gestion accès espace pro
+  function handleProSpaceSubmit(e) {
+    e.preventDefault()
+  
+    if (proPasswordInput === project.proSpace.password) {
+      setHandleProSpace(true)
+      setHandleAuthPro(false)
+      setProPasswordError(false)
+    } else {
+      setHandleProSpace(false)
+      setProPasswordError(true)
+    }
+  }
 
   // Variants
   const fadeUp = useMemo(
@@ -78,6 +96,18 @@ function OneSpectacle() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  useEffect(() => {
+    if (handleAuthPro || handleProSpace) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+  
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [handleAuthPro, handleProSpace])
 
   // Loading guard (évite des comportements bizarres au premier render)
   if (!project) {
@@ -136,10 +166,83 @@ function OneSpectacle() {
                 durée {project.duration}
               </motion.p>
             )}
-            {project.proSpace && project.proSpace.enabled && (
-              <motion.p className='oneSpectacle_mainDatas_proSpace' variants={fadeUp}>
-                espace pro
-              </motion.p>
+            {project.proSpace?.enabled && project.proSpace?.zipUrl && (
+              <motion.div className='oneSpectacle_mainDatas_proSpace' variants={fadeUp}>
+                <button 
+                  className='oneSpectacle_mainDatas_proSpace_button' 
+                  onClick={() => setHandleAuthPro((prev) => !prev)}>
+                  ESPACE PRO
+                </button>
+                {handleAuthPro === true && (
+                  <div className='oneSpectacle_mainDatas_proSpace_modal'>
+                    <div className='oneSpectacle_mainDatas_proSpace_modal_formContainer oneSpectacle_mainDatas_proSpace_modal_formContainer--authModal'>
+                      <button
+                        className='oneSpectacle_mainDatas_proSpace_modal_formContainer_closeButton'
+                        type='button'
+                        onClick={() => setHandleAuthPro(false)}
+                      >
+                        <FontAwesomeIcon icon={faXmark} />
+                      </button>
+
+                      <form onSubmit={handleProSpaceSubmit}>
+                        <label htmlFor='proSpacePassword'>
+                          Veuillez entrer le code d'accès
+                        </label>
+
+                        <input
+                          id='proSpacePassword'
+                          type='text'
+                          value={proPasswordInput}
+                          onChange={(e) => {
+                            setProPasswordInput(e.target.value)
+                            setProPasswordError(false)
+                          }}
+                        />
+
+                        <button type='submit'>
+                          ENVOYER
+                        </button>
+
+                        {proPasswordError && (
+                          <p>Code incorrect</p>
+                        )}
+                      </form>
+                    </div>
+                  </div>
+                )}
+
+                {handleProSpace === true && (
+                  
+                  <div className='oneSpectacle_mainDatas_proSpace_modal'>
+                    <div className='oneSpectacle_mainDatas_proSpace_modal_formContainer oneSpectacle_mainDatas_proSpace_modal_formContainer--proSpaceModal'>
+                      <button
+                        className='oneSpectacle_mainDatas_proSpace_modal_formContainer_closeButton'
+                        type='button'
+                        onClick={() => {
+                          setHandleProSpace(false)
+                          setProPasswordInput('')
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faXmark} />
+                      </button>
+                      <img src={project.images[project.mainImageIndex].imageUrl}/>
+                      <div className='oneSpectacle_mainDatas_proSpace_modal_formContainer--proSpaceModal_datas'>
+                        <p className='oneSpectacle_mainDatas_proSpace_modal_formContainer--proSpaceModal_datas_title'>{project.title}</p>
+                        <a
+                          href={project.proSpace.zipUrl}
+                          target='_blank'
+                          rel='noreferrer'
+                          download
+                        >
+                          <FontAwesomeIcon icon={faFileZipper} />
+                          Télécharger le pack pro
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+              </motion.div>
             )}
 
             {project.description && (

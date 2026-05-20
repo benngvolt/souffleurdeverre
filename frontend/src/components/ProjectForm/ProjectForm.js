@@ -638,98 +638,104 @@ function ProjectForm({
 
             {/* ✅ AJOUT ESPACE PRO */}
             <div className='projectForm_projectProSpace'>
-            {hasZip && (
-                <label className='projectForm_projectProSpace_checkbox'>
-                    <input
-                        type='checkbox'
-                        checked={proSpace.enabled}
-                        onChange={(e) =>
-                            setProSpace({
-                                ...proSpace,
-                                enabled: e.target.checked,
-                            })
-                        }
-                    />
-                    AFFICHER L'ESPACE PRO
-                </label>
-                
-            )}
-            {hasZip && (
-                <div className='projectForm_projectProSpace_password'>
-                    <label htmlFor='inputProjectProSpacePassword'>
-                        MOT DE PASSE ESPACE PRO
+                <p className='projectForm_projectProSpace_title'>GESTION ESPACE PRO</p>
+                {hasZip && (
+                    <label className='projectForm_projectProSpace_checkbox'>
+                        <p>AFFICHER L'ESPACE PRO</p>
+                        <input
+                            type='checkbox'
+                            checked={proSpace.enabled}
+                            onChange={(e) =>
+                                setProSpace({
+                                    ...proSpace,
+                                    enabled: e.target.checked,
+                                })
+                            }
+                        />
+                        
+                    </label>
+                    
+                )}
+                {hasZip && (
+                    <div className='projectForm_projectProSpace_password'>
+                        <label htmlFor='inputProjectProSpacePassword'>
+                            MOT DE PASSE ESPACE PRO
+                        </label>
+
+                        <input
+                            type='text'
+                            id='inputProjectProSpacePassword'
+                            value={proSpace.password || ''}
+                            onChange={(e) =>
+                                setProSpace({
+                                    ...proSpace,
+                                    password: e.target.value,
+                                })
+                            }
+                        />
+                    </div>
+                )}
+
+                    {proSpace.zipUrl && (
+                        <div className='projectForm_projectProSpace_currentFile'>
+                            <p>
+                                ZIP actuel :{' '}
+                                <a href={proSpace.zipUrl} target='_blank' rel='noreferrer'>
+                                    Voir le fichier
+                                </a>
+                            </p>
+
+                            <button
+                                type='button'
+                                onClick={() =>
+                                    setProSpace({
+                                        ...proSpace,
+                                        zipUrl: '',
+                                        enabled: false,
+                                    })
+                                }
+                            >
+                                SUPPRIMER LE ZIP
+                            </button>
+                        </div>
+                    )}
+                    <div>
+
+                    <label htmlFor='inputProjectZipFile'>
+                        {(zipFile || Boolean(proSpace.zipUrl))
+                            ? 'CHANGER LE ZIP'
+                            : '+ AJOUTER UN ZIP'}
                     </label>
 
                     <input
-                        type='text'
-                        id='inputProjectProSpacePassword'
-                        value={proSpace.password || ''}
-                        onChange={(e) =>
-                            setProSpace({
-                                ...proSpace,
-                                password: e.target.value,
-                            })
-                        }
+                        type='file'
+                        id='inputProjectZipFile'
+                        name='zipFile'
+                        accept='.zip,application/zip,application/x-zip-compressed'
+                        onChange={handleZipChange}
                     />
-                </div>
-            )}
-
-                {proSpace.zipUrl && (
-                    <div className='projectForm_projectProSpace_currentFile'>
-                        <p>
-                            ZIP actuel :{' '}
-                            <a href={proSpace.zipUrl} target='_blank' rel='noreferrer'>
-                                Voir le fichier
-                            </a>
-                        </p>
-
-                        <button
-                            type='button'
-                            onClick={() =>
-                                setProSpace({
-                                    ...proSpace,
-                                    zipUrl: '',
-                                    enabled: false,
-                                })
-                            }
-                        >
-                            SUPPRIMER LE ZIP
-                        </button>
                     </div>
-                )}
 
-                <label htmlFor='inputProjectZipFile'>
-                    {zipFile ? 'CHANGER LE ZIP' : '+ AJOUTER UN ZIP'}
-                </label>
-
-                <input
-                    type='file'
-                    id='inputProjectZipFile'
-                    name='zipFile'
-                    accept='.zip,application/zip,application/x-zip-compressed'
-                    onChange={handleZipChange}
-                />
-
-                {zipFile && (
-                    <div className='projectForm_projectProSpace_newFile'>
-                        <p>Nouveau ZIP : {zipFile.name}</p>
-                        <button
-                            type='button'
-                            onClick={() => {
-                                setZipFile(null);
-                            
-                                if (!proSpace.zipUrl) {
-                                    setProSpace((prev) => ({
-                                        ...prev,
-                                        enabled: false,
-                                    }));
-                                }
-                            }}
-                        >
-                            ANNULER LE ZIP
-                        </button>
-                    </div>
-                )}
+                    {zipFile && (
+                        <div className='projectForm_projectProSpace_newFile'>
+                            <p>Nouveau ZIP : {zipFile.name}</p>
+                            <button
+                                type='button'
+                                onClick={() => {
+                                    setZipFile(null);
+                                
+                                    if (!proSpace.zipUrl) {
+                                        setProSpace((prev) => ({
+                                            ...prev,
+                                            enabled: false,
+                                        }));
+                                    }
+                                }}
+                            >
+                                ANNULER LE ZIP
+                            </button>
+                        </div>
+                    )}
             </div>
             <div className='projectForm_projectDescription'>
                 <label htmlFor='inputProjectDescription'>RÉSUMÉ</label>

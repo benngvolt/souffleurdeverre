@@ -104,6 +104,204 @@
                 font-size: 15px;
             }
         }
+
+        &_proSpace {
+            @include SidePaddings;
+            &_button {
+                font-family: 'MainFont_light';
+                font-size: 16px;
+                background-color: $colorTwo;
+                border: none;
+                padding: 4px 8px;
+            
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    font-size: 15px;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    font-size: 14px;
+                }
+                &:hover {
+                    cursor: pointer;
+                    background-color: $colorFive;
+                }
+            }
+
+            &_modal {
+                position: fixed;
+                z-index: 3000;
+                top: 0;
+                left: 0;
+                width:100vw;
+                height: 100vh;
+                background-color:rgba(0, 0, 0, 0.7);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                &_formContainer {
+                    
+                    margin: auto;
+                    display: flex;
+                    align-items: center;
+                    vertical-align: middle;
+                    background-color: white;
+                    position: relative;
+
+                    &--authModal {
+                        flex-direction: column;
+                        justify-content: center;
+                        width: 40%;
+                        height: 50%;
+                        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                            width: 50%;
+                            height: 50%;
+                        }
+                        @media only screen and (max-width:$mobileMaxWidth){
+                            width: 90%;
+                            height: 60%;
+                        } 
+                    }
+                    &--proSpaceModal {
+                        flex-direction: row;
+                        justify-content: flex-start;
+                        column-gap: 10%;
+                        width: 60%;
+                        height: 60%;
+                        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                            width: 75%;
+                            height: 80%;
+                        }
+                        @media only screen and (max-width:$mobileMaxWidth){
+                            width: 90%;
+                            height: 80%;
+                        } 
+
+                        img {
+                            height: 100%;
+                            width: 40%;
+                            object-fit: cover;
+                        }
+
+                        &_datas {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            row-gap: 45px;
+
+                            &_title {
+                                @include Title;
+                                @include SidePaddings;
+                                @include DropColorFilter;
+                                font-size: 120px;
+                                word-break: break-word;
+                                margin: 0;
+                                text-transform: uppercase;
+                                text-wrap: nowrap;
+                                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                                    font-size: 81px;
+                                }
+                                @media only screen and (max-width:$mobileMaxWidth){
+                                    font-size: 60px;
+                                } 
+                            }
+
+                            a {
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                                row-gap: 22px;
+                                background-color: $colorSix;
+                                color: white;
+                                padding: 22px;
+                                font-family: 'MainFont_light';
+                                font-size: 18px;
+                                font-weight: bold;
+                                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                                    font-size: 16px;
+                                    padding: 12px;
+                                }
+                                @media only screen and (max-width:$mobileMaxWidth){
+                                    font-size: 15px;
+                                    padding: 6px;
+                                    width: 110px;
+                                } 
+
+                                svg {
+                                    height: 50px;
+                                }
+
+                                &:hover {
+                                    background-color: $colorFive;
+                                }
+                            }
+                        }
+
+
+                    }
+
+                    &_closeButton {
+                        border:none;
+                        background:none;
+                        position: absolute;
+                        top: 20px;
+                        right: 20px;
+                        font-size: 25px;
+                        &:hover {
+                            cursor: pointer;
+                        }
+                        
+                    }
+
+                    form {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        row-gap: 22px;
+
+                        label {
+                            @include BoldType;
+                            margin: auto;
+                        }
+
+                        input {
+                            height: 20px;
+                            font-family: 'MainFont_light';
+                            font-weight: bold;
+                            font-size: 16px;
+                            padding: 5px;
+                            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                                font-size: 15px;
+                            }
+                            @media only screen and (max-width:$mobileMaxWidth){
+                                font-size: 14px;
+                            } 
+                        }
+                        button {
+                            padding: 10px;
+                            box-sizing: border-box;
+                            font-family: 'SpecialFont_regular';
+                            font-size: 30px;
+                            width: 12em;
+                            text-transform: uppercase;
+                            color: $colorDarkGrey;
+                            text-decoration: none;
+                            border: none;
+                            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                                font-size: 22px;
+                            }
+                            @media only screen and (max-width:$mobileMaxWidth){
+                                font-size: 16px;
+                            } 
+                            &:hover {
+                                background-color: $colorFive;
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
         
         &_description {
             padding: 73px 15%;

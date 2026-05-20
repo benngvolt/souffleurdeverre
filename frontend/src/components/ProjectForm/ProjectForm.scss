@@ -87,12 +87,14 @@
     &_projectDuration, 
     &_projectCreationDate, 
     &_projectDescription, 
-    &_projectMoreInfos {
+    &_projectMoreInfos,
+    &_projectProSpace {
 
         width: 80%;
         margin: 0 auto 10px auto;
         display: flex;
         flex-direction: column;
+        row-gap: 12px;
         column-gap: 19px;
 
         label {
@@ -112,6 +114,57 @@
             min-width: 100%;
             min-height: 300px;
         } 
+    }
+    &_projectProSpace {
+        display: flex;
+        flex-direction: column;
+        row-gap: 22px;
+        margin: 45px auto 60px auto;
+        &_title {
+            font-size: 18px;
+            font-family: 'MainFont_light';
+            font-weight: bold;
+        }
+        &_checkbox {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            p {
+                flex-wrap: nowrap;
+                width: 220px;
+            }
+
+            input {
+                margin: auto 0;
+                height: 15px;
+                width: 30px;
+            }
+            input[type='checkbox'] {
+                accent-color: black;
+            }
+        }
+        &_currentFile {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            font-size: 16px;
+            font-family: 'MainFont_light';
+            
+            p {
+                
+            }
+
+            button {
+                @include Button2;
+                width: 400px;
+            }
+        }
+        &_newFile {
+            button {
+                @include Button2;
+                width: 400px;
+            }
+        }
     }
 
     &_projectArtistsList,
