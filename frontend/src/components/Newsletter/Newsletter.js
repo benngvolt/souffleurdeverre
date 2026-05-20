@@ -13,7 +13,7 @@ import DOMPurify from 'dompurify'
 import Alert from '../Alert/Alert'
 
 
-function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
+function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter, selectedNewsletterProjectIds = [] }) {
 
 
 
@@ -68,9 +68,9 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
   ------------------------------*/
   const dt = (d) => new Date((d || '') + ((d || '').length === 10 ? 'T00:00:00' : ''))
   const fmtDay = new Intl.DateTimeFormat('fr-FR', {
-    weekday: 'short',
+    // weekday: 'short',
     day: '2-digit',
-    month: 'short',
+    month: 'long',
     year: 'numeric',
   })
   const fmtDate = (iso) => fmtDay.format(dt(iso)).replace(/\./g, '')
@@ -178,6 +178,7 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
           city: ev?.show?.city,
           placeName: ev?.show?.placeName,
           placeLink: ev?.show?.placeLink,
+          moreInfos: ev?.show?.moreInfos,
           times: Array.isArray(ev?.times) ? ev.times : undefined,
         })
       } else if (ev?.type === 'residency') {
@@ -188,11 +189,41 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
           city: ev?.residency?.city,
           placeName: ev?.residency?.placeName,
           placeLink: ev?.residency?.placeLink,
+          moreInfos: ev?.show?.moreInfos,
         })
       }
   
       byProject.set(projectKey, base)
     })
+
+    projects.forEach((p) => {
+      if (!selectedNewsletterProjectIds.includes(p._id)) return;
+      if (byProject.has(p._id)) return;
+    
+      let heroImageUrl = null;
+    
+      if (
+        typeof p.mainImageIndex === 'number' &&
+        Array.isArray(p.images) &&
+        p.images[p.mainImageIndex]
+      ) {
+        heroImageUrl = p.images[p.mainImageIndex].imageUrl;
+      }
+    
+      byProject.set(p._id, {
+        key: p._id,
+        id: p._id,
+        slug: p.slug || p.urlSlug || null,
+        title: p.title || 'Projet',
+        subtitle: p.subtitle || null,
+        projectType: p.projectType || null,
+        duration: p.duration || null,
+        heroImageUrl,
+        summary: p.summary || p.excerpt || p.description || p.shortDescription || null,
+        shows: [],
+        residencies: [],
+      });
+    }, [sortedEvents, projectMetaMap, projects, selectedNewsletterProjectIds]);
   
     const projectsArr = Array.from(byProject.values())
   
@@ -201,24 +232,45 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
       gp.residencies.sort((a, b) => (a.startDate || '').localeCompare(b.startDate || ''))
     })
   
-    projectsArr.sort((a, b) => {
-      const nextA = Math.min(
-        ...[].concat(
-          gpTimes(a.shows),
-          gpTimes(a.residencies, true)
-        )
-      )
-      const nextB = Math.min(
-        ...[].concat(
-          gpTimes(b.shows),
-          gpTimes(b.residencies, true)
-        )
-      )
-      return (isFinite(nextA) ? nextA : Infinity) - (isFinite(nextB) ? nextB : Infinity)
-    })
+  //   projectsArr.sort((a, b) => {
+  //     const nextA = Math.min(
+  //       ...[].concat(
+  //         gpTimes(a.shows),
+  //         gpTimes(a.residencies, true)
+  //       )
+  //     )
+  //     const nextB = Math.min(
+  //       ...[].concat(
+  //         gpTimes(b.shows),
+  //         gpTimes(b.residencies, true)
+  //       )
+  //     )
+  //     return (isFinite(nextA) ? nextA : Infinity) - (isFinite(nextB) ? nextB : Infinity)
+  //   })
   
-    return projectsArr
-  }, [sortedEvents, projectMetaMap])
+  //   return projectsArr
+  // }, [sortedEvents, projectMetaMap])
+  projectsArr.sort((a, b) => {
+    const nextA = Math.min(
+      ...[].concat(
+        gpTimes(a.shows),
+        gpTimes(a.residencies, true)
+      )
+    );
+  
+    const nextB = Math.min(
+      ...[].concat(
+        gpTimes(b.shows),
+        gpTimes(b.residencies, true)
+      )
+    );
+  
+    return (isFinite(nextA) ? nextA : Infinity) - (isFinite(nextB) ? nextB : Infinity);
+  });
+  
+  return projectsArr.filter((project) =>
+    selectedNewsletterProjectIds.includes(project.id)
+  )}, [sortedEvents, projectMetaMap, selectedNewsletterProjectIds]);
 
   function gpTimes(arr = [], isResidency = false){
     return arr.map(x => new Date(isResidency ? x.startDate : x.date).getTime())
@@ -380,8 +432,8 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
                       <img
                         src="https://storage.googleapis.com/website_ciesouffleur/assets/facebook_black.jpg"
                         alt="facebook"
-                        width={40}
-                        height={40}
+                        width={30}
+                        height={30}
                         style={{
                           display: 'block',
                           border: 0,
@@ -403,8 +455,8 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
                       <img
                         src="https://storage.googleapis.com/website_ciesouffleur/assets/x_black.jpg"
                         alt="x"
-                        width={40}
-                        height={40}
+                        width={30}
+                        height={30}
                         style={{
                           display: 'block',
                           border: 0,
@@ -426,8 +478,8 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
                       <img
                         src="https://storage.googleapis.com/website_ciesouffleur/assets/youtube_black.jpg"
                         alt="youtube"
-                        width={40}
-                        height={40}
+                        width={30}
+                        height={30}
                         style={{
                           display: 'block',
                           border: 0,
@@ -449,8 +501,8 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
                       <img
                         src="https://storage.googleapis.com/website_ciesouffleur/assets/instagram_black.jpg"
                         alt="instagram"
-                        width={40}
-                        height={40}
+                        width={30}
+                        height={30}
                         style={{
                           display: 'block',
                           border: 0,
@@ -467,8 +519,8 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
           </div>
 
           {/* INTRO */}
-          <p className="intro fs-18" style={{color:'#000',fontSize:18,textAlign:'center',margin:'40px auto',width:'80%',maxWidth:520,lineHeight:1.5}}>
-            Retrouvez ici l’essentiel de nos actualités, les spectacles en tournée et les créations en cours.
+          <p className="intro fs-18" style={{color:'#000',fontSize:18,textAlign:'center',margin:'60px auto',width:'80%',maxWidth:520,lineHeight:1.5}}>
+            <strong>Retrouvez ici l’essentiel de nos actualités, les spectacles en tournée et les créations en cours.</strong>
           </p>
 
           {/* PROJETS */}
@@ -481,26 +533,10 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
                       <img src={project.heroImageUrl} alt={project.title || 'Illustration'} className="hero-img" style={{width:'100%', height:'400px', objectFit:'cover', display:'block'}}/>
                     )}
 
-                    {/* Titre + méta */}
-                    <div className="datasrow" style={{ display:'flex', columnGap:'1rem', margin:'12px 0 20px' }}>
-                      <h2 className="fs-20" style={{margin:0,fontWeight:800,color:'#ff00ff',fontSize:20,lineHeight:1.2}}>{project.title}</h2>
-                      {project.subtitle ? (
-                        <p className="fs-16" style={{margin:0,fontSize:18,color:'#ff00ff',fontStyle:'italic'}}><em>{project.subtitle}</em></p>
-                      ) : null}
-                      {project.residencies && project.residencies.length > 0 && (
-                        <span className="fs-16" style={{display:'inline-block',marginRight:8,fontSize:14,fontWeight:700,background:'#ff00ff',color:'#fff',padding:'2px 6px',borderRadius:2,textTransform:'uppercase'}}>en création</span>
-                      )}
-                      {project.shows && project.shows.length > 0 && (
-                        <span className="fs-16" style={{display:'inline-block',fontSize:14,fontWeight:700,background:'#ff00ff',color:'#fff',padding:'2px 6px',borderRadius:2,textTransform:'uppercase'}}>en tournée</span>
-                      )}
-                      {project.projectType ? (
-                        <p className="fs-16" style={{margin:0,fontSize:16,color:'#ff00ff',fontStyle:'italic'}}>{project.projectType}</p>
-                      ) : null}
-                    </div>
-
-                    {/* Résumé */}
-                    {project.summary ? (
-                      <div  className="fs-16" style={{width:'100%',fontSize:16,lineHeight:1.6,textAlign:'justify'}} dangerouslySetInnerHTML={{ __html: toSafeHtml(project.summary) }} />
+                    {/* TITRE */}
+                    <h2 className="fs-20" style={{margin:'12px 0 0 0',fontWeight:800,color:'#ff00ff',fontSize:20,lineHeight:1.2}}>{project.title}</h2>
+                    {project.subtitle ? (
+                      <p className="fs-16" style={{margin:0,fontSize:18,color:'#ff00ff',fontStyle:'italic'}}><em>{project.subtitle}</em></p>
                     ) : null}
 
                     {/* DATES – représentations */}
@@ -508,18 +544,20 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
                       <ul className="fs-16" style={{margin:'16px 0',paddingLeft:0,listStyle:'none',lineHeight:1.6}}>
                         {project.shows.map((s, idx) => {
                           const when = formatRange(s.date, s.endDate)
-                          const whereStr = [s.placeName, s.city].filter(Boolean).join(' — ')
+                          const whereStr = [s.placeName, s.city].filter(Boolean).join(' - ')
                           const times = Array.isArray(s.times) && s.times.length
-                            ? ' · ' + s.times.map((t) => t?.label || t?.time).filter(Boolean).join(', ')
+                            ? ' - ' + s.times.map((t) => t?.label || t?.time + ' ' + (t.timeInfos? t.timeInfos:'')).filter(Boolean).join(', ')
                             : ''
                           const whereNode = s.placeLink ? (
                             <a href={s.placeLink} target="_blank" rel="noopener noreferrer" style={{color:'#000',textDecoration:'underline'}}>{whereStr}</a>
                           ) : (
                             whereStr
                           )
+                          const moreInfos = s.moreInfos
+                
                           return (
                             <li key={idx} style={{margin:'6px 0'}}>
-                              <strong>{when}</strong> — {whereNode}{times}
+                              <strong>{when}</strong> - {whereNode}{times} {moreInfos && (<em> - {moreInfos}</em>)}
                             </li>
                           )
                         })}
@@ -538,14 +576,38 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
                           ) : (
                             whereStr
                           )
+                          const moreInfos = r.moreInfos
                           return (
                             <li key={idx} style={{margin:'6px 0'}}>
-                              <strong>{when}</strong>{type} — {whereNode}
+                              <strong>{when}</strong>{type} - {whereNode} {moreInfos && (<em> - {moreInfos}</em>)}
                             </li>
                           )
                         })}
                       </ul>
                     )}
+
+                    {/* Titre + méta */}
+                    <div className="datasrow" style={{ display:'flex', flexDirection:'column', rowGap:'1rem', margin:'12px 0 20px' }}>
+                      
+                      {project.residencies && project.residencies.length > 0 && (
+                        <span className="fs-16" style={{width:'100px',display:'inline-block',marginRight:8,fontSize:14,fontWeight:700,background:'#ff00ff',color:'#fff',padding:'2px 6px',borderRadius:2,textTransform:'uppercase'}}>en création</span>
+                      )}
+                      {project.shows && project.shows.length > 0 && (
+                        <span className="fs-16" style={{width:'100px',display:'inline-block',fontSize:14,fontWeight:700,background:'#ff00ff',color:'#fff',padding:'2px 6px',borderRadius:2,textTransform:'uppercase'}}>en tournée</span>
+                      )}
+                      {project.projectType ? (
+                        <p className="fs-16" style={{margin:0,fontSize:16,color:'#ff00ff',fontStyle:'italic'}}>{project.projectType}</p>
+                      ) : null}
+                    </div>
+
+                    
+
+                    
+
+                    {/* Résumé */}
+                    {project.summary ? (
+                      <div  className="fs-16" style={{width:'100%',fontSize:16,lineHeight:1.6,textAlign:'justify'}} dangerouslySetInnerHTML={{ __html: toSafeHtml(project.summary) }} />
+                    ) : null}
 
                     {/* Lien projet */}
                     <a className="fs-16" href={`https://souffleurdeverre.fr/#/spectacles/${project.id}`} style={{display:'inline-block',marginTop:6,color:'#ff00ff',fontWeight:700,fontStyle:'italic',textDecoration:'underline'}}>en savoir +</a>
@@ -558,6 +620,13 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter }) {
           {/* FOOTER */}
           <div style={{width:'100%',margin:'40px auto 0 auto',textAlign:'center',fontSize:16,lineHeight:1.5}}>
             <div className="footer-brand" style={{background:'#ff8a00',color:'#000',fontWeight:700,textTransform:'uppercase',letterSpacing:'.5px',padding:'8px 12px', boxSizing:'border-box', width:'100%',margin:'0 auto 24px auto'}}>COMPAGNIE LE SOUFFLEUR DE VERRE</div>
+
+            <div style={{width:'100%',margin:'0 auto 22px auto'}}>
+              <h4 style={{margin:'0 0 10px 0',color:'#ff8a00',fontWeight:700,textTransform:'uppercase'}}>CONTACT</h4>
+              <p style={{margin:'4px 0'}}>Bertrand Renard</p>
+              <p style={{margin:'4px 0'}}>06 25 75 42 76</p>
+              <p style={{margin:'4px 0'}}><a href="mailto:ciesouffleur@gmail.com" style={{color:'#000',textDecoration:'underline'}}>theatrejp.souffleur@gmail.com</a></p>
+            </div>
 
             <div style={{width:'100%',margin:'0 auto 22px auto'}}>
               <h4 style={{margin:'0 0 10px 0',color:'#ff8a00',fontWeight:700,textTransform:'uppercase'}}>RESPONSABLE ARTISTIQUE</h4>
