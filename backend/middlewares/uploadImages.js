@@ -451,8 +451,47 @@ async function uploadImage(req, res, next) {
   }
 }
 
+/* ----------------------------
+   Upload single ZIP for pro space
+---------------------------- */
+
+async function uploadZip(req, res, next) {
+  try {
+    const file = req.files?.zipFile?.[0];
+
+    if (!file) {
+      return next();
+    }
+
+    const { originalname, buffer, mimetype } = file;
+
+    const filePath = createUniqueFileName(
+      'pro_space_zips',
+      originalname,
+      'zip'
+    );
+
+    const publicUrl = await uploadBufferToGCS(
+      filePath,
+      buffer,
+      mimetype || 'application/zip'
+    );
+
+    req.zipFileUrl = publicUrl;
+
+    return next();
+  } catch (error) {
+    console.error('Erreur uploadZip :', error);
+
+    return res.status(500).json({
+      error: 'Erreur lors du traitement du ZIP.',
+    });
+  }
+}
+
 module.exports = {
   uploadImages,
   uploadImage,
   uploadPdfs,
+  uploadZip,
 };

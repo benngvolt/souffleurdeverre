@@ -37,41 +37,81 @@ async function deleteProjectImageFiles(req) {
     }
   }
 
-async function deleteProjectPdfFiles(req) {
-  // Obtenez la liste des URLs des images depuis Google Cloud Storage
-  
-  async function getCloudPdfUrls() {
-    const [files] = await bucket.getFiles({ prefix: 'pdfList/' });
-    return files.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
-  }
+  async function deleteProjectPdfFiles(req) {
+    // Obtenez la liste des URLs des images depuis Google Cloud Storage
     
-  // Obtenez la liste des URLs des images depuis MongoDB
-  async function getDbPdfUrls() {
-    // Récupérez toutes les séries depuis MongoDB
-    const projects = await Project.find();
-    const pdfUrls = projects.flatMap((project) => project.pdfList.map((pdf) => decodeURIComponent(pdf.pdfLink.replace(/\+/g, ' '))));
-    return pdfUrls;
-  }
-
-  try {
-    const cloudPdfUrls = await getCloudPdfUrls(); // Utilisez "await" pour attendre la résolution de la promesse
-    const dbPdfUrls = await getDbPdfUrls(); // Utilisez "await" pour attendre la résolution de la promesse
-    const pdfToDelete = cloudPdfUrls.filter((url) => !dbPdfUrls.includes(url));
-    // Suppression des images non référencées dans le cloud
-    for (const pdfUrl of pdfToDelete) {
-      // Divisez l'URL en parties en utilisant "/" comme séparateur
-      const parts = pdfUrl.split('/');
-      // Récupérez la dernière partie qui contient le nom du fichier
-      const fileToDeleteName = parts.pop();
-      if (fileToDeleteName) {
-        await bucket.file('pdfList/' + fileToDeleteName).delete();
-      }
+    async function getCloudPdfUrls() {
+      const [files] = await bucket.getFiles({ prefix: 'pdfList/' });
+      return files.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
+    }
+      
+    // Obtenez la liste des URLs des images depuis MongoDB
+    async function getDbPdfUrls() {
+      // Récupérez toutes les séries depuis MongoDB
+      const projects = await Project.find();
+      const pdfUrls = projects.flatMap((project) => project.pdfList.map((pdf) => decodeURIComponent(pdf.pdfLink.replace(/\+/g, ' '))));
+      return pdfUrls;
     }
 
-  } catch (error) {
-    console.error(error.message);
+    try {
+      const cloudPdfUrls = await getCloudPdfUrls(); // Utilisez "await" pour attendre la résolution de la promesse
+      const dbPdfUrls = await getDbPdfUrls(); // Utilisez "await" pour attendre la résolution de la promesse
+      const pdfToDelete = cloudPdfUrls.filter((url) => !dbPdfUrls.includes(url));
+      // Suppression des images non référencées dans le cloud
+      for (const pdfUrl of pdfToDelete) {
+        // Divisez l'URL en parties en utilisant "/" comme séparateur
+        const parts = pdfUrl.split('/');
+        // Récupérez la dernière partie qui contient le nom du fichier
+        const fileToDeleteName = parts.pop();
+        if (fileToDeleteName) {
+          await bucket.file('pdfList/' + fileToDeleteName).delete();
+        }
+      }
+
+    } catch (error) {
+      console.error(error.message);
+    }
   }
-}
+
+  async function deleteProjectZipFiles(req) {
+    async function getCloudZipUrls() {
+      const [files] = await bucket.getFiles({ prefix: 'pro_space_zips/' });
+
+      return files.map((file) =>
+        `https://storage.googleapis.com/${bucket.name}/${file.name}`
+      );
+    }
+
+    async function getDbZipUrls() {
+      const projects = await Project.find();
+
+      const zipUrls = projects
+        .map((project) => project?.proSpace?.zipUrl)
+        .filter(Boolean)
+        .map((zipUrl) => decodeURIComponent(zipUrl.replace(/\+/g, ' ')));
+
+      return zipUrls;
+    }
+
+    try {
+      const cloudZipUrls = await getCloudZipUrls();
+      const dbZipUrls = await getDbZipUrls();
+
+      const zipsToDelete = cloudZipUrls.filter(
+        (url) => !dbZipUrls.includes(url)
+      );
+
+      for (const zipUrl of zipsToDelete) {
+        const filePath = extractFilePathFromGcsUrl(zipUrl);
+
+        if (filePath) {
+          await bucket.file(filePath).delete({ ignoreNotFound: true });
+        }
+      }
+    } catch (error) {
+      console.error('Erreur suppression ZIP projet :', error.message);
+    }
+  }
   
 // async function deleteBiographyImageFiles(req) {
 //   // Obtenez la liste des URLs des images depuis Google Cloud Storage
@@ -158,7 +198,8 @@ async function deleteBiographyImageFiles(req, res, next) {
 
 function deleteProjectFiles(req) {
   deleteProjectImageFiles();
-  deleteProjectPdfFiles()
+  deleteProjectPdfFiles();
+  deleteProjectZipFiles()
 }
 
 

@@ -6,6 +6,7 @@ const multer = require('../middlewares/multer-config');
 // const auth = require('../middlewares/auth');
 const uploadImages = require('../middlewares/uploadImages').uploadImages;
 const uploadPdfs = require('../middlewares/uploadImages').uploadPdfs;
+const uploadZip = require('../middlewares/uploadImages').uploadZip;
 const deleteProjectFiles = require('../middlewares/deleteImages').deleteProjectFiles;
 
 // const uploadImage = require('../middlewares/uploadImages').uploadImage;
@@ -18,26 +19,41 @@ const deleteProjectFiles = require('../middlewares/deleteImages').deleteProjectF
 // l'argument next permet de passer au middleware suivant
 
 router.post('/',
-    auth,
-    multer.fields([{ name: 'images' }, { name: 'pdfFiles' }]),
-    uploadImages,
-    uploadPdfs,
-    projectsCtrl.createProject);
+  auth,
+  multer.fields([
+    { name: 'images' },
+    { name: 'pdfFiles' },
+    { name: 'zipFile' },
+  ]),
+  uploadImages,
+  uploadPdfs,
+  uploadZip,
+  projectsCtrl.createProject
+);
+
 router.get('/',
     projectsCtrl.getAllProjects);
+
 router.get('/:id',
     projectsCtrl.getOneProject);
+
 router.delete ('/:id',
     auth,
     projectsCtrl.deleteOneProject,
     deleteProjectFiles);
-router.put ('/:id',
+
+router.put('/:id',
     auth,
-    multer.fields([{ name: 'images' }, { name: 'pdfFiles' }]),
+    multer.fields([
+      { name: 'images' },
+      { name: 'pdfFiles' },
+      { name: 'zipFile' },
+    ]),
     uploadImages,
     uploadPdfs,
+    uploadZip,
     projectsCtrl.updateOneProject,
     deleteProjectFiles
-    );
+  );
 
 module.exports = router;

@@ -136,6 +136,11 @@ function OneSpectacle() {
                 durée {project.duration}
               </motion.p>
             )}
+            {project.proSpace && project.proSpace.enabled && (
+              <motion.p className='oneSpectacle_mainDatas_proSpace' variants={fadeUp}>
+                espace pro
+              </motion.p>
+            )}
 
             {project.description && (
               <motion.p

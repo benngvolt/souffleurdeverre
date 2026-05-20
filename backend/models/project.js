@@ -90,6 +90,22 @@ const projectSchema = mongoose.Schema({
         photograph: {type: String, required: false},
         }
     ],
+    proSpace: {
+        enabled: {
+            type: Boolean,
+            default: false,
+        },
+    
+        zipUrl: {
+            type: String,
+            default: '',
+        },
+        password: {
+            type: String,
+            default: '',
+            trim: true,
+        },
+    },
 });
 
 

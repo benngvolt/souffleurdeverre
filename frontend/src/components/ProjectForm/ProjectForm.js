@@ -91,6 +91,14 @@ function ProjectForm({
     const [projectCreationDate, setProjectCreationDate] = useState('')
     const [projectDescription, setProjectDescription] = useState('')
     const [projectMoreInfos, setProjectMoreInfos] = useState('')
+        // ✅ AJOUT ESPACE PRO
+    const [proSpace, setProSpace] = useState({
+        enabled: false,
+        zipUrl: '',
+        password: '',
+    });
+
+    const [zipFile, setZipFile] = useState(null);
     const [confirmBoxState, setConfirmBoxState] = useState(false);
     const [displayServerError, setDisplayServerError] = useState(false);
     const [displayError, setDisplayError] = useState(false);
@@ -108,6 +116,12 @@ function ProjectForm({
             setProjectCreationDate(projectEdit.creationDate);
             setProjectDescription(projectEdit.description);
             setProjectMoreInfos(projectEdit.moreInfos);
+            setProSpace(projectEdit.proSpace || {
+                enabled: false,
+                zipUrl: '',
+                password: ''
+            });
+            setZipFile(null);
         } else if (projectFormMode === 'add') {
             setProjectTitle('');
             setProjectSubtitle('');
@@ -117,6 +131,12 @@ function ProjectForm({
             setProjectCreationDate('');
             setProjectDescription('');
             setProjectMoreInfos('');
+            setProSpace({
+                enabled: false,
+                zipUrl: '',
+                password: '',
+            });
+            setZipFile(null);
         }
     }
 
@@ -311,6 +331,29 @@ function ProjectForm({
         image
     }));
 
+    // ✅ AJOUT ESPACE PRO
+    function handleZipChange(e) {
+        const file = e.target.files?.[0];
+
+        if (!file) {
+            setZipFile(null);
+            return;
+        }
+
+        setZipFile(file);
+    }
+    
+    const hasZip = Boolean(zipFile || proSpace.zipUrl);
+
+    useEffect(() => {
+        if (!hasZip && proSpace.enabled) {
+            setProSpace((prev) => ({
+                ...prev,
+                enabled: false,
+            }));
+        }
+    }, [hasZip, proSpace.enabled]);
+
     /* ------------------------
     ----- FORM FUNCTIONS ------
     -------------------------*/
@@ -374,6 +417,12 @@ function ProjectForm({
 
         // 🔁 ICI on envoie la version nettoyée
         projectFormData.append('showsList', JSON.stringify(payloadShowsList));
+        // ✅ AJOUT ESPACE PRO
+        projectFormData.append('proSpace', JSON.stringify(proSpace));
+
+        if (zipFile) {
+            projectFormData.append('zipFile', zipFile);
+        }
         
         pdfWithIndex.forEach(({ index, pdf }) => {
             if (pdf instanceof File) {
@@ -519,6 +568,7 @@ function ProjectForm({
     function openConfirmBox () {
         setConfirmBoxState(true);
     }
+   
 
     return  (      
         <form onSubmit={(event) => projectFormSubmit(event)} method="post" className='projectForm' ref={projectFormRef}>
@@ -584,6 +634,102 @@ function ProjectForm({
             <div className='projectForm_projectMoreInfos'>
                 <label htmlFor='inputProjectMoreInfos'>PLUS D'INFOS</label>
                 <input type='text' id='inputProjectMoreInfos' ref={inputProjectMoreInfosRef} value={projectMoreInfos} onChange={(e) =>setProjectMoreInfos(e.target.value)}></input>
+            </div>
+
+            {/* ✅ AJOUT ESPACE PRO */}
+            <div className='projectForm_projectProSpace'>
+            {hasZip && (
+                <label className='projectForm_projectProSpace_checkbox'>
+                    <input
+                        type='checkbox'
+                        checked={proSpace.enabled}
+                        onChange={(e) =>
+                            setProSpace({
+                                ...proSpace,
+                                enabled: e.target.checked,
+                            })
+                        }
+                    />
+                    AFFICHER L'ESPACE PRO
+                </label>
+                
+            )}
+            {hasZip && (
+                <div className='projectForm_projectProSpace_password'>
+                    <label htmlFor='inputProjectProSpacePassword'>
+                        MOT DE PASSE ESPACE PRO
+                    </label>
+
+                    <input
+                        type='text'
+                        id='inputProjectProSpacePassword'
+                        value={proSpace.password || ''}
+                        onChange={(e) =>
+                            setProSpace({
+                                ...proSpace,
+                                password: e.target.value,
+                            })
+                        }
+                    />
+                </div>
+            )}
+
+                {proSpace.zipUrl && (
+                    <div className='projectForm_projectProSpace_currentFile'>
+                        <p>
+                            ZIP actuel :{' '}
+                            <a href={proSpace.zipUrl} target='_blank' rel='noreferrer'>
+                                Voir le fichier
+                            </a>
+                        </p>
+
+                        <button
+                            type='button'
+                            onClick={() =>
+                                setProSpace({
+                                    ...proSpace,
+                                    zipUrl: '',
+                                    enabled: false,
+                                })
+                            }
+                        >
+                            SUPPRIMER LE ZIP
+                        </button>
+                    </div>
+                )}
+
+                <label htmlFor='inputProjectZipFile'>
+                    {zipFile ? 'CHANGER LE ZIP' : '+ AJOUTER UN ZIP'}
+                </label>
+
+                <input
+                    type='file'
+                    id='inputProjectZipFile'
+                    name='zipFile'
+                    accept='.zip,application/zip,application/x-zip-compressed'
+                    onChange={handleZipChange}
+                />
+
+                {zipFile && (
+                    <div className='projectForm_projectProSpace_newFile'>
+                        <p>Nouveau ZIP : {zipFile.name}</p>
+                        <button
+                            type='button'
+                            onClick={() => {
+                                setZipFile(null);
+                            
+                                if (!proSpace.zipUrl) {
+                                    setProSpace((prev) => ({
+                                        ...prev,
+                                        enabled: false,
+                                    }));
+                                }
+                            }}
+                        >
+                            ANNULER LE ZIP
+                        </button>
+                    </div>
+                )}
             </div>
             <div className='projectForm_projectDescription'>
                 <label htmlFor='inputProjectDescription'>RÉSUMÉ</label>

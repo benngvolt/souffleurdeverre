@@ -1,6 +1,23 @@
 const Project = require('../models/project')
 const { storage, bucket } = require('../config/storage');
 
+
+/* -----------------------------
+AJOUT PROSPACE
+Helper pour parser les champs JSON envoyés en FormData
+----------------------------- */
+function parseJsonField(value, fallback) {
+  if (!value) return fallback;
+  if (typeof value === 'object') return value;
+
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+
+
 /*------------------------
 ----- GET ALL PROJECTS ---
 -------------------------*/
@@ -61,6 +78,17 @@ exports.createProject = async (req, res) => {
     const linksList = JSON.parse(req.body.linksList);
     const residenciesList = JSON.parse(req.body.residenciesList);
     const showsList = JSON.parse(req.body.showsList);
+    const proSpace = parseJsonField(req.body.proSpace, {
+      enabled: false,
+      zipUrl: '',
+      password: ''
+    });
+
+    // ✅ ZIP : si un nouveau ZIP a été uploadé, on injecte son URL dans proSpace
+    if (req.zipFileUrl) {
+      proSpace.zipUrl = req.zipFileUrl;
+    }
+
   
     const descriptionWithBr = req.body.description;
 
@@ -98,7 +126,8 @@ exports.createProject = async (req, res) => {
           residenciesList: residenciesList,
           showsList: showsList,
           images: images,
-          pdfList: pdfList
+          pdfList: pdfList,
+          proSpace: proSpace
         });
         await project.save();
         res.status(201).json({ message: 'Projet enregistrée !' });
@@ -134,7 +163,17 @@ exports.updateOneProject = async (req, res, next) => {
       const linksList = JSON.parse(req.body.linksList);
       const residenciesList = JSON.parse(req.body.residenciesList);
       const showsList = JSON.parse(req.body.showsList);
+      const proSpace = parseJsonField(req.body.proSpace, {
+        enabled: false,
+        zipUrl: '',
+        password: ''
+      });
       
+      // ✅ ZIP : si un nouveau ZIP a été uploadé, il remplace l'ancien
+      if (req.zipFileUrl) {
+        proSpace.zipUrl = req.zipFileUrl;
+      }
+
       const paragraphListWithBr = paragraphList.map((paragraph) => {
         const paragraphTextWithBr = paragraph.paragraphText;
         return {
@@ -194,7 +233,8 @@ exports.updateOneProject = async (req, res, next) => {
           showsList: showsList,
           mainImageIndex: updatedMainImageIndex,
           images: updatedImages,
-          pdfList: updatedPdfs
+          pdfList: updatedPdfs,
+          proSpace: proSpace
         };
   
         await Project.updateOne({ _id: req.params.id }, projectObject);
