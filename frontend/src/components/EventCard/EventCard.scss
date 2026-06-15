@@ -1,0 +1,25 @@
+@import '../../utils/mixins';
+
+.actualite {
+  
+
+    &_container {
+      
+         &_yearContainer {
+            
+            
+            &_pastDates {
+
+                color: grey!important;
+
+               p, a {
+                color: grey!important;
+               }
+               .actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_type, .actualite_container_yearContainer_monthContainer_events_eventContainer_showsBox_type {
+                background-color: grey;
+                color: $colorLightGrey!important;
+               }
+            }
+        }
+    }
+}

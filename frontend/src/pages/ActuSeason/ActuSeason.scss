@@ -14,7 +14,24 @@
         width: 100%;
          &_yearContainer {
             margin: 45px auto;
-            
+            &_pastDates {
+
+
+
+                &_summary{
+
+                    color: $colorDarkGrey;
+                    background-color: $colorThree;
+                    padding: 6px;
+                    text-transform: uppercase !important;
+                    @include TextTitle;
+                    &:hover {
+                        cursor: pointer;
+                        background-color: $colorDarkGrey;
+                        color: $colorLightGrey;
+                    }
+                }
+            }
 
             &_year {
                 font-family: 'SpecialFont_regular';
