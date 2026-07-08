@@ -36,8 +36,11 @@
             &_year {
                 font-family: 'SpecialFont_regular';
                 font-size: 150px;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    
+                }
                 @media only screen and (max-width:$mobileMaxWidth){
-                    font-size: 80px;
+                    font-size: 70px!important;
                 }
             }
 
@@ -54,6 +57,8 @@
                 }
                 @media only screen and (max-width:$mobileMaxWidth){
                     flex-direction: column;
+                    
+                    
                 }
 
                 &_month {
@@ -63,11 +68,21 @@
                     text-transform: uppercase;
                     @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
                         font-size: 80px;
-                        width: 100%;
+                        width: 100%!important;
+                        background: $colorDarkGrey;
+                        color: $colorLightGrey;
+                        padding-left: 22px;
+                        box-sizing: border-box;
+                        margin-bottom: 45px;
                     }
                     @media only screen and (max-width:$mobileMaxWidth){
-                        font-size: 60px;
-                        width: 100%;
+                        font-size: 50px!important;
+                        width: 100%!important;
+                        background: $colorDarkGrey;
+                        color: $colorLightGrey;
+                        padding-left: 22px;
+                        box-sizing: border-box;
+                        margin-bottom: 22px;
                     }
                 }
 

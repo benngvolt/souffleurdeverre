@@ -1,6 +1,7 @@
 import './Compagnie.scss'
 import { API_URL } from '../../utils/constants'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
+import { Context } from '../../utils/Context'
 import { Link } from 'react-router-dom'
 import Footer from '../../components/Footer/Footer'
 import BioCard from '../../components/BioCard/BioCard'
@@ -19,6 +20,11 @@ function Compagnie() {
     const [bioVeschambre, setBioVeschambre] = useState([]);
     const [displayBioAside, setDisplayBioAside] = useState(false);
     const [bioAside, setBioAside] = useState([]);
+
+    const { biographies, bioFields } = useContext(Context);
+
+    const permanentTeam = biographies.filter((bio)=> bio.isPermanentTeam === true && bio._id !== '65a7a54629c574d3654f8810')
+
     const partners = [
         {
             'name':'Préfète de la Région Auvergne Rhône-Alpes',
@@ -57,6 +63,7 @@ function Compagnie() {
         .catch((error)=>console.log(error.message))
     },[]);
 
+
     useEffect(() => {
         window.scrollTo(0, 0);
     },[]);
@@ -88,15 +95,21 @@ function Compagnie() {
                 <li className='compagnieSection_biosList_bioItem'>
                     <BioCard biography={bioRocha} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
                 </li>
-                <li className='compagnieSection_biosList_bioItem'>
+                {/* <li className='compagnieSection_biosList_bioItem'>
                     <BioCard biography={bioVeschambre} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
-                </li>
+                </li> */}
+                {permanentTeam.map((bio)=>(
+                    <li className='compagnieSection_biosList_bioItem'>
+                        <BioCard biography={bio} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
+                    </li>
+                ))}
+                
             </ul>
-            <img src={cedricVeschambre} alt="photo de Cédric Veschambre par Julien Bruhat" className='compagnieSection_image'/>
+            {/* <img src={cedricVeschambre} alt="photo de Cédric Veschambre par Julien Bruhat" className='compagnieSection_image'/> */}
             <div className={displayBioAside=== true ? 'compagnieSection_bioSheetContainer compagnieSection_bioSheetContainer--displayOn' : 'compagnieSection_bioSheetContainer compagnieSection_bioSheetContainer--displayOff'}>
                 <BioSheet biography={bioAside} closeBioAside={closeBioAside} className='compagnieSection_bioSheetContainer'/>
             </div>
-            <Collapse title="COLLABORATIONS" style='white'>
+            <Collapse title="COLLABORATIONS" style='blue'>
                 <div className='compagnieSection_teamCollapse'>
                     <Equipe 
                         className='compagnieSection_teamCollapse'

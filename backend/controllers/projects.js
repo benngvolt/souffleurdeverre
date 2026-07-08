@@ -17,6 +17,17 @@ function parseJsonField(value, fallback) {
   }
 }
 
+function slugify(text) {
+  return text
+    .toString()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 
 /*------------------------
 ----- GET ALL PROJECTS ---
@@ -37,6 +48,30 @@ exports.getOneProject = (req, res) => {
     .then (project =>res.status(200).json(project))
     .catch (error => res.status (400).json({error}))
 }
+
+/*------------------------
+--- GET PROJECT BY SLUG --
+-------------------------*/
+
+exports.getOneProjectBySlug = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    const projects = await Project.find();
+
+    const project = projects.find((project) => {
+      return slugify(project.title) === slug;
+    });
+
+    if (!project) {
+      return res.status(404).json({ message: 'Projet introuvable' });
+    }
+
+    res.status(200).json(project);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
 
 
 /*--------------------------

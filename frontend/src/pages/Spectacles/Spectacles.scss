@@ -117,13 +117,15 @@
         padding: 0 40px;
         list-style-type: none;
         grid-gap: 3px;
-        width: 70%;
+        width: 100%;
         @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
             grid-template-columns: 1fr 1fr 1fr;
+            width: 90%;
 
         }
         @media only screen and (max-width:$mobileMaxWidth){
             grid-template-columns: 1fr 1fr;
+            width: 100%;
         } 
         
 
@@ -141,9 +143,14 @@
             row-gap: 0px;
             text-decoration: none;
             min-height: 350px;
+         
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                min-height: 300px;
+    
+            }
             @media only screen and (max-width:$mobileMaxWidth){
-                margin-bottom: 15px;
-            } 
+                min-height: 150px;
+            }
             
 
             &:hover {
@@ -160,7 +167,6 @@
                 width: 100%;
                 aspect-ratio: 1/1.25;
                 object-fit: cover;
-                // filter: saturate(0);
             } 
 
             &_mainDatas {
@@ -198,18 +204,21 @@
 
                 &_subtitle {
                     font-family: 'MainFont_light';
-                    font-size: 14px;
+                    font-size: 13px;
                     color: $colorDarkGrey;
                     display: flex;
                     width: 100%;
                     justify-content: center;
                     text-transform: uppercase;
                     text-align: center;
+                 
                     @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                        font-size: 12px;
+                        font-size: 13px;
+                        display: none;
                     }
                     @media only screen and (max-width:$mobileMaxWidth){
                         font-size: 12px;
+                        display: none;
                     } 
                 }
 
@@ -218,30 +227,16 @@
                     color: $colorDarkGrey;
                     font-family: 'MainFont_light';
                     font-style: italic;
+                    font-size: 13px;
+                    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                        font-size: 13px;
+                        
+                    }
+                    @media only screen and (max-width:$mobileMaxWidth){
+                        font-size: 12px;
+                       
+                    } 
                 }
-
-                // &_subtitle {
-                //     font-family: 'MainFont_light';
-                //     font-size: 14px;
-                //     font-weight: bold;
-                //     color: $colorDarkGrey;
-                //     margin:  0 0 10px 0;
-                    
-                // }
-                // &_creationDate {
-                //     font-family: 'MainFont_light';
-                //     font-size: 14px;
-                //     color: $colorDarkGrey;
-                //     margin: 0;
-                    
-                // }
-                // &_state {
-                //     font-family: 'MainFont_light';
-                //     font-style: italic;
-                //     font-size: 14px;
-                //     color: $colorDarkGrey;
-                //     margin: 0;
-                // }
             }
         }
     }

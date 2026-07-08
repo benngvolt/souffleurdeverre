@@ -72,8 +72,10 @@
 
     &_biosList {
        
-        display: flex;
-        flex-direction: row;
+        
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
         justify-content: center;
         margin: 105px 0;
 
@@ -81,17 +83,33 @@
             padding: 0;
             margin: 25px 30px;
             column-gap: 5%;
+            gap: 11px;
         }
         @media only screen and (max-width:$mobileMaxWidth){
+            display: flex;
             flex-direction: column;
             padding: 0;
             margin: 25px 0 0 0;
+            row-gap: 0;
         } 
 
         &_bioItem {
             list-style-type: none;
             padding: 0;
             width: 100%;
+            margin: auto;
+            
+            img {
+                width: 50%;
+                object-fit: cover;
+                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                    width: 100%;
+                }
+                @media only screen and (max-width:$mobileMaxWidth){
+                    width: 100%;
+                    aspect-ratio: 16/9;
+                } 
+            }
         }
 
     }
@@ -113,7 +131,15 @@
         width: 100%;
         margin: auto;
         height: auto;
-        background-color: $colorLightGrey;
+        background-color: $colorTwo;
+        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            padding-top: 22px;
+            padding-bottom: 22px;
+        }
+        @media only screen and (max-width:$mobileMaxWidth){
+            padding-top: 22px;
+            padding-bottom: 22px;
+        } 
 
         &_teamButton {
             margin: 0 auto 98px auto;
@@ -173,9 +199,11 @@
                 @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
                     margin: 0;
                     row-gap: 16px;
+                    grid-template-columns: 1fr 1fr;
                 }
                 @media only screen and (max-width:$mobileMaxWidth){
                     margin: 0;
+                    grid-template-columns: 1fr 1fr;
                 } 
 
                 &_item {

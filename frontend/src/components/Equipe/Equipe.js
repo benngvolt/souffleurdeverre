@@ -19,21 +19,21 @@ function Equipe({className, setBioAside, setDisplayBioAside}) {
     const [selectedBioField, setSelectedBioField] = useState ('artistique');
 
     const { biographies, bioFields } = useContext(Context);
-
+    const nonPermanentTeam = biographies.filter((bio)=> bio.isPermanentTeam === false && bio._id !== '65a7a54629c574d3654f8810')
 
 
     useEffect(() => {
-        const selectedBios = biographies.filter((biography) => biography.field===selectedBioField);
+        const selectedBios = nonPermanentTeam.filter((biography) => biography.field===selectedBioField);
         setSortedBiographies(selectedBios);
-      }, [biographies]);
+      }, [nonPermanentTeam]);
 
     function closeBioAside () {
         setDisplayBioAside(false);
         console.log('coucou')
     }
 
-    function displayBios(biographies, bioField) {
-        const selectedBios = biographies.filter((biography) => biography.field===bioField);
+    function displayBios(nonPermanentTeam, bioField) {
+        const selectedBios = nonPermanentTeam.filter((biography) => biography.field===bioField);
         setSortedBiographies(selectedBios);
         setSelectedBioField (bioField);
     }

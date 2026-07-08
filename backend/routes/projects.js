@@ -34,8 +34,11 @@ router.post('/',
 router.get('/',
     projectsCtrl.getAllProjects);
 
-router.get('/:id',
-    projectsCtrl.getOneProject);
+router.get('/:slug', 
+projectsCtrl.getOneProjectBySlug);
+
+// router.get('/:id', 
+// projectsCtrl.getOneProject);
 
 router.delete ('/:id',
     auth,

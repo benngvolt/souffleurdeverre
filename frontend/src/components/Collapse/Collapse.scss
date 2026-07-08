@@ -12,6 +12,8 @@
         flex-direction: row;
         justify-content: center;
 
+      
+
         &:hover {
 
             cursor: pointer;
@@ -21,6 +23,7 @@
             border: none;
             background-color: $colorDarkGrey;
                 h4 {
+                
                 color: $colorLightGrey;
             }
             svg {
@@ -33,6 +36,20 @@
             background-color: $colorLightGrey;
                 h4 {
                 color: $colorDarkGrey;
+                
+            }
+
+            svg {
+                color: $colorDarkGrey;
+            }
+        }
+
+        &--blue, &--blue--open {
+            border: none;
+            background-color: $colorTwo;
+                h4 {
+                color: $colorDarkGrey;
+                
             }
 
             svg {
@@ -66,8 +83,14 @@
             display: flex;
             margin: auto 0 auto 0;
             font-family: 'SpecialFont_regular';
-            font-size: 30px;
+            font-size: 54px;
             font-weight: 200;
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 45px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 30px;
+            } 
         }
 
         &_icon {

@@ -1,245 +1,21 @@
-// import './BioForm.scss'
-// import { API_URL } from '../../utils/constants'
-// import {useRef, useEffect, useState, useContext } from 'react'
-// import { Context } from '../../utils/Context'
-// import Loader from '../Loader/Loader'
-// import 'trix';
-// import '../../utils/trix.scss'
-// import ErrorText from '../ErrorText/ErrorText'
-
-// function BioForm({biographyEdit, bioFormMode, setHandleDisplayBioForm, handleDisplayBioForm}) {
-
-//     const { bioFields, handleLoadBiographies, loaderDisplay, displayLoader, hideLoader } = useContext(Context);
-
-//     const inputSurnameRef = useRef(null);
-//     const inputNameRef = useRef(null);
-//     const inputRoleRef = useRef(null);
-//     const inputLinkUrlRef = useRef(null);
-//     const inputBioRef = useRef(null);
-//     const inputBioImageFileRef = useRef(null);
-//     const inputFieldRef = useRef(null);
-//     const bioImageSampleRef = useRef (null);
-//     // let content = useRef();
-
-//     // const cleanedBiography = DOMPurify.sanitize(biographyEdit?.biography);
-
-//     const [isImageLoaded, setIsImageLoaded] = useState(false);
-
-//     const [bioSurname, setBioSurname] = useState(bioFormMode === 'edit' ? biographyEdit.surname : '');
-//     const [bioName, setBioName] = useState(bioFormMode === 'edit' ? biographyEdit.name : '');
-//     const [bioRole, setBioRole] = useState(bioFormMode === 'edit' ? biographyEdit.role : '');
-//     const [bioField, setBioField] = useState(bioFormMode === 'edit' ? biographyEdit.field : '');
-//     const [bioLinkUrl, setBioLinkUrl] = useState(bioFormMode === 'edit' ? biographyEdit.linkUrl : '');
-//     const [bioBiography, setBioBiography] = useState(bioFormMode === 'edit' ? biographyEdit.biography : '');
-//     const [displayServerError, setDisplayServerError] = useState(false);
-//     const [displayError, setDisplayError] = useState(false);
-    
-    
-//     // Réinitialisation des valuers input lorsque le formulaire s'ouvre / se ferme.
-//     useEffect(() => {
-//         if (bioFormMode === 'edit') {
-//             setBioSurname(biographyEdit.surname);
-//             setBioName(biographyEdit.name);
-//             setBioRole(biographyEdit.role);
-//             setBioField(biographyEdit.field);
-//             setBioLinkUrl(biographyEdit.linkUrl);
-//             setBioBiography(biographyEdit.biography); // is a Trix.Editor instance
-//         } else {
-//             setBioSurname('');
-//             setBioName('');
-//             setBioRole('');
-//             setBioField('');
-//             setBioLinkUrl('');
-//             setBioBiography('');
-//             clearTrixEditor()
-//         }
-//     }, [bioFormMode, handleDisplayBioForm, bioBiography]);
-
-//     useEffect(() => {
-//         const element = document.getElementById("inputBio");
-//         if (element) {
-//             element.editor.setSelectedRange([0, 0]);
-//             element.editor.loadHTML(bioBiography); 
-//         }
-//     }, [bioBiography, handleDisplayBioForm]);
-
-//     function bioFormSubmit(event) {
-//         event.preventDefault();
-//         const token = window.sessionStorage.getItem('1');
-//         displayLoader();
-//         const bioFormData = new FormData();
-
-//         bioFormData.append('image', inputBioImageFileRef.current.files[0]);
-//         bioFormData.append('surname', inputSurnameRef.current.value);
-//         bioFormData.append('name', inputNameRef.current.value);
-//         bioFormData.append('role', inputRoleRef.current.value);
-//         bioFormData.append('linkUrl', inputLinkUrlRef.current.value);
-//         bioFormData.append('biography', inputBioRef.current.value);
-//         bioFormData.append('field', inputFieldRef.current.value);
-
-//         if (
-//             !inputSurnameRef.current.value ||
-//             !inputNameRef.current.value ||
-//             !inputRoleRef.current.value ||
-//             !inputFieldRef.current.value
-//         ) {
-//             hideLoader();
-//             setDisplayError(true);
-//             return;
-//         } else {
-
-//             if (bioFormMode==='add') {
-//                 fetch(`${API_URL}/api/biographies`, {
-//                     method: "POST",
-//                     headers: {
-//                         // 'Content-Type': 'application/json',
-//                         'Authorization': 'Bearer ' + token,
-//                     },
-//                     body: bioFormData,
-//                     })
-//                     .then((response) => {
-//                         if (response.ok) {
-//                             hideLoader();
-//                             return response;
-//                         } else {
-//                             hideLoader();
-//                             setDisplayServerError(true);
-//                             throw new Error('La requête a échoué');
-//                         }
-//                     })
-//                     .then(()=> {
-//                         closeForm();
-//                     })
-//                     .catch((error) => {
-//                         console.error(error);
-//                         hideLoader();
-//                         setDisplayServerError(true);
-//                     });
-//             } else if (bioFormMode==='edit') {
-//                 fetch(`${API_URL}/api/biographies/${biographyEdit._id}`, {
-//                     method: "PUT",
-//                     headers: {
-//                         // 'Content-Type': 'application/json',
-//                         'Authorization': 'Bearer ' + token,
-//                     },
-//                     body: bioFormData,
-//                     })
-//                     .then((response) => {
-//                         if (response.ok) {
-//                             hideLoader();
-//                             return response;
-//                         } else {
-//                             hideLoader();
-//                             setDisplayServerError(true);
-//                             throw new Error('La requête a échoué');
-//                         }
-//                     })
-//                     .then(()=> {
-//                         closeForm();
-//                     })
-//                     .catch((error) => {
-//                         console.error(error);
-//                         hideLoader();
-//                         setDisplayServerError(true);
-//                     });
-//             }
-//         }
-//     }
-
-
-//     function displaySample() {
-//         if(!inputBioImageFileRef.current.files || inputBioImageFileRef.current.files.length === 0) {
-//             setIsImageLoaded(false);
-//             return
-//         } else {
-//             const file = inputBioImageFileRef.current.files[0]; // récupération du fichier image dans le formulaire
-//             const reader = new FileReader(); // un objet FileReader est créé pour lire le contenu du fichier image sélectionné.
-//             reader.readAsDataURL(file); // lecture du fichier image récupéré comme adresse url
-//             reader.onload = function() { // création des attributs de l'image (src, alt, class)
-//                 bioImageSampleRef.current.setAttribute("src", reader.result);
-//                 bioImageSampleRef.current.setAttribute("alt", "");
-//                 bioImageSampleRef.current.setAttribute("class", "bioForm_sampleContainer_img--displayOn");
-//             }
-//             setIsImageLoaded(true);
-//         }
-//     }
-
-//     function clearTrixEditor() {
-//         const element = document.querySelector("trix-editor");
-//         element.editor.setSelectedRange([0, 0]);
-//         element.editor.loadHTML(''); 
-//     }
-
-//     function closeForm() {
-//         setHandleDisplayBioForm(false);
-//         handleLoadBiographies();
-//         clearTrixEditor();
-//         hideLoader();
-//     }
-
-//     return  (    
-//         <form onSubmit={(event) => bioFormSubmit(event)} method="post" className='bioForm'>
-//             <img id='biography image' src="" alt=''></img>
-//             <div className="bioForm_sampleContainer">
-//                 <img id='imageSample' ref={bioImageSampleRef} src={bioFormMode === 'edit' ? biographyEdit.bioImageUrl : ''} className="bioForm_sampleContainer_img" alt=''/>
-//             </div>
-//             <div className='bioForm_bioImageFile'>
-//                 <label htmlFor='inputBioImageFile'>{isImageLoaded ? 'MODIFIER L\'IMAGE' : '+ AJOUTER UNE IMAGE'}</label>
-//                 <input type='file' id='inputBioImageFile' name="image" ref={inputBioImageFileRef} onChange={displaySample}></input>
-//             </div>
-//             <div className='bioForm_surname'>
-//                 <label htmlFor='inputSurname'>NOM*</label>
-//                 <input type='text' id='inputSurname' ref={inputSurnameRef} value={bioSurname} onChange={(e) =>setBioSurname(e.target.value)}></input>
-//             </div>
-//             <div className='bioForm_name'>
-//                 <label htmlFor='inputName'>PRENOM*</label>
-//                 <input type='text' id='inputName' ref={inputNameRef} value={bioName} onChange={(e) =>setBioName(e.target.value)}></input>
-//             </div>
-//             <div className='bioForm_role'>
-//                 <label htmlFor='inputRole'>ROLE*</label>
-//                 <input type='text' id='inputRole' ref={inputRoleRef} value={bioRole} onChange={(e) =>setBioRole(e.target.value)}></input>
-//             </div>
-//             <div className='bioForm_field'>
-//                 <label htmlFor='inputField'>CHAMPS*</label>
-//                 <select id='inputField' ref={inputFieldRef} name="field" value={bioField} onChange={(e) =>setBioField(e.target.value)}>
-//                     <option value=''></option>
-//                     {bioFields.map((bioField)=>(
-//                         <option value={bioField}>{bioField}</option>
-//                     ))}
-//                 </select>
-//             </div>
-//             <div className='bioForm_linkUrl'>
-//                 <label htmlFor='inputLinkUrl'>LIEN URL</label>
-//                 <input type='text' id='inputLinkUrl' ref={inputLinkUrlRef} value={bioLinkUrl} onChange={(e) =>setBioLinkUrl(e.target.value)}></input>
-//             </div>
-//             <div className='bioForm_bio'>
-//                 <label htmlFor='inputBio'>BIOGRAPHIE</label>
-//                 <input id="trix" type="hidden" name="content" defaultValue={bioBiography} ref={inputBioRef}></input>
-//                 <trix-editor id='inputBio' input="trix"/>
-//             </div>
-//             <ErrorText errorText={"Une erreur s\'est produite"} state={displayServerError}/>
-//             <ErrorText errorText={"Tous les champs marqués d'une * doivent être remplis"} state={displayError}/>
-//             <div className='bioForm_buttons'>
-//                 <button type='submit'>VALIDER</button>
-//                 <button onClick={() => closeForm()}>ANNULER</button>
-//             </div>
-//             <div className={loaderDisplay===true?'homePage_loader--displayOn':'homePage_loader--displayOff'}>
-//                 <Loader className='loader--opaque' loaderDisplay={loaderDisplay}/>
-//             </div>
-//         </form>
-//     )
-// }
-
-// export default BioForm
-
 import './BioForm.scss';
 import { API_URL } from '../../utils/constants';
 import { useRef, useEffect, useState, useContext, useMemo } from 'react';
 import { Context } from '../../utils/Context';
 import Loader from '../Loader/Loader';
+import ErrorText from '../ErrorText/ErrorText';
 import 'trix';
 import '../../utils/trix.scss';
-import ErrorText from '../ErrorText/ErrorText';
+
+const initialFormState = {
+    surname: '',
+    name: '',
+    role: '',
+    field: '',
+    linkUrl: '',
+    biography: '',
+    isPermanentTeam: false,
+};
 
 function BioForm({
     biographyEdit,
@@ -255,23 +31,12 @@ function BioForm({
         hideLoader,
     } = useContext(Context);
 
-    const inputSurnameRef = useRef(null);
-    const inputNameRef = useRef(null);
-    const inputRoleRef = useRef(null);
-    const inputLinkUrlRef = useRef(null);
     const inputBioRef = useRef(null);
     const inputBioImageFileRef = useRef(null);
-    const inputFieldRef = useRef(null);
 
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
+    const [formData, setFormData] = useState(initialFormState);
     const [previewImageUrl, setPreviewImageUrl] = useState('');
-
-    const [bioSurname, setBioSurname] = useState('');
-    const [bioName, setBioName] = useState('');
-    const [bioRole, setBioRole] = useState('');
-    const [bioField, setBioField] = useState('');
-    const [bioLinkUrl, setBioLinkUrl] = useState('');
-    const [bioBiography, setBioBiography] = useState('');
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [displayServerError, setDisplayServerError] = useState(false);
     const [displayError, setDisplayError] = useState(false);
 
@@ -279,72 +44,83 @@ function BioForm({
         return bioFormMode === 'edit' && biographyEdit?._id
             ? `trix-bio-${biographyEdit._id}`
             : 'trix-bio-new';
-    }, [bioFormMode, biographyEdit]);
+    }, [bioFormMode, biographyEdit?._id]);
 
     useEffect(() => {
         if (bioFormMode === 'edit' && biographyEdit) {
-            setBioSurname(biographyEdit.surname || '');
-            setBioName(biographyEdit.name || '');
-            setBioRole(biographyEdit.role || '');
-            setBioField(biographyEdit.field || '');
-            setBioLinkUrl(biographyEdit.linkUrl || '');
-            setBioBiography(biographyEdit.biography || '');
+            setFormData({
+                surname: biographyEdit.surname || '',
+                name: biographyEdit.name || '',
+                role: biographyEdit.role || '',
+                field: biographyEdit.field || '',
+                linkUrl: biographyEdit.linkUrl || '',
+                biography: biographyEdit.biography || '',
+                isPermanentTeam: Boolean(biographyEdit.isPermanentTeam),
+            });
+
             setPreviewImageUrl(biographyEdit.bioImageUrl || '');
-            setIsImageLoaded(false);
-            setDisplayError(false);
-            setDisplayServerError(false);
-
-            if (inputBioImageFileRef.current) {
-                inputBioImageFileRef.current.value = '';
-            }
         } else {
-            setBioSurname('');
-            setBioName('');
-            setBioRole('');
-            setBioField('');
-            setBioLinkUrl('');
-            setBioBiography('');
+            setFormData(initialFormState);
             setPreviewImageUrl('');
-            setIsImageLoaded(false);
-            setDisplayError(false);
-            setDisplayServerError(false);
-
-            if (inputBioImageFileRef.current) {
-                inputBioImageFileRef.current.value = '';
-            }
         }
-    }, [bioFormMode, biographyEdit]);
+
+        setIsImageLoaded(false);
+        setDisplayError(false);
+        setDisplayServerError(false);
+
+        if (inputBioImageFileRef.current) {
+            inputBioImageFileRef.current.value = '';
+        }
+    }, [bioFormMode, biographyEdit, handleDisplayBioForm]);
 
     useEffect(() => {
         const element = document.getElementById('inputBio');
 
-        if (element && element.editor) {
-            element.editor.setSelectedRange([0, 0]);
-            element.editor.loadHTML(bioBiography || '');
-        }
-    }, [bioBiography, trixInputId]);
+        if (!element) return;
 
-    function clearTrixEditor() {
-        const element = document.getElementById('inputBio');
-        if (element && element.editor) {
+        const loadBiographyIntoTrix = () => {
+            if (!element.editor) return;
+
             element.editor.setSelectedRange([0, 0]);
-            element.editor.loadHTML('');
+            element.editor.loadHTML(formData.biography || '');
+        };
+
+        if (element.editor) {
+            loadBiographyIntoTrix();
+        } else {
+            element.addEventListener('trix-initialize', loadBiographyIntoTrix, { once: true });
+        }
+
+        return () => {
+            element.removeEventListener('trix-initialize', loadBiographyIntoTrix);
+        };
+    }, [formData.biography, trixInputId, handleDisplayBioForm]);
+
+    function updateField(field, value) {
+        setFormData((previousData) => ({
+            ...previousData,
+            [field]: value,
+        }));
+    }
+
+    function resetFileInput() {
+        if (inputBioImageFileRef.current) {
+            inputBioImageFileRef.current.value = '';
         }
     }
 
     function displaySample() {
-        const files = inputBioImageFileRef.current?.files;
+        const file = inputBioImageFileRef.current?.files?.[0];
 
-        if (!files || files.length === 0) {
+        if (!file) {
             setIsImageLoaded(false);
             setPreviewImageUrl(bioFormMode === 'edit' ? biographyEdit?.bioImageUrl || '' : '');
             return;
         }
 
-        const file = files[0];
         const reader = new FileReader();
 
-        reader.onload = function () {
+        reader.onload = () => {
             setPreviewImageUrl(reader.result);
             setIsImageLoaded(true);
         };
@@ -357,29 +133,25 @@ function BioForm({
         setDisplayError(false);
         setDisplayServerError(false);
         setIsImageLoaded(false);
+        setPreviewImageUrl('');
+        resetFileInput();
         hideLoader();
 
-        if (inputBioImageFileRef.current) {
-            inputBioImageFileRef.current.value = '';
-        }
-
-        setPreviewImageUrl('');
-        clearTrixEditor();
+        // Important : ne pas vider Trix ici.
+        // Sinon, si on rouvre la même bio, React peut ne pas relancer le remplissage.
     }
 
-    function bioFormSubmit(event) {
+    async function bioFormSubmit(event) {
         event.preventDefault();
-
-        const token = window.sessionStorage.getItem('1');
 
         setDisplayError(false);
         setDisplayServerError(false);
 
         if (
-            !inputSurnameRef.current.value.trim() ||
-            !inputNameRef.current.value.trim() ||
-            !inputRoleRef.current.value.trim() ||
-            !inputFieldRef.current.value.trim()
+            !formData.surname.trim() ||
+            !formData.name.trim() ||
+            !formData.role.trim() ||
+            !formData.field.trim()
         ) {
             setDisplayError(true);
             hideLoader();
@@ -388,19 +160,27 @@ function BioForm({
 
         displayLoader();
 
-        const bioFormData = new FormData();
+        const token = window.sessionStorage.getItem('1');
         const selectedImage = inputBioImageFileRef.current?.files?.[0];
+        const biographyValue = inputBioRef.current?.value;
+
+        const requestFormData = new FormData();
 
         if (selectedImage) {
-            bioFormData.append('image', selectedImage);
+            requestFormData.append('image', selectedImage);
         }
 
-        bioFormData.append('surname', inputSurnameRef.current.value.trim());
-        bioFormData.append('name', inputNameRef.current.value.trim());
-        bioFormData.append('role', inputRoleRef.current.value.trim());
-        bioFormData.append('linkUrl', inputLinkUrlRef.current.value.trim());
-        bioFormData.append('biography', inputBioRef.current?.value || '');
-        bioFormData.append('field', inputFieldRef.current.value.trim());
+        requestFormData.append('surname', formData.surname.trim());
+        requestFormData.append('name', formData.name.trim());
+        requestFormData.append('role', formData.role.trim());
+        requestFormData.append('field', formData.field.trim());
+        requestFormData.append('linkUrl', formData.linkUrl.trim());
+        requestFormData.append('isPermanentTeam', formData.isPermanentTeam ? 'true' : 'false');
+
+        requestFormData.append(
+            'biography',
+            biographyValue || (bioFormMode === 'edit' ? biographyEdit?.biography || '' : '')
+        );
 
         const url =
             bioFormMode === 'add'
@@ -409,34 +189,32 @@ function BioForm({
 
         const method = bioFormMode === 'add' ? 'POST' : 'PUT';
 
-        fetch(url, {
-            method,
-            headers: {
-                Authorization: 'Bearer ' + token,
-            },
-            body: bioFormData,
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('La requête a échoué');
-                }
-                return response.json().catch(() => null);
-            })
-            .then(() => {
-                handleLoadBiographies();
-                closeForm();
-            })
-            .catch((error) => {
-                console.error(error);
-                hideLoader();
-                setDisplayServerError(true);
+        try {
+            const response = await fetch(url, {
+                method,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: requestFormData,
             });
+
+            if (!response.ok) {
+                throw new Error('La requête a échoué');
+            }
+
+            await response.json().catch(() => null);
+
+            handleLoadBiographies();
+            closeForm();
+        } catch (error) {
+            console.error(error);
+            hideLoader();
+            setDisplayServerError(true);
+        }
     }
 
     return (
         <form onSubmit={bioFormSubmit} method='post' className='bioForm'>
-            <img id='biography image' src='' alt='' />
-
             <div className='bioForm_sampleContainer'>
                 <img
                     id='imageSample'
@@ -469,9 +247,8 @@ function BioForm({
                 <input
                     type='text'
                     id='inputSurname'
-                    ref={inputSurnameRef}
-                    value={bioSurname}
-                    onChange={(e) => setBioSurname(e.target.value)}
+                    value={formData.surname}
+                    onChange={(e) => updateField('surname', e.target.value)}
                 />
             </div>
 
@@ -480,9 +257,8 @@ function BioForm({
                 <input
                     type='text'
                     id='inputName'
-                    ref={inputNameRef}
-                    value={bioName}
-                    onChange={(e) => setBioName(e.target.value)}
+                    value={formData.name}
+                    onChange={(e) => updateField('name', e.target.value)}
                 />
             </div>
 
@@ -491,9 +267,8 @@ function BioForm({
                 <input
                     type='text'
                     id='inputRole'
-                    ref={inputRoleRef}
-                    value={bioRole}
-                    onChange={(e) => setBioRole(e.target.value)}
+                    value={formData.role}
+                    onChange={(e) => updateField('role', e.target.value)}
                 />
             </div>
 
@@ -501,10 +276,9 @@ function BioForm({
                 <label htmlFor='inputField'>CHAMPS*</label>
                 <select
                     id='inputField'
-                    ref={inputFieldRef}
                     name='field'
-                    value={bioField}
-                    onChange={(e) => setBioField(e.target.value)}
+                    value={formData.field}
+                    onChange={(e) => updateField('field', e.target.value)}
                 >
                     <option value=''></option>
                     {bioFields.map((bioField) => (
@@ -515,26 +289,42 @@ function BioForm({
                 </select>
             </div>
 
+            <div className='bioForm_permanentTeam'>
+                <label htmlFor='inputPermanentTeam'>
+                    <input
+                        type='checkbox'
+                        id='inputPermanentTeam'
+                        checked={formData.isPermanentTeam}
+                        onChange={(e) => updateField('isPermanentTeam', e.target.checked)}
+                    />
+                    Équipe permanente
+                </label>
+            </div>
+
             <div className='bioForm_linkUrl'>
                 <label htmlFor='inputLinkUrl'>LIEN URL</label>
                 <input
                     type='text'
                     id='inputLinkUrl'
-                    ref={inputLinkUrlRef}
-                    value={bioLinkUrl}
-                    onChange={(e) => setBioLinkUrl(e.target.value)}
+                    value={formData.linkUrl}
+                    onChange={(e) => updateField('linkUrl', e.target.value)}
                 />
             </div>
 
             <div className='bioForm_bio'>
                 <label htmlFor='inputBio'>BIOGRAPHIE</label>
                 <input
+                    key={`hidden-${trixInputId}`}
                     id={trixInputId}
                     type='hidden'
                     name='content'
                     ref={inputBioRef}
                 />
-                <trix-editor id='inputBio' input={trixInputId} />
+                <trix-editor
+                    key={trixInputId}
+                    id='inputBio'
+                    input={trixInputId}
+                />
             </div>
 
             <ErrorText errorText={"Une erreur s'est produite"} state={displayServerError} />
@@ -547,7 +337,7 @@ function BioForm({
                 </button>
             </div>
 
-            <div className={loaderDisplay === true ? 'homePage_loader--displayOn' : 'homePage_loader--displayOff'}>
+            <div className={loaderDisplay ? 'homePage_loader--displayOn' : 'homePage_loader--displayOff'}>
                 <Loader className='loader--opaque' loaderDisplay={loaderDisplay} />
             </div>
         </form>

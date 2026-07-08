@@ -67,6 +67,17 @@ function Spectacles() {
     setChronologicalSortedProjects(sorted);
   }, [sortedProjects]);
 
+  function slugify(text) {
+    return text
+      .toString()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
   function handleFilterProjectState(state) {
     const newSortedProjectsByState = displayedProjects.filter((project) => (project.projectState === state));
     setSortedProjectsByState(newSortedProjectsByState);
@@ -212,7 +223,7 @@ function Spectacles() {
               exit="exit"
               layout
             >
-              <Link to={`/spectacles/${project._id}`}>
+              <Link to={`/spectacles/${slugify(project.title)}`}>
                 <img
                   src={project.images[project.mainImageIndex]?.imageUrl}
                   alt={project.title}

@@ -14,6 +14,7 @@ import ParallaxImage from '../../components/ParallaxImage/ParallaxImage'
 import { motion, useReducedMotion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faVideo, faMusic, faGlobe, faFilePdf, faXmark, faFileZipper } from '@fortawesome/free-solid-svg-icons'
+import { Helmet } from 'react-helmet-async';
 
 function OneSpectacle() {
   // ⚠️ objet, pas tableau (sinon plein de checks bizarres)
@@ -23,7 +24,7 @@ function OneSpectacle() {
   const [proPasswordInput, setProPasswordInput] = useState('')
   const [proPasswordError, setProPasswordError] = useState(false)
 
-  const { id } = useParams()
+  const { slug } = useParams()
   const { productionFunctions, residencyTypes, isAuthenticated } = useContext(Context)
   const reduceMotion = useReducedMotion()
 
@@ -40,6 +41,8 @@ function OneSpectacle() {
       setProPasswordError(true)
     }
   }
+
+  
 
   // Variants
   const fadeUp = useMemo(
@@ -68,7 +71,10 @@ function OneSpectacle() {
 
   const viewportOnce = { once: true, margin: '0px 0px -10% 0px' }
 
-  const dataKey = useMemo(() => project?._id || project?.title || `loading-${id}`, [project?._id, project?.title, id])
+  const dataKey = useMemo(
+    () => project?._id || project?.title || `loading-${slug}`,
+    [project?._id, project?.title, slug]
+  )
 
   const cleanedDescription = useMemo(
     () => DOMPurify.sanitize(project?.description || ''),
@@ -87,11 +93,11 @@ function OneSpectacle() {
   }, [project?.linksList])
 
   useEffect(() => {
-    fetch(`${API_URL}/api/projects/${id}`)
+    fetch(`${API_URL}/api/projects/${slug}`)
       .then((res) => res.json())
       .then((data) => setProject(data))
       .catch((error) => console.log(error.message))
-  }, [id])
+  }, [slug])
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -124,6 +130,47 @@ function OneSpectacle() {
 
   return (
     <section className='oneSpectacle'>
+      <Helmet>
+        <title>{project.title} | Compagnie Le Souffleur de Verre</title>
+
+        <meta
+          name="description"
+          content={
+            project.subtitle ||
+            'Spectacle de la Compagnie Le Souffleur de Verre.'
+          }
+        />
+
+        <link
+          rel="canonical"
+          href={`https://souffleurdeverre.fr/spectacles/${slug}`}
+        />
+
+        <meta
+          property="og:title"
+          content={`${project.title} | Compagnie Le Souffleur de Verre`}
+        />
+
+        <meta
+          property="og:description"
+          content={
+            project.subtitle ||
+            'Spectacle de la Compagnie Le Souffleur de Verre.'
+          }
+        />
+
+        <meta
+          property="og:url"
+          content={`https://souffleurdeverre.fr/spectacles/${slug}`}
+        />
+
+        {project.images?.[project.mainImageIndex]?.imageUrl && (
+          <meta
+            property="og:image"
+            content={project.images[project.mainImageIndex].imageUrl}
+          />
+        )}
+      </Helmet>
       {canSee && (
         <div>
           {/* Titre + métadonnées */}

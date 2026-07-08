@@ -49,21 +49,21 @@ function Mediations() {
         }
     }
 
-    function handleFilterProjectType (type) {
-        const newSortedProjectsByType = displayedProjects.filter((project)=> (project.projectType === type));
-        setSortedProjectsByType (newSortedProjectsByType);
-        setDisplayTypeFilter (type)
-    }
-
-    function displayAllProjectsStates () {
-        setSortedProjectsByState (displayedProjects);
-        setDisplayStateFilter ("tous");
-    }
-
     function displayAllProjectsTypes () {
         setSortedProjectsByType (displayedProjects);
         setDisplayTypeFilter ("tous");
     }
+
+    function slugify(text) {
+        return text
+          .toString()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      }
 
 
     return  (      
@@ -73,17 +73,30 @@ function Mediations() {
             <p className='spectacles_filtersHandler_errorText'>...</p>
             }
             <ul className='spectacles_projectsList' >
-                {chronologicalSortedProjects?.map((project) => (
-                    <li>
-                        <Link to={`/spectacles/${project._id}`} className='spectacles_projectsList_projectItem'>
-                            <img src={project.images[project.mainImageIndex]?.imageUrl} alt={project.title} className='spectacles_projectsList_projectItem_img' />
-                            <div className='spectacles_projectsList_projectItem_mainDatas'>
-                                <h3 className='spectacles_projectsList_projectItem_mainDatas_title'>{project.title}</h3>
-                                <p className='spectacles_projectsList_projectItem_mainDatas_subtitle'>{project.subtitle ? project.subtitle : ''}</p>
-                                <p className='spectacles_projectsList_projectItem_mainDatas_date'>{project.creationDate ? `${project.creationDate.split('-')[0]}` : ''}</p>
-                            </div>
-                        </Link>
-                    </li>
+            {chronologicalSortedProjects?.map((project) => (
+                <li key={project._id}>
+                    <Link
+                    to={`/spectacles/${slugify(project.title)}`}
+                    className='spectacles_projectsList_projectItem'
+                    >
+                    <img
+                        src={project.images[project.mainImageIndex]?.imageUrl}
+                        alt={project.title}
+                        className='spectacles_projectsList_projectItem_img'
+                    />
+                    <div className='spectacles_projectsList_projectItem_mainDatas'>
+                        <h3 className='spectacles_projectsList_projectItem_mainDatas_title'>
+                        {project.title}
+                        </h3>
+                        <p className='spectacles_projectsList_projectItem_mainDatas_subtitle'>
+                        {project.subtitle ? project.subtitle : ''}
+                        </p>
+                        <p className='spectacles_projectsList_projectItem_mainDatas_date'>
+                        {project.creationDate ? `${project.creationDate.split('-')[0]}` : ''}
+                        </p>
+                    </div>
+                    </Link>
+                </li>
                 ))}
             </ul>
             
