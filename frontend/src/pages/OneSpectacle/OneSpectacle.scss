@@ -440,9 +440,11 @@
                             @media only screen and (max-width:$mobileMaxWidth){
                                 width: auto;
                             } 
-                            &:hover {
-                                font-weight: bold;
-                                cursor: pointer;
+                            @media (hover: hover) and (pointer: fine) {
+                                &:hover {
+                                    font-weight: bold;
+                                    cursor: pointer;
+                                }
                             }
                         }
                     }
