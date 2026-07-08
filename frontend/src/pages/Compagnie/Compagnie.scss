@@ -120,6 +120,7 @@
 
     &_bioSheetContainer--displayOn {
         display: flex;
+        z-index: 100!important;
     }
 
     &_teamCollapse {

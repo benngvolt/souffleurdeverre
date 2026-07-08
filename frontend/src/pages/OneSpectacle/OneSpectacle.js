@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import { Context } from '../../utils/Context'
 import IsALink from '../../components/IsALink/IsALink'
 import DOMPurify from 'dompurify'
+import BioSheet from '../../components/BioSheet/BioSheet'
 import FullPeriodDate from '../../components/FullPeriodDate/FullPeriodDate'
 import FullPonctualDates from '../../components/FullPonctualDates/FullPonctualDates'
 import FullUniqueDate from '../../components/FullUniqueDate/FullUniqueDate'
@@ -24,8 +25,11 @@ function OneSpectacle() {
   const [proPasswordInput, setProPasswordInput] = useState('')
   const [proPasswordError, setProPasswordError] = useState(false)
 
+  const [displayBioAside, setDisplayBioAside] = useState(false);
+  const [bioAside, setBioAside] = useState([]);
+
   const { slug } = useParams()
-  const { productionFunctions, residencyTypes, isAuthenticated } = useContext(Context)
+  const { productionFunctions, residencyTypes, isAuthenticated, biographies } = useContext(Context)
   const reduceMotion = useReducedMotion()
 
   // Gestion accès espace pro
@@ -42,7 +46,14 @@ function OneSpectacle() {
     }
   }
 
-  
+  function openBioAside (bio) {
+    setBioAside (bio);
+    setDisplayBioAside(true);
+  }
+  function closeBioAside () {
+    setDisplayBioAside(false);
+    console.log('coucou')
+  }
 
   // Variants
   const fadeUp = useMemo(
@@ -60,6 +71,30 @@ function OneSpectacle() {
     }),
     []
   )
+
+  const normalizeName = (str = '') => {
+    return str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .toLowerCase()
+  }
+  
+  const splitArtistNames = (str = '') => {
+    return str
+      .replace(/\s+(?:et|&)\s+/gi, ',')
+      .split(/\s*,\s*/)
+      .map((name) => name.trim())
+      .filter(Boolean)
+  }
+  
+  const findMatchingBiography = (artistName) => {
+    return biographies?.find(
+      (biography) =>
+        normalizeName(`${biography.name}${biography.surname}`) ===
+        normalizeName(artistName)
+    )
+  }
 
   const item = useMemo(
     () => ({
@@ -288,7 +323,6 @@ function OneSpectacle() {
                     </div>
                   </div>
                 )}
-
               </motion.div>
             )}
 
@@ -315,19 +349,55 @@ function OneSpectacle() {
                 whileInView='visible'
                 viewport={viewportOnce}
               >
-                <motion.ul className='oneSpectacle_mainDatas_teamList_artistsList' variants={container}>
-                  {project.artistsList.map((artist) => (
-                    <motion.li
-                      key={artist._id}
-                      className='oneSpectacle_mainDatas_teamList_artistsList_item'
-                      variants={item}
-                    >
-                      <p className='oneSpectacle_mainDatas_teamList_artistsList_item_function'>{artist.artistFunction}</p>
-                      <p className='oneSpectacle_mainDatas_teamList_artistsList_item_names'>{artist.artistName}</p>
-                    </motion.li>
-                  ))}
+                <motion.ul 
+                  className='oneSpectacle_mainDatas_teamList_artistsList' 
+                  variants={container}
+                >
+                  {project.artistsList.map((artist) => {
+                    const artistNames = splitArtistNames(artist.artistName)
+
+                    return (
+                      <motion.li
+                        key={artist._id}
+                        className='oneSpectacle_mainDatas_teamList_artistsList_item'
+                        variants={item}
+                      >
+                        <p className='oneSpectacle_mainDatas_teamList_artistsList_item_function'>
+                          {artist.artistFunction}
+                        </p>
+
+                        <p className='oneSpectacle_mainDatas_teamList_artistsList_item_names'>
+                          {artistNames.map((artistName, index) => {
+                            const matchingBiography = findMatchingBiography(artistName)
+                            const separator = index < artistNames.length - 1 ? ', ' : ''
+
+                            return (
+                              <React.Fragment key={`${artist._id}-${artistName}`}>
+                                {matchingBiography ? (
+                                  <button
+                                    type='button'
+                                    className='oneSpectacle_mainDatas_teamList_artistsList_item_names_button'
+                                    onClick={() => openBioAside(matchingBiography)}
+                                  >
+                                    {artistName}
+                                  </button>
+                                ) : (
+                                  <span>{artistName}</span>
+                                )}
+                                {separator}
+                              </React.Fragment>
+                            )
+                          })}
+                        </p>
+                      </motion.li>
+                    )
+                  })}
                 </motion.ul>
+                <div className={displayBioAside=== true ? 'compagnieSection_bioSheetContainer compagnieSection_bioSheetContainer--displayOn' : 'compagnieSection_bioSheetContainer compagnieSection_bioSheetContainer--displayOff'}>
+                  <BioSheet biography={bioAside} closeBioAside={closeBioAside} className='compagnieSection_bioSheetContainer'/>
+              </div>
               </motion.div>
+              
             )}
 
             {/* Paragraphes (animés) */}

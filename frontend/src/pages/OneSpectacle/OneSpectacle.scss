@@ -423,7 +423,27 @@
                         @media only screen and (max-width:$mobileMaxWidth){
                             width: 50%;
                         } 
+
+                        &_button {
+                            background:none;
+                            border: none;
+                            font-style: italic;
+                            @include LightType;
+                            text-align: start;
+                            margin: 0;
+                            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                                width: 50%;
+                            }
+                            @media only screen and (max-width:$mobileMaxWidth){
+                                width: 50%;
+                            } 
+                            &:hover {
+                                font-weight: bold;
+                                cursor: pointer;
+                            }
+                        }
                     }
+                    
                 }
             }
         }
