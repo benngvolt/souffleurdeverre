@@ -425,17 +425,20 @@
                         } 
 
                         &_button {
+                            
                             background:none;
                             border: none;
+                            color: $colorDarkGrey;
                             font-style: italic;
                             @include LightType;
                             text-align: start;
                             margin: 0;
+                            padding: 0;
                             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                                width: 50%;
+                                width: auto;
                             }
                             @media only screen and (max-width:$mobileMaxWidth){
-                                width: 50%;
+                                width: auto;
                             } 
                             &:hover {
                                 font-weight: bold;
