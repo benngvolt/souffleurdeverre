@@ -101,7 +101,7 @@
         &_icon {
             height: 2em;
             
-            &:hover {
+            @include hoverable {
                 cursor: pointer;
             }
         }

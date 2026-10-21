@@ -1,7 +1,30 @@
 @import '../../utils/mixins';
 
+// Style du bouton ESPACE PRO, réutilisé par le(s) dossier(s) téléchargeable(s) placé(s) juste dessous
+@mixin ProSpaceButton {
+    font-family: 'MainFont_light';
+    font-size: 16px;
+    background-color: $colorTwo;
+    border: none;
+    padding: 4px 8px;
+    color: black;
+    text-decoration: none;
+
+    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+        font-size: 15px;
+    }
+    @media only screen and (max-width:$mobileMaxWidth){
+        font-size: 14px;
+    }
+    @include hoverable {
+        cursor: pointer;
+        background-color: $colorFive;
+    }
+}
+
 .oneSpectacle {
     animation: pageAppearing 2s ease forwards;
+    @include HeaderOffset;
 
     &_invisible {
         display: flex;
@@ -10,6 +33,18 @@
         font-family: 'MainFont_light';
         width: 100%;
         margin: 180px auto;
+    }
+
+    &_logos {
+        @include SidePaddings;
+        margin: 98px auto 0 auto;
+
+        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            margin: 60px auto 0 auto;
+        }
+        @media only screen and (max-width:$mobileMaxWidth){
+            margin: 45px auto 0 auto;
+        }
     }
 
     &_mainDatas {
@@ -105,25 +140,23 @@
             }
         }
 
+        &_pdfs {
+            @include SidePaddings;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            row-gap: 8px;
+            margin-top: 8px;
+
+            &_button {
+                @include ProSpaceButton;
+            }
+        }
+
         &_proSpace {
             @include SidePaddings;
             &_button {
-                font-family: 'MainFont_light';
-                font-size: 16px;
-                background-color: $colorTwo;
-                border: none;
-                padding: 4px 8px;
-            
-                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                    font-size: 15px;
-                }
-                @media only screen and (max-width:$mobileMaxWidth){
-                    font-size: 14px;
-                }
-                &:hover {
-                    cursor: pointer;
-                    background-color: $colorFive;
-                }
+                @include ProSpaceButton;
             }
 
             &_modal {
@@ -205,33 +238,63 @@
                                 } 
                             }
 
-                            a {
+                            &_documents {
                                 display: flex;
                                 flex-direction: column;
-                                justify-content: center;
-                                row-gap: 22px;
-                                background-color: $colorSix;
-                                color: white;
-                                padding: 22px;
-                                font-family: 'MainFont_light';
-                                font-size: 18px;
-                                font-weight: bold;
-                                @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
-                                    font-size: 16px;
-                                    padding: 12px;
-                                }
+                                row-gap: 8px;
+                                margin: 0;
+                                padding: 0 22px 0 0;
+                                list-style: none;
+                                max-height: 45vh;
+                                overflow-y: auto;
                                 @media only screen and (max-width:$mobileMaxWidth){
-                                    font-size: 15px;
-                                    padding: 6px;
-                                    width: 110px;
-                                } 
-
-                                svg {
-                                    height: 50px;
+                                    padding-right: 8px;
+                                    row-gap: 6px;
                                 }
 
-                                &:hover {
-                                    background-color: $colorFive;
+                                a {
+                                    display: flex;
+                                    flex-direction: row;
+                                    align-items: center;
+                                    column-gap: 12px;
+                                    background-color: $colorSix;
+                                    color: white;
+                                    padding: 12px 16px;
+                                    font-family: 'MainFont_light';
+                                    font-size: 16px;
+                                    font-weight: bold;
+                                    text-decoration: none;
+                                    @media only screen and (max-width:$mobileMaxWidth){
+                                        font-size: 13px;
+                                        padding: 8px 10px;
+                                        column-gap: 8px;
+                                    }
+
+                                    svg {
+                                        flex-shrink: 0;
+                                        height: 22px;
+                                    }
+
+                                    @include hoverable {
+                                        background-color: $colorFive;
+                                    }
+                                }
+
+                                &_name {
+                                    flex: 1;
+                                    min-width: 0;
+                                    overflow-wrap: break-word;
+                                }
+
+                                &_size {
+                                    flex-shrink: 0;
+                                    font-size: 13px;
+                                    font-weight: normal;
+                                    opacity: 0.85;
+                                    // Sur petit écran, la place est réservée au nom du document
+                                    @media only screen and (max-width:$mobileMaxWidth){
+                                        display: none;
+                                    }
                                 }
                             }
                         }
@@ -246,7 +309,7 @@
                         top: 20px;
                         right: 20px;
                         font-size: 25px;
-                        &:hover {
+                        @include hoverable {
                             cursor: pointer;
                         }
                         
@@ -292,7 +355,7 @@
                             @media only screen and (max-width:$mobileMaxWidth){
                                 font-size: 16px;
                             } 
-                            &:hover {
+                            @include hoverable {
                                 background-color: $colorFive;
                                 cursor: pointer;
                             }
@@ -523,7 +586,7 @@
 
                 &_link {
                     
-                    &:hover {
+                    @include hoverable {
                         background-color: $colorSix;
                         color: $colorLightGrey;
                         cursor: pointer;
@@ -547,7 +610,7 @@
                 };
                 &_pdf {
                     background-color: $colorTwo;
-                    &:hover {
+                    @include hoverable {
                         background-color: $colorFour;
                         color: $colorLightGrey;
                         cursor: pointer;
@@ -754,7 +817,7 @@
                                     text-decoration: none;
                                     color: $colorDarkGrey;
                                     margin: 0;
-                                    &:hover {
+                                    @include hoverable {
                                         color: $colorTwo;
                                         cursor: pointer;
                                     }

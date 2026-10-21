@@ -3,6 +3,7 @@
 .editSection {
     animation: pageAppearing 2s ease forwards;
     background-color:rgb(131, 255, 214) ;
+    @include HeaderOffset;
     &_specialImg {
         width: 60%;
         margin: 0 auto;
@@ -39,10 +40,97 @@
         margin: 120px auto;
         text-align: center;
     }
-    &_mainContainer {
+    &_dashboard {
         z-index: 10;
         display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+
+        @media only screen and (max-width: $padMaxWidth) {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+
+    &_sidebar {
+        display: flex;
         flex-direction: column;
+        flex-shrink: 0;
+        width: 160px;
+        margin: 0 0 30px 50px;
+        row-gap: 4px;
+        padding: 15px;
+        border-radius: 6px;
+        background-color: $colorLightGrey;
+        position: sticky;
+        top: 20px;
+        box-sizing: border-box;
+
+        @media only screen and (max-width: $padMaxWidth) {
+            position: static;
+            flex-direction: row;
+            width: auto;
+            margin: 0 20px 20px 20px;
+            column-gap: 4px;
+            row-gap: 0;
+        }
+
+        &_item {
+            border: none;
+            background: none;
+            border-radius: 4px;
+            padding: 12px 8px;
+            text-align: left;
+            font-family: 'MainFont_light';
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 0.3px;
+            color: $colorMediumGrey;
+            transition: background-color 0.15s ease, color 0.15s ease;
+
+            @include hoverable {
+                cursor: pointer;
+                color: $colorDarkGrey;
+                background-color: rgba(255, 255, 255, 0.6);
+            }
+
+            &--active {
+                color: $colorDarkGrey;
+                border-left: 3px solid $colorSix;
+                background-color: rgba(255, 255, 255, 0.9);
+
+                @include hoverable {
+                    background-color: rgba(255, 255, 255, 0.9);
+                }
+            }
+
+            @media only screen and (max-width: $padMaxWidth) {
+                flex: 1;
+                min-width: 0;
+                text-align: center;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+                overflow-wrap: break-word;
+                hyphens: auto;
+
+                &--active {
+                    border-left: none;
+                    border-bottom: 3px solid $colorSix;
+                }
+            }
+
+            @media only screen and (max-width: $mobileMaxWidth) {
+                font-size: 11px;
+                letter-spacing: 0;
+                padding: 10px 2px;
+            }
+        }
+    }
+
+    &_content {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
 
         &_newsletter {
 
@@ -50,7 +138,7 @@
                 font-family: 'MainFont_light';
                 font-size: 17px;
             }
-            
+
             &_projectsList {
                 display: grid;
                 grid-template-rows: repeat(8, auto);
@@ -64,7 +152,7 @@
 
                 li {
                     list-style: none;
-                    
+
                 }
 
                 label {
@@ -82,38 +170,111 @@
                         accent-color: black;
                     }
                 }
+
+                @media only screen and (max-width: $padMaxWidth) {
+                    grid-template-rows: none;
+                    grid-auto-flow: row;
+                    grid-template-columns: 1fr 1fr;
+                }
+
+                @media only screen and (max-width: $mobileMaxWidth) {
+                    grid-template-columns: 1fr;
+                }
             }
         }
 
-        &_bios, &_projects, &_newsletter {
+        &_logos {
+            &_tuto, &_empty {
+                font-family: 'MainFont_light';
+                font-size: 17px;
+                margin: 0 0 10px 0;
+
+                @media only screen and (max-width: $mobileMaxWidth) {
+                    font-size: 14px;
+                }
+            }
+
+            &_empty {
+                font-style: italic;
+            }
+
+            &_logosList_item_badge {
+                margin-left: 12px;
+                font-family: 'MainFont_light';
+                font-size: 13px;
+                font-style: italic;
+                font-weight: bold;
+                color: $colorSix;
+                text-transform: none;
+                white-space: nowrap;
+            }
+
+            &_logosList_item_info {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                column-gap: 16px;
+                min-width: 0;
+
+                &_image {
+                    flex-shrink: 0;
+                    width: 90px;
+                    height: 50px;
+                    object-fit: contain;
+                    padding: 4px;
+                    box-sizing: border-box;
+                    background-color: $colorLightGrey;
+
+                    @media only screen and (max-width: $mobileMaxWidth) {
+                        width: 64px;
+                        height: 40px;
+                    }
+                }
+            }
+        }
+
+        &_bios, &_projects, &_logos, &_newsletter {
 
             margin: 50px;
 
-            &_title {
-                font-family: 'MainFont_light';
-                font-size: 35px;
-                margin: 45px 0;
+            @media only screen and (max-width: $padMaxWidth) {
+                margin: 20px;
             }
 
-            &_biosList, &_projectsList {
+            &_title {
+                font-family: 'MainFont_light';
+                font-weight: bold;
+                font-size: 35px;
+                margin: 45px 0 20px 0;
+
+                @media only screen and (max-width: $mobileMaxWidth) {
+                    font-size: 26px;
+                    margin: 20px 0 15px 0;
+                }
+            }
+
+            &_biosList, &_projectsList, &_logosList {
                 padding: 0;
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-                
+                margin: 30px 0 0 0;
+                display: flex;
+                flex-direction: column;
+                list-style: none;
+
                 &_item {
-                    height: 90px;
-                    display: flex;
-                    flex-direction: column;
-                    // row-gap: 5px;
-                    margin-bottom: 20px;
+                    display: grid;
+                    grid-template-columns: 420px auto;
+                    align-items: center;
+                    column-gap: 16px;
+                    padding: 14px 0;
+                    border-bottom: 1px solid rgba(35, 35, 35, 0.15);
 
                     &_name {
                         font-family: 'SpecialFont_regular';
                         font-size: 30px;
                         background: none;
                         border: none;
-                        // margin: 16px 0;
                         text-transform: uppercase;
+                        overflow-wrap: anywhere;
 
                         &--visible {
                             color: $colorDarkGrey;
@@ -123,7 +284,7 @@
                             color: $colorOne;
                             font-style: italic;
                         }
-                        
+
                     }
                     &_unpublished {
                         color: $colorOne;
@@ -137,31 +298,51 @@
                     &_buttons {
                         display: flex;
                         flex-direction: row;
-                        column-gap: 15px;
+                        flex-shrink: 0;
+                        column-gap: 10px;
                         justify-content: flex-start;
                         z-index: 10;
-                        margin: 10px 0;
-                        
+
                         button {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 34px;
+                            height: 34px;
                             margin: 0;
                             border: none;
+                            border-radius: 4px;
                             background: none;
                             padding: 0;
-                            &:hover {
+                            color: $colorDarkGrey;
+                            font-size: 16px;
+                            @include hoverable {
                                 cursor: pointer;
                                 color: $colorSix;
+                                background-color: rgba(0, 0, 0, 0.05);
                             }
-                        }             
+                        }
 
                     }
 
-                       
+                    @media only screen and (max-width: $padMaxWidth) {
+                        grid-template-columns: minmax(0, 1fr) auto;
+                    }
+
+                    @media only screen and (max-width: $mobileMaxWidth) {
+                        grid-template-columns: minmax(0, 1fr) auto;
+
+                        &_name {
+                            font-size: 22px;
+                        }
+                    }
+
                 }
 
             }
             &_addButton {
-                width: 100%;
-                margin: 40px auto;
+                width: auto;
+                margin: 0 0 30px 0;
                 @include Button2;
                 z-index: 10;
             }
@@ -169,7 +350,7 @@
 
     }
 
-    
+
 
     &_forms, &_newsletter {
         

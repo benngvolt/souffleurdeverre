@@ -9,6 +9,8 @@ import instagramLogo from '../../assets/instagram_black.png'
 import ContactModal from '../../components/ContactModal/ContactModal'
 import Loader from '../../components/Loader/Loader'
 import logoSouffleur from '../../assets/logoSouffleur.svg'
+import { useDocumentMeta } from '../../utils/useDocumentMeta'
+import { SITE_URL } from '../../utils/constants'
 
 function Home() {
     const {
@@ -17,6 +19,14 @@ function Home() {
     } = useContext(Context)
 
     const [displayContactModal, setdisplayContactModal] = useState(false)
+
+    useDocumentMeta({
+        title: 'Compagnie Le Souffleur de Verre',
+        description: 'Compagnie de théâtre Le Souffleur de Verre : spectacles, actualités et médiations.',
+        canonical: SITE_URL,
+        ogTitle: 'Compagnie Le Souffleur de Verre',
+        ogUrl: SITE_URL,
+    })
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -276,6 +286,7 @@ function Home() {
                                         src={projectImage}
                                         alt={project.title}
                                         className='home_touring_card_image'
+                                        loading='lazy'
                                     />
                                 )}
 
@@ -317,6 +328,7 @@ function Home() {
                                         src={projectImage}
                                         alt={project.title}
                                         className='home_residencies_card_image'
+                                        loading='lazy'
                                     />
                                 )}
 

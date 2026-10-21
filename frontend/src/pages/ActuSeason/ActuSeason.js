@@ -2,6 +2,8 @@ import './ActuSeason.scss';
 import React, { useContext, useMemo } from 'react';
 import { Context } from '../../utils/Context';
 import EventCard from '../../components/EventCard/EventCard';
+import { useDocumentMeta } from '../../utils/useDocumentMeta';
+import { SITE_URL } from '../../utils/constants';
 
 function ActuSeason() {
   const months = [
@@ -10,6 +12,14 @@ function ActuSeason() {
   ];
 
   const { seasonBuckets } = useContext(Context);
+
+  useDocumentMeta({
+    title: 'Calendrier | Compagnie Le Souffleur de Verre',
+    description: 'Le calendrier des dates de tournée et de résidence de la Compagnie Le Souffleur de Verre.',
+    canonical: `${SITE_URL}/actualite`,
+    ogTitle: 'Calendrier | Compagnie Le Souffleur de Verre',
+    ogUrl: `${SITE_URL}/actualite`,
+  })
 
   const googleEventCalendarUrlMount = (eventData) => {
     const eventDate = eventData.startDate;
@@ -82,10 +92,13 @@ function ActuSeason() {
       const upcomingEvents = [];
 
       (season.events || []).forEach((event) => {
-        const eventDate = new Date(event.startDate);
-        eventDate.setHours(0, 0, 0, 0);
+        // On se base sur la date de FIN : un événement encore en cours
+        // (démarré avant aujourd'hui mais pas terminé) doit rester visible,
+        // pas basculer dans "Dates passées".
+        const eventEndDate = new Date(event.endDate);
+        eventEndDate.setHours(0, 0, 0, 0);
 
-        if (eventDate < today) {
+        if (eventEndDate < today) {
           pastEvents.push(event);
         } else {
           upcomingEvents.push(event);
@@ -143,10 +156,6 @@ function ActuSeason() {
               {season.label}
             </p>
 
-            {season.groupedByMonth.map((monthBlock) =>
-              renderMonthBlock(season, monthBlock)
-            )}
-
             {season.pastGroupedByMonth.length > 0 && (
               <details className='actualite_container_yearContainer_pastDates'>
                 <summary className='actualite_container_yearContainer_pastDates_summary'>
@@ -157,6 +166,10 @@ function ActuSeason() {
                   renderMonthBlock(season, monthBlock, true)
                 )}
               </details>
+            )}
+
+            {season.groupedByMonth.map((monthBlock) =>
+              renderMonthBlock(season, monthBlock)
             )}
 
             {season.groupedByMonth.length === 0 &&

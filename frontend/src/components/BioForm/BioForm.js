@@ -1,5 +1,5 @@
 import './BioForm.scss';
-import { API_URL } from '../../utils/constants';
+import { apiFetch } from '../../utils/api';
 import { useRef, useEffect, useState, useContext, useMemo } from 'react';
 import { Context } from '../../utils/Context';
 import Loader from '../Loader/Loader';
@@ -160,7 +160,6 @@ function BioForm({
 
         displayLoader();
 
-        const token = window.sessionStorage.getItem('1');
         const selectedImage = inputBioImageFileRef.current?.files?.[0];
         const biographyValue = inputBioRef.current?.value;
 
@@ -184,25 +183,13 @@ function BioForm({
 
         const url =
             bioFormMode === 'add'
-                ? `${API_URL}/api/biographies`
-                : `${API_URL}/api/biographies/${biographyEdit._id}`;
+                ? '/api/biographies'
+                : `/api/biographies/${biographyEdit._id}`;
 
         const method = bioFormMode === 'add' ? 'POST' : 'PUT';
 
         try {
-            const response = await fetch(url, {
-                method,
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                body: requestFormData,
-            });
-
-            if (!response.ok) {
-                throw new Error('La requête a échoué');
-            }
-
-            await response.json().catch(() => null);
+            await apiFetch(url, { method, auth: true, body: requestFormData });
 
             handleLoadBiographies();
             closeForm();

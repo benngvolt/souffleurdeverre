@@ -5,6 +5,7 @@
 }
 
 .spectacles {
+    @include HeaderOffset;
 
     &_filtersHandler {
         
@@ -65,7 +66,7 @@
                     @include FilterButton;
                     text-align: right;
                     width: 100%;
-                    &:hover {
+                    @include hoverable {
                         cursor: pointer;
                         background-color: $colorTwo;
                         color: $colorDarkGrey;  
@@ -91,7 +92,7 @@
                     @include FilterButton;
                     text-align: left;
                     width: 100%;
-                    &:hover {
+                    @include hoverable {
                         cursor: pointer;
                         background-color: $colorTwo;
                         color: $colorDarkGrey;  
@@ -153,7 +154,7 @@
             }
             
 
-            &:hover {
+            @include hoverable {
                 cursor: pointer;
                 background-color: $colorTwo;
                 

@@ -3,42 +3,29 @@ const projectsCtrl = require ('../controllers/projects');
 const router = express.Router();
 const auth = require('../middlewares/auth');
 const multer = require('../middlewares/multer-config');
-// const auth = require('../middlewares/auth');
 const uploadImages = require('../middlewares/uploadImages').uploadImages;
 const uploadPdfs = require('../middlewares/uploadImages').uploadPdfs;
-const uploadZip = require('../middlewares/uploadImages').uploadZip;
+const uploadProDocuments = require('../middlewares/uploadImages').uploadProDocuments;
 const deleteProjectFiles = require('../middlewares/deleteImages').deleteProjectFiles;
-
-// const uploadImage = require('../middlewares/uploadImages').uploadImage;
-
-// Cette partie du code définit un  **** MIDDLEWARE **** pour notre application Express. 
-// Un middleware est une fonction qui peut être utilisée pour effectuer des actions sur une requête avant qu'elle n'atteigne sa route finale.
-// Dans ce cas, le middleware est défini à l'aide de app.use(), qui indique à Express d'utiliser ce middleware pour toutes les requêtes entrantes. 
-// Le middleware prend deux arguments, req (pour la requête) et res (pour la réponse). 
-// Dans cet exemple, il envoie une réponse JSON contenant le message "Votre requête a bien été reçue !" à chaque requête entrante.
-// l'argument next permet de passer au middleware suivant
 
 router.post('/',
   auth,
   multer.fields([
     { name: 'images' },
     { name: 'pdfFiles' },
-    { name: 'zipFile' },
+    { name: 'proDocuments' },
   ]),
   uploadImages,
   uploadPdfs,
-  uploadZip,
+  uploadProDocuments,
   projectsCtrl.createProject
 );
 
 router.get('/',
     projectsCtrl.getAllProjects);
 
-router.get('/:slug', 
-projectsCtrl.getOneProjectBySlug);
-
-// router.get('/:id', 
-// projectsCtrl.getOneProject);
+router.get('/:slug',
+    projectsCtrl.getOneProjectBySlug);
 
 router.delete ('/:id',
     auth,
@@ -50,11 +37,11 @@ router.put('/:id',
     multer.fields([
       { name: 'images' },
       { name: 'pdfFiles' },
-      { name: 'zipFile' },
+      { name: 'proDocuments' },
     ]),
     uploadImages,
     uploadPdfs,
-    uploadZip,
+    uploadProDocuments,
     projectsCtrl.updateOneProject,
     deleteProjectFiles
   );

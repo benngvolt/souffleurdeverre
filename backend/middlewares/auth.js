@@ -11,6 +11,6 @@ module.exports = (req, res, next) => {
         };
 	next();
    } catch(error) {
-       res.status(401).json({ error }); // status 401 'Unauthorized'
+       res.status(401).json({ message: 'Authentification requise.' });
    }
 };

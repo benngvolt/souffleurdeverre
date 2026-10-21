@@ -2,7 +2,7 @@
 
 
 
-.home {
+.homeSpecial {
     animation: pageAppearing 4s ease forwards;
     display: flex;
     flex-direction: column;
@@ -17,7 +17,7 @@
 	height: 100vh;
     &_linkFake {
         width: auto;
-        &:hover {
+        @include hoverable {
             h3, p {
             color: $colorThree;
         }
@@ -102,7 +102,7 @@
                     font-family: 'MainFont_light';
                     font-size: 22px;
                     font-weight: bold;
-                    &:hover {
+                    @include hoverable {
                         cursor: pointer;
                         color: $colorFive;
                     }
@@ -141,7 +141,7 @@
                 img {
                     width: 30px;
                 }
-                &:hover {
+                @include hoverable {
                     cursor: pointer;
 
                     @include colorDuo3;

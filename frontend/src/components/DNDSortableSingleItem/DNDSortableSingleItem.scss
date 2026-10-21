@@ -377,7 +377,7 @@
         display: none;
     }
 
-    &:hover {
+    @include hoverable {
         cursor:grab;
     }
 
@@ -398,7 +398,7 @@
             border: none;
             color: white;
             z-index: 2;
-            &:hover {
+            @include hoverable {
                 cursor: pointer;
             }
         }

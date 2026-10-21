@@ -42,7 +42,7 @@
             }
         }
         &_title {
-            &:hover {
+            @include hoverable {
                 color: $colorTwo
             }
             @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
@@ -73,8 +73,10 @@
                 }
 
             }
-            :hover {
-                color: $colorThree
+            @media (hover: hover) and (pointer: fine) {
+                :hover {
+                    color: $colorThree
+                }
             }
         }
     }

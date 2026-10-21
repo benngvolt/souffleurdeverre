@@ -1,11 +1,11 @@
 import './ConfirmBox.scss'
 
-function ConfirmBox({confirmBoxState, affirmativeChoice, negativeChoice, attribut}) {
+function ConfirmBox({confirmBoxState, affirmativeChoice, negativeChoice, attribut, question = 'Es-tu sûr ?'}) {
     
     return (
         <div className={confirmBoxState === false ? "editWorkModal_confirmBox editWorkModal_confirmBox--displayOff" : "editWorkModal_confirmBox editWorkModal_confirmBox--displayOn"}>
             <div className='editWorkModal_confirmBox_container'>
-                <p className='editWorkModal_confirmBox_container_question'>Es-tu sûr ?</p>
+                <p className='editWorkModal_confirmBox_container_question'>{question}</p>
                 <div className='editWorkModal_confirmBox_container_buttons'>
                     <button aria-label="non" onClick={() => negativeChoice() } type='button'>NON</button>
                     <button aria-label="oui" onClick={() => { 

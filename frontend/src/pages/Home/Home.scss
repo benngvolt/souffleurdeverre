@@ -100,7 +100,7 @@
                     font-family: 'MainFont_light';
                     font-size: 22px;
                     font-weight: normal;
-                    &:hover {
+                    @include hoverable {
                         cursor: pointer;
                         font-weight: bold;
                     }
@@ -129,7 +129,7 @@
                 img {
                     width: 30px;
                 }
-                &:hover {
+                @include hoverable {
                     cursor: pointer;
                     // color: $colorMediumGrey;
                     // background-color: pink;

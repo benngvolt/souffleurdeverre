@@ -99,6 +99,28 @@
     box-sizing: border-box;
 }
 
+// N'applique le style qu'aux appareils qui supportent réellement le survol
+// (souris/trackpad) : évite le hover "collant" au doigt sur écrans tactiles.
+@mixin hoverable {
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            @content;
+        }
+    }
+}
+
+// Compense le header sticky (qui n'a plus de margin-bottom) pour garder
+// le fond de la page uniforme du haut jusqu'en bas, sans bande grise visible.
+@mixin HeaderOffset {
+    padding-top: 50px;
+    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+        padding-top: 35px;
+    }
+    @media only screen and (max-width: $mobileMaxWidth){
+        padding-top: 20px;
+    }
+}
+
 @mixin DropColorFilter {
     filter: drop-shadow(5px 5px 1px $colorTwo) drop-shadow(-5px -5px 1px $colorThree) ;
 }
@@ -136,9 +158,29 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    &:hover {
+    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+        font-size: 15px;
+        padding: 8px;
+    }
+    @media only screen and (max-width:$mobileMaxWidth){
+        font-size: 13px;
+        padding: 7px;
+    }
+    @include hoverable {
         color: $colorSix;
         cursor: pointer;
+    }
+}
+
+// Largeur des blocs de formulaire (titres de sous-section, champs, boutons Valider/Annuler...) :
+// élargie progressivement sur tablette/mobile pour profiter de l'espace disponible.
+@mixin FormFieldWidth {
+    width: 80%;
+    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+        width: 92%;
+    }
+    @media only screen and (max-width:$mobileMaxWidth){
+        width: 96%;
     }
 }
 
@@ -154,7 +196,7 @@
     height: 30px;
     padding: 0px 40px;
     line-height: 1.3;
-    &:hover {
+    @include hoverable {
         cursor: pointer;
         background-color: $colorTwo;
     }
@@ -183,7 +225,7 @@
     height: 50px;
     padding: 0px 40px;
     line-height: 1.3;
-    &:hover {
+    @include hoverable {
         cursor: pointer;
         border: solid 3px $colorMediumGrey;
         color: $colorMediumGrey;
@@ -201,7 +243,17 @@
     height: 40px;
     padding: 0px 40px;
     line-height: 1.3;
-    &:hover {
+    @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+        font-size: 16px;
+        height: 36px;
+        padding: 0px 24px;
+    }
+    @media only screen and (max-width:$mobileMaxWidth){
+        font-size: 14px;
+        height: 34px;
+        padding: 0px 18px;
+    }
+    @include hoverable {
         cursor: pointer;
         background-color: $colorSix;
         color: $colorMediumGrey;

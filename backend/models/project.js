@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 
 const projectSchema = mongoose.Schema({
     title: {type: String, required: true},
@@ -90,16 +89,28 @@ const projectSchema = mongoose.Schema({
         photograph: {type: String, required: false},
         }
     ],
+    // Noms des logos (modèle Logo) à afficher en bas de la page du projet
+    logos: [{type: String}],
     proSpace: {
         enabled: {
             type: Boolean,
             default: false,
         },
     
+        // Ancien format (un seul ZIP) : conservé en lecture pour les projets existants
         zipUrl: {
             type: String,
             default: '',
         },
+        // Documents téléchargeables indépendamment par les pros (PDF, images, .doc...)
+        documents: [
+            {
+                name: {type: String, required: false},
+                url: {type: String, required: false},
+                size: {type: Number, required: false},
+                mimeType: {type: String, required: false},
+            }
+        ],
         password: {
             type: String,
             default: '',

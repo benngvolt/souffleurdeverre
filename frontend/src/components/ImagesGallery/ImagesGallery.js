@@ -65,6 +65,7 @@ function ImagesGallery({ project }) {
               alt={`${project?.title || 'image'} ${image._id || ''}`}
               src={image.imageUrl}
               onClick={() => handleImageDisplay(image.imageUrl)}
+              loading='lazy'
             />
           </motion.li>
         ))}

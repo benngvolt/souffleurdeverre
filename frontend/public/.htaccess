@@ -2,6 +2,24 @@
   RewriteEngine On
   RewriteBase /
 
+  # --- Canonicalisation des URL (évite le contenu en double vu par Google) ---
+  # Objectif : une seule URL possible par page, en https, sans "www", sans slash final.
+
+  # 1. Forcer HTTPS. On vérifie à la fois %{HTTPS} et l'en-tête X-Forwarded-Proto
+  #    car le site est derrière un load balancer (OVH) qui ne peuple pas toujours %{HTTPS}.
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # 2. Forcer l'absence de "www"
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # 3. Supprimer le slash final (sauf sur la racine "/")
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} ^/(.+)/$
+  RewriteRule ^ /%1 [R=301,L]
+
   RewriteRule ^index\.html$ - [L]
 
   RewriteCond %{REQUEST_FILENAME} !-f

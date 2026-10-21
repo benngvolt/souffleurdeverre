@@ -1,0 +1,53 @@
+@import '../../utils/mixins';
+
+.logosList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 30px 40px;
+    width: 100%;
+    margin: 0 auto;
+    // Un peu d'air sous la dernière rangée de logos
+    padding: 0 0 45px 0;
+    box-sizing: border-box;
+
+    @media only screen and (max-width: $mobileMaxWidth) {
+        gap: 28px 30px;
+    }
+
+    &_item {
+        list-style-type: none;
+        display: flex;
+
+        a {
+            display: flex;
+        }
+
+        img {
+            display: block;
+            height: 80px;
+            width: auto;
+            max-width: 220px;
+            object-fit: contain;
+
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth) {
+                height: 56px;
+                max-width: 160px;
+            }
+            @media only screen and (max-width: $mobileMaxWidth) {
+                height: 52px;
+                max-width: 130px;
+            }
+        }
+
+        a img {
+            transition: opacity 0.2s ease;
+
+            @include hoverable {
+                opacity: 0.6;
+            }
+        }
+    }
+}

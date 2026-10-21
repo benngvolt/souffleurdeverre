@@ -6,10 +6,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 
-function Collapse({children, title, style}) {
+function Collapse({children, title, style, defaultOpen = false}) {
 
 
-    const [isCollapseOpened, setIsCollapseOpened] = useState(false);
+    const [isCollapseOpened, setIsCollapseOpened] = useState(defaultOpen);
     
     function handleCollapseState() {
         const childrenElement = document.getElementById(`collapsible${title}`);

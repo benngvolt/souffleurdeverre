@@ -3,10 +3,25 @@ import { Link } from 'react-router-dom';
 import IsALink from '../../components/IsALink/IsALink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarPlus } from '@fortawesome/free-solid-svg-icons';
-import FullUniqueDate from '../../components/FullUniqueDate/FullUniqueDate';
 
 function EventCard({ event, months, googleEventCalendarUrlMount }) {
   const eventKey = `${event.project._id}-${event.startDate}-${event.endDate}-${event.type}`;
+
+  function slugify(text) {
+    return text
+      .toString()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  // Heure de la sortie de résidence ("2026-04-30T10:00" -> "10:00")
+  const releaseTime = event.type === 'release' && (event.releaseDate || '').includes('T')
+    ? event.releaseDate.split('T')[1].slice(0, 5)
+    : '';
 
   return (
     <div
@@ -31,7 +46,7 @@ function EventCard({ event, months, googleEventCalendarUrlMount }) {
             Représentation
           </p>
 
-          <Link to={`/spectacles/${event.project._id}`}>
+          <Link to={`/spectacles/${slugify(event.project.title)}`}>
             <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_showTitle'>
               {event.project.title}
             </p>
@@ -76,6 +91,40 @@ function EventCard({ event, months, googleEventCalendarUrlMount }) {
             </p>
           </div>
         </div>
+      ) : event.type === 'release' ? (
+        <div className='actualite_container_yearContainer_monthContainer_events_eventContainer_residency'>
+          <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_type eventCard_releaseLabel'>
+            Sortie de résidence
+          </p>
+
+          <Link to={`/spectacles/${slugify(event.project.title)}`}>
+            <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_showTitle'>
+              {event.project.title}
+            </p>
+            <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_showSubtitle'>
+              {event.project.subtitle}
+            </p>
+          </Link>
+
+          <div className='actualite_container_yearContainer_monthContainer_events_eventContainer_showsBox'>
+            {releaseTime && (
+              <div className='actualite_container_yearContainer_monthContainer_events_eventContainer_showsBox_timeContainer'>
+                <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_showsBox_time'>
+                  {releaseTime}
+                </p>
+              </div>
+            )}
+
+            <IsALink
+              className='actualite_container_yearContainer_monthContainer_events_eventContainer_showsBox_link'
+              link={event.residency.placeLink}
+              name={event.residency.placeName}
+            />
+            <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_showsBox_city'>
+              {event.residency.city}
+            </p>
+          </div>
+        </div>
       ) : (
         <div className='actualite_container_yearContainer_monthContainer_events_eventContainer_residency'>
           <p
@@ -90,7 +139,7 @@ function EventCard({ event, months, googleEventCalendarUrlMount }) {
             {event.residency.residencyType.replace(/Résidences/g, 'Résidence')}
           </p>
 
-          <Link to={`/spectacles/${event.project._id}`}>
+          <Link to={`/spectacles/${slugify(event.project.title)}`}>
             <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_showTitle'>
               {event.project.title}
             </p>
@@ -108,13 +157,6 @@ function EventCard({ event, months, googleEventCalendarUrlMount }) {
           <p className='actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_city'>
             {event.residency.city}
           </p>
-
-          {event.residency.releaseDate && (
-            <div className='actualite_container_yearContainer_monthContainer_events_eventContainer_residenciesBox_releaseContainer'>
-              <p>Sortie de résidence :</p>
-              <FullUniqueDate creationDate={event.residency.releaseDate} />
-            </div>
-          )}
         </div>
       )}
     </div>

@@ -48,7 +48,7 @@
                     border: none;
                     background: none;
                     color: black;
-                    &:hover {
+                    @include hoverable {
                         cursor: pointer;
                         color: grey;
                     }

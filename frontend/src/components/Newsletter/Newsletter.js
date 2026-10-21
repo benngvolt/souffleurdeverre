@@ -4,13 +4,14 @@ import ConfirmBox from '../ConfirmBox/ConfirmBox'
 import ErrorText from '../ErrorText/ErrorText'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import { API_URL } from '../../utils/constants'
+import { apiFetch } from '../../utils/api'
 import facebookLogo from '../../assets/facebook_black.png'
 import xLogo from '../../assets/x_black.png'
 import youtubeLogo from '../../assets/youtube_black.png'
 import instagramLogo from '../../assets/instagram_black.png'
 import DOMPurify from 'dompurify'
 import Alert from '../Alert/Alert'
+import './Newsletter.scss'
 
 
 function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter, selectedNewsletterProjectIds = [] }) {
@@ -130,6 +131,8 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter, selec
     const byProject = new Map()
   
     sortedEvents.forEach(ev => {
+      // Les sorties de résidence n'apparaissent que dans le calendrier du site
+      if (ev?.type === 'release') return
       const p = ev?.project || {}
       const projectKey = p?._id || p?.title || ('unknown_' + Math.random().toString(36).slice(2))
       const existing = byProject.get(projectKey)
@@ -342,8 +345,6 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter, selec
   ----- SUBMIT → POST vers ton BFF ----------
   -----------------------------------------*/
 
-  const token = window.sessionStorage.getItem('1')
-
   async function handleSubmit(e) {
     e.preventDefault()
     setDisplayError(false)
@@ -361,28 +362,15 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter, selec
         subject: "Nos dates & actualités",
         htmlContent
       }
-      const r = await fetch(`${API_URL}/api/newsletters/template`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + token },
-        body: JSON.stringify(payload)
+      const data = await apiFetch('/api/newsletters/template', {
+        method: 'POST',
+        auth: true,
+        json: payload,
       })
-      if (!r.ok) {
-        const raw = await r.text()
-        let errJson = {}
-        try { errJson = JSON.parse(raw) } catch {}
-        console.error('Erreur création template Brevo:', {
-          status: r.status,
-          statusText: r.statusText,
-          headers: Object.fromEntries(r.headers.entries()),
-          raw
-        })
-        throw new Error(errJson?.error || `Échec création template (HTTP ${r.status})`)
-      }
-      const data = await r.json()
       setOkMsg(`Template créé !! Tu peux le retrouver sur Brevo. (id: ${data?.id ?? "?"})`)
       setTimeout(() => closeForm(), 3000)
     } catch (err) {
-      console.error(err)
+      console.error('Erreur création template Brevo:', err)
       setDisplayServerError(true)
     } finally {
       setLoading(false)
@@ -393,14 +381,15 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter, selec
   ----- RENDER JSX ---------
   ------------------------*/
   return (
-    <form method="post" onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',height:'100%',rowGap:'9px',width:'80%',overflow:'scroll',margin:'auto',backgroundColor:'#fff'}}>
+    <form method="post" onSubmit={handleSubmit} className='newsletter'>
       {/* bouton fermer */}
-      <button type='button' onClick={openConfirmBox} style={{width:'auto',display:'flex',flexDirection:'row',justifyContent:'flex-end',color:'#333',background:'none',border:'none',position:'sticky',top:80,left:60,zIndex:100}}>
-        <FontAwesomeIcon icon={faXmark} style={{height:'2em',marginRight:15,cursor:'pointer'}}/>
+      <button type='button' onClick={openConfirmBox} className='newsletter_stickyCancelButton'>
+        <FontAwesomeIcon icon={faXmark} className='newsletter_stickyCancelButton_icon'/>
       </button>
 
-      {/* CONTENEUR DU HTML EMAIL */}
-      <div style={{width:'50%',margin:'80px auto'}}>
+      {/* CONTENEUR DU HTML EMAIL (aperçu à l'écran uniquement : sa largeur n'est pas envoyée,
+          seul le contenu de bodyRef ci-dessous est capturé pour le template envoyé) */}
+      <div className='newsletter_htmlbodyContainer'>
         <div ref={bodyRef}>
           {/* HEADER */}
           <div style={{width:'100%',margin:'0 auto',background:'#00f0ff',padding:'30px 0',textAlign:'center'}}>
@@ -671,9 +660,9 @@ function Newsletter({ setHandleDisplayNewsletter, handleDisplayNewsletter, selec
       <ErrorText errorText={"Une erreur s'est produite"} state={displayServerError}/>
       <ErrorText errorText={"Tous les champs marqués d'une * doivent être remplis"} state={displayError}/>
 
-      <div style={{display:'flex',flexDirection:'row',margin:'0 auto 54px auto',width:'100%',justifyContent:'center',columnGap:16}}>
-        <button type='submit' disabled={loading} style={{fontSize:22,fontFamily:'MainFont_light, Arial, sans-serif',fontWeight:'bold',color:'#333',borderRadius:0,border:'1px solid #333',background:'none',width:170,padding:15,cursor: loading ? 'default' : 'pointer'}}>{loading ? 'ENVOI…' : 'VALIDER'}</button>
-        <button type='button' onClick={openConfirmBox} style={{fontSize:22,fontFamily:'MainFont_light, Arial, sans-serif',fontWeight:'bold',color:'#333',borderRadius:0,border:'1px solid #333',background:'none',width:170,padding:15,cursor:'pointer'}}>ANNULER</button>
+      <div className='newsletter_buttons'>
+        <button type='submit' disabled={loading} style={{cursor: loading ? 'default' : 'pointer'}}>{loading ? 'ENVOI…' : 'VALIDER'}</button>
+        <button type='button' onClick={openConfirmBox}>ANNULER</button>
       </div>
 
       <ConfirmBox

@@ -102,8 +102,8 @@ function Header() {
                 aria-controls='header_nav' 
                 aria-expanded={displayMenu===false? false : true}
                 >
-            <svg id="hamburger" className={displayMenu===true? 'header_icon header_icon--opened':'header_icon header_icon--closed'} viewbox="0 0 60 30">
-                <g stroke="#232323" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg id="hamburger" className={displayMenu===true? 'header_icon header_icon--opened':'header_icon header_icon--closed'} viewBox="0 0 60 30">
+                <g stroke="#232323" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path id="top-line" d="M10,10 L50,10 Z"></path>
                     <path id="middle-line" d="M10,20 L50,20 Z"></path>
                     <path id="bottom-line" d="M10,30 L50,30 Z"></path>
@@ -154,7 +154,7 @@ function Header() {
                     <li className={isAuthenticated===true?(location.pathname!=='/edit'?'header_nav_menu_item header_nav_menu_item--edit header_nav_menu_item--light':'header_nav_menu_item header_nav_menu_item--edit header_nav_menu_item--bold'):'header_nav_menu_item--displayOff'}>
                         <Link aria-label="Accéder à la page d'édition" to="/edit"><p>EDIT</p></Link>
                     </li>
-                    <li className={isAuthenticated===true?'header_nav_menu_item':'header_nav_menu_item--displayOff'}>
+                    <li className={isAuthenticated===true?'header_nav_menu_item header_nav_menu_item--light':'header_nav_menu_item--displayOff'}>
                         <button aria-label='Se déconnecter' type='button' 
                         onClick={()=> {
                             setLoggedOut();

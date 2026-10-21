@@ -5,7 +5,7 @@
     flex-direction: column;
     height: 100%;
     row-gap: 9px;
-    width: 80%;
+    @include FormFieldWidth;
     overflow: scroll;
     margin: auto;
     background-color: white;
@@ -20,6 +20,7 @@
 
     &_stickyCancelButton {
         width: auto;
+        align-self: flex-end;
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
@@ -28,14 +29,14 @@
         border: none;
         position: sticky;
         top: 80px;
-        left: 60px;
+        right: 0;
         z-index: 100;
-        
+
         &_icon {
             height: 2em;
             margin-right: 15px;
             
-            &:hover {
+            @include hoverable {
                 cursor: pointer;
             }
         }
@@ -59,20 +60,40 @@
             border: 1px solid $colorDarkGrey;
             background: none;
             width: 170px;
+            max-width: 45%;
             padding: 15px;
-            &:hover {
+            @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+                font-size: 17px;
+                padding: 11px;
+            }
+            @media only screen and (max-width:$mobileMaxWidth){
+                font-size: 14px;
+                padding: 9px;
+            }
+            @include hoverable {
                 color: $colorLightGrey;
                 background-color: $colorDarkGrey;
                 border: none;
                 cursor: pointer;
             }
         }
-        
+
     }
     &_htmlbodyContainer {
+        // Largeur de l'aperçu affiché dans le dashboard uniquement : le contenu envoyé
+        // (bodyRef, capturé via innerHTML dans Newsletter.js) n'est pas concerné par ces
+        // règles, donc on peut élargir librement sur mobile sans toucher au vrai email.
         width: 50%;
         margin: 80px auto;
-        
+
+        @media only screen and (min-width: $padMinWidth) and (max-width: $padMaxWidth){
+            width: 80%;
+            margin: 60px auto;
+        }
+        @media only screen and (max-width:$mobileMaxWidth){
+            width: 96%;
+            margin: 40px auto;
+        }
     }
 
     &_htmlbody {
@@ -195,7 +216,7 @@
                 color: black;
                 font-style: italic;
 
-                &:hover {
+                @include hoverable {
                     color: $colorFive;
                     cursor: pointer;
                 }
@@ -208,7 +229,7 @@
             font-weight: bolder;
             font-style: italic;
             
-            &:hover {
+            @include hoverable {
                 color: $colorFour;
                 cursor: pointer;
             }
@@ -253,7 +274,7 @@
             color: #000;
             text-decoration: underline;
     
-            &:hover {
+            @include hoverable {
               color: #444; // discret
               cursor: pointer;
             }
@@ -270,7 +291,7 @@
             color: #000;
             text-decoration: underline;
     
-            &:hover {
+            @include hoverable {
               color: #444;
               cursor: pointer;
             }

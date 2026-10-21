@@ -1,6 +1,6 @@
 import './OneSpectacle.scss'
 import React, { useState, useEffect, useContext, useMemo } from 'react'
-import { API_URL } from '../../utils/constants'
+import { apiFetch } from '../../utils/api'
 import { useParams } from 'react-router-dom'
 import { Context } from '../../utils/Context'
 import IsALink from '../../components/IsALink/IsALink'
@@ -14,8 +14,11 @@ import ImagesGallery from '../../components/ImagesGallery/ImagesGallery'
 import ParallaxImage from '../../components/ParallaxImage/ParallaxImage'
 import { motion, useReducedMotion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faVideo, faMusic, faGlobe, faFilePdf, faXmark, faFileZipper } from '@fortawesome/free-solid-svg-icons'
-import { Helmet } from 'react-helmet-async';
+import { faVideo, faMusic, faGlobe, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { useDocumentMeta } from '../../utils/useDocumentMeta';
+import { SITE_URL } from '../../utils/constants';
+import LogosList from '../../components/LogosList/LogosList';
+import { formatFileSize, getDocumentIcon } from '../../utils/proDocuments';
 
 function OneSpectacle() {
   // ⚠️ objet, pas tableau (sinon plein de checks bizarres)
@@ -29,7 +32,7 @@ function OneSpectacle() {
   const [bioAside, setBioAside] = useState([]);
 
   const { slug } = useParams()
-  const { productionFunctions, residencyTypes, isAuthenticated, biographies } = useContext(Context)
+  const { productionFunctions, residencyTypes, isAuthenticated, biographies, logos } = useContext(Context)
   const reduceMotion = useReducedMotion()
 
   // Gestion accès espace pro
@@ -96,6 +99,27 @@ function OneSpectacle() {
     )
   }
 
+  // Groupe les résidences par type connu ; celles dont le type est vide/inconnu
+  // (résidence créée sans type sélectionné) sont quand même affichées, sous un
+  // groupe sans intitulé, plutôt que d'être silencieusement omises.
+  const getResidencyGroups = (residenciesList) => {
+    const list = residenciesList || []
+    const knownTypesPresent = residencyTypes.filter((type) =>
+      list.some((r) => r.residencyType === type)
+    )
+    const groups = knownTypesPresent.map((type) => ({
+      type,
+      items: list.filter((r) => r.residencyType === type),
+    }))
+    const otherResidencies = list.filter(
+      (r) => !residencyTypes.includes(r.residencyType)
+    )
+    if (otherResidencies.length > 0) {
+      groups.push({ type: null, items: otherResidencies })
+    }
+    return groups
+  }
+
   const item = useMemo(
     () => ({
       hidden: { opacity: 0, y: reduceMotion ? 0 : 18 },
@@ -128,10 +152,9 @@ function OneSpectacle() {
   }, [project?.linksList])
 
   useEffect(() => {
-    fetch(`${API_URL}/api/projects/${slug}`)
-      .then((res) => res.json())
+    apiFetch(`/api/projects/${slug}`)
       .then((data) => setProject(data))
-      .catch((error) => console.log(error.message))
+      .catch((error) => console.error(error.message))
   }, [slug])
 
   useEffect(() => {
@@ -150,6 +173,16 @@ function OneSpectacle() {
     }
   }, [handleAuthPro, handleProSpace])
 
+  useDocumentMeta({
+    title: project ? `${project.title} | Compagnie Le Souffleur de Verre` : undefined,
+    description: project?.subtitle || 'Spectacle de la Compagnie Le Souffleur de Verre.',
+    canonical: `${SITE_URL}/spectacles/${slug}`,
+    ogTitle: project ? `${project.title} | Compagnie Le Souffleur de Verre` : undefined,
+    ogDescription: project?.subtitle || 'Spectacle de la Compagnie Le Souffleur de Verre.',
+    ogUrl: `${SITE_URL}/spectacles/${slug}`,
+    ogImage: project?.images?.[project.mainImageIndex]?.imageUrl,
+  })
+
   // Loading guard (évite des comportements bizarres au premier render)
   if (!project) {
     return (
@@ -163,49 +196,19 @@ function OneSpectacle() {
     project.projectState !== '*non visible*' ||
     (project.projectState === '*non visible*' && isAuthenticated === true)
 
+  // Documents de l'espace pro (+ ancien ZIP des projets créés avant le passage aux documents multiples)
+  const proDocuments = [
+    ...(project.proSpace?.documents || []),
+    ...(project.proSpace?.zipUrl ? [{ name: 'Pack pro (ZIP)', url: project.proSpace.zipUrl }] : []),
+  ]
+
+  // Jointure projet.logos (noms) -> modèle Logo (image + lien), dans l'ordre choisi dans l'éditeur
+  const projectLogos = (project.logos || [])
+    .map((logoName) => logos?.find((logo) => logo.name === logoName))
+    .filter(Boolean)
+
   return (
     <section className='oneSpectacle'>
-      <Helmet>
-        <title>{project.title} | Compagnie Le Souffleur de Verre</title>
-
-        <meta
-          name="description"
-          content={
-            project.subtitle ||
-            'Spectacle de la Compagnie Le Souffleur de Verre.'
-          }
-        />
-
-        <link
-          rel="canonical"
-          href={`https://souffleurdeverre.fr/spectacles/${slug}`}
-        />
-
-        <meta
-          property="og:title"
-          content={`${project.title} | Compagnie Le Souffleur de Verre`}
-        />
-
-        <meta
-          property="og:description"
-          content={
-            project.subtitle ||
-            'Spectacle de la Compagnie Le Souffleur de Verre.'
-          }
-        />
-
-        <meta
-          property="og:url"
-          content={`https://souffleurdeverre.fr/spectacles/${slug}`}
-        />
-
-        {project.images?.[project.mainImageIndex]?.imageUrl && (
-          <meta
-            property="og:image"
-            content={project.images[project.mainImageIndex].imageUrl}
-          />
-        )}
-      </Helmet>
       {canSee && (
         <div>
           {/* Titre + métadonnées */}
@@ -248,7 +251,7 @@ function OneSpectacle() {
                 durée {project.duration}
               </motion.p>
             )}
-            {project.proSpace?.enabled && project.proSpace?.zipUrl && (
+            {project.proSpace?.enabled && proDocuments.length > 0 && (
               <motion.div className='oneSpectacle_mainDatas_proSpace' variants={fadeUp}>
                 <button 
                   className='oneSpectacle_mainDatas_proSpace_button' 
@@ -310,19 +313,44 @@ function OneSpectacle() {
                       <img src={project.images[project.mainImageIndex].imageUrl}/>
                       <div className='oneSpectacle_mainDatas_proSpace_modal_formContainer--proSpaceModal_datas'>
                         <p className='oneSpectacle_mainDatas_proSpace_modal_formContainer--proSpaceModal_datas_title'>{project.title}</p>
-                        <a
-                          href={project.proSpace.zipUrl}
-                          target='_blank'
-                          rel='noreferrer'
-                          download
-                        >
-                          <FontAwesomeIcon icon={faFileZipper} />
-                          Télécharger le pack pro
-                        </a>
+                        <ul className='oneSpectacle_mainDatas_proSpace_modal_formContainer--proSpaceModal_datas_documents'>
+                          {proDocuments.map((document) => (
+                            <li key={document._id || document.url}>
+                              <a href={document.url} download rel='noreferrer'>
+                                <FontAwesomeIcon icon={getDocumentIcon(document.url)} />
+                                <span className='oneSpectacle_mainDatas_proSpace_modal_formContainer--proSpaceModal_datas_documents_name'>
+                                  {document.name}
+                                </span>
+                                {document.size > 0 && (
+                                  <span className='oneSpectacle_mainDatas_proSpace_modal_formContainer--proSpaceModal_datas_documents_size'>
+                                    {formatFileSize(document.size)}
+                                  </span>
+                                )}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
                   </div>
                 )}
+              </motion.div>
+            )}
+
+            {/* Dossier(s) téléchargeable(s) : sous le bouton espace pro, avec le même style */}
+            {project.pdfList?.length > 0 && (
+              <motion.div className='oneSpectacle_mainDatas_pdfs' variants={fadeUp}>
+                {project.pdfList.map((pdf) => (
+                  <a
+                    key={pdf._id || pdf.pdfLink}
+                    href={pdf.pdfLink || ''}
+                    target='_blank'
+                    rel='noreferrer'
+                    className='oneSpectacle_mainDatas_pdfs_button'
+                  >
+                    {pdf.pdfName}
+                  </a>
+                ))}
               </motion.div>
             )}
 
@@ -439,7 +467,7 @@ function OneSpectacle() {
             )}
 
             {/* Media links (animés + groupés par type) */}
-            {(project.linksList?.length > 0 || project.pdfList?.length > 0) && (
+            {project.linksList?.length > 0 && (
               <motion.div
                 className='oneSpectacle_mainDatas_mediaLinks'
                 variants={container}
@@ -499,25 +527,6 @@ function OneSpectacle() {
                       >
                         <FontAwesomeIcon icon={faGlobe} />
                         {link.linkName}
-                      </motion.a>
-                    ))}
-                  </motion.div>
-                )}
-
-                {/* PDFS */}
-                {project.pdfList?.length > 0 && (
-                  <motion.div className='oneSpectacle_mainDatas_mediaLinks_pdfsContainer' variants={container}>
-                    {project.pdfList.map((pdf) => (
-                      <motion.a
-                        key={pdf._id}
-                        href={pdf.pdfLink || ''}
-                        target='_blank'
-                        rel='noreferrer'
-                        className='oneSpectacle_mainDatas_mediaLinks_pdfsContainer_pdf'
-                        variants={item}
-                      >
-                        <FontAwesomeIcon icon={faFilePdf} />
-                        {pdf.pdfName}
                       </motion.a>
                     ))}
                   </motion.div>
@@ -609,25 +618,23 @@ function OneSpectacle() {
           {/* Résidences */}
           {project.residenciesList?.length > 0 && (
             <motion.div variants={fadeUp} initial='hidden' whileInView='visible' viewport={viewportOnce}>
-              <Collapse title='RÉSIDENCES' style='light'>
+              <Collapse title='RÉSIDENCES' style='light' defaultOpen={true}>
                 <div className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList'>
-                  {residencyTypes.map((residencyType) => (
-                    project.residenciesList.some((r) => r.residencyType === residencyType) && (
+                  {getResidencyGroups(project.residenciesList).map(({ type, items }) => (
                       <motion.div
-                        key={residencyType}
+                        key={type ?? '__other__'}
                         className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer'
                         variants={container}
                         initial='hidden'
                         whileInView='visible'
                         viewport={viewportOnce}
                       >
-                        <p className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_title'>{residencyType}</p>
+                        {type && <p className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_title'>{type}</p>}
                         <motion.ul className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list' variants={container}>
-                          {project.residenciesList
-                            .filter((r) => r.residencyType === residencyType)
+                          {items
                             .map((residency) => (
                               <motion.li
-                                key={residency.id}
+                                key={residency._id || residency.id}
                                 className='oneSpectacle_mainDatas_residenciesAndShows_residenciesList_typeContainer_list_item'
                                 variants={item}
                               >
@@ -659,7 +666,6 @@ function OneSpectacle() {
                             ))}
                         </motion.ul>
                       </motion.div>
-                    )
                   ))}
                 </div>
               </Collapse>
@@ -698,6 +704,19 @@ function OneSpectacle() {
                   </div>
                 </div>
               </Collapse>
+            </motion.div>
+          )}
+
+          {/* Logos (partenaires, soutiens...) : tout en bas de la page, comme sur la page Compagnie */}
+          {projectLogos.length > 0 && (
+            <motion.div
+              className='oneSpectacle_logos'
+              variants={fadeUp}
+              initial='hidden'
+              whileInView='visible'
+              viewport={viewportOnce}
+            >
+              <LogosList logos={projectLogos} />
             </motion.div>
           )}
         </div>

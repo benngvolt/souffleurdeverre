@@ -1,13 +1,15 @@
 import React, { createContext, useState, useEffect, useMemo } from 'react';
-import { API_URL } from './constants';
+import { apiFetch, isLoggedIn, clearAuthToken } from './api';
 
 export const Context = createContext();
 
 export const Provider = ({ children }) => {
   const [loadProjects, setLoadProjects] = useState(false);
   const [loadBiographies, setLoadBiographies] = useState(false);
+  const [loadLogos, setLoadLogos] = useState(false);
   const [projects, setProjects] = useState([]);
   const [biographies, setBiographies] = useState([]);
+  const [logos, setLogos] = useState([]);
   const [loaderDisplay, setLoaderDisplay] = useState(false);
   const [fullCurrentDate, setFullCurrentDate] = useState([]);
 
@@ -20,14 +22,15 @@ export const Provider = ({ children }) => {
   /*---------------------------------
   ----- MISE À JOUR ÉTAT D'AUTH -----
   ---------------------------------*/
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Initialisé depuis le token en session pour ne pas déconnecter l'utilisateur au refresh.
+  const [isAuthenticated, setIsAuthenticated] = useState(isLoggedIn());
 
   function setLoggedIn () {
     setIsAuthenticated(true);
   }
 
   function setLoggedOut () {
-    window.sessionStorage.removeItem('1');
+    clearAuthToken();
     setIsAuthenticated(false);
   }
 
@@ -50,6 +53,10 @@ export const Provider = ({ children }) => {
     setLoadBiographies(loadBiographies === false ? true : false);
   };
 
+  const handleLoadLogos = () => {
+    setLoadLogos(loadLogos === false ? true : false);
+  };
+
   /*---------------------------------------------
   ----- Chargement des projets et stockage ------
   ---------------------------------------------*/
@@ -66,24 +73,28 @@ export const Provider = ({ children }) => {
 
     setFullCurrentDate(formattedDate);
 
-    fetch(`${API_URL}/api/projects`)
-      .then((res) => res.json())
+    apiFetch('/api/projects')
       .then((data) => {
-        setProjects(data);
+        setProjects(data || []);
         hideLoader();
       })
       .catch((error) => {
-        console.log(error.message);
+        console.error(error.message);
         hideLoader();
       });
   }, [loadProjects]);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/biographies`)
-      .then((res) => res.json())
-      .then((data) => setBiographies(data))
-      .catch((error)=>console.log(error.message));
+    apiFetch('/api/biographies')
+      .then((data) => setBiographies(data || []))
+      .catch((error) => console.error(error.message));
   }, [loadBiographies]);
+
+  useEffect(() => {
+    apiFetch('/api/logos')
+      .then((data) => setLogos(data || []))
+      .catch((error) => console.error(error.message));
+  }, [loadLogos]);
 
   /*-----------------------------------------
   ----- Dates "aujourd'hui" (00:00) ---------
@@ -98,66 +109,6 @@ export const Provider = ({ children }) => {
   /*-----------------------------------------
   ----- Helper : construire les events -------
   -----------------------------------------*/
-  // const buildEventsFromProjects = (onlyFuture = false) => {
-  //   const grouped = {};
-
-  //   projects.forEach(project => {
-  //     // SHOWS
-  //     if (project.showsList) {
-  //       project.showsList.forEach(show => {
-  //         if (show.dates) {
-  //           show.dates.forEach(d => {
-  //             const startDate = d.day || d.period?.startDate;
-  //             const endDate = d.period?.endDate || d.day;
-  //             const period = !!(d.period?.startDate && d.period?.endDate);
-
-  //             if (!startDate || !endDate) return;
-  //             if (onlyFuture && new Date(endDate) < today) return;
-
-  //             const key = `${startDate}_${endDate}_${project._id}_show`;
-  //             if (!grouped[key]) {
-  //               grouped[key] = {
-  //                 type: 'show',
-  //                 project,
-  //                 show,
-  //                 times: d.times,
-  //                 startDate,
-  //                 endDate,
-  //                 period
-  //               };
-  //             }
-  //           });
-  //         }
-  //       });
-  //     }
-
-  //     // RESIDENCIES
-  //     if (project.residenciesList) {
-  //       project.residenciesList.forEach(residency => {
-  //         const startDate = residency.startDates;
-  //         const endDate = residency.endDates;
-  //         const releaseDate = residency.releaseDate;
-
-  //         if (!startDate || !endDate) return;
-  //         if (onlyFuture && new Date(endDate) < today) return;
-
-  //         const key = `${startDate}_${endDate}_${project._id}_residency`;
-  //         if (!grouped[key]) {
-  //           grouped[key] = {
-  //             type: 'residency',
-  //             project,
-  //             residency,
-  //             startDate,
-  //             endDate,
-  //             releaseDate
-  //           };
-  //         }
-  //       });
-  //     }
-  //   });
-
-  //   return Object.values(grouped).sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
-  // };
   const buildEventsFromProjects = (onlyFuture = false) => {
     const events = [];
   
@@ -220,6 +171,30 @@ export const Provider = ({ children }) => {
             startDate,
             endDate,
             releaseDate
+          });
+        });
+
+        // SORTIES DE RÉSIDENCE : un événement à part entière (ni "résidence", ni "représentation"),
+        // daté du jour de sortie, avec les mêmes règles de tri/affichage que les autres.
+        project.residenciesList.forEach((residency, residencyIndex) => {
+          const releaseDay = (residency.releaseDate || '').slice(0, 10);
+
+          if (!releaseDay) return;
+          if (onlyFuture && new Date(releaseDay) < today) return;
+
+          events.push({
+            _eventKey: [
+              'release',
+              project._id,
+              residency._id || residencyIndex,
+              releaseDay
+            ].join('_'),
+            type: 'release',
+            project,
+            residency,
+            startDate: releaseDay,
+            endDate: releaseDay,
+            releaseDate: residency.releaseDate
           });
         });
       }
@@ -313,6 +288,8 @@ export const Provider = ({ children }) => {
       setProjects,
       biographies,
       setBiographies,
+      logos,
+      setLogos,
 
       // ✅ futur only (inchangé)
       sortedEvents,
@@ -325,6 +302,7 @@ export const Provider = ({ children }) => {
 
       handleLoadProjects,
       handleLoadBiographies,
+      handleLoadLogos,
       loadProjects,
       loaderDisplay,
       displayLoader,

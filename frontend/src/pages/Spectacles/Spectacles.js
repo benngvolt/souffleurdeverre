@@ -3,9 +3,19 @@ import { Link } from 'react-router-dom'
 import React, { useState, useEffect, useContext, useMemo } from 'react'
 import { Context } from '../../utils/Context'
 import { motion, AnimatePresence } from "framer-motion";
+import { useDocumentMeta } from '../../utils/useDocumentMeta'
+import { SITE_URL } from '../../utils/constants'
 
 function Spectacles() {
   const { projects, projectTypes, projectStates, fullCurrentDate, isAuthenticated } = useContext(Context);
+
+  useDocumentMeta({
+    title: 'Spectacles | Compagnie Le Souffleur de Verre',
+    description: 'Les spectacles de la Compagnie Le Souffleur de Verre : créations, tournées et reprises.',
+    canonical: `${SITE_URL}/spectacles`,
+    ogTitle: 'Spectacles | Compagnie Le Souffleur de Verre',
+    ogUrl: `${SITE_URL}/spectacles`,
+  })
 
   const visibleProjects = useMemo(
     () => projects.filter((project) => (project.projectState !== "*non visible*") && (project.projectState !== "médiation")),
@@ -228,6 +238,7 @@ function Spectacles() {
                   src={project.images[project.mainImageIndex]?.imageUrl}
                   alt={project.title}
                   className="spectacles_projectsList_projectItem_img"
+                  loading="lazy"
                 />
                 <div className="spectacles_projectsList_projectItem_mainDatas">
                   <h3 className="spectacles_projectsList_projectItem_mainDatas_title">{project.title}</h3>

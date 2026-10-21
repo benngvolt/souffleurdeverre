@@ -1,5 +1,5 @@
 import './Compagnie.scss'
-import { API_URL } from '../../utils/constants'
+import { apiFetch } from '../../utils/api'
 import React, {useEffect, useState, useContext} from 'react'
 import { Context } from '../../utils/Context'
 import { Link } from 'react-router-dom'
@@ -10,10 +10,10 @@ import Equipe from '../../components/Equipe/Equipe'
 import Collapse from '../../components/Collapse/Collapse'
 import julienRocha from '../../assets/Julien_Rocha_Julien_Bruhat.webp'
 import cedricVeschambre from '../../assets/Cedric_Veschambre_Julien_Bruhat.webp'
-import logoAra from '../../assets/logo_region_Auvergne_Rhone-Alpes.png'
-import logoClermont from '../../assets/logo_clermont.png'
-import logoMinistere from '../../assets/logo_ministere.png'
- 
+import { useDocumentMeta } from '../../utils/useDocumentMeta'
+import { SITE_URL } from '../../utils/constants'
+import LogosList from '../../components/LogosList/LogosList'
+
 function Compagnie() {
 
     const [bioRocha, setBioRocha] = useState([]);
@@ -21,46 +21,31 @@ function Compagnie() {
     const [displayBioAside, setDisplayBioAside] = useState(false);
     const [bioAside, setBioAside] = useState([]);
 
-    const { biographies, bioFields } = useContext(Context);
+    const { biographies, bioFields, logos } = useContext(Context);
+
+    useDocumentMeta({
+        title: 'La Compagnie | Compagnie Le Souffleur de Verre',
+        description: "Découvrez la Compagnie Le Souffleur de Verre : son équipe, ses artistes associés et ses partenaires.",
+        canonical: `${SITE_URL}/compagnie`,
+        ogTitle: 'La Compagnie | Compagnie Le Souffleur de Verre',
+        ogUrl: `${SITE_URL}/compagnie`,
+    })
 
     const permanentTeam = biographies.filter((bio)=> bio.isPermanentTeam === true && bio._id !== '65a7a54629c574d3654f8810')
 
-    const partners = [
-        {
-            'name':'Préfète de la Région Auvergne Rhône-Alpes',
-            'logo': `${logoMinistere}`,
-            'class':'min',
-            'website':'https://www.culture.gouv.fr/regions/drac-auvergne-rhone-alpes'
-        },
-        {
-            'name':'Région Auvergne Rhône-Alpes',
-            'logo': `${logoAra}`,
-            'class':'ara',
-            'website':'https://www.auvergnerhonealpes.fr/'
-        },
-        {
-            'name':'Ville de Clermont-Ferrand',
-            'logo': `${logoClermont}`,
-            'class':'cle',
-            'website':'https://clermont-ferrand.fr/'
-        },
-    ]
+    // Logos cochés « Faire figurer sur la page Compagnie » dans la rubrique LOGOS du tableau de bord
+    const companyLogos = (logos || []).filter((logo) => logo.isOnCompanyPage)
 
     useEffect(() => {
-        fetch(`${API_URL}/api/biographies/65a7a59a29c574d3654f88a4`)
-        .then((res) => res.json())
-        .then((data) => setBioVeschambre(data)
-        )
-        .catch((error)=>console.log(error.message))
+        apiFetch('/api/biographies/65a7a59a29c574d3654f88a4')
+        .then((data) => setBioVeschambre(data))
+        .catch((error) => console.error(error.message))
     },[]);
 
     useEffect(() => {
-        fetch(`${API_URL}/api/biographies/65a7a54629c574d3654f8810`)
-        .then((res) => res.json())
-        .then((data) => setBioRocha(data),
-            console.log('travaux chargés'),
-        )
-        .catch((error)=>console.log(error.message))
+        apiFetch('/api/biographies/65a7a54629c574d3654f8810')
+        .then((data) => setBioRocha(data))
+        .catch((error) => console.error(error.message))
     },[]);
 
 
@@ -99,7 +84,7 @@ function Compagnie() {
                     <BioCard biography={bioVeschambre} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
                 </li> */}
                 {permanentTeam.map((bio)=>(
-                    <li className='compagnieSection_biosList_bioItem'>
+                    <li key={bio._id} className='compagnieSection_biosList_bioItem'>
                         <BioCard biography={bio} setDisplayBioAside={setDisplayBioAside} setBioAside={setBioAside}/>
                     </li>
                 ))}
@@ -128,15 +113,7 @@ function Compagnie() {
                 avec le Ministère de la Culture/Drac Auvergne-Rhône-Alpes, <br/>
                 la Région Auvergne-Rhône-Alpes, et la Ville de Clermont-Ferrand.
                 </p>
-                <ul className='compagnieSection_partners_list'>
-                    {partners.map((partner)=> (
-                        <li className='compagnieSection_partners_list_item'>
-                            <a href={partner.website} target='_blank' rel='noreferrer'>
-                                <img className={`compagnieSection_partners_list_item_${partner.class}`} src={partner.logo} alt={`logo ${partner.logo}`}/>
-                            </a>
-                        </li>
-                    ))}
-                </ul>
+                <LogosList logos={companyLogos} />
             </div>
             <Footer/>
         </section>

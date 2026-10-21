@@ -14,7 +14,7 @@
 
       
 
-        &:hover {
+        @include hoverable {
 
             cursor: pointer;
         }

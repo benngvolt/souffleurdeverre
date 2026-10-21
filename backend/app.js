@@ -1,103 +1,80 @@
-/*-----------------------------------------------------------
-
-CONSTANTES et IMPORTS
-
------------------------------------------------------------*/
-
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-
-const SECRET_MONGODBKEY = process.env.SECRET_MONGODBKEY;
-//Nouvelle instance de l'application Express, pour configurer notre serveur et définir les routes et les middlewares.
-
-
-/* --------------------------------------------------------
-
------------ A CONFIGURER ----------------------------------
-
-----------------------------------------------------------*/
-
+const helmet = require('helmet');
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 
 const projectsRoutes = require('./routes/projects');
 const biographiesRoutes = require('./routes/biographies');
+const logosRoutes = require('./routes/logos');
+const backupRoutes = require('./routes/backup');
 const usersRoutes = require('./routes/users');
-const newslettersRoutes = require('./routes/newsletters')
+const newslettersRoutes = require('./routes/newsletters');
+const { notFoundHandler, errorHandler } = require('./middlewares/errorHandler');
 
-/* --------------------------------------------------------
+const SECRET_MONGODBKEY = process.env.SECRET_MONGODBKEY;
 
------------ A CONFIGURER ----------------------------------
-
-----------------------------------------------------------*/
-
-
-const path = require ('path');
-
-// Connexion à mongoose avec l'adresse srv donnée lors de la création du cluster contenant le password
-mongoose.connect(SECRET_MONGODBKEY,
-  { useNewUrlParser: true,
-    useUnifiedTopology: true })
-  .then(() => console.log('Connexion à MongoDB réussie !')) // écrit dans la console du terminal
-  .catch(() => console.log('Connexion à MongoDB échouée !'));
+mongoose.connect(SECRET_MONGODBKEY)
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch((error) => console.error('Connexion à MongoDB échouée :', error.message));
 
 /*-----------------------------------------------------------
-
 MIDDLEWARES
-
 -----------------------------------------------------------*/
 
-// // MIDDLEWARRE POUR INDIQUER A EXPRESS Où SE TROUVE MON DOSSIER CONTENANT LES IMAGES
-// app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(helmet());
 
-// PREMIER MIDDLEWARE POUR GÉRER LES PROBLEMES DE CORS ORIGIN
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+// Site public en lecture ouverte à tous les domaines
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content', 'Accept', 'Content-Type', 'Authorization'],
+}));
 
-    // intercept OPTIONS method
-    if ('OPTIONS' == req.method) {
-      res.sendStatus(200);
-    }
-    else {
-      next();
-    }
-  });
-
-// pour parser les requêtes
 app.use(express.json());
 
-/* --------------------------------------------------------
+if (process.env.NODE_ENV !== 'production') {
+  app.use((req, res, next) => {
+    console.log('[API] ', req.method, req.originalUrl);
+    next();
+  });
+}
 
------------ A CONFIGURER ----------------------------------
-
-----------------------------------------------------------*/
-app.use((req, res, next) => {
-  console.log('[API] ', req.method, req.originalUrl);
-  next();
+// Limite le brute-force sur le login et les abus sur l'envoi de newsletters
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Trop de tentatives, réessayez plus tard.' },
 });
-// on utilise les routers importés
-app.use ('/api/users', usersRoutes);
-app.use ('/api/projects', projectsRoutes);
-app.use ('/api/biographies', biographiesRoutes);
-app.use ('/api/newsletters', newslettersRoutes);
-// app.use ('/api/events', eventsRoutes);
-// app.use ('/api/email', emailRoutes);
 
-/* --------------------------------------------------------
+const newsletterLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Trop de requêtes, réessayez plus tard.' },
+});
 
------------ A CONFIGURER ----------------------------------
+app.use('/api/users', loginLimiter, usersRoutes);
+app.use('/api/projects', projectsRoutes);
+app.use('/api/biographies', biographiesRoutes);
+app.use('/api/logos', logosRoutes);
 
-----------------------------------------------------------*/
+// Une sauvegarde complète n'a pas lieu d'être déclenchée plus de quelques fois par heure
+const backupLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Trop de requêtes, réessayez plus tard.' },
+});
+app.use('/api/backup', backupLimiter, backupRoutes);
+app.use('/api/newsletters', newsletterLimiter, newslettersRoutes);
 
+app.use(notFoundHandler);
+app.use(errorHandler);
 
-
-
-// Enfin, cette ligne exporte notre instance d'application Express afin qu'elle puisse être utilisée dans d'autres fichiers du projet. 
-// Cela permet d'utiliser cette instance d'application pour créer le serveur et configurer d'autres fonctionnalités.
 module.exports = app;
-
-
-
-// En résumé, ce code crée une instance d'application Express, définit un middleware qui renvoie une réponse JSON à chaque requête entrante, puis exporte cette instance pour une utilisation ultérieure. 
-// C'est une configuration de base pour une application Express simple.

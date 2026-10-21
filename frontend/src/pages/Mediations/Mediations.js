@@ -2,11 +2,22 @@ import './Mediations.scss'
 import { Link } from 'react-router-dom'
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../utils/Context'
+import { useDocumentMeta } from '../../utils/useDocumentMeta'
+import { SITE_URL } from '../../utils/constants'
 
- 
+
 function Mediations() {
 
     const { projects, projectTypes, projectStates, fullCurrentDate, isAuthenticated } = useContext(Context);
+
+    useDocumentMeta({
+        title: 'Médiations | Compagnie Le Souffleur de Verre',
+        description: 'Les actions de médiation culturelle et artistique de la Compagnie Le Souffleur de Verre.',
+        canonical: `${SITE_URL}/mediations`,
+        ogTitle: 'Médiations | Compagnie Le Souffleur de Verre',
+        ogUrl: `${SITE_URL}/mediations`,
+    })
+
     const visibleProjects = projects.filter((project)=>(project.projectState === "médiation"));
     const [displayedProjects, setDisplayedProjects] = useState(visibleProjects);
     const [sortedProjects, setSortedProjects] = useState(displayedProjects);
@@ -83,6 +94,7 @@ function Mediations() {
                         src={project.images[project.mainImageIndex]?.imageUrl}
                         alt={project.title}
                         className='spectacles_projectsList_projectItem_img'
+                        loading='lazy'
                     />
                     <div className='spectacles_projectsList_projectItem_mainDatas'>
                         <h3 className='spectacles_projectsList_projectItem_mainDatas_title'>

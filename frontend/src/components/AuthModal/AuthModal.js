@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import './AuthModal.scss';
 import { Context } from '../../utils/Context';
 import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../../utils/constants';
+import { apiFetch, setAuthToken } from '../../utils/api';
 import ErrorText from '../ErrorText/ErrorText';
 
 function AuthModal({ handleAuthModal, authModalDisplay }) {
@@ -16,54 +16,33 @@ function AuthModal({ handleAuthModal, authModalDisplay }) {
 
     const onSubmit = async (event) => {
         event.preventDefault();
-    
-        const authData = {
-            username,
-            password
-        };
-    
+
+        setDisplayError(false);
+        setDisplayServerError(false);
+
         try {
-            const response = await fetch(`${API_URL}/api/users/`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(authData)
+            const data = await apiFetch('/api/users/', {
+                method: 'POST',
+                json: { username, password },
             });
-    
-            // Vérifier le code de réponse HTTP
-            if (response.status === 401) {
-                // Erreur d'authentification
+
+            if (!data?.token) {
                 setDisplayError(true);
                 setLoggedOut();
-                console.log('Non authentifié');
-            } else if (response.status === 500) {
-                // Erreur interne du serveur
-                setDisplayServerError(true);
-                console.log('Erreur serveur');
-            } else {
-                // Si le code de réponse est autre que 401 ou 500
-                const data = await response.json();
-    
-                if (data.token) {
-                    setDisplayError(false);
-                    const tokenValue = JSON.stringify(data.token);
-                    const token = tokenValue.replace(/"/g, '');
-                    setLoggedIn();
-                    handleAuthModal();
-                    navigate('/edit');
-                    window.sessionStorage.setItem("1", token);
-                    console.log('Authentifié');
-                } else {
-                    setDisplayError(true);
-                    setLoggedOut();
-                    console.log('Non authentifié');
-                }
+                return;
             }
+
+            setAuthToken(data.token);
+            setLoggedIn();
+            navigate('/edit');
         } catch (error) {
-            // Erreur de connexion
             console.error(error);
-            setDisplayServerError(true);
+            if (error.status === 401) {
+                setDisplayError(true);
+                setLoggedOut();
+            } else {
+                setDisplayServerError(true);
+            }
         }
     };
 

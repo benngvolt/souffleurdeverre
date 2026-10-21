@@ -1,5 +1,7 @@
 # https://www.robotstxt.org/robotstxt.html
 
-User-agent: * 
-Allow: / 
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /edit
 Sitemap: https://souffleurdeverre.fr/sitemap.xml

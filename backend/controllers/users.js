@@ -8,15 +8,14 @@ exports.logIn = (req, res) => {
     User.findOne({ username: req.body.username })
         .then(user => {
             if (!user) {
-                return res.status(401).json({ message: 'Utilisateur non-existant'});
-                 // status 401 'Unauthorized' authentification non-validée
+                return res.status(401).json({ message: 'Identifiants incorrects' });
             }
             bcrypt.compare(req.body.password, user.password)
-                .then( valid => {   
+                .then( valid => {
                     if (!valid) {
-                        return res.status(401).json({ message: 'Paire username/mot de passe incorrecte' }); // status 401 'Unauthorized' authentification non-validée
+                        return res.status(401).json({ message: 'Identifiants incorrects' });
                     }
-                    res.status(200).json({ // status 200 'OK'
+                    res.status(200).json({
                         userId: user._id,
                         token: jwt.sign (
                         { userId: user._id },
@@ -25,21 +24,13 @@ exports.logIn = (req, res) => {
                         )
             })
         })
-            .catch(error => res.status(500).json({ error })); // status 500 'Internal  Server  Error' > erreur serveur
+            .catch(error => {
+                console.error(error);
+                res.status(500).json({ message: 'Erreur lors de la connexion.' });
+            });
         })
-    .catch(error => res.status(400).json({ error }));  // status 400 'Bad Request' > pour indiquer une erreur côté client
+    .catch(error => {
+        console.error(error);
+        res.status(500).json({ message: 'Erreur lors de la connexion.' });
+    });
 };
-
-// exports.signUp = (req, res) => {
-//     bcrypt.hash(req.body.password, 10)
-//     .then(hash => {
-//       const user = new User({
-//         username: req.body.username,
-//         password: hash
-//       });
-//       user.save()
-//         .then(() => res.status(201).json({ message: 'Utilisateur créé !' })) // status 201 'Created'
-//         .catch(error => res.status(400).json({ error })); // status 400 'Bad Request' > pour indiquer une erreur côté client
-//     })
-//     .catch(error => res.status(500).json({ error })); // status 500 'Internal  Server  Error' > erreur serveur
-// }

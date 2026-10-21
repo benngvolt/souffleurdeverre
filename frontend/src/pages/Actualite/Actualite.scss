@@ -80,7 +80,7 @@
                             font-size: 30px;
                             color: $colorDarkGrey;
                             text-transform: uppercase;
-                            &:hover {
+                            @include hoverable {
                                 color: $colorFive;
                              }   
                         }
@@ -150,9 +150,11 @@
 
                             &_calendarLink {
                                 color: black;
-                                :hover {
-                                    color: $colorFive;
-                                    cursor: pointer;
+                                @media (hover: hover) and (pointer: fine) {
+                                    :hover {
+                                        color: $colorFive;
+                                        cursor: pointer;
+                                    }
                                 }
 
                                 svg {
@@ -175,7 +177,7 @@
                                         margin: 0 10px
                                     }
                                     
-                                    &:hover {
+                                    @include hoverable {
                                         color: $colorThree;
                                     }
                                 }

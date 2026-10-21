@@ -1,22 +1,11 @@
-// routes/newsletters.js
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const auth = require('../middlewares/auth');
-// Optionnel : inline du CSS si tu en as dans <style> (utile pour l'email)
-// const juice = require('juice');
 
 const BREVO_API_KEY = process.env.BREVO_API_KEY;
 
-// const requireAuth = (req, res, next) => { /* TODO: vérifier JWT/role */ next(); };
-
 router.post('/template', auth, async (req, res) => {
-    
-    // console.log('HIT /api/newsletters/template', req.method, {
-    //     hasHtml: !!req.body?.htmlContent
-    //   });
-    //   console.log('coucou')
-
     try {
       if (!BREVO_API_KEY) {
         return res.status(500).json({ error: 'BREVO_API_KEY manquant' });

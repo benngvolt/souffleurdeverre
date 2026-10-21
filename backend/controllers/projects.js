@@ -1,9 +1,6 @@
 const Project = require('../models/project')
-const { storage, bucket } = require('../config/storage');
-
 
 /* -----------------------------
-AJOUT PROSPACE
 Helper pour parser les champs JSON envoyés en FormData
 ----------------------------- */
 function parseJsonField(value, fallback) {
@@ -15,6 +12,53 @@ function parseJsonField(value, fallback) {
   } catch {
     return fallback;
   }
+}
+
+function parseRequiredJsonList(value) {
+  if (typeof value === 'object' && value !== null) return value;
+
+  try {
+    return JSON.parse(value);
+  } catch {
+    const error = new Error('Champ JSON invalide dans la requête.');
+    error.status = 400;
+    throw error;
+  }
+}
+
+function parseLogoNames(value) {
+  const names = parseJsonField(value, []);
+  if (!Array.isArray(names)) return [];
+  return [...new Set(names.filter((name) => typeof name === 'string' && name.trim()).map((name) => name.trim()))];
+}
+
+// Documents déjà enregistrés que le client conserve (JSON) : on ne garde que les champs attendus
+function sanitizeDocuments(value) {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .filter((document) => document && typeof document.url === 'string' && document.url.trim())
+    .map((document) => ({
+      name: String(document.name || '').trim() || 'Document',
+      url: document.url.trim(),
+      size: Number.isFinite(Number(document.size)) ? Number(document.size) : undefined,
+      mimeType: typeof document.mimeType === 'string' ? document.mimeType : '',
+    }));
+}
+
+// Espace pro : documents conservés (envoyés en JSON) + documents tout juste uploadés (middleware uploadProDocuments)
+function buildProSpace(rawProSpace, newDocuments = []) {
+  const parsed = parseJsonField(rawProSpace, {});
+  const documents = [...sanitizeDocuments(parsed.documents), ...newDocuments];
+  const zipUrl = typeof parsed.zipUrl === 'string' ? parsed.zipUrl : '';
+
+  return {
+    // Sans aucun document (ni ancien ZIP), l'espace pro ne peut pas être affiché
+    enabled: Boolean(parsed.enabled) && (documents.length > 0 || Boolean(zipUrl)),
+    zipUrl,
+    password: typeof parsed.password === 'string' ? parsed.password : '',
+    documents,
+  };
 }
 
 function slugify(text) {
@@ -36,7 +80,10 @@ function slugify(text) {
 exports.getAllProjects = (req, res) => {
     Project.find()
       .then (projects =>res.status(200).json(projects))
-      .catch (error => res.status (400).json({error}))
+      .catch (error => {
+        console.error(error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des projets.' });
+      })
   }
 
 /*------------------------
@@ -46,7 +93,10 @@ exports.getAllProjects = (req, res) => {
 exports.getOneProject = (req, res) => {
   Project.findOne({_id: req.params.id})
     .then (project =>res.status(200).json(project))
-    .catch (error => res.status (400).json({error}))
+    .catch (error => {
+      console.error(error);
+      res.status(400).json({ error: 'Erreur lors de la récupération du projet.' });
+    })
 }
 
 /*------------------------
@@ -69,7 +119,8 @@ exports.getOneProjectBySlug = async (req, res) => {
 
     res.status(200).json(project);
   } catch (error) {
-    res.status(500).json({ error });
+    console.error(error);
+    res.status(500).json({ error: 'Erreur lors de la récupération du projet.' });
   }
 };
 
@@ -84,10 +135,6 @@ exports.deleteOneProject = async (req, res, next) => {
     if (!deletedProject) {
       return res.status(404).json({ message: 'Projet non trouvée' });
     }
-    const projects = await Project.find();
-    const imageUrls = projects.flatMap((project) => project.images.map((image) => image.imageUrl));
-    const pdfLinks = projects.flatMap((project) => project.pdfList.map((pdf) => pdf.pdfLink));
-    // Appeler la fonction de suppression d'images après avoir supprimé la série
     res.status(200).json({ message: 'Projet supprimé !' });
     next();
   } catch (error) {
@@ -102,76 +149,46 @@ exports.deleteOneProject = async (req, res, next) => {
 ------------------------*/
 
 exports.createProject = async (req, res) => {
-
+  try {
     const projectData = req.body;
     const images = req.newImagesObjects;
     const pdfList = req.newPdfsObjects;
-    const artistsList = JSON.parse(req.body.artistsList);
-    const productionList = JSON.parse(req.body.productionList);
-    const pressList = JSON.parse(req.body.pressList);
-    const paragraphList = JSON.parse(req.body.paragraphList);
-    const linksList = JSON.parse(req.body.linksList);
-    const residenciesList = JSON.parse(req.body.residenciesList);
-    const showsList = JSON.parse(req.body.showsList);
-    const proSpace = parseJsonField(req.body.proSpace, {
-      enabled: false,
-      zipUrl: '',
-      password: ''
-    });
+    const artistsList = parseRequiredJsonList(req.body.artistsList);
+    const productionList = parseRequiredJsonList(req.body.productionList);
+    const pressList = parseRequiredJsonList(req.body.pressList);
+    const paragraphList = parseRequiredJsonList(req.body.paragraphList);
+    const linksList = parseRequiredJsonList(req.body.linksList);
+    const residenciesList = parseRequiredJsonList(req.body.residenciesList);
+    const showsList = parseRequiredJsonList(req.body.showsList);
+    const logos = parseLogoNames(req.body.logos);
+    const proSpace = buildProSpace(req.body.proSpace, req.newProDocumentsObjects);
 
-    // ✅ ZIP : si un nouveau ZIP a été uploadé, on injecte son URL dans proSpace
-    if (req.zipFileUrl) {
-      proSpace.zipUrl = req.zipFileUrl;
-    }
-
-  
-    const descriptionWithBr = req.body.description;
-
-    const paragraphListWithBr = paragraphList.map((paragraph) => {
-      const paragraphTextWithBr = paragraph.paragraphText;
-      return {
-          ...paragraph, // Spread des propriétés de paragraph
-          paragraphText: paragraphTextWithBr // Modification de la propriété paragraphText
-      };
-    });
-
-    const pressListWithBr = pressList.map((press) => {
-      const quoteTextWithBr = press.quote;
-      return {
-          ...press, // Spread des propriétés de paragraph
-          quote: quoteTextWithBr // Modification de la propriété paragraphText
-      };
-    });
-  
     if (!projectData.title || !projectData.projectState) {
       return res.status(400).json({ error: 'Le champ "title" ou "state" est manquant dans la demande.' });
     }
-  
-    try {
-      // if (serieImages.length === req.newImagesObjects.length) {
-        // Si toutes les images ont été traitées, créez une nouvelle instance du modèle Serie
-        const project = new Project({
-          ... projectData,
-          description: descriptionWithBr,
-          artistsList: artistsList,
-          productionList: productionList,
-          pressList: pressListWithBr,
-          paragraphList: paragraphListWithBr,
-          linksList: linksList,
-          residenciesList: residenciesList,
-          showsList: showsList,
-          images: images,
-          pdfList: pdfList,
-          proSpace: proSpace
-        });
-        await project.save();
-        res.status(201).json({ message: 'Projet enregistrée !' });
-      // }
-    } catch (error) {
-      console.error(error);
-      res.status(400).json({ error });
-    }
-  };
+
+    const project = new Project({
+      ...projectData,
+      artistsList,
+      productionList,
+      pressList,
+      paragraphList,
+      linksList,
+      residenciesList,
+      showsList,
+      logos,
+      images,
+      pdfList,
+      proSpace
+    });
+    await project.save();
+    // L'_id permet à l'éditeur de continuer à modifier le projet (PUT) sans en recréer un autre
+    res.status(201).json({ message: 'Projet enregistrée !', _id: project._id });
+  } catch (error) {
+    console.error(error);
+    res.status(error.status || 400).json({ error: error.status ? error.message : 'Erreur lors de la création du projet.' });
+  }
+};
 
 /*--------------------------
 ----- UPDATE ONE PROJECT -----
@@ -190,105 +207,68 @@ exports.updateOneProject = async (req, res, next) => {
       }
 
       const projectData = req.body;
-      const descriptionWithBr = req.body.description;
-      const artistsList = JSON.parse(req.body.artistsList);
-      const productionList = JSON.parse(req.body.productionList);
-      const pressList = JSON.parse(req.body.pressList);
-      const paragraphList = JSON.parse(req.body.paragraphList);
-      const linksList = JSON.parse(req.body.linksList);
-      const residenciesList = JSON.parse(req.body.residenciesList);
-      const showsList = JSON.parse(req.body.showsList);
-      const proSpace = parseJsonField(req.body.proSpace, {
-        enabled: false,
-        zipUrl: '',
-        password: ''
-      });
-      
-      // ✅ ZIP : si un nouveau ZIP a été uploadé, il remplace l'ancien
-      if (req.zipFileUrl) {
-        proSpace.zipUrl = req.zipFileUrl;
-      }
+      const artistsList = parseRequiredJsonList(req.body.artistsList);
+      const productionList = parseRequiredJsonList(req.body.productionList);
+      const pressList = parseRequiredJsonList(req.body.pressList);
+      const paragraphList = parseRequiredJsonList(req.body.paragraphList);
+      const linksList = parseRequiredJsonList(req.body.linksList);
+      const residenciesList = parseRequiredJsonList(req.body.residenciesList);
+      const showsList = parseRequiredJsonList(req.body.showsList);
+      const proSpace = buildProSpace(req.body.proSpace, req.newProDocumentsObjects);
 
-      const paragraphListWithBr = paragraphList.map((paragraph) => {
-        const paragraphTextWithBr = paragraph.paragraphText;
-        return {
-            ...paragraph, // Spread des propriétés de paragraph
-            paragraphText: paragraphTextWithBr // Modification de la propriété paragraphText
-        };
-      });
-  
-      const pressListWithBr = pressList.map((press) => {
-        const quoteTextWithBr = press.quote;
-        return {
-            ...press, // Spread des propriétés de paragraph
-            quote: quoteTextWithBr // Modification de la propriété paragraphText
-        };
-      });
       // RÉCUPÉRATION DES IMAGES EXISTANTES DEPUIS LE FRONTEND, PARSE DES DONNÉES
       const existingImages = req.body.existingImages || [];
       const existingImagesObjects = existingImages.map((imageStr) => JSON.parse(imageStr));
-      
+
       // RÉCUPÉRATION DES PDFS EXISTANTES DEPUIS LE FRONTEND, PARSE DES DONNÉES
       const existingPdfs = req.body.existingPdfs || [];
       const existingPdfsObjects = existingPdfs.map((pdfStr) => JSON.parse(pdfStr));
-  
-      async function processAndSortImages(existingImagesObjects, newImagesObjects) {
-        const allImages = existingImagesObjects.map((image, index) => ({
-          imageUrl: image.imageUrl,
-          index,
-        })).concat(newImagesObjects);
-        allImages.sort((a, b) => a.index - b.index);
-        const updatedImages = allImages.filter((image) => image != null && image !== "empty");
-        return updatedImages;
-      }
-  
-      async function processAndSortPdfs(existingPdfsObjects, newPdfsObjects) {
-        const allPdfs = existingPdfsObjects.concat(newPdfsObjects);
-        const updatedPdfs = allPdfs.filter((pdf) => pdf != null && pdf !== "");
-        return updatedPdfs;
-      }
-  
-      // MISE À JOUR DE LA SÉRIE DANS LA BASE DE DONNÉES
-      async function updateProject(updatedImages) {
-        const updatedMainImageIndex = req.body.mainImageIndex || 0;
 
-        if (!projectData.title || !projectData.projectState) {
-          return res.status(400).json({ error: 'Le champ "title" ou "state" est manquant dans la demande.' });
-        }
-        
-        const projectObject = {
-          ...projectData,
-          description: descriptionWithBr,
-          artistsList: artistsList,
-          productionList: productionList,
-          pressList: pressListWithBr,
-          paragraphList: paragraphListWithBr,
-          linksList: linksList,
-          residenciesList: residenciesList,
-          showsList: showsList,
-          mainImageIndex: updatedMainImageIndex,
-          images: updatedImages,
-          pdfList: updatedPdfs,
-          proSpace: proSpace
-        };
-  
-        await Project.updateOne({ _id: req.params.id }, projectObject);
-        console.log('Project updated successfully');
-        res.status(200).json({ message: 'Projet modifiée' });
-        next();
-        // À ce stade, vous pouvez appeler d'autres fonctions si nécessaire
-      }
-  
       const newImagesObjects = req.newImagesObjects || [];
       const newPdfsObjects = req.newPdfsObjects || [];
 
-      const updatedImages = await processAndSortImages(existingImagesObjects, newImagesObjects);
-      const updatedPdfs = await processAndSortPdfs(existingPdfsObjects, newPdfsObjects);
+      const allImages = existingImagesObjects
+        .map((image, index) => ({ imageUrl: image.imageUrl, index }))
+        .concat(newImagesObjects);
+      allImages.sort((a, b) => a.index - b.index);
+      const updatedImages = allImages.filter((image) => image != null && image !== 'empty');
 
-      await updateProject(updatedImages, updatedPdfs);
+      const updatedPdfs = existingPdfsObjects
+        .concat(newPdfsObjects)
+        .filter((pdf) => pdf != null && pdf !== '');
+
+      if (!projectData.title || !projectData.projectState) {
+        return res.status(400).json({ error: 'Le champ "title" ou "state" est manquant dans la demande.' });
+      }
+
+      const projectObject = {
+        ...projectData,
+        artistsList,
+        productionList,
+        pressList,
+        paragraphList,
+        linksList,
+        residenciesList,
+        showsList,
+        mainImageIndex: req.body.mainImageIndex || 0,
+        images: updatedImages,
+        pdfList: updatedPdfs,
+        proSpace
+      };
+
+      // Les logos ne sont modifiés que si le client les envoie (évite de les vider par erreur)
+      if (req.body.logos !== undefined) {
+        projectObject.logos = parseLogoNames(req.body.logos);
+      } else {
+        delete projectObject.logos;
+      }
+
+      await Project.updateOne({ _id: req.params.id }, projectObject);
+      res.status(200).json({ message: 'Projet modifiée' });
+      next();
 
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Erreur lors de la mise à jour de la série.' });
+      res.status(error.status || 500).json({ error: error.status ? error.message : 'Erreur lors de la mise à jour du projet.' });
     }
   };

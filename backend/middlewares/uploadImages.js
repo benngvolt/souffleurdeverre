@@ -1,217 +1,9 @@
-// const { storage, bucket } = require('../config/storage');
-//  // should be your bucket name
-// const sharp = require('sharp')
-// const { format } = require('url'); 
-
-
-// function uploadImages(req, res, next) {
-    
-//     const newImagesObjects = [];
-//     const fileIndexes = req.body.fileIndexes;
-//     const files = req.files.images;
-    
-//     if (!files || files.length === 0) {
-//       // Aucune image n'a été téléchargée, appeler next() et sortir de la fonction
-//       return next();
-//     }
-//     // Créez un tableau de promesses pour gérer chaque fichier individuellement
-//     const uploadPromises = files.map( (file, index) => {
-//       return new Promise(async(resolve, reject) => {
-//         try {
-//           const { originalname, buffer } = file;
-    
-//           // Redimensionnez et convertissez l'image avec Sharp
-//           const resizedImageBuffer = await sharp(buffer)
-//             .resize({
-//               width: 1500,
-//               fit: 'cover',
-//               kernel: 'lanczos3',
-//             })
-//             .toFormat('webp')
-//             .toBuffer();
-    
-//           // Créez un blob dans le stockage Google Cloud Storage
-//           const blob = bucket.file('projects_images/' + originalname);
-//           const blobStream = blob.createWriteStream({
-//             resumable: false
-//           });
-    
-//           blobStream.on('finish', () => {
-//             const publicUrl = format(
-//               `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-//             );
-    
-//             // Pousser les données dans le tableau newImagesObject
-//             if (fileIndexes) {
-//               newImagesObjects.push({
-//                 imageUrl: publicUrl,
-//                 index: JSON.parse(fileIndexes[index])
-//               });
-//             } else {
-//               newImagesObjects.push({
-//                 imageUrl: publicUrl,
-//               });
-//             }
-  
-//             // Continuer avec la prochaine promesse
-//             resolve(publicUrl);
-//           }).on('error', () => {
-//             reject(`Unable to upload image: ${originalname}`);
-//           }).end(resizedImageBuffer);
-//         } catch (error) {
-//           // Gérez les erreurs ici...
-//           reject(`Unable to process image: ${file.originalname}`);
-//         }
-//       })
-//     });
-
-//     // Utilisez Promise.all pour attendre que toutes les promesses d'upload se terminent
-//     Promise.all(uploadPromises)
-//       .then(() => {
-//         // Stockez newImagesObjects dans l'objet req pour qu'il soit disponible dans le contrôleur
-//         req.newImagesObjects = newImagesObjects;
-//         next(); // Passez au middleware suivant ou à la route
-//       })
-//       .catch((error) => {
-//         // Gérez les erreurs ici...
-//         res.status(500).json({ error: 'Erreur lors du traitement des images.' });
-//       });
-//   };
-
-
-//   function uploadPdfs(req, res, next) {
-    
-//     const newPdfsObjects = [];
-//     const pdfFileIndexes = req.body.pdfFileIndexes;
-//     const files = req.files.pdfFiles;
-//     let pdfNames = req.body.pdfNames;
-//     if (!Array.isArray(pdfNames)) {
-//         pdfNames = [pdfNames];
-//     }
-    
-//     if (!files || files.length === 0) {
-//       // Aucune image n'a été téléchargée, appeler next() et sortir de la fonction
-//       return next();
-//     }
-  
-//     // Créez un tableau de promesses pour gérer chaque fichier individuellement
-//     const uploadPromises = files.map( (file, index) => {
-//       return new Promise(async(resolve, reject) => {
-//         try {
-//           const { originalname, buffer } = file;
-//           const pdfName = pdfNames[index];
-    
-//           // Créez un blob dans le stockage Google Cloud Storage
-//           const blob = bucket.file('pdfList/' + originalname);
-//           const blobStream = blob.createWriteStream({
-//             resumable: false
-//           });
-  
-//           blobStream.on('finish', () => {
-//             const publicUrl = format(
-//               `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-//             );
-            
-            
-//             // Pousser les données dans le tableau newImagesObject
-//             if (pdfFileIndexes) {
-//               newPdfsObjects.push({
-//                 pdfLink: publicUrl,
-//                 pdfName: pdfName,
-//                 index: JSON.parse(pdfFileIndexes[index])
-//               });
-//             } else {
-//               newPdfsObjects.push({
-//                 pdfLink: publicUrl,
-//                 pdfName: pdfName,
-//               });
-//             }
-//             // Continuer avec la prochaine promesse
-//             resolve(publicUrl);
-//           }).on('error', () => {
-//             reject(`Unable to upload pdf: ${originalname}`);
-//           }).end(buffer);
-//         } catch (error) {
-//           // Gérez les erreurs ici...
-//           reject(`Unable to process pdf: ${file.originalname}`);
-//         }
-//       })
-//     });
-
-//     // Utilisez Promise.all pour attendre que toutes les promesses d'upload se terminent
-//     Promise.all(uploadPromises)
-//       .then(() => {
-//         // Stockez newImagesObjects dans l'objet req pour qu'il soit disponible dans le contrôleur
-//         req.newPdfsObjects = newPdfsObjects;
-//         next(); // Passez au middleware suivant ou à la route
-//       })
-//       .catch((error) => {
-//         // Gérez les erreurs ici...
-//         res.status(500).json({ error: 'Erreur lors du traitement des pdfs.' });
-//       });
-//   };
-
-
-
-//   function uploadImage(req, res, next) {
-//     try {
-//       if (!req.file) {
-//         next(); // Pas de fichier, passez directement au contrôleur suivant
-//       } else if (req.file) {
-//         const file = req.file;
-//         const { originalname, buffer } = file;
-      
-//         // Redimensionnez et convertissez l'image avec Sharp
-//         sharp(buffer)
-//           .resize({
-//             width: 1500,
-//             fit: 'cover',
-//             kernel: 'lanczos3',
-//           })
-//           .toFormat('webp')
-//           .toBuffer()
-//           .then((resizedImageBuffer) => {
-//             // Créez un blob dans le stockage Google Cloud Storage
-//             const blob = bucket.file('biographies_images/' + originalname);
-//             const blobStream = blob.createWriteStream({
-//               resumable: false
-//             });
-    
-//             blobStream.on('finish', () => {
-//               const publicUrl = format(
-//                 `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-//               );
-    
-//               // Stockez l'URL de l'image dans req
-//               req.imageUrl = publicUrl;
-//               next(); // Passez au middleware suivant ou à la route
-//             }).on('error', (error) => {
-//               console.error(error);
-//               res.status(500).json({ error: `Unable to upload image: ${originalname}` });
-//             }).end(resizedImageBuffer);
-//           })
-//           .catch((error) => {
-//             console.error(error);
-//             res.status(500).json({ error: `Unable to process image: ${file.originalname}` });
-//           });
-//       }
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ error: 'Erreur lors du traitement de l\'image.' });
-//     }
-//   }
-
-//   module.exports = {
-//     uploadImages,
-//     uploadImage,
-//     uploadPdfs,
-//   };
-
 const { bucket } = require('../config/storage');
 const sharp = require('sharp');
 const { format } = require('url');
 const path = require('path');
 const crypto = require('crypto');
+const { PRO_DOCUMENT_MAX_SIZE } = require('../config/proDocuments');
 
 /* ----------------------------
    Helpers
@@ -259,13 +51,14 @@ function parseOptionalIndex(indexValue) {
   }
 }
 
-function uploadBufferToGCS(filePath, buffer, contentType) {
+function uploadBufferToGCS(filePath, buffer, contentType, extraMetadata = {}) {
   return new Promise((resolve, reject) => {
     const blob = bucket.file(filePath);
     const blobStream = blob.createWriteStream({
       resumable: false,
       metadata: {
         contentType,
+        ...extraMetadata,
       },
     });
 
@@ -452,39 +245,106 @@ async function uploadImage(req, res, next) {
 }
 
 /* ----------------------------
-   Upload single ZIP for pro space
+   Upload single logo image
 ---------------------------- */
 
-async function uploadZip(req, res, next) {
+async function uploadLogoImage(req, res, next) {
   try {
-    const file = req.files?.zipFile?.[0];
-
-    if (!file) {
+    if (!req.file) {
       return next();
     }
 
-    const { originalname, buffer, mimetype } = file;
+    const { originalname, buffer, mimetype } = req.file;
 
-    const filePath = createUniqueFileName(
-      'pro_space_zips',
-      originalname,
-      'zip'
-    );
+    // Un logo ne doit pas être agrandi ni recadré ; webp conserve la transparence.
+    // Les SVG sont rastérisés avec une densité élevée pour rester nets.
+    const resizedImageBuffer = await sharp(buffer, mimetype === 'image/svg+xml' ? { density: 300 } : undefined)
+      .resize({
+        width: 800,
+        height: 800,
+        fit: 'inside',
+        withoutEnlargement: true,
+      })
+      .toFormat('webp')
+      .toBuffer();
 
-    const publicUrl = await uploadBufferToGCS(
+    const filePath = createUniqueFileName('logos', originalname, 'webp');
+
+    req.logoImageUrl = await uploadBufferToGCS(
       filePath,
-      buffer,
-      mimetype || 'application/zip'
+      resizedImageBuffer,
+      'image/webp'
     );
-
-    req.zipFileUrl = publicUrl;
 
     return next();
   } catch (error) {
-    console.error('Erreur uploadZip :', error);
+    console.error('Erreur uploadLogoImage :', error);
+    return res.status(500).json({
+      error: 'Erreur lors du traitement du logo.',
+    });
+  }
+}
+
+/* ----------------------------
+   Upload pro space documents
+---------------------------- */
+
+// En-tête Content-Disposition (RFC 5987) : le navigateur télécharge le fichier sous son nom d'origine.
+function buildContentDisposition(displayName, extension) {
+  const hasExtension = displayName.toLowerCase().endsWith(`.${extension}`);
+  const fileName = hasExtension || !extension ? displayName : `${displayName}.${extension}`;
+  const encoded = encodeURIComponent(fileName).replace(/['()*]/g, (char) => `%${char.charCodeAt(0).toString(16).toUpperCase()}`);
+  const asciiFallback = fileName.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x20-\x7e]|["\\]/g, '_');
+
+  return `attachment; filename="${asciiFallback}"; filename*=UTF-8''${encoded}`;
+}
+
+async function uploadProDocuments(req, res, next) {
+  try {
+    const files = req.files?.proDocuments;
+
+    if (!files || files.length === 0) {
+      return next();
+    }
+
+    const tooBig = files.find((file) => file.size > PRO_DOCUMENT_MAX_SIZE);
+
+    if (tooBig) {
+      return res.status(413).json({
+        error: `"${tooBig.originalname}" dépasse la limite de ${PRO_DOCUMENT_MAX_SIZE / (1024 * 1024)} Mo.`,
+      });
+    }
+
+    const names = normalizeToArray(req.body.proDocumentNames);
+
+    req.newProDocumentsObjects = await Promise.all(
+      files.map(async (file, index) => {
+        const extension = path.extname(file.originalname || '').slice(1).toLowerCase();
+        const displayName = (names[index] || '').toString().trim() || file.originalname;
+        const filePath = createUniqueFileName('pro_space_documents', file.originalname, extension || 'bin');
+
+        const url = await uploadBufferToGCS(
+          filePath,
+          file.buffer,
+          file.mimetype || 'application/octet-stream',
+          { contentDisposition: buildContentDisposition(displayName, extension) }
+        );
+
+        return {
+          name: displayName,
+          url,
+          size: file.size,
+          mimeType: file.mimetype || '',
+        };
+      })
+    );
+
+    return next();
+  } catch (error) {
+    console.error('Erreur uploadProDocuments :', error);
 
     return res.status(500).json({
-      error: 'Erreur lors du traitement du ZIP.',
+      error: "Erreur lors de l'envoi des documents de l'espace pro.",
     });
   }
 }
@@ -492,6 +352,7 @@ async function uploadZip(req, res, next) {
 module.exports = {
   uploadImages,
   uploadImage,
+  uploadLogoImage,
   uploadPdfs,
-  uploadZip,
+  uploadProDocuments,
 };

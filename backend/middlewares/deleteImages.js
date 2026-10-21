@@ -1,6 +1,5 @@
-const { storage, bucket } = require('../config/storage');
+const { bucket } = require('../config/storage');
 const Project = require('../models/project')
-const Biography = require('../models/biography')
 
 async function deleteProjectImageFiles(req) {
     // Obtenez la liste des URLs des images depuis Google Cloud Storage
@@ -73,6 +72,32 @@ async function deleteProjectImageFiles(req) {
     }
   }
 
+  // Documents de l'espace pro retirés d'un projet (ou projet supprimé) : on les efface du bucket
+  async function deleteProjectProDocumentFiles() {
+    try {
+      const [cloudFiles] = await bucket.getFiles({ prefix: 'pro_space_documents/' });
+      const projects = await Project.find();
+
+      const referencedUrls = new Set(
+        projects
+          .flatMap((project) => project?.proSpace?.documents || [])
+          .map((document) => document?.url)
+          .filter(Boolean)
+          .map((url) => decodeURIComponent(url.replace(/\+/g, ' ')))
+      );
+
+      for (const file of cloudFiles) {
+        const fileUrl = `https://storage.googleapis.com/${bucket.name}/${file.name}`;
+
+        if (!referencedUrls.has(fileUrl)) {
+          await bucket.file(file.name).delete({ ignoreNotFound: true });
+        }
+      }
+    } catch (error) {
+      console.error('Erreur suppression documents espace pro :', error.message);
+    }
+  }
+
   async function deleteProjectZipFiles(req) {
     async function getCloudZipUrls() {
       const [files] = await bucket.getFiles({ prefix: 'pro_space_zips/' });
@@ -113,43 +138,6 @@ async function deleteProjectImageFiles(req) {
     }
   }
   
-// async function deleteBiographyImageFiles(req) {
-//   // Obtenez la liste des URLs des images depuis Google Cloud Storage
-//   async function getCloudImageUrls() {
-//     const [files] = await bucket.getFiles({ prefix: 'biographies_images/' });
-//     return files.map((file) => `https://storage.googleapis.com/${bucket.name}/${file.name}`);
-//   }
-    
-//   // Obtenez la liste des URLs des images depuis MongoDB
-//   async function getDbImageUrls() {
-
-//     // Récupérez toutes les séries depuis MongoDB
-//     const biographies = await Biography.find();
-    
-//     const imageUrls = biographies.flatMap((biography) => decodeURIComponent(biography.bioImageUrl.replace(/\+/g, ' ')));
-//     return imageUrls;
-//   }
-    
-//   try {
-//     const cloudImageUrls = await getCloudImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
-//     const dbImageUrls = await getDbImageUrls(); // Utilisez "await" pour attendre la résolution de la promesse
-//     const imagesToDelete = cloudImageUrls.filter((url) => !dbImageUrls.includes(url));
-//     // Suppression des images non référencées dans le cloud
-//     for (const imageUrl of imagesToDelete) {
-//       // Divisez l'URL en parties en utilisant "/" comme séparateur
-//       const parts = imageUrl.split('/');
-//       // Récupérez la dernière partie qui contient le nom du fichier
-//       const fileToDeleteName = parts.pop();
-//       if (fileToDeleteName) {
-//         await bucket.file('biographies_images/' + fileToDeleteName).delete();
-//       }
-//     }
-
-//   } catch (error) {
-//     console.error(error.message);
-//   }
-// }
-
 /* -----------------------------
    Helpers
 ----------------------------- */
@@ -195,15 +183,35 @@ async function deleteBiographyImageFiles(req, res, next) {
   }
 }
 
+/* -------------------------------
+   Delete a replaced/removed logo image
+------------------------------- */
+
+async function deleteLogoImageFile(req, res, next) {
+  try {
+    const filePath = extractFilePathFromGcsUrl(req.oldLogoImageUrl);
+
+    if (filePath) {
+      await bucket.file(filePath).delete({ ignoreNotFound: true });
+    }
+  } catch (error) {
+    console.error('Erreur suppression image logo :', error.message);
+  }
+
+  return next();
+}
+
 
 function deleteProjectFiles(req) {
   deleteProjectImageFiles();
   deleteProjectPdfFiles();
+  deleteProjectProDocumentFiles();
   deleteProjectZipFiles()
 }
 
 
 module.exports = {
     deleteProjectFiles,
-    deleteBiographyImageFiles
+    deleteBiographyImageFiles,
+    deleteLogoImageFile
   };

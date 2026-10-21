@@ -8,6 +8,7 @@
     align-items: flex-start;
     row-gap: 54px;
     @include SidePaddings;
+    @include HeaderOffset;
     
 
     &_container {
@@ -25,7 +26,7 @@
                     padding: 6px;
                     text-transform: uppercase !important;
                     @include TextTitle;
-                    &:hover {
+                    @include hoverable {
                         cursor: pointer;
                         background-color: $colorDarkGrey;
                         color: $colorLightGrey;
@@ -119,7 +120,7 @@
                             font-size: 30px;
                             color: $colorDarkGrey;
                             text-transform: uppercase;
-                            &:hover {
+                            @include hoverable {
                                 color: $colorFive;
                              }   
                         }
@@ -189,9 +190,11 @@
 
                             &_calendarLink {
                                 color: black;
-                                :hover {
-                                    color: $colorFive;
-                                    cursor: pointer;
+                                @media (hover: hover) and (pointer: fine) {
+                                    :hover {
+                                        color: $colorFive;
+                                        cursor: pointer;
+                                    }
                                 }
 
                                 svg {
@@ -214,7 +217,7 @@
                                         margin: 0 10px
                                     }
                                     
-                                    &:hover {
+                                    @include hoverable {
                                         color: $colorThree;
                                     }
                                 }
@@ -238,6 +241,11 @@
 
                                 &--mediation {
                                     background-color: $colorFive;   
+                                }
+
+                                // Double classe : l'ancienne feuille Actualite.scss (encore importée) impose sinon son fond cyan
+                                &.eventCard_releaseLabel {
+                                    background-color: $colorThree;
                                 }
                             } 
 
