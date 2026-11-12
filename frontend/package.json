@@ -6,35 +6,23 @@
     "@dnd-kit/core": "^6.0.8",
     "@dnd-kit/sortable": "^7.0.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
-    "@fortawesome/react-fontawesome": "^0.2.0",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
+    "@fortawesome/react-fontawesome": "^0.2.6",
     "dompurify": "^3.0.8",
-    "framer-motion": "^12.23.12",
-    "pdfjs-dist": "^4.0.379",
+    "framer-motion": "^12.43.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.18.5",
-    "react-scripts": "^5.0.1",
-    "sass": "^1.77.6",
+    "sass": "^1.108.2",
     "trix": "^2.1.1",
-    "uuid": "^11.1.1",
-    "web-vitals": "^2.1.4"
+    "uuid": "^11.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -49,18 +37,13 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.1.1"
+    "@vitejs/plugin-react": "^6.3.0",
+    "autoprefixer": "^10.6.2",
+    "gh-pages": "^6.1.1",
+    "vite": "^8.3.8"
   },
-  "overrides": {
-    "nth-check": "^2.1.1",
-    "postcss": "^8.5.32",
-    "serialize-javascript": "^7.1.4",
-    "svgo": "^2.8.4",
-    "underscore": "^1.13.8",
-    "@tootallnate/once": "^2.0.1",
-    "uuid": "^11.1.1",
-    "sucrase": {
-      "glob": "^14.0.4"
-    }
+  "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
   }
 }

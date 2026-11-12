@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { Provider } from './utils/Context';
 import { USE_HOME_SPECIAL } from './utils/constants';
-import reportWebVitals from './reportWebVitals';
 import Home from './pages/Home/Home';
 import HomeSpecial from './pages/HomeSpecial/HomeSpecial';
 import Compagnie from './pages/Compagnie/Compagnie';
@@ -56,5 +55,3 @@ root.render(
     </Provider>
   </React.StrictMode>
 );
-
-reportWebVitals();

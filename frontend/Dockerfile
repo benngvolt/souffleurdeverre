@@ -1,5 +1,5 @@
 # Étape 1 : Utiliser une image Node.js pour builder l'application React
-FROM node:16 AS build
+FROM node:22 AS build
 
 # Définir le répertoire de travail dans le conteneur
 WORKDIR /app
@@ -13,7 +13,7 @@ RUN npm install
 # Copier tous les fichiers de l'application
 COPY . .
 
-# Builder l'application React
+# Builder l'application React (Vite)
 RUN npm run build
 
 # Étape 2 : Utiliser une image Nginx pour servir l'application
