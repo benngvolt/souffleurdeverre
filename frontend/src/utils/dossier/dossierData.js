@@ -132,27 +132,19 @@ export function formatCreationDate(value) {
 }
 
 /* Calendrier de création du dossier : seulement les résidences d'écriture puis de création
-   (ni répétitions, ni laboratoires, ni autres), dans cet ordre, suivies de la production. */
+   (ni répétitions, ni laboratoires, ni autres), dans cet ordre. */
 const CALENDAR_TYPES = ["residences d'ecriture", 'residences de creation'];
 
 function residencyKey(type) {
   return normalizeText(String(type || '').replace(/[’‘]/g, "'"));
 }
 
-export function calendarGroups(residenciesList = [], productionList = []) {
+export function calendarGroups(residenciesList = []) {
   const kept = (residenciesList || []).filter((residency) => CALENDAR_TYPES.includes(residencyKey(residency.residencyType)));
-  const groups = groupResidencies(kept).sort(
+
+  return groupResidencies(kept).sort(
     (a, b) => CALENDAR_TYPES.indexOf(residencyKey(a.type)) - CALENDAR_TYPES.indexOf(residencyKey(b.type))
   );
-
-  const production = (productionList || [])
-    .filter((item) => item && ((item.productionFunction || '').trim() || (item.productionName || '').trim()))
-    .map((item) => ({
-      dates: (item.productionFunction || '').trim(),
-      lines: (item.productionName || '').trim() ? [(item.productionName || '').trim()] : [],
-    }));
-
-  return production.length ? [...groups, { type: 'Production', items: production }] : groups;
 }
 
 /* Résidences regroupées par type, triées par date. L'année n'est affichée que si

@@ -78,9 +78,7 @@ function buildContent(project, allLogos) {
     images,
     cover: { title: project.title, credits: coverCredits, notes: coverNotes },
     generic: { title: project.title, tagline: project.moreInfos ? htmlToText(project.moreInfos) : '', rows: genericRows },
-    calendarBlocks: calendarGroups(project.residenciesList, project.productionList).flatMap((group) =>
-      calendarBlocks(group, 'calendar', { keepTogether: group.type === 'Production' })
-    ),
+    calendarBlocks: calendarGroups(project.residenciesList).flatMap((group) => calendarBlocks(group, 'calendar')),
     logos: (project.logos || []).map((name) => allLogos.find((logo) => logo.name === name)).filter(Boolean),
   };
 }
@@ -328,7 +326,7 @@ function DossierEditor({ project, biographies, logos, onBack }) {
             <SectionLabel number='5' title='LA COMPAGNIE' hint='Page fixe.' />
             <CompanyPage />
 
-            <SectionLabel number='·' title='CALENDRIER DE CRÉATION' hint='Résidences d’écriture et de création, puis production : repris des données du projet.' />
+            <SectionLabel number='·' title='CALENDRIER DE CRÉATION' hint='Résidences d’écriture et de création, reprises des données du projet.' />
             <FlowPages title='Calendrier de création' blocks={content.calendarBlocks} variant='calendar' />
 
             <SectionLabel number='6' title='INFOS DE LA COMPAGNIE ET LOGOS' hint='Page fixe, logos choisis dans le projet.' />

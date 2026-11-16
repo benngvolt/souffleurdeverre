@@ -292,7 +292,7 @@ export function FlowPages({ title, blocks, variant = 'calendar' }) {
 
 /* Un groupe (type de résidence...) devient une suite de blocs : un titre, puis une ligne
    par date. Ainsi une longue liste se répartit sur plusieurs pages, et un titre n'est jamais seul en bas de page. */
-export function calendarBlocks(group, prefix = 'calendar', { keepTogether = false } = {}) {
+export function calendarBlocks(group, prefix = 'calendar') {
   const last = group.items.length - 1;
 
   return [
@@ -307,8 +307,6 @@ export function calendarBlocks(group, prefix = 'calendar', { keepTogether = fals
     },
     ...group.items.map((item, index) => ({
       key: `${prefix}-${group.type}-${index}`,
-      // groupe court (ex. la production) : toutes ses lignes restent ensemble sur la même page
-      keepWithNext: keepTogether && index < last,
       node: (
         <div className={`dossierCalendar ${index === last ? 'dossierCalendar--last' : ''}`}>
           <p className='dossierCalendar_dates'>{item.dates}</p>
