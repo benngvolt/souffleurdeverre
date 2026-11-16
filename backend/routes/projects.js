@@ -27,6 +27,14 @@ router.get('/',
 router.get('/:slug',
     projectsCtrl.getOneProjectBySlug);
 
+// Espace pro : vérification du mot de passe côté serveur (public) et lecture complète (admin)
+router.post('/:id/pro-access',
+    projectsCtrl.verifyProSpaceAccess);
+
+router.get('/:id/pro-space',
+    auth,
+    projectsCtrl.getProSpaceForAdmin);
+
 router.delete ('/:id',
     auth,
     projectsCtrl.deleteOneProject,

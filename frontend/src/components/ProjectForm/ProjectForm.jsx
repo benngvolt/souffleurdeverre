@@ -147,12 +147,39 @@ function ProjectForm({
     const [projectLogos, setProjectLogos] = useState([])
         // ✅ AJOUT ESPACE PRO
     const [proSpace, setProSpace] = useState(EMPTY_PRO_SPACE);
+    // L'espace pro complet (mot de passe, documents) n'est plus dans les données publiques : on le charge
+    // à l'ouverture d'un projet. Tant qu'il n'est pas chargé, on bloque l'enregistrement pour ne pas l'écraser.
+    const [proSpaceStatus, setProSpaceStatus] = useState(projectFormMode === 'edit' ? 'loading' : 'ready');
+    const proSpaceRequestRef = useRef(0);
     // Documents ajoutés mais pas encore enregistrés : [{ id, file, name }]
     const [proDocumentFiles, setProDocumentFiles] = useState([]);
     const [proDocumentsError, setProDocumentsError] = useState('');
     const [displayServerError, setDisplayServerError] = useState(false);
     const [displayError, setDisplayError] = useState(false);
     const [projectCurrentDescription, setProjectCurrentDescription] = useState('');
+
+    function loadProSpace() {
+        if (projectFormMode !== 'edit' || !projectEdit?._id) {
+            setProSpaceStatus('ready');
+            return;
+        }
+
+        proSpaceRequestRef.current += 1;
+        const requestId = proSpaceRequestRef.current;
+        setProSpaceStatus('loading');
+
+        apiFetch(`/api/projects/${projectEdit._id}/pro-space`, { auth: true })
+            .then((data) => {
+                if (requestId !== proSpaceRequestRef.current) return;
+                setProSpace(normalizeProSpace(data));
+                setProSpaceStatus('ready');
+            })
+            .catch((error) => {
+                if (requestId !== proSpaceRequestRef.current) return;
+                console.error(error);
+                setProSpaceStatus('error');
+            });
+    }
 
     function initializeFields() {
         setDisplayServerError(false);
@@ -167,7 +194,8 @@ function ProjectForm({
             setProjectDescription(projectEdit.description);
             setProjectMoreInfos(projectEdit.moreInfos);
             setProjectLogos(projectEdit.logos || []);
-            setProSpace(normalizeProSpace(projectEdit.proSpace));
+            setProSpace(EMPTY_PRO_SPACE);
+            loadProSpace();
             setProDocumentFiles([]);
         } else if (projectFormMode === 'add') {
             setProjectTitle('');
@@ -180,6 +208,7 @@ function ProjectForm({
             setProjectMoreInfos('');
             setProjectLogos([]);
             setProSpace(EMPTY_PRO_SPACE);
+            setProSpaceStatus('ready');
             setProDocumentFiles([]);
         }
     }
@@ -402,13 +431,13 @@ function ProjectForm({
 
     // Sans document, l'espace pro ne peut pas être affiché
     useEffect(() => {
-        if (!hasProDocuments && proSpace.enabled) {
+        if (proSpaceStatus === 'ready' && !hasProDocuments && proSpace.enabled) {
             setProSpace((prev) => ({
                 ...prev,
                 enabled: false,
             }));
         }
-    }, [hasProDocuments, proSpace.enabled]);
+    }, [hasProDocuments, proSpace.enabled, proSpaceStatus]);
 
     /* ------------------------
     ----- FORM FUNCTIONS ------
@@ -433,7 +462,10 @@ function ProjectForm({
     // remplacés par leur version serveur (sinon le prochain enregistrement les renverrait en double).
     async function refreshFromServer(projectId) {
         try {
-            const allProjects = await apiFetch('/api/projects');
+            const [allProjects, adminProSpace] = await Promise.all([
+                apiFetch('/api/projects'),
+                apiFetch(`/api/projects/${projectId}/pro-space`, { auth: true }),
+            ]);
             setProjects(allProjects || []);
 
             const saved = (allProjects || []).find((project) => project._id === projectId);
@@ -441,18 +473,26 @@ function ProjectForm({
                 setImageFiles(saved.images || []);
                 setMainImageIndex(saved.mainImageIndex || 0);
                 setPdfFiles(saved.pdfList || []);
-                setProSpace(normalizeProSpace(saved.proSpace));
+                setProSpace(normalizeProSpace(adminProSpace));
+                setProSpaceStatus('ready');
                 setProDocumentFiles([]);
                 setProDocumentsError('');
             }
         } catch (error) {
             console.error(error);
+            // Sans la version serveur de l'espace pro, un nouvel enregistrement pourrait le dupliquer ou le vider
+            setProSpaceStatus('error');
         }
         // Les instantanés ANNULER repartent de l'état qui vient d'être enregistré
         setSaveVersion((version) => version + 1);
     }
 
     async function saveProject({ closeAfter = false } = {}) {
+        if (proSpaceStatus !== 'ready') {
+            showSaveStatus('error', "L'espace pro n'est pas chargé : patientez un instant ou rouvrez le projet avant d'enregistrer.");
+            return;
+        }
+
         displayLoader();
         setDisplayServerError(false);
         setDisplayError(false);
@@ -1236,7 +1276,15 @@ function ProjectForm({
                 <p className='projectForm_subSection_title'>GESTION ESPACE PRO</p>
                 {renderSectionActions('proSpace')}
                 <div className='projectForm_projectProSpace'>
-                    {hasProDocuments && (
+                    {proSpaceStatus === 'loading' && (
+                        <p className='projectForm_projectProSpace_hint'>Chargement de l'espace pro…</p>
+                    )}
+                    {proSpaceStatus === 'error' && (
+                        <p className='projectForm_projectProSpace_error' role='alert'>
+                            Impossible de charger l'espace pro. Rouvrez le projet avant d'enregistrer.
+                        </p>
+                    )}
+                    {proSpaceStatus === 'ready' && hasProDocuments && (
                         <label className='projectForm_projectProSpace_checkbox'>
                             <p>AFFICHER L'ESPACE PRO</p>
                             <input
@@ -1253,7 +1301,7 @@ function ProjectForm({
                         </label>
 
                     )}
-                    {hasProDocuments && (
+                    {proSpaceStatus === 'ready' && hasProDocuments && (
                         <div className='projectForm_projectProSpace_password'>
                             <label htmlFor='inputProjectProSpacePassword'>
                                 MOT DE PASSE ESPACE PRO
@@ -1273,6 +1321,7 @@ function ProjectForm({
                         </div>
                     )}
 
+                    {proSpaceStatus === 'ready' && (
                     <div className='projectForm_projectProSpace_documents'>
                         <p className='projectForm_projectProSpace_title'>DOCUMENTS À TÉLÉCHARGER</p>
                         <p className='projectForm_projectProSpace_hint'>
@@ -1367,6 +1416,7 @@ function ProjectForm({
                             onChange={handleProDocumentsChange}
                         />
                     </div>
+                    )}
                 </div>
             </div>
 

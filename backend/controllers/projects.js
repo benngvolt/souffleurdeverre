@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const Project = require('../models/project')
 
 /* -----------------------------
@@ -61,6 +62,30 @@ function buildProSpace(rawProSpace, newDocuments = []) {
   };
 }
 
+/* -----------------------------
+Espace pro : ce qui est public / privé
+----------------------------- */
+
+// Version publique d'un projet : l'espace pro n'expose NI le mot de passe NI les liens
+// de téléchargement, seulement de quoi afficher (ou non) le bouton "ESPACE PRO".
+function toPublicProject(project) {
+  const data = typeof project.toObject === 'function' ? project.toObject() : { ...project };
+  const proSpace = data.proSpace || {};
+
+  data.proSpace = {
+    enabled: Boolean(proSpace.enabled),
+    hasDocuments: Boolean((proSpace.documents && proSpace.documents.length > 0) || proSpace.zipUrl),
+  };
+
+  return data;
+}
+
+// Comparaison à temps constant (les deux valeurs sont hachées pour avoir la même longueur)
+function passwordsMatch(provided, expected) {
+  const hash = (value) => crypto.createHash('sha256').update(String(value)).digest();
+  return crypto.timingSafeEqual(hash(provided), hash(expected));
+}
+
 function slugify(text) {
   return text
     .toString()
@@ -79,7 +104,7 @@ function slugify(text) {
 
 exports.getAllProjects = (req, res) => {
     Project.find()
-      .then (projects =>res.status(200).json(projects))
+      .then (projects =>res.status(200).json(projects.map(toPublicProject)))
       .catch (error => {
         console.error(error);
         res.status(500).json({ error: 'Erreur lors de la récupération des projets.' });
@@ -92,7 +117,7 @@ exports.getAllProjects = (req, res) => {
 
 exports.getOneProject = (req, res) => {
   Project.findOne({_id: req.params.id})
-    .then (project =>res.status(200).json(project))
+    .then (project =>res.status(200).json(project ? toPublicProject(project) : null))
     .catch (error => {
       console.error(error);
       res.status(400).json({ error: 'Erreur lors de la récupération du projet.' });
@@ -117,10 +142,72 @@ exports.getOneProjectBySlug = async (req, res) => {
       return res.status(404).json({ message: 'Projet introuvable' });
     }
 
-    res.status(200).json(project);
+    res.status(200).json(toPublicProject(project));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erreur lors de la récupération du projet.' });
+  }
+};
+
+/*-----------------------------------------------
+--- ESPACE PRO : ACCÈS PAR MOT DE PASSE (public) ---
+------------------------------------------------*/
+
+// Le mot de passe est vérifié ici (jamais dans le navigateur). Aucune limite d'essais (choix du site).
+exports.verifyProSpaceAccess = async (req, res) => {
+  try {
+    const project = await Project.findOne({ _id: req.params.id });
+    const proSpace = project && project.proSpace;
+
+    if (!proSpace || !proSpace.enabled) {
+      return res.status(404).json({ error: 'Espace pro indisponible.' });
+    }
+
+    const provided = typeof req.body?.password === 'string' ? req.body.password : '';
+
+    if (!passwordsMatch(provided, proSpace.password || '')) {
+      return res.status(401).json({ error: 'Code incorrect' });
+    }
+
+    res.status(200).json({
+      documents: (proSpace.documents || []).map((document) => ({
+        _id: document._id,
+        name: document.name,
+        url: document.url,
+        size: document.size,
+        mimeType: document.mimeType,
+      })),
+      zipUrl: proSpace.zipUrl || '',
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ error: 'Espace pro indisponible.' });
+  }
+};
+
+/*-----------------------------------------------------
+--- ESPACE PRO COMPLET POUR L'ADMINISTRATION (auth) ---
+------------------------------------------------------*/
+
+exports.getProSpaceForAdmin = async (req, res) => {
+  try {
+    const project = await Project.findOne({ _id: req.params.id });
+
+    if (!project) {
+      return res.status(404).json({ error: 'Projet non trouvé' });
+    }
+
+    const proSpace = project.proSpace ? project.proSpace.toObject() : {};
+
+    res.status(200).json({
+      enabled: Boolean(proSpace.enabled),
+      zipUrl: proSpace.zipUrl || '',
+      password: proSpace.password || '',
+      documents: proSpace.documents || [],
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: "Erreur lors de la récupération de l'espace pro." });
   }
 };
 

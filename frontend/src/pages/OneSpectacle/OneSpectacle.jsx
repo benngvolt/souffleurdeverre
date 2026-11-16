@@ -27,6 +27,8 @@ function OneSpectacle() {
   const [handleAuthPro, setHandleAuthPro] = useState(false)
   const [proPasswordInput, setProPasswordInput] = useState('')
   const [proPasswordError, setProPasswordError] = useState(false)
+  // Documents de l'espace pro : renvoyés par le serveur uniquement après vérification du code
+  const [proDocuments, setProDocuments] = useState([])
 
   const [displayBioAside, setDisplayBioAside] = useState(false);
   const [bioAside, setBioAside] = useState([]);
@@ -36,14 +38,25 @@ function OneSpectacle() {
   const reduceMotion = useReducedMotion()
 
   // Gestion accès espace pro
-  function handleProSpaceSubmit(e) {
+  // Le code est vérifié par le serveur : ni le mot de passe ni les liens ne sont dans les données publiques
+  async function handleProSpaceSubmit(e) {
     e.preventDefault()
-  
-    if (proPasswordInput === project.proSpace.password) {
+
+    try {
+      const access = await apiFetch(`/api/projects/${project._id}/pro-access`, {
+        method: 'POST',
+        json: { password: proPasswordInput },
+      })
+
+      setProDocuments([
+        ...(access.documents || []),
+        ...(access.zipUrl ? [{ name: 'Pack pro (ZIP)', url: access.zipUrl }] : []),
+      ])
       setHandleProSpace(true)
       setHandleAuthPro(false)
       setProPasswordError(false)
-    } else {
+    } catch (error) {
+      setProDocuments([])
       setHandleProSpace(false)
       setProPasswordError(true)
     }
@@ -196,12 +209,6 @@ function OneSpectacle() {
     project.projectState !== '*non visible*' ||
     (project.projectState === '*non visible*' && isAuthenticated === true)
 
-  // Documents de l'espace pro (+ ancien ZIP des projets créés avant le passage aux documents multiples)
-  const proDocuments = [
-    ...(project.proSpace?.documents || []),
-    ...(project.proSpace?.zipUrl ? [{ name: 'Pack pro (ZIP)', url: project.proSpace.zipUrl }] : []),
-  ]
-
   // Jointure projet.logos (noms) -> modèle Logo (image + lien), dans l'ordre choisi dans l'éditeur
   const projectLogos = (project.logos || [])
     .map((logoName) => logos?.find((logo) => logo.name === logoName))
@@ -251,7 +258,7 @@ function OneSpectacle() {
                 durée {project.duration}
               </motion.p>
             )}
-            {project.proSpace?.enabled && proDocuments.length > 0 && (
+            {project.proSpace?.enabled && project.proSpace?.hasDocuments && (
               <motion.div className='oneSpectacle_mainDatas_proSpace' variants={fadeUp}>
                 <button 
                   className='oneSpectacle_mainDatas_proSpace_button' 
@@ -306,6 +313,7 @@ function OneSpectacle() {
                         onClick={() => {
                           setHandleProSpace(false)
                           setProPasswordInput('')
+                          setProDocuments([])
                         }}
                       >
                         <FontAwesomeIcon icon={faXmark} />
