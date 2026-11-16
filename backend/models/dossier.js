@@ -24,7 +24,12 @@ const pageSchema = new mongoose.Schema(
     title: { type: String, default: '' },
     html: { type: String, default: '' },
     align: { type: String, enum: ['top', 'center', 'bottom'], default: 'top' },
-    // page photo : toujours 3 emplacements
+    // page photo : disposition des photos et emplacements (1, 2 ou 3 selon la disposition)
+    layout: {
+      type: String,
+      enum: ['three-bottom', 'three-left', 'two-stacked', 'two-columns', 'one'],
+      default: 'three-bottom',
+    },
     slots: { type: [photoSchema], default: [] },
   },
   { _id: false }

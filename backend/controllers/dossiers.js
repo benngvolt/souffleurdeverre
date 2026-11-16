@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+const sharp = require('sharp');
 const Dossier = require('../models/dossier');
+const { bucket } = require('../config/storage');
 
 /* Brouillons de dossier artistique : toutes les routes sont réservées à l'administrateur connecté
    (jamais exposées publiquement). */
@@ -14,7 +16,9 @@ const LIMITS = {
 };
 const PAGE_TYPES = ['text', 'photos'];
 const ALIGNS = ['top', 'center', 'bottom'];
-const PHOTOS_PER_PAGE = 3;
+// Dispositions d'une page photo -> nombre de photos
+const LAYOUT_COUNTS = { 'three-bottom': 3, 'three-left': 3, 'two-stacked': 2, 'two-columns': 2, one: 1 };
+const DEFAULT_LAYOUT = 'three-bottom';
 
 class ValidationError extends Error {}
 
@@ -65,11 +69,13 @@ function validContent(body) {
       if (typeof html !== 'string' || html.length > LIMITS.html) fail(`${where} : texte trop long (${LIMITS.html} caractères maximum).`);
       const align = page.align === undefined ? 'top' : page.align;
       if (!ALIGNS.includes(align)) fail(`${where} : position du texte invalide.`);
-      return { pageId: page.pageId, type: 'text', title, html, align, slots: [] };
+      return { pageId: page.pageId, type: 'text', title, html, align, layout: DEFAULT_LAYOUT, slots: [] };
     }
 
-    if (!Array.isArray(page.slots) || page.slots.length !== PHOTOS_PER_PAGE) {
-      fail(`${where} : une page photo contient exactement ${PHOTOS_PER_PAGE} emplacements.`);
+    const layout = page.layout === undefined ? DEFAULT_LAYOUT : page.layout;
+    if (!Object.prototype.hasOwnProperty.call(LAYOUT_COUNTS, layout)) fail(`${where} : disposition des photos inconnue.`);
+    if (!Array.isArray(page.slots) || page.slots.length !== LAYOUT_COUNTS[layout]) {
+      fail(`${where} : cette disposition contient exactement ${LAYOUT_COUNTS[layout]} emplacement${LAYOUT_COUNTS[layout] > 1 ? 's' : ''}.`);
     }
     return {
       pageId: page.pageId,
@@ -77,6 +83,7 @@ function validContent(body) {
       title: '',
       html: '',
       align: 'top',
+      layout,
       slots: page.slots.map((slot, slotIndex) => validPhoto(slot, `${where}, photo ${slotIndex + 1}`)),
     };
   });
@@ -93,6 +100,57 @@ function respondError(res, error, fallback) {
   console.error(error);
   return res.status(500).json({ error: fallback });
 }
+
+/* ----- photo convertie en JPEG pour l'export PDF -----
+   Le navigateur n'intègre dans un PDF les photos WebP qu'en les décompressant (fichiers énormes), alors qu'un JPEG est
+   repris tel quel. Cette route renvoie donc une photo du site en JPEG, à la largeur utile (pour ne pas dépasser le poids visé).
+   Elle ne lit que les dossiers de photos du site (jamais d'adresse libre). */
+const EXPORT_IMAGE_PREFIXES = ['projects_images/', 'biographies_images/', 'logos/'];
+
+function objectPathFromUrl(url) {
+  const base = `https://storage.googleapis.com/${bucket.name}/`;
+  if (typeof url !== 'string' || !url.startsWith(base)) return null;
+
+  let objectPath;
+  try {
+    objectPath = decodeURIComponent(url.slice(base.length).split('?')[0]);
+  } catch (error) {
+    return null;
+  }
+  if (objectPath.includes('..') || !EXPORT_IMAGE_PREFIXES.some((prefix) => objectPath.startsWith(prefix))) return null;
+  return objectPath;
+}
+
+function boundedInteger(value, min, max, fallback) {
+  const number = Number.parseInt(value, 10);
+  return Number.isFinite(number) ? Math.min(max, Math.max(min, number)) : fallback;
+}
+
+exports.exportImage = async (req, res) => {
+  const objectPath = objectPathFromUrl(req.query.url);
+  if (!objectPath) return res.status(400).json({ error: 'Adresse de photo non autorisée.' });
+
+  const width = boundedInteger(req.query.width, 200, 4000, 1500);
+  const quality = boundedInteger(req.query.quality, 40, 95, 82);
+
+  try {
+    const [original] = await bucket.file(objectPath).download();
+    const jpeg = await sharp(original)
+      .rotate()
+      .resize({ width, withoutEnlargement: true })
+      .flatten({ background: '#ffffff' }) // un JPEG n'a pas de transparence
+      .jpeg({ quality }) // JPEG standard (non progressif), repris tel quel par le PDF
+      .toBuffer();
+
+    res.set({ 'Content-Type': 'image/jpeg', 'Cache-Control': 'private, max-age=3600' });
+    return res.status(200).send(jpeg);
+  } catch (error) {
+    if (error && (error.code === 404 || /No such object/i.test(error.message || ''))) {
+      return res.status(404).json({ error: 'Photo introuvable.' });
+    }
+    return respondError(res, error, 'Erreur lors de la préparation de la photo.');
+  }
+};
 
 /* ----- liste des brouillons (sans leur contenu) ----- */
 exports.listDossiers = async (req, res) => {

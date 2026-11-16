@@ -7,6 +7,8 @@ const auth = require('../middlewares/auth');
 router.use(auth);
 
 router.get('/', dossiersCtrl.listDossiers);
+// avant « /:id » : sinon « image » serait pris pour un identifiant
+router.get('/image', dossiersCtrl.exportImage);
 router.get('/:id', dossiersCtrl.getDossier);
 router.post('/', dossiersCtrl.createDossier);
 router.put('/:id', dossiersCtrl.updateDossier);
