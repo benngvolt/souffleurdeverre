@@ -62,7 +62,7 @@ function useOverflowFlag(pageRef, columnRef, capacityMm, dependencies) {
 
 export function CoverPage({ title, credits, notes, photo, onPan, onChoose }) {
   return (
-    <section className='dossierPage dossierPage--cover dossierTypo'>
+    <section className='dossierPage dossierPage--cover dossierTypo' data-section='cover'>
       <div className='dossierCover_panel'>
         <div className='dossierCover_content'>
           <div className='dossierCover_logoFrame'>
@@ -103,7 +103,7 @@ export function CoverPage({ title, credits, notes, photo, onPan, onChoose }) {
 
 export function GenericPage({ title, tagline, rows }) {
   return (
-    <section className='dossierPage dossierPage--generic dossierTypo'>
+    <section className='dossierPage dossierPage--generic dossierTypo' data-section='generic'>
       <h1 className='dossierGlowTitle'>{title}</h1>
       {tagline && <p className='dossierGeneric_tagline'>{tagline}</p>}
 
@@ -137,6 +137,8 @@ export function TextPage({ page }) {
     <section
       ref={pageRef}
       className={`dossierPage dossierPage--flow dossierPage--text ${centered ? 'dossierPage--centered' : ''} ${overflowing ? 'dossierPage--overflow' : ''} dossierTypo`}
+      data-section='middle'
+      data-page-id={page.id}
     >
       {title && <h2 className='dossierTitle'>{title}</h2>}
       <div ref={columnRef} className='dossierColumn'>
@@ -156,7 +158,7 @@ export function PhotosPage({ page, images, onPanSlot, onChooseSlot }) {
   ];
 
   return (
-    <section className='dossierPage dossierPage--photos dossierPage--noNumber dossierTypo'>
+    <section className='dossierPage dossierPage--photos dossierPage--noNumber dossierTypo' data-section='middle' data-page-id={page.id}>
       <div className='dossierPhotos dossierPhotos--n3'>
         {page.slots.map((slot, index) => (
           <PhotoFrame
@@ -225,6 +227,7 @@ function TeamPage({ title, biographies }) {
     <section
       ref={pageRef}
       className={`dossierPage dossierPage--flow dossierPage--team ${overflowing ? 'dossierPage--overflow' : ''} dossierTypo`}
+      data-section='team'
     >
       {title && <h2 className='dossierTitle'>{title}</h2>}
       <div ref={columnRef} className='dossierColumn'>
@@ -253,7 +256,7 @@ export function TeamPages({ title, biographies }) {
 
 function FlowPage({ title, showTitle, variant, children }) {
   return (
-    <section className={`dossierPage dossierPage--flow dossierPage--${variant} dossierTypo`}>
+    <section className={`dossierPage dossierPage--flow dossierPage--${variant} dossierTypo`} data-section='calendar'>
       {showTitle && <h2 className='dossierTitle'>{title}</h2>}
       <div className='dossierColumn'>{children}</div>
     </section>
@@ -287,7 +290,7 @@ export function FlowPages({ title, blocks, variant = 'calendar' }) {
   );
 }
 
-/* Un groupe (type de résidence, année de diffusion...) devient une suite de blocs : un titre, puis une ligne
+/* Un groupe (type de résidence...) devient une suite de blocs : un titre, puis une ligne
    par date. Ainsi une longue liste se répartit sur plusieurs pages, et un titre n'est jamais seul en bas de page. */
 export function calendarBlocks(group, prefix = 'calendar') {
   const last = group.items.length - 1;
@@ -329,7 +332,7 @@ export function CompanyPage() {
   const page = COMPANY_PAGE;
 
   return (
-    <section className='dossierPage dossierPage--company dossierTypo'>
+    <section className='dossierPage dossierPage--company dossierPage--noNumber dossierTypo' data-section='company'>
       <h2 className='dossierTitle'>{page.title}</h2>
 
       <div className='dossierCompany_text'>
@@ -358,7 +361,7 @@ export function ContactPage({ logos }) {
   const lines = (list) => list.map((line, index) => <React.Fragment key={index}>{index > 0 && <br />}{line}</React.Fragment>);
 
   return (
-    <section className='dossierPage dossierPage--contact dossierTypo'>
+    <section className='dossierPage dossierPage--contact dossierTypo' data-section='contact'>
       <div className='dossierContact'>
         {infos.contacts.map((contact) => (
           <div key={contact.role} className='dossierContact_group'>

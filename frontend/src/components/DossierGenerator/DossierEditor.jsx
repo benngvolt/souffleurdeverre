@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer, useState } from 'react';
+import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   DndContext,
@@ -6,19 +6,14 @@ import {
   KeyboardSensor,
   PointerSensor,
   closestCenter,
-  useDraggable,
-  useDroppable,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faArrowDown,
   faArrowLeft,
-  faArrowUp,
   faFilePdf,
   faFont,
-  faGripVertical,
   faImage,
   faMinus,
   faPenToSquare,
@@ -36,6 +31,7 @@ import {
   ContactPage,
   calendarBlocks,
 } from './DossierPages';
+import PageOverview from './PageOverview';
 import PhotoPicker from './PhotoPicker';
 import TextPagePanel from './TextPagePanel';
 import ConfirmBox from '../ConfirmBox/ConfirmBox';
@@ -44,7 +40,6 @@ import {
   splitLeadingItalic,
   htmlToBlocks,
   groupResidencies,
-  groupDiffusion,
   formatCreationDate,
   firstItem,
 } from '../../utils/dossier/dossierData';
@@ -83,7 +78,6 @@ function buildContent(project, allLogos) {
     cover: { title: project.title, credits: coverCredits, notes: coverNotes },
     generic: { title: project.title, tagline: project.moreInfos ? htmlToText(project.moreInfos) : '', rows: genericRows },
     calendarBlocks: groupResidencies(project.residenciesList).flatMap((group) => calendarBlocks(group, 'calendar')),
-    diffusionBlocks: groupDiffusion(project.showsList).flatMap((group) => calendarBlocks(group, 'diffusion')),
     logos: (project.logos || []).map((name) => allLogos.find((logo) => logo.name === name)).filter(Boolean),
   };
 }
@@ -119,36 +113,18 @@ function AddPageBar({ index, onAdd }) {
   );
 }
 
-/* Page de la partie 3 avec sa barre d'outils : déplaçable (glisser-déposer ou flèches), modifiable, supprimable */
-function MiddlePageFrame({ page, index, count, onMove, onEdit, onDelete, children }) {
-  const id = `page:${page.id}`;
-  const { setNodeRef: setDropRef, isOver } = useDroppable({ id });
-  const { attributes, listeners, setNodeRef: setDragRef, isDragging } = useDraggable({ id });
+/* Page de la partie 3 avec sa barre d'outils : modifiable, supprimable.
+   L'ordre des pages se change dans l'aperçu, à gauche. */
+function MiddlePageFrame({ page, index, count, onEdit, onDelete, children }) {
   const label = page.type === 'text' ? 'Page texte' : 'Page photo';
 
   return (
-    <div ref={setDropRef} className={`dossierFrame ${isOver ? 'dossierFrame--over' : ''} ${isDragging ? 'dossierFrame--dragging' : ''}`}>
+    <div className='dossierFrame'>
       <div className='dossierFrame_bar'>
-        <button
-          type='button'
-          ref={setDragRef}
-          className='dossierFrame_handle'
-          aria-label={`Déplacer cette ${label.toLowerCase()}`}
-          {...listeners}
-          {...attributes}
-        >
-          <FontAwesomeIcon icon={faGripVertical} />
-        </button>
         <span className='dossierFrame_label'>
           {label} · {index + 1}/{count}
         </span>
         <div className='dossierFrame_actions'>
-          <button type='button' onClick={() => onMove(page.id, index - 1)} disabled={index === 0} aria-label='Monter la page'>
-            <FontAwesomeIcon icon={faArrowUp} />
-          </button>
-          <button type='button' onClick={() => onMove(page.id, index + 1)} disabled={index === count - 1} aria-label='Descendre la page'>
-            <FontAwesomeIcon icon={faArrowDown} />
-          </button>
           {page.type === 'text' && (
             <button type='button' className='dossierFrame_edit' onClick={() => onEdit(page.id)}>
               <FontAwesomeIcon icon={faPenToSquare} /> MODIFIER
@@ -175,6 +151,8 @@ function DossierEditor({ project, biographies, logos, onBack }) {
   const [picker, setPicker] = useState(null); // { kind: 'cover' } | { kind: 'slot', pageId, slotIndex }
   const [pageToDelete, setPageToDelete] = useState(null);
   const [activeDrag, setActiveDrag] = useState(null);
+  const pagesRef = useRef(null);
+  const scrollRef = useRef(null);
 
   const content = useMemo(() => buildContent(project, logos), [project, logos]);
 
@@ -207,10 +185,6 @@ function DossierEditor({ project, biographies, logos, onBack }) {
     const page = type === 'text' ? newTextPage() : newPhotoPage();
     dispatch({ type: 'addPage', index, page });
     if (type === 'text') setEditingId(page.id);
-  }
-
-  function movePage(id, index) {
-    dispatch({ type: 'movePage', id, index });
   }
 
   function confirmDelete() {
@@ -304,7 +278,10 @@ function DossierEditor({ project, biographies, logos, onBack }) {
 
       {state && (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onDragCancel={() => setActiveDrag(null)}>
-          <div className='dossierEditor_pages' style={{ zoom }}>
+          <div className='dossierEditor_body'>
+          <PageOverview pagesRef={pagesRef} scrollRef={scrollRef} ready={Boolean(state)} dragging={Boolean(activeDrag)} />
+          <div ref={scrollRef} className='dossierEditor_main'>
+          <div ref={pagesRef} className='dossierEditor_pages' style={{ zoom }}>
             <SectionLabel number='1' title='COUVERTURE' hint='Seule la photo est modifiable : changez-la, ou faites-la glisser pour la recadrer.' />
             <CoverPage
               {...content.cover}
@@ -316,7 +293,7 @@ function DossierEditor({ project, biographies, logos, onBack }) {
             <SectionLabel number='2' title='INFOS ET DISTRIBUTION' hint='Reprises des données du projet.' />
             <GenericPage {...content.generic} />
 
-            <SectionLabel number='3' title='DESCRIPTIONS ET PHOTOS' hint='Ajoutez, supprimez et déplacez les pages texte et photo.' />
+            <SectionLabel number='3' title='DESCRIPTIONS ET PHOTOS' hint='Ajoutez et supprimez des pages texte et photo ; l’ordre se change dans l’aperçu, à gauche.' />
             <AddPageBar index={0} onAdd={addPage} />
             {state.middle.map((page, index) => (
               <React.Fragment key={page.id}>
@@ -324,7 +301,6 @@ function DossierEditor({ project, biographies, logos, onBack }) {
                   page={page}
                   index={index}
                   count={state.middle.length}
-                  onMove={movePage}
                   onEdit={setEditingId}
                   onDelete={setPageToDelete}
                 >
@@ -349,12 +325,13 @@ function DossierEditor({ project, biographies, logos, onBack }) {
             <SectionLabel number='5' title='LA COMPAGNIE' hint='Page fixe.' />
             <CompanyPage />
 
-            <SectionLabel number='·' title='CALENDRIER DE CRÉATION ET DIFFUSION' hint='Repris des résidences et des représentations du projet.' />
+            <SectionLabel number='·' title='CALENDRIER DE CRÉATION' hint='Repris des résidences du projet.' />
             <FlowPages title='Calendrier de création' blocks={content.calendarBlocks} variant='calendar' />
-            <FlowPages title='Diffusion' blocks={content.diffusionBlocks} variant='calendar' />
 
             <SectionLabel number='6' title='INFOS DE LA COMPAGNIE ET LOGOS' hint='Page fixe, logos choisis dans le projet.' />
             <ContactPage logos={content.logos} />
+          </div>
+          </div>
           </div>
 
           <DragOverlay dropAnimation={null}>
