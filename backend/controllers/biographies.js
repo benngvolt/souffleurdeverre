@@ -1,4 +1,16 @@
 const Biography = require('../models/biography');
+const { DOSSIER_BIOGRAPHY_MAX_CHARS, plainTextLength } = require('../config/dossierBiography');
+
+// Refuse une biographie courte plus longue que la limite (le formulaire la bloque déjà côté navigateur)
+function dossierBiographyTooLong(value) {
+  return typeof value === 'string' && plainTextLength(value) > DOSSIER_BIOGRAPHY_MAX_CHARS;
+}
+
+function tooLongResponse(res, value) {
+  return res.status(400).json({
+    error: `La biographie courte est limitée à ${DOSSIER_BIOGRAPHY_MAX_CHARS} caractères (actuellement ${plainTextLength(value)}).`,
+  });
+}
 
 /*------------------------------
 ----- DELETE ONE BIOGRAPHY -----
@@ -31,6 +43,10 @@ exports.deleteOneBiography = async (req, res, next) => {
 exports.createBiography = async (req, res, next) => {
   try {
     const biographyData = req.body;
+
+    if (dossierBiographyTooLong(biographyData.dossierBiography)) {
+      return tooLongResponse(res, biographyData.dossierBiography);
+    }
 
     if (
       !biographyData.surname ||
@@ -114,6 +130,10 @@ exports.updateOneBiography = async (req, res, next) => {
       return res.status(404).json({
         message: 'Aucune biographie trouvée.'
       });
+    }
+
+    if (dossierBiographyTooLong(req.body.dossierBiography)) {
+      return tooLongResponse(res, req.body.dossierBiography);
     }
 
     const biographyData = {

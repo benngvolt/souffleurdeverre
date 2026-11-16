@@ -8,3 +8,9 @@ export const SITE_URL = 'https://souffleurdeverre.fr';
 
 // Passer à true puis redéployer pour afficher HomeSpecial au lieu de Home sur "/".
 export const USE_HOME_SPECIAL = true;
+
+
+// Biographie courte pour les dossiers artistiques : limite de caractères (espaces compris).
+// Référence : la bio de Clément Dubois du dossier GYNT (2 105 caractères), arrondie vers le haut.
+// Même valeur côté backend (backend/config/dossierBiography.js).
+export const DOSSIER_BIOGRAPHY_MAX_CHARS = 2150;

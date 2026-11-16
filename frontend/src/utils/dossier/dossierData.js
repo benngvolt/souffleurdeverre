@@ -226,3 +226,11 @@ export function groupTeam(count, firstPageSize = 2, pageSize = 3) {
 
   return sizes;
 }
+
+/* Nombre de caractères du texte d'un contenu HTML (éditeur trix), espaces compris.
+   Les balises et les retours à la ligne ne comptent pas. Doit rester équivalent à
+   plainTextLength() du backend (backend/config/dossierBiography.js). */
+export function countPlainCharacters(html) {
+  const doc = new DOMParser().parseFromString(`<body>${html || ''}</body>`, 'text/html');
+  return (doc.body.textContent || '').replace(/[\r\n]/g, '').length;
+}

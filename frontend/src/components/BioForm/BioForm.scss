@@ -89,6 +89,29 @@
         }
     }
 
+    &_counter {
+        margin: 8px 0 0 0;
+        text-align: right;
+        font-family: 'MainFont_light';
+        font-size: 15px;
+        color: #535353;
+
+        &--over {
+            color: #c00000;
+            font-weight: bold;
+        }
+    }
+
+    &_counterAlert {
+        margin: 6px 0 0 0;
+        padding: 8px 10px;
+        font-family: 'MainFont_light';
+        font-size: 15px;
+        font-weight: bold;
+        color: white;
+        background: #c00000;
+    }
+
     &_hint {
         margin: 6px auto 10px auto;
         width: 100%;
@@ -137,6 +160,10 @@
             @media only screen and (max-width:$mobileMaxWidth){
                 font-size: 14px;
                 padding: 9px;
+            }
+            &:disabled {
+                opacity: 0.35;
+                cursor: not-allowed;
             }
             @include hoverable {
                 color: $colorLightGrey;

@@ -2,6 +2,8 @@ import './BioForm.scss';
 import { apiFetch } from '../../utils/api';
 import { useRef, useEffect, useState, useContext, useMemo } from 'react';
 import { Context } from '../../utils/Context';
+import { DOSSIER_BIOGRAPHY_MAX_CHARS } from '../../utils/constants';
+import { countPlainCharacters } from '../../utils/dossier/dossierData';
 import Loader from '../Loader/Loader';
 import ErrorText from '../ErrorText/ErrorText';
 import 'trix';
@@ -17,6 +19,12 @@ const initialFormState = {
     dossierBiography: '',
     isPermanentTeam: false,
 };
+
+// Nombre de caractères du texte de l'éditeur (espaces compris, sans les retours à la ligne)
+function countEditorCharacters(trixElement) {
+    if (!trixElement || !trixElement.editor) return 0;
+    return trixElement.editor.getDocument().toString().replace(/[\r\n]/g, '').length;
+}
 
 function BioForm({
     biographyEdit,
@@ -41,6 +49,10 @@ function BioForm({
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [displayServerError, setDisplayServerError] = useState(false);
     const [displayError, setDisplayError] = useState(false);
+    const [dossierBioCount, setDossierBioCount] = useState(0);
+
+    const dossierBioExcess = dossierBioCount - DOSSIER_BIOGRAPHY_MAX_CHARS;
+    const isDossierBioTooLong = dossierBioExcess > 0;
 
     const trixInputId = useMemo(() => {
         return bioFormMode === 'edit' && biographyEdit?._id
@@ -110,12 +122,18 @@ function BioForm({
 
         if (!element) return;
 
+        // Compteur de caractères en direct (espaces compris, sans les retours à la ligne)
+        const updateCount = () => setDossierBioCount(countEditorCharacters(element));
+
         const loadDossierBiographyIntoTrix = () => {
             if (!element.editor) return;
 
             element.editor.setSelectedRange([0, 0]);
             element.editor.loadHTML(formData.dossierBiography || '');
+            updateCount();
         };
+
+        element.addEventListener('trix-change', updateCount);
 
         if (element.editor) {
             loadDossierBiographyIntoTrix();
@@ -125,6 +143,7 @@ function BioForm({
 
         return () => {
             element.removeEventListener('trix-initialize', loadDossierBiographyIntoTrix);
+            element.removeEventListener('trix-change', updateCount);
         };
     }, [formData.dossierBiography, dossierTrixInputId, handleDisplayBioForm]);
 
@@ -187,6 +206,17 @@ function BioForm({
         ) {
             setDisplayError(true);
             hideLoader();
+            return;
+        }
+
+        // La biographie courte ne peut pas dépasser la limite (vérifiée aussi côté serveur)
+        const submittedDossierBio = inputDossierBioRef.current?.value || '';
+        const submittedCount = Math.max(
+            countPlainCharacters(submittedDossierBio),
+            countEditorCharacters(document.getElementById('inputDossierBio'))
+        );
+        if (submittedCount > DOSSIER_BIOGRAPHY_MAX_CHARS) {
+            setDossierBioCount(submittedCount);
             return;
         }
 
@@ -355,8 +385,8 @@ function BioForm({
             <div className='bioForm_bio'>
                 <label htmlFor='inputDossierBio'>BIOGRAPHIE COURTE (DOSSIER ARTISTIQUE)</label>
                 <p className='bioForm_hint'>
-                    Facultatif : version courte, d'environ 1 500 caractères, utilisée dans les dossiers artistiques.
-                    Si ce champ est vide, la biographie complète est utilisée.
+                    Facultatif : version courte utilisée dans les dossiers artistiques, limitée à {DOSSIER_BIOGRAPHY_MAX_CHARS.toLocaleString('fr-FR')} caractères
+                    (espaces compris). Si ce champ est vide, aucune biographie n'apparaît dans le dossier (le portrait et le nom restent).
                 </p>
                 <input
                     key={`hidden-${dossierTrixInputId}`}
@@ -370,13 +400,25 @@ function BioForm({
                     id='inputDossierBio'
                     input={dossierTrixInputId}
                 />
+                <p
+                    className={isDossierBioTooLong ? 'bioForm_counter bioForm_counter--over' : 'bioForm_counter'}
+                    aria-live='polite'
+                >
+                    {dossierBioCount.toLocaleString('fr-FR')} / {DOSSIER_BIOGRAPHY_MAX_CHARS.toLocaleString('fr-FR')} caractères
+                </p>
+                {isDossierBioTooLong && (
+                    <p className='bioForm_counterAlert' role='alert'>
+                        Limite dépassée de {dossierBioExcess.toLocaleString('fr-FR')} caractère{dossierBioExcess > 1 ? 's' : ''} :
+                        raccourcissez la biographie courte pour pouvoir enregistrer.
+                    </p>
+                )}
             </div>
 
             <ErrorText errorText={"Une erreur s'est produite"} state={displayServerError} />
             <ErrorText errorText={"Tous les champs marqués d'une * doivent être remplis"} state={displayError} />
 
             <div className='bioForm_buttons'>
-                <button type='submit'>VALIDER</button>
+                <button type='submit' disabled={isDossierBioTooLong}>VALIDER</button>
                 <button type='button' onClick={closeForm}>
                     ANNULER
                 </button>
