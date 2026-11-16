@@ -130,13 +130,13 @@ export function TextPage({ page }) {
   const pageRef = React.useRef(null);
   const columnRef = React.useRef(null);
   const title = page.title.trim();
-  const centered = !title && page.align === 'center';
+  const align = ['top', 'center', 'bottom'].includes(page.align) ? page.align : 'top';
   const overflowing = useOverflowFlag(pageRef, columnRef, title ? TEXT_PAGE_TITLED_CAPACITY_MM : TEXT_PAGE_CAPACITY_MM, [page.html, title]);
 
   return (
     <section
       ref={pageRef}
-      className={`dossierPage dossierPage--flow dossierPage--text ${centered ? 'dossierPage--centered' : ''} ${overflowing ? 'dossierPage--overflow' : ''} dossierTypo`}
+      className={`dossierPage dossierPage--flow dossierPage--text dossierPage--align-${align} ${overflowing ? 'dossierPage--overflow' : ''} dossierTypo`}
       data-section='middle'
       data-page-id={page.id}
     >
@@ -292,7 +292,7 @@ export function FlowPages({ title, blocks, variant = 'calendar' }) {
 
 /* Un groupe (type de résidence...) devient une suite de blocs : un titre, puis une ligne
    par date. Ainsi une longue liste se répartit sur plusieurs pages, et un titre n'est jamais seul en bas de page. */
-export function calendarBlocks(group, prefix = 'calendar') {
+export function calendarBlocks(group, prefix = 'calendar', { keepTogether = false } = {}) {
   const last = group.items.length - 1;
 
   return [
@@ -307,6 +307,8 @@ export function calendarBlocks(group, prefix = 'calendar') {
     },
     ...group.items.map((item, index) => ({
       key: `${prefix}-${group.type}-${index}`,
+      // groupe court (ex. la production) : toutes ses lignes restent ensemble sur la même page
+      keepWithNext: keepTogether && index < last,
       node: (
         <div className={`dossierCalendar ${index === last ? 'dossierCalendar--last' : ''}`}>
           <p className='dossierCalendar_dates'>{item.dates}</p>

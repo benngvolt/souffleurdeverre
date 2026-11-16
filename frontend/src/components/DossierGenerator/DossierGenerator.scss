@@ -453,9 +453,21 @@ $dossierMagenta: #ff00ff;
     text-justify: inter-word;
     overflow-wrap: break-word;
 
+    // « Heading » de l'éditeur : grand titre en police Warsaw, comme « L'ÉQUIPE »
     h1 {
-        font-size: inherit;
-        font-weight: bold;
+        margin: 0 0 6mm 0;
+        font-family: 'SpecialFont_regular';
+        font-weight: normal;
+        font-size: 37pt;
+        line-height: 1;
+        text-align: left;
+        text-transform: uppercase;
+        -webkit-hyphens: none;
+        hyphens: none;
+
+        &:not(:first-child) {
+            margin-top: 8mm;
+        }
     }
 
     blockquote {
@@ -618,13 +630,32 @@ $dossierMagenta: #ff00ff;
 }
 
 .dossierPage--text {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 11mm;
+
     .dossierTitle,
     .dossierColumn {
         margin-left: 97mm;
     }
 
+    .dossierTitle {
+        flex-shrink: 0;
+    }
+
     .dossierColumn {
         width: 187mm;
+        flex-shrink: 0;
+    }
+
+    // texte en haut (par défaut), au milieu ou en bas de la page (sous le titre s'il y en a un)
+    &.dossierPage--align-center .dossierColumn {
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+    &.dossierPage--align-bottom .dossierColumn {
+        margin-top: auto;
     }
 }
 
@@ -651,12 +682,6 @@ $dossierMagenta: #ff00ff;
     }
 }
 
-.dossierPage--centered {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-top: 0;
-}
 
 /* ---------- Équipe ---------- */
 
@@ -1196,6 +1221,13 @@ $dossierMagenta: #ff00ff;
         cursor: pointer;
     }
 
+    &_hint {
+        margin: 0 0 8px 0;
+        font-size: 12px;
+        line-height: 1.4;
+        color: #535353;
+    }
+
     &_label {
         margin: 14px 0 5px 0;
         font-size: 13px;
@@ -1218,6 +1250,16 @@ $dossierMagenta: #ff00ff;
         display: block;
         min-height: 380px;
         max-height: none;
+    }
+
+    // Les styles Trix du site ne laissent que gras et italique : on réaffiche ici le bouton « Heading »
+    // (grand titre en police Warsaw)
+    .trix-button-group--block-tools {
+        display: flex;
+    }
+
+    .trix-button--icon-heading-1 {
+        display: inline-block;
     }
 }
 

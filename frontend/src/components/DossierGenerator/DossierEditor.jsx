@@ -39,7 +39,7 @@ import {
   htmlToText,
   splitLeadingItalic,
   htmlToBlocks,
-  groupResidencies,
+  calendarGroups,
   formatCreationDate,
   firstItem,
 } from '../../utils/dossier/dossierData';
@@ -50,7 +50,8 @@ const PAGE_WIDTH_PX = (PAGE.widthMm * 96) / 25.4;
 
 function fitZoom() {
   const width = window.innerWidth || document.documentElement.clientWidth || 1200;
-  return Math.min(1, Math.max(0.3, (width - 48) / PAGE_WIDTH_PX));
+  // l'aperçu à gauche occupe 214 px
+  return Math.min(1, Math.max(0.3, (width - 214 - 48) / PAGE_WIDTH_PX));
 }
 
 /* Contenu dérivé des données du projet (parties qui ne se modifient pas). */
@@ -77,7 +78,9 @@ function buildContent(project, allLogos) {
     images,
     cover: { title: project.title, credits: coverCredits, notes: coverNotes },
     generic: { title: project.title, tagline: project.moreInfos ? htmlToText(project.moreInfos) : '', rows: genericRows },
-    calendarBlocks: groupResidencies(project.residenciesList).flatMap((group) => calendarBlocks(group, 'calendar')),
+    calendarBlocks: calendarGroups(project.residenciesList, project.productionList).flatMap((group) =>
+      calendarBlocks(group, 'calendar', { keepTogether: group.type === 'Production' })
+    ),
     logos: (project.logos || []).map((name) => allLogos.find((logo) => logo.name === name)).filter(Boolean),
   };
 }
@@ -325,7 +328,7 @@ function DossierEditor({ project, biographies, logos, onBack }) {
             <SectionLabel number='5' title='LA COMPAGNIE' hint='Page fixe.' />
             <CompanyPage />
 
-            <SectionLabel number='·' title='CALENDRIER DE CRÉATION' hint='Repris des résidences du projet.' />
+            <SectionLabel number='·' title='CALENDRIER DE CRÉATION' hint='Résidences d’écriture et de création, puis production : repris des données du projet.' />
             <FlowPages title='Calendrier de création' blocks={content.calendarBlocks} variant='calendar' />
 
             <SectionLabel number='6' title='INFOS DE LA COMPAGNIE ET LOGOS' hint='Page fixe, logos choisis dans le projet.' />
