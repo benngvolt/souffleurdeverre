@@ -1,0 +1,795 @@
+@import '../../utils/mixins';
+
+/* ============================================================
+   Onglet "GÉNÉRATEUR DE DOSSIER" (back-office)
+============================================================ */
+
+.dossierGenerator {
+    margin: 50px;
+
+    @media only screen and (max-width: $padMaxWidth) {
+        margin: 20px;
+    }
+
+    &_title {
+        font-family: 'MainFont_light';
+        font-weight: bold;
+        font-size: 35px;
+        margin: 45px 0 20px 0;
+
+        @media only screen and (max-width: $mobileMaxWidth) {
+            font-size: 26px;
+            margin: 20px 0 15px 0;
+        }
+    }
+
+    &_tuto {
+        font-family: 'MainFont_light';
+        font-size: 17px;
+        max-width: 720px;
+        margin: 0 0 30px 0;
+    }
+
+    &_startButton {
+        width: auto;
+        margin: 0 0 30px 0;
+        @include Button2;
+        z-index: 10;
+    }
+
+    &_notice {
+        font-family: 'MainFont_light';
+        font-size: 15px;
+        color: $colorDarkGrey;
+    }
+}
+
+/* ---------- Modale de choix du projet ---------- */
+
+.dossierPicker {
+    position: fixed;
+    inset: 0;
+    z-index: 250;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+
+    &_box {
+        display: flex;
+        flex-direction: column;
+        width: 520px;
+        max-width: 92vw;
+        max-height: 82vh;
+        padding: 24px;
+        box-sizing: border-box;
+        background: white;
+        font-family: 'MainFont_light';
+        color: $colorDarkGrey;
+    }
+
+    &_header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    &_title {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    &_close {
+        border: none;
+        background: none;
+        font-size: 24px;
+        color: $colorDarkGrey;
+        padding: 4px 8px;
+
+        @include hoverable {
+            cursor: pointer;
+            color: black;
+        }
+    }
+
+    &_search {
+        font-family: 'MainFont_light';
+        font-size: 16px;
+        padding: 10px 12px;
+        margin-bottom: 12px;
+        border: 1px solid $colorDarkGrey;
+        border-radius: 0;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    &_list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        overflow-y: auto;
+        border-top: 1px solid $colorLightGrey;
+    }
+
+    &_item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: baseline;
+        column-gap: 16px;
+        width: 100%;
+        padding: 12px 8px;
+        border: none;
+        border-bottom: 1px solid $colorLightGrey;
+        background: none;
+        text-align: left;
+        font-family: 'MainFont_light';
+        font-size: 17px;
+        color: $colorDarkGrey;
+
+        @include hoverable {
+            cursor: pointer;
+            background: $colorLightGrey;
+        }
+
+        &_name {
+            font-weight: bold;
+        }
+
+        &_state {
+            font-size: 13px;
+            color: $colorMediumGrey;
+            white-space: nowrap;
+        }
+    }
+
+    &_empty {
+        padding: 16px 8px;
+        font-size: 15px;
+    }
+}
+
+/* ============================================================
+   Éditeur de dossier (plein écran)
+============================================================ */
+
+$dossierGreen: #00ff00;
+$dossierMagenta: #ff00ff;
+
+.dossierEditor {
+    position: fixed;
+    inset: 0;
+    z-index: 250;
+    overflow: auto;
+    background: #2b2b2b;
+    font-family: 'MainFont_light';
+
+    &_toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px 16px;
+        padding: 10px 24px;
+        background: white;
+        color: $colorDarkGrey;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+
+        &_title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        &_group {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+        }
+
+        &_zoom {
+            min-width: 48px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        &_button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid $colorDarkGrey;
+            border-radius: 0;
+            background: white;
+            color: $colorDarkGrey;
+            padding: 8px 14px;
+            font-family: 'MainFont_light';
+            font-size: 14px;
+            font-weight: bold;
+
+            @include hoverable {
+                cursor: pointer;
+                background: $colorLightGrey;
+            }
+
+            &--icon {
+                padding: 8px 10px;
+            }
+
+            &--primary {
+                margin-left: 12px;
+                background: $colorDarkGrey;
+                color: white;
+
+                @include hoverable {
+                    background: black;
+                }
+            }
+        }
+    }
+
+    &_hint {
+        max-width: 900px;
+        margin: 14px auto 0 auto;
+        padding: 0 24px;
+        font-size: 13px;
+        line-height: 1.4;
+        color: #d8d8d8;
+        text-align: center;
+    }
+
+    &_pages {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        width: fit-content;
+        margin: 0 auto;
+        padding: 20px 0 80px 0;
+        counter-reset: dossierPage;
+    }
+}
+
+/* ============================================================
+   Pages (A4 paysage, dimensions en mm)
+============================================================ */
+
+.dossierTypo {
+    font-family: 'MainFont_light';
+    font-size: 10pt;
+    line-height: 12.2pt;
+    font-weight: normal;
+    color: #000;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+
+    :where(p, h1, h2) {
+        margin: 0;
+    }
+
+    strong {
+        font-weight: bold;
+    }
+
+    em {
+        font-style: italic;
+    }
+
+    [contenteditable]:focus {
+        outline: 1px dashed rgba(0, 0, 0, 0.3);
+        outline-offset: 1px;
+    }
+}
+
+.dossierMeasure {
+    position: absolute;
+    left: -10000px;
+    top: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.dossierPage {
+    position: relative;
+    flex-shrink: 0;
+    width: 297mm;
+    height: 210mm;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: white;
+    counter-increment: dossierPage;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+
+    &--cover {
+        counter-increment: none;
+    }
+
+    /* Numéro de page en bas à droite (la couverture n'est pas numérotée ; les pages photo comptent mais n'affichent pas leur numéro) */
+    &:not(.dossierPage--cover):not(.dossierPage--noNumber)::after {
+        content: counter(dossierPage, decimal-leading-zero);
+        position: absolute;
+        right: 7mm;
+        bottom: 4.5mm;
+        font-family: 'MainFont_light';
+        font-size: 10pt;
+        line-height: 1;
+    }
+}
+
+.dossierBlock {
+    break-inside: avoid;
+
+    /* Texte plus haut qu'une page : coupé à l'export, signalé en rouge à l'écran */
+    &--tooTall {
+        position: relative;
+        overflow: hidden;
+        outline: 2px dashed #e00000;
+        outline-offset: -2px;
+
+        &::after {
+            content: 'Texte trop long pour une page : il sera coupé. À raccourcir.';
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 1mm 2mm;
+            background: #e00000;
+            color: white;
+            font-family: 'MainFont_light';
+            font-size: 8pt;
+            line-height: 1.2;
+            font-weight: bold;
+        }
+    }
+}
+
+.dossierSpacer {
+    height: 12.2pt;
+}
+
+.dossierText {
+    text-align: justify;
+    text-justify: inter-word;
+    overflow-wrap: break-word;
+
+    h1 {
+        font-size: inherit;
+        font-weight: bold;
+    }
+
+    blockquote {
+        margin: 0 0 0 6mm;
+        font-style: italic;
+    }
+
+    ul,
+    ol {
+        margin: 0;
+        padding-left: 5mm;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+}
+
+/* ---------- Couverture ---------- */
+
+.dossierCover {
+    &_panel {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 114mm;
+        box-sizing: border-box;
+        padding: 48mm 11mm 0 0;
+    }
+
+    &_content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        text-align: right;
+        font-size: 10pt;
+        line-height: 12.2pt;
+    }
+
+    /* Le filtre est sur le parent : appliqué sur l'élément masqué, il serait coupé par le masque */
+    &_logoFrame {
+        width: 40mm;
+        filter: drop-shadow(-0.7mm -0.7mm 0 $dossierGreen) drop-shadow(0.7mm 0.7mm 0 $dossierMagenta);
+    }
+
+    &_logo {
+        width: 100%;
+        aspect-ratio: 374 / 252;
+        background: #000;
+        -webkit-mask: url('../../assets/logoSouffleur.svg#mask') center / contain no-repeat;
+        mask: url('../../assets/logoSouffleur.svg#mask') center / contain no-repeat;
+    }
+
+    &_company {
+        margin-top: 4mm;
+        font-size: 9pt;
+    }
+
+    &_title {
+        margin: 14mm 0 13mm 0;
+        font-family: 'SpecialFont_regular';
+        font-weight: normal;
+        font-size: 45.5pt;
+        line-height: 0.85;
+        text-transform: uppercase;
+    }
+
+    &_credit {
+        margin-bottom: 4.4mm;
+    }
+
+    &_note {
+        margin-top: 2.8mm;
+        font-style: italic;
+        max-width: 80mm;
+    }
+
+    &_credit + &_note {
+        margin-top: 14mm;
+    }
+
+    &_photo {
+        position: absolute;
+        left: 114mm;
+        top: 0;
+        width: 183mm;
+        height: 210mm;
+        object-fit: cover;
+    }
+}
+
+/* ---------- Page générique ---------- */
+
+.dossierGlowTitle {
+    position: absolute;
+    left: 104mm;
+    top: 8mm;
+    font-family: 'SpecialFont_regular';
+    font-weight: normal;
+    font-size: 95pt;
+    line-height: 1;
+    text-transform: uppercase;
+    text-shadow: -0.8mm -0.8mm 0 $dossierGreen, 0.8mm 0.8mm 0 $dossierMagenta;
+    white-space: nowrap;
+}
+
+.dossierGeneric_tagline {
+    position: absolute;
+    left: 104mm;
+    top: 44mm;
+    width: 180mm;
+    font-size: 12pt;
+    line-height: 15pt;
+}
+
+.dossierCredits {
+    position: absolute;
+    left: 97mm;
+    top: 76mm;
+    width: 187mm;
+    display: grid;
+    grid-template-columns: 47.5mm 1fr;
+    column-gap: 4.5mm;
+    align-items: start;
+
+    &_label {
+        text-align: right;
+        font-weight: bold;
+        line-height: 4.2mm;
+    }
+
+    &_value {
+        line-height: 4.2mm;
+    }
+
+    &_label--gap,
+    &_value--gap {
+        margin-top: 4.2mm;
+    }
+}
+
+/* ---------- Pages de texte ---------- */
+
+.dossierPage--flow {
+    padding-top: 10mm;
+
+    .dossierTitle {
+        font-family: 'SpecialFont_regular';
+        font-weight: normal;
+        font-size: 37pt;
+        line-height: 1;
+        text-transform: uppercase;
+        height: 22.7mm;
+        padding-top: 1mm;
+        box-sizing: border-box;
+        white-space: nowrap;
+    }
+}
+
+.dossierPage--text {
+    .dossierTitle,
+    .dossierColumn {
+        margin-left: 97mm;
+    }
+
+    .dossierColumn {
+        width: 187mm;
+    }
+}
+
+.dossierPage--team {
+    .dossierTitle {
+        margin-left: 52mm;
+        height: 62mm;
+    }
+
+    .dossierColumn {
+        margin-left: 52mm;
+        width: 232mm;
+    }
+}
+
+.dossierPage--calendar {
+    .dossierTitle {
+        margin-left: 115mm;
+    }
+
+    .dossierColumn {
+        margin-left: 112mm;
+        width: 162mm;
+    }
+}
+
+.dossierPage--centered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 0;
+}
+
+/* ---------- Équipe ---------- */
+
+.dossierTeamRow {
+    display: grid;
+    grid-template-columns: 63.5mm 1fr;
+    column-gap: 7.5mm;
+    align-items: start;
+    padding-bottom: 3mm;
+
+    &_photo {
+        width: 63.5mm;
+        height: 60mm;
+        overflow: hidden;
+        background: #e9e9e9;
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &_text {
+        font-size: 7.6pt;
+        line-height: 10.4pt;
+
+        .dossierSpacer {
+            height: 10.4pt;
+        }
+    }
+}
+
+/* ---------- Calendrier ---------- */
+
+.dossierCalendar {
+    display: grid;
+    grid-template-columns: 66mm 1fr;
+    column-gap: 4mm;
+    padding-bottom: 9mm;
+
+    &_heading {
+        grid-column: 1 / -1;
+        font-weight: bold;
+        line-height: 4.2mm;
+        margin-bottom: 1.4mm;
+    }
+
+    &_dates {
+        text-align: right;
+        font-weight: bold;
+        line-height: 4.2mm;
+        margin-bottom: 1.2mm;
+    }
+
+    &_place {
+        line-height: 4.2mm;
+        margin-bottom: 1.2mm;
+        text-align: left;
+        hyphens: manual;
+        -webkit-hyphens: manual;
+    }
+}
+
+/* ---------- Pages photo ---------- */
+
+.dossierPhotos {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 65mm;
+    display: grid;
+    gap: 0.6mm;
+    background: white;
+
+    &--n3 {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+
+        .dossierPhotos_item:nth-child(3) {
+            grid-column: 1 / -1;
+        }
+    }
+
+    &--n2 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    &--n1 {
+        left: 58mm;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    &_item {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
+        object-fit: cover;
+    }
+
+    &_credit {
+        position: absolute;
+        left: 53mm;
+        bottom: 12mm;
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        font-size: 5.5pt;
+        line-height: 1;
+        white-space: nowrap;
+    }
+}
+
+/* ---------- Contact et crédits ---------- */
+
+.dossierContact {
+    width: 200mm;
+    margin-left: 62mm;
+    padding-top: 22mm;
+    text-align: center;
+    font-size: 10pt;
+    line-height: 12.2pt;
+
+    &_group {
+        margin-bottom: 8mm;
+
+        &--center p {
+            text-align: center;
+        }
+    }
+
+    &_role {
+        font-weight: bold;
+        margin-bottom: 4mm;
+    }
+
+    &_person {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        column-gap: 4mm;
+        text-align: left;
+    }
+
+    &_logos {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 4mm 16mm;
+        margin-top: 12mm;
+
+        img {
+            display: block;
+            height: 11mm;
+            width: auto;
+            max-width: 45mm;
+            object-fit: contain;
+        }
+    }
+}
+
+/* ============================================================
+   Impression / export PDF : on n'imprime que les pages du dossier
+============================================================ */
+
+@page {
+    size: 297mm 210mm;
+    margin: 0;
+}
+
+@media print {
+    #root,
+    .dossierPicker,
+    .dossierMeasure,
+    .dossierEditor_toolbar,
+    .dossierEditor_hint {
+        display: none !important;
+    }
+
+    html,
+    body {
+        background: white !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .dossierEditor {
+        position: static;
+        overflow: visible;
+        background: none;
+    }
+
+    .dossierEditor_pages {
+        display: block;
+        width: auto;
+        padding: 0;
+        zoom: 1 !important;
+    }
+
+    .dossierPage {
+        box-shadow: none;
+        break-after: page;
+        page-break-after: always;
+    }
+
+    .dossierPage:last-child {
+        break-after: auto;
+        page-break-after: auto;
+    }
+
+    [contenteditable]:focus {
+        outline: none;
+    }
+
+    .dossierBlock--tooTall {
+        outline: none;
+
+        &::after {
+            display: none;
+        }
+    }
+}

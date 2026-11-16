@@ -5,6 +5,7 @@ import LogoForm from '../../components/LogoForm/LogoForm';
 import ConfirmBox from '../../components/ConfirmBox/ConfirmBox';
 import ProjectForm from '../../components/ProjectForm/ProjectForm';
 import Newsletter from '../../components/Newsletter/Newsletter';
+import DossierGenerator from '../../components/DossierGenerator/DossierGenerator';
 import { apiFetch } from '../../utils/api';
 import { Context } from '../../utils/Context';
 import React, { useEffect, useState, useContext } from 'react';
@@ -267,6 +268,13 @@ function Edit() {
                             >
                                 NEWSLETTER
                             </button>
+                            <button
+                                type='button'
+                                className={activeSection === 'dossier' ? 'editSection_sidebar_item editSection_sidebar_item--active' : 'editSection_sidebar_item'}
+                                onClick={() => setActiveSection('dossier')}
+                            >
+                                GÉNÉRATEUR DE DOSSIER
+                            </button>
                         </nav>
 
                         <div className='editSection_content'>
@@ -425,6 +433,8 @@ function Edit() {
                                     </ul>
                                 </div>
                             )}
+
+                            {activeSection === 'dossier' && <DossierGenerator />}
 
                             {activeSection === 'biographies' && (
                                 <div className='editSection_content_bios'>
