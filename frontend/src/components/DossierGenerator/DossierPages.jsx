@@ -1,42 +1,66 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import Paginator from './Paginator';
+import PhotoFrame from './PhotoFrame';
 import { COMPANY_INFOS, COMPANY_PAGE } from './dossierConfig';
 import companyPhotoLeft from '../../assets/Julien_Rocha_Julien_Bruhat.webp';
 import companyPhotoRight from '../../assets/Cedric_Veschambre_Julien_Bruhat.webp';
 import { sanitizeHtml, escapeHtml, groupTeam } from '../../utils/dossier/dossierData';
 
-/* Pages du dossier artistique (A4 paysage). Toutes les zones de texte sont éditables
-   directement (contentEditable) : les modifications ne sont pas encore sauvegardées. */
+/* Pages du dossier artistique (A4 paysage).
+   Seuls sont modifiables : la photo de couverture, les pages texte et photo de la partie 3 et l'ordre
+   des biographies. Les autres pages reprennent les données du projet (ou sont fixes). */
 
-const editable = {
-  contentEditable: true,
-  suppressContentEditableWarning: true,
-  spellCheck: false,
-};
-
-function Html({ html, className = '', as: Tag = 'div', placeholder }) {
+function Html({ html, className = '', placeholder }) {
   return (
-    <Tag
+    <div
       className={`dossierText ${className}`}
       data-placeholder={placeholder}
-      {...editable}
       dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
     />
   );
 }
 
-// Hauteurs de ligne (pt) : doivent rester identiques à celles du SCSS (.dossierTypo / .dossierTeamRow_text)
-const TEXT_LINE_HEIGHT_PT = 12.2;
-
 function Spacer() {
   return <div className='dossierSpacer' />;
 }
 
+/* Page dont le contenu dépasse : détection en direct (rapport hauteur de colonne / hauteur de page,
+   donc indépendant du zoom d'affichage). */
+function useOverflowFlag(pageRef, columnRef, capacityMm, dependencies) {
+  const [overflowing, setOverflowing] = useState(false);
+
+  useLayoutEffect(() => {
+    const column = columnRef.current;
+    const page = pageRef.current;
+    if (!column || !page || typeof ResizeObserver === 'undefined') return undefined;
+
+    const check = () => {
+      const pageHeight = page.getBoundingClientRect().height;
+      if (!pageHeight) return;
+      const columnMm = (column.getBoundingClientRect().height / pageHeight) * 210;
+      setOverflowing(columnMm > capacityMm + 0.5);
+    };
+
+    const observer = new ResizeObserver(check);
+    observer.observe(column);
+    check();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
+
+    return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [capacityMm, ...dependencies]);
+
+  return overflowing;
+}
+
 /* ----------------------------------
-   Couverture
+   1. Couverture (seule la photo est modifiable)
 ---------------------------------- */
 
-export function CoverPage({ title, credits, notes, imageUrl }) {
+export function CoverPage({ title, credits, notes, photo, onPan, onChoose }) {
   return (
     <section className='dossierPage dossierPage--cover dossierTypo'>
       <div className='dossierCover_panel'>
@@ -45,10 +69,10 @@ export function CoverPage({ title, credits, notes, imageUrl }) {
             <div className='dossierCover_logo' role='img' aria-label='Le Souffleur de Verre' />
           </div>
           <p className='dossierCover_company'>LE SOUFFLEUR DE VERRE</p>
-          <h1 className='dossierCover_title' {...editable}>{title}</h1>
+          <h1 className='dossierCover_title'>{title}</h1>
 
           {credits.map((credit) => (
-            <p key={credit.label} className='dossierCover_credit' {...editable}>
+            <p key={credit.label} className='dossierCover_credit'>
               <strong>{credit.label.toLowerCase()}</strong>
               <br />
               {credit.value}
@@ -56,30 +80,38 @@ export function CoverPage({ title, credits, notes, imageUrl }) {
           ))}
 
           {notes.map((note, index) => (
-            <p key={index} className='dossierCover_note' {...editable}>{note}</p>
+            <p key={index} className='dossierCover_note'>{note}</p>
           ))}
         </div>
       </div>
-      {imageUrl && <img className='dossierCover_photo' src={imageUrl} alt='' />}
+
+      <PhotoFrame
+        className='dossierCover_photo'
+        imageUrl={photo.imageUrl}
+        x={photo.x}
+        y={photo.y}
+        onPan={onPan}
+        onChoose={onChoose}
+      />
     </section>
   );
 }
 
 /* ----------------------------------
-   Page générique (titre + distribution)
+   2. Infos et distribution
 ---------------------------------- */
 
 export function GenericPage({ title, tagline, rows }) {
   return (
     <section className='dossierPage dossierPage--generic dossierTypo'>
-      <h1 className='dossierGlowTitle' {...editable}>{title}</h1>
-      {tagline && <p className='dossierGeneric_tagline' {...editable}>{tagline}</p>}
+      <h1 className='dossierGlowTitle'>{title}</h1>
+      {tagline && <p className='dossierGeneric_tagline'>{tagline}</p>}
 
       <div className='dossierCredits'>
         {rows.map((row, index) => (
           <React.Fragment key={index}>
-            <p className={`dossierCredits_label ${row.gap ? 'dossierCredits_label--gap' : ''}`} {...editable}>{row.label}</p>
-            <p className={`dossierCredits_value ${row.gap ? 'dossierCredits_value--gap' : ''}`} {...editable}>{row.value}</p>
+            <p className={`dossierCredits_label ${row.gap ? 'dossierCredits_label--gap' : ''}`}>{row.label}</p>
+            <p className={`dossierCredits_value ${row.gap ? 'dossierCredits_value--gap' : ''}`}>{row.value}</p>
           </React.Fragment>
         ))}
       </div>
@@ -88,90 +120,90 @@ export function GenericPage({ title, tagline, rows }) {
 }
 
 /* ----------------------------------
-   Pages de texte (répartition automatique)
+   3. Pages texte et pages photo (modifiables)
 ---------------------------------- */
 
-function FlowPage({ title, showTitle, variant, centered, children }) {
+const TEXT_PAGE_CAPACITY_MM = 189;
+const TEXT_PAGE_TITLED_CAPACITY_MM = 166;
+
+export function TextPage({ page }) {
+  const pageRef = React.useRef(null);
+  const columnRef = React.useRef(null);
+  const title = page.title.trim();
+  const centered = !title && page.align === 'center';
+  const overflowing = useOverflowFlag(pageRef, columnRef, title ? TEXT_PAGE_TITLED_CAPACITY_MM : TEXT_PAGE_CAPACITY_MM, [page.html, title]);
+
   return (
-    <section className={`dossierPage dossierPage--flow dossierPage--${variant} ${centered ? 'dossierPage--centered' : ''} dossierTypo`}>
-      {showTitle && <h2 className='dossierTitle' {...editable}>{title}</h2>}
-      <div className='dossierColumn'>{children}</div>
+    <section
+      ref={pageRef}
+      className={`dossierPage dossierPage--flow dossierPage--text ${centered ? 'dossierPage--centered' : ''} ${overflowing ? 'dossierPage--overflow' : ''} dossierTypo`}
+    >
+      {title && <h2 className='dossierTitle'>{title}</h2>}
+      <div ref={columnRef} className='dossierColumn'>
+        <Html html={page.html} placeholder='Page vide : cliquez sur MODIFIER pour saisir le texte.' />
+      </div>
     </section>
   );
 }
 
-const FLOW_SETTINGS = {
-  text: { widthMm: 187, capacityMm: 189, titledCapacityMm: 166 },
-  calendar: { widthMm: 162, capacityMm: 189, titledCapacityMm: 166 },
-};
-
-export function FlowPages({ title, blocks, variant = 'text' }) {
-  const settings = FLOW_SETTINGS[variant];
-  if (!blocks.length) return null;
+export function PhotosPage({ page, images, onPanSlot, onChooseSlot }) {
+  const credits = [
+    ...new Set(
+      page.slots
+        .map((slot) => (images.find((image) => image.imageUrl === slot.imageUrl) || {}).photograph)
+        .filter(Boolean)
+    ),
+  ];
 
   return (
-    <Paginator
-      blocks={blocks}
-      widthMm={settings.widthMm}
-      firstCapacityMm={title ? settings.titledCapacityMm : settings.capacityMm}
-      capacityMm={settings.capacityMm}
-      renderPage={(pageBlocks, pageIndex, pageCount) => (
-        <FlowPage
-          key={`${variant}-${title || 'sans-titre'}-${pageIndex}`}
-          title={title}
-          showTitle={Boolean(title) && pageIndex === 0}
-          variant={variant}
-          centered={!title && pageCount === 1}
-        >
-          {pageBlocks.map((block) => (
-            <div
-              key={block.key}
-              className={block.tooLong ? 'dossierBlock dossierBlock--tooLong' : 'dossierBlock'}
-              data-pages={block.tooLong || undefined}
-            >
-              {block.node}
-            </div>
-          ))}
-        </FlowPage>
-      )}
-    />
+    <section className='dossierPage dossierPage--photos dossierPage--noNumber dossierTypo'>
+      <div className='dossierPhotos dossierPhotos--n3'>
+        {page.slots.map((slot, index) => (
+          <PhotoFrame
+            key={index}
+            className='dossierPhotos_item'
+            imageUrl={slot.imageUrl}
+            x={slot.x}
+            y={slot.y}
+            onPan={(position) => onPanSlot(page.id, index, position)}
+            onChoose={() => onChooseSlot(page.id, index)}
+          />
+        ))}
+      </div>
+      {credits.length > 0 && <p className='dossierPhotos_credit'>© {credits.join(' / ')}</p>}
+    </section>
   );
 }
 
-/* Blocs : HTML issu de l'éditeur */
-
-export function htmlBlocks(prefix, htmlBlockList) {
-  return htmlBlockList.map((block, index) => ({
-    key: `${prefix}-${index}`,
-    spacer: block.spacer,
-    splittable: !block.spacer,
-    lineHeightPt: TEXT_LINE_HEIGHT_PT,
-    node: block.spacer ? <Spacer /> : <Html html={block.html} />,
-  }));
-}
-
-export function subtitleBlock(key, text) {
-  return { key, keepWithNext: true, node: <Html html={`<strong>${text}</strong>`} /> };
-}
-
-export function spacerBlock(key, keepWithNext = false) {
-  return { key, spacer: true, keepWithNext, node: <Spacer /> };
-}
-
-/* Pages équipe : groupes fixes (3 biographies par page, voir groupTeam).
+/* ----------------------------------
+   4. L'équipe : 3 biographies par page (voir groupTeam), déplaçables
    Seule la biographie COURTE écrite pour le dossier est utilisée ; sans elle, le champ reste vide
-   (avec le portrait et le nom). Une page dont le contenu dépasse est signalée à l'écran. */
+   (avec le portrait et le nom).
+---------------------------------- */
 
 const TEAM_PAGE_CAPACITY_MM = 189;
 const TEAM_FIRST_PAGE_CAPACITY_MM = 127;
 
 function TeamRow({ biography }) {
+  const id = `bio:${biography._id}`;
+  const { setNodeRef: setDropRef, isOver } = useDroppable({ id });
+  const { attributes, listeners, setNodeRef: setDragRef, isDragging } = useDraggable({ id });
+
   const name = `${biography.name || ''} ${biography.surname || ''}`.trim();
   const role = biography.role ? `, ${biography.role}` : '';
   const text = biography.dossierBiography && biography.dossierBiography.trim() ? biography.dossierBiography : '';
 
   return (
-    <div className='dossierTeamRow'>
+    <div
+      ref={(node) => {
+        setDropRef(node);
+        setDragRef(node);
+      }}
+      className={`dossierTeamRow ${isOver ? 'dossierTeamRow--over' : ''} ${isDragging ? 'dossierTeamRow--dragging' : ''}`}
+    >
+      <button type='button' className='dossierDragHandle dossierDragHandle--team' aria-label={`Déplacer ${name}`} {...listeners} {...attributes}>
+        <FontAwesomeIcon icon={faGripVertical} />
+      </button>
       <div className='dossierTeamRow_photo'>
         {biography.bioImageUrl && <img src={biography.bioImageUrl} alt='' />}
       </div>
@@ -185,38 +217,16 @@ function TeamRow({ biography }) {
 }
 
 function TeamPage({ title, biographies }) {
-  const pageRef = useRef(null);
-  const columnRef = useRef(null);
-  const [overflowing, setOverflowing] = useState(false);
-
-  useLayoutEffect(() => {
-    const column = columnRef.current;
-    const page = pageRef.current;
-    if (!column || !page || typeof ResizeObserver === 'undefined') return undefined;
-
-    // Rapport hauteur de la colonne / hauteur de la page : indépendant du zoom d'affichage
-    const check = () => {
-      const pageHeight = page.getBoundingClientRect().height;
-      if (!pageHeight) return;
-      const columnMm = (column.getBoundingClientRect().height / pageHeight) * 210;
-      const capacity = title ? TEAM_FIRST_PAGE_CAPACITY_MM : TEAM_PAGE_CAPACITY_MM;
-      setOverflowing(columnMm > capacity + 0.5);
-    };
-
-    const observer = new ResizeObserver(check);
-    observer.observe(column);
-    check();
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
-
-    return () => observer.disconnect();
-  }, [title, biographies]);
+  const pageRef = React.useRef(null);
+  const columnRef = React.useRef(null);
+  const overflowing = useOverflowFlag(pageRef, columnRef, title ? TEAM_FIRST_PAGE_CAPACITY_MM : TEAM_PAGE_CAPACITY_MM, [biographies]);
 
   return (
     <section
       ref={pageRef}
       className={`dossierPage dossierPage--flow dossierPage--team ${overflowing ? 'dossierPage--overflow' : ''} dossierTypo`}
     >
-      {title && <h2 className='dossierTitle' {...editable}>{title}</h2>}
+      {title && <h2 className='dossierTitle'>{title}</h2>}
       <div ref={columnRef} className='dossierColumn'>
         {biographies.map((biography) => (
           <TeamRow key={biography._id} biography={biography} />
@@ -237,18 +247,56 @@ export function TeamPages({ title, biographies }) {
   });
 }
 
-/* Blocs : calendrier de création */
+/* ----------------------------------
+   Calendrier de création (répartition automatique)
+---------------------------------- */
+
+function FlowPage({ title, showTitle, variant, children }) {
+  return (
+    <section className={`dossierPage dossierPage--flow dossierPage--${variant} dossierTypo`}>
+      {showTitle && <h2 className='dossierTitle'>{title}</h2>}
+      <div className='dossierColumn'>{children}</div>
+    </section>
+  );
+}
+
+const FLOW_SETTINGS = {
+  calendar: { widthMm: 162, capacityMm: 189, titledCapacityMm: 166 },
+};
+
+export function FlowPages({ title, blocks, variant = 'calendar' }) {
+  const settings = FLOW_SETTINGS[variant];
+  if (!blocks.length) return null;
+
+  return (
+    <Paginator
+      blocks={blocks}
+      widthMm={settings.widthMm}
+      firstCapacityMm={title ? settings.titledCapacityMm : settings.capacityMm}
+      capacityMm={settings.capacityMm}
+      renderPage={(pageBlocks, pageIndex) => (
+        <FlowPage key={`${variant}-${title || 'sans-titre'}-${pageIndex}`} title={title} showTitle={Boolean(title) && pageIndex === 0} variant={variant}>
+          {pageBlocks.map((block) => (
+            <div key={block.key} className='dossierBlock'>
+              {block.node}
+            </div>
+          ))}
+        </FlowPage>
+      )}
+    />
+  );
+}
 
 export function calendarBlock(group) {
   return {
     key: `calendar-${group.type}`,
     node: (
       <div className='dossierCalendar'>
-        <p className='dossierCalendar_heading' {...editable}>{group.type}</p>
+        <p className='dossierCalendar_heading'>{group.type}</p>
         {group.items.map((item, index) => (
           <React.Fragment key={index}>
-            <p className='dossierCalendar_dates' {...editable}>{item.dates}</p>
-            <p className='dossierCalendar_place' {...editable}>
+            <p className='dossierCalendar_dates'>{item.dates}</p>
+            <p className='dossierCalendar_place'>
               {item.lines.map((line, lineIndex) => (
                 <React.Fragment key={lineIndex}>
                   {lineIndex > 0 && <br />}
@@ -264,36 +312,7 @@ export function calendarBlock(group) {
 }
 
 /* ----------------------------------
-   Pages photo
----------------------------------- */
-
-function chunk(list, size) {
-  const result = [];
-  for (let i = 0; i < list.length; i += size) result.push(list.slice(i, i + size));
-  return result;
-}
-
-export function PhotoPages({ images }) {
-  return chunk(images, 3).map((group, pageIndex) => {
-    const credits = [...new Set(group.map((image) => image.photograph).filter(Boolean))];
-
-    return (
-      <section key={`photos-${pageIndex}`} className='dossierPage dossierPage--photos dossierPage--noNumber dossierTypo'>
-        <div className={`dossierPhotos dossierPhotos--n${group.length}`}>
-          {group.map((image, index) => (
-            <img key={index} className='dossierPhotos_item' src={image.imageUrl} alt='' />
-          ))}
-        </div>
-        {credits.length > 0 && (
-          <p className='dossierPhotos_credit' {...editable}>© {credits.join(' / ')}</p>
-        )}
-      </section>
-    );
-  });
-}
-
-/* ----------------------------------
-   La compagnie
+   5. La compagnie (page fixe)
 ---------------------------------- */
 
 export function CompanyPage() {
@@ -301,17 +320,17 @@ export function CompanyPage() {
 
   return (
     <section className='dossierPage dossierPage--company dossierTypo'>
-      <h2 className='dossierTitle' {...editable}>{page.title}</h2>
+      <h2 className='dossierTitle'>{page.title}</h2>
 
       <div className='dossierCompany_text'>
         {page.paragraphs.map((paragraph, index) => (
-          <p key={index} className='dossierText' {...editable}>{paragraph}</p>
+          <p key={index} className='dossierText'>{paragraph}</p>
         ))}
-        <p className='dossierText dossierCompany_quote' {...editable}>{page.quote}</p>
-        <p className='dossierCompany_signature' {...editable}>{page.signature}</p>
+        <p className='dossierText dossierCompany_quote'>{page.quote}</p>
+        <p className='dossierCompany_signature'>{page.signature}</p>
       </div>
 
-      <p className='dossierCompany_credit' {...editable}>{page.photoCredit}</p>
+      <p className='dossierCompany_credit'>{page.photoCredit}</p>
       <div className='dossierCompany_photos'>
         <img src={companyPhotoLeft} alt='' />
         <img src={companyPhotoRight} alt='' />
@@ -321,44 +340,45 @@ export function CompanyPage() {
 }
 
 /* ----------------------------------
-   Contact et crédits
+   6. Infos de la compagnie et logos (page fixe)
 ---------------------------------- */
 
 export function ContactPage({ logos }) {
   const infos = COMPANY_INFOS;
+  const lines = (list) => list.map((line, index) => <React.Fragment key={index}>{index > 0 && <br />}{line}</React.Fragment>);
 
   return (
     <section className='dossierPage dossierPage--contact dossierTypo'>
       <div className='dossierContact'>
         {infos.contacts.map((contact) => (
           <div key={contact.role} className='dossierContact_group'>
-            <p className='dossierContact_role' {...editable}>{contact.role}</p>
+            <p className='dossierContact_role'>{contact.role}</p>
             <div className='dossierContact_person'>
-              <p {...editable}><strong>{contact.name}</strong></p>
-              <p {...editable}>{contact.lines.map((line, index) => <React.Fragment key={index}>{index > 0 && <br />}{line}</React.Fragment>)}</p>
+              <p><strong>{contact.name}</strong></p>
+              <p>{lines(contact.lines)}</p>
             </div>
           </div>
         ))}
 
         <div className='dossierContact_group dossierContact_group--center'>
-          <p {...editable}>{infos.email}</p>
+          <p>{infos.email}</p>
         </div>
         <div className='dossierContact_group dossierContact_group--center'>
-          <p {...editable}>
+          <p>
             {infos.name}
             <br />
             {infos.address.map((line, index) => <React.Fragment key={index}>{line}<br /></React.Fragment>)}
           </p>
         </div>
         <div className='dossierContact_group dossierContact_group--center'>
-          <p {...editable}>{infos.website}</p>
+          <p>{infos.website}</p>
         </div>
         <div className='dossierContact_group dossierContact_group--center'>
-          <p className='dossierContact_role' {...editable}>Crédits</p>
-          <p {...editable}>{infos.credits.map((line, index) => <React.Fragment key={index}>{index > 0 && <br />}{line}</React.Fragment>)}</p>
+          <p className='dossierContact_role'>Crédits</p>
+          <p>{lines(infos.credits)}</p>
         </div>
         <div className='dossierContact_group dossierContact_group--center'>
-          <p {...editable}>{infos.conventions.map((line, index) => <React.Fragment key={index}>{index > 0 && <br />}{line}</React.Fragment>)}</p>
+          <p>{lines(infos.conventions)}</p>
         </div>
 
         {logos.length > 0 && (
