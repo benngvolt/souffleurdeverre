@@ -7,12 +7,12 @@ import {
   GenericPage,
   FlowPages,
   PhotoPages,
+  TeamPages,
   CompanyPage,
   ContactPage,
   htmlBlocks,
   subtitleBlock,
   spacerBlock,
-  teamBlock,
   calendarBlock,
 } from './DossierPages';
 import {
@@ -69,7 +69,7 @@ function buildContent(project, biographies, allLogos) {
     paragraphBlocks.push(...htmlBlocks(`par-${index}`, htmlToBlocks(paragraph.paragraphText)));
   });
 
-  const teamBlocks = matchBiographies(project, biographies).map(teamBlock);
+  const team = matchBiographies(project, biographies);
   const calendarBlocks = groupResidencies(project.residenciesList).map(calendarBlock);
 
   const logos = (project.logos || [])
@@ -82,7 +82,7 @@ function buildContent(project, biographies, allLogos) {
     descriptionBlocks: htmlBlocks('description', descriptionHtmlBlocks),
     paragraphBlocks,
     otherImages,
-    teamBlocks,
+    team,
     calendarBlocks,
     logos,
   };
@@ -131,7 +131,7 @@ function DossierEditor({ project, biographies, logos, onBack }) {
         <FlowPages blocks={content.descriptionBlocks} />
         <FlowPages title='Note d’intention' blocks={content.paragraphBlocks} />
         <PhotoPages images={content.otherImages} />
-        <FlowPages title='L’équipe' blocks={content.teamBlocks} variant='team' />
+        <TeamPages title='L’équipe' biographies={content.team} />
         <CompanyPage />
         <FlowPages title='Calendrier de création' blocks={content.calendarBlocks} variant='calendar' />
         <ContactPage logos={content.logos} />

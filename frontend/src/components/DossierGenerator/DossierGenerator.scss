@@ -354,6 +354,22 @@ $dossierMagenta: #ff00ff;
     height: 12.2pt;
 }
 
+/* Page dont le contenu dépasse : signalée en rouge à l'écran (jamais à l'export) */
+.dossierPage--overflow::before {
+    content: 'Cette page déborde : raccourcir une biographie.';
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    padding: 1mm 2mm;
+    background: #e00000;
+    color: white;
+    font-family: 'MainFont_light';
+    font-size: 8pt;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
 /* Morceau d'un texte coupé sur plusieurs pages : fenêtre sur le bloc complet */
 .dossierFragment {
     overflow: hidden;
@@ -423,6 +439,13 @@ $dossierMagenta: #ff00ff;
 }
 
 .dossierText {
+    /* champ vide : texte indicatif visible à l'écran seulement (jamais à l'export) */
+    &[data-placeholder]:empty::before {
+        content: attr(data-placeholder);
+        color: #9a9a9a;
+        font-style: italic;
+    }
+
     text-align: justify;
     text-justify: inter-word;
     overflow-wrap: break-word;
@@ -850,6 +873,11 @@ $dossierMagenta: #ff00ff;
 
     [contenteditable]:focus {
         outline: none;
+    }
+
+    .dossierText[data-placeholder]:empty::before,
+    .dossierPage--overflow::before {
+        content: none;
     }
 
     .dossierBlock--tooLong {

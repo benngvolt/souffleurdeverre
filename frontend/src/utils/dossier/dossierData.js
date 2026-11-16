@@ -193,3 +193,36 @@ export function matchBiographies(project, biographies = []) {
 export function firstItem(value) {
   return String(value || '').split(',')[0].trim();
 }
+
+export function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/* Répartition des biographies sur les pages « équipe » : 3 par page, la première page
+   en portant 2 (elle porte aussi le titre). Si la dernière page n'aurait qu'une seule
+   biographie, on en reprend une sur la page précédente pour en avoir au moins deux.
+   Retourne le nombre de biographies de chaque page, ex. 12 personnes -> [2, 3, 3, 2, 2]. */
+export function groupTeam(count, firstPageSize = 2, pageSize = 3) {
+  if (count <= 0) return [];
+
+  const sizes = [Math.min(firstPageSize, count)];
+  let remaining = count - sizes[0];
+
+  while (remaining > 0) {
+    const take = Math.min(pageSize, remaining);
+    sizes.push(take);
+    remaining -= take;
+  }
+
+  const last = sizes.length - 1;
+  if (last >= 1 && sizes[last] === 1 && sizes[last - 1] > 2) {
+    sizes[last - 1] -= 1;
+    sizes[last] = 2;
+  }
+
+  return sizes;
+}

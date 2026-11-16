@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import Paginator from './Paginator';
 import { COMPANY_INFOS, COMPANY_PAGE } from './dossierConfig';
 import companyPhotoLeft from '../../assets/Julien_Rocha_Julien_Bruhat.webp';
 import companyPhotoRight from '../../assets/Cedric_Veschambre_Julien_Bruhat.webp';
-import { sanitizeHtml } from '../../utils/dossier/dossierData';
+import { sanitizeHtml, escapeHtml, groupTeam } from '../../utils/dossier/dossierData';
 
 /* Pages du dossier artistique (A4 paysage). Toutes les zones de texte sont éditables
    directement (contentEditable) : les modifications ne sont pas encore sauvegardées. */
@@ -14,13 +14,19 @@ const editable = {
   spellCheck: false,
 };
 
-function Html({ html, className = '', as: Tag = 'div' }) {
-  return <Tag className={`dossierText ${className}`} {...editable} dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }} />;
+function Html({ html, className = '', as: Tag = 'div', placeholder }) {
+  return (
+    <Tag
+      className={`dossierText ${className}`}
+      data-placeholder={placeholder}
+      {...editable}
+      dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
+    />
+  );
 }
 
 // Hauteurs de ligne (pt) : doivent rester identiques à celles du SCSS (.dossierTypo / .dossierTeamRow_text)
 const TEXT_LINE_HEIGHT_PT = 12.2;
-const TEAM_LINE_HEIGHT_PT = 10.4;
 
 function Spacer() {
   return <div className='dossierSpacer' />;
@@ -96,7 +102,6 @@ function FlowPage({ title, showTitle, variant, centered, children }) {
 
 const FLOW_SETTINGS = {
   text: { widthMm: 187, capacityMm: 189, titledCapacityMm: 166 },
-  team: { widthMm: 232, capacityMm: 189, titledCapacityMm: 127 },
   calendar: { widthMm: 162, capacityMm: 189, titledCapacityMm: 166 },
 };
 
@@ -153,33 +158,83 @@ export function spacerBlock(key, keepWithNext = false) {
   return { key, spacer: true, keepWithNext, node: <Spacer /> };
 }
 
-/* Blocs : équipe */
+/* Pages équipe : groupes fixes (3 biographies par page, voir groupTeam).
+   Seule la biographie COURTE écrite pour le dossier est utilisée ; sans elle, le champ reste vide
+   (avec le portrait et le nom). Une page dont le contenu dépasse est signalée à l'écran. */
 
-export function teamBlock(biography) {
+const TEAM_PAGE_CAPACITY_MM = 189;
+const TEAM_FIRST_PAGE_CAPACITY_MM = 127;
+
+function TeamRow({ biography }) {
   const name = `${biography.name || ''} ${biography.surname || ''}`.trim();
   const role = biography.role ? `, ${biography.role}` : '';
-  // version courte écrite pour le dossier si elle existe, sinon la biographie complète du site
-  const text = biography.dossierBiography && biography.dossierBiography.trim() ? biography.dossierBiography : biography.biography;
+  const text = biography.dossierBiography && biography.dossierBiography.trim() ? biography.dossierBiography : '';
 
-  return {
-    key: `team-${biography._id}`,
-    splittable: true,
-    lineHeightPt: TEAM_LINE_HEIGHT_PT,
-    splitSelector: '.dossierTeamRow_text',
-    minFirstMm: 62, // au moins la hauteur du portrait avant de couper
-    node: (
-      <div className='dossierTeamRow'>
-        <div className='dossierTeamRow_photo'>
-          {biography.bioImageUrl && <img src={biography.bioImageUrl} alt='' />}
-        </div>
-        <div className='dossierTeamRow_text'>
-          <Html html={`<strong>${name}</strong>${role}.`} />
-          <Spacer />
-          <Html html={text} />
-        </div>
+  return (
+    <div className='dossierTeamRow'>
+      <div className='dossierTeamRow_photo'>
+        {biography.bioImageUrl && <img src={biography.bioImageUrl} alt='' />}
       </div>
-    ),
-  };
+      <div className='dossierTeamRow_text'>
+        <Html html={`<strong>${escapeHtml(name)}</strong>${escapeHtml(role)}.`} />
+        <Spacer />
+        <Html html={text} placeholder='Biographie courte à saisir (onglet BIOGRAPHIES)…' />
+      </div>
+    </div>
+  );
+}
+
+function TeamPage({ title, biographies }) {
+  const pageRef = useRef(null);
+  const columnRef = useRef(null);
+  const [overflowing, setOverflowing] = useState(false);
+
+  useLayoutEffect(() => {
+    const column = columnRef.current;
+    const page = pageRef.current;
+    if (!column || !page || typeof ResizeObserver === 'undefined') return undefined;
+
+    // Rapport hauteur de la colonne / hauteur de la page : indépendant du zoom d'affichage
+    const check = () => {
+      const pageHeight = page.getBoundingClientRect().height;
+      if (!pageHeight) return;
+      const columnMm = (column.getBoundingClientRect().height / pageHeight) * 210;
+      const capacity = title ? TEAM_FIRST_PAGE_CAPACITY_MM : TEAM_PAGE_CAPACITY_MM;
+      setOverflowing(columnMm > capacity + 0.5);
+    };
+
+    const observer = new ResizeObserver(check);
+    observer.observe(column);
+    check();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
+
+    return () => observer.disconnect();
+  }, [title, biographies]);
+
+  return (
+    <section
+      ref={pageRef}
+      className={`dossierPage dossierPage--flow dossierPage--team ${overflowing ? 'dossierPage--overflow' : ''} dossierTypo`}
+    >
+      {title && <h2 className='dossierTitle' {...editable}>{title}</h2>}
+      <div ref={columnRef} className='dossierColumn'>
+        {biographies.map((biography) => (
+          <TeamRow key={biography._id} biography={biography} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function TeamPages({ title, biographies }) {
+  const sizes = groupTeam(biographies.length);
+  let cursor = 0;
+
+  return sizes.map((size, pageIndex) => {
+    const group = biographies.slice(cursor, cursor + size);
+    cursor += size;
+    return <TeamPage key={`team-${pageIndex}`} title={pageIndex === 0 ? title : null} biographies={group} />;
+  });
 }
 
 /* Blocs : calendrier de création */
