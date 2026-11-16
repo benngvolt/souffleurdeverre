@@ -21,6 +21,11 @@ const biographySchema = mongoose.Schema({
         type: String,
         required: false,
     },
+    // Version courte de la biographie, utilisée dans les dossiers artistiques (facultative)
+    dossierBiography: {
+        type: String,
+        required: false,
+    },
     linkUrl: {
         type: String,
         required: false,

@@ -49,6 +49,7 @@ exports.createBiography = async (req, res, next) => {
       role: biographyData.role,
       field: biographyData.field,
       biography: biographyData.biography || '',
+      dossierBiography: biographyData.dossierBiography || '',
       linkUrl: biographyData.linkUrl || '',
       bioImageUrl: req.imageUrl || null,
       isPermanentTeam: biographyData.isPermanentTeam === 'true',
@@ -125,6 +126,11 @@ exports.updateOneBiography = async (req, res, next) => {
       bioImageUrl: req.imageUrl || biography.bioImageUrl,
       isPermanentTeam: req.body.isPermanentTeam === 'true',
     };
+
+    // Champ facultatif : n'est modifié que s'il est envoyé (un ancien formulaire ne l'efface pas)
+    if (req.body.dossierBiography !== undefined) {
+      biographyData.dossierBiography = req.body.dossierBiography;
+    }
 
     await Biography.updateOne(
       { _id: req.params.id },

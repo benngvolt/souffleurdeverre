@@ -89,6 +89,15 @@
         }
     }
 
+    &_hint {
+        margin: 6px auto 10px auto;
+        width: 100%;
+        text-align: center;
+        font-family: 'MainFont_light';
+        font-size: 14px;
+        color: #535353;
+    }
+
     &_bio {
         width: 90%;
         margin-top: 35px;

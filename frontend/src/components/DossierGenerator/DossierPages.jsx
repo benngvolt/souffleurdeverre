@@ -1,6 +1,8 @@
 import React from 'react';
 import Paginator from './Paginator';
-import { COMPANY_INFOS } from './dossierConfig';
+import { COMPANY_INFOS, COMPANY_PAGE } from './dossierConfig';
+import companyPhotoLeft from '../../assets/Julien_Rocha_Julien_Bruhat.webp';
+import companyPhotoRight from '../../assets/Cedric_Veschambre_Julien_Bruhat.webp';
 import { sanitizeHtml } from '../../utils/dossier/dossierData';
 
 /* Pages du dossier artistique (A4 paysage). Toutes les zones de texte sont éditables
@@ -15,6 +17,10 @@ const editable = {
 function Html({ html, className = '', as: Tag = 'div' }) {
   return <Tag className={`dossierText ${className}`} {...editable} dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }} />;
 }
+
+// Hauteurs de ligne (pt) : doivent rester identiques à celles du SCSS (.dossierTypo / .dossierTeamRow_text)
+const TEXT_LINE_HEIGHT_PT = 12.2;
+const TEAM_LINE_HEIGHT_PT = 10.4;
 
 function Spacer() {
   return <div className='dossierSpacer' />;
@@ -104,7 +110,7 @@ export function FlowPages({ title, blocks, variant = 'text' }) {
       widthMm={settings.widthMm}
       firstCapacityMm={title ? settings.titledCapacityMm : settings.capacityMm}
       capacityMm={settings.capacityMm}
-      renderPage={(pageBlocks, pageIndex, pageCount, pageCapacityMm) => (
+      renderPage={(pageBlocks, pageIndex, pageCount) => (
         <FlowPage
           key={`${variant}-${title || 'sans-titre'}-${pageIndex}`}
           title={title}
@@ -115,8 +121,8 @@ export function FlowPages({ title, blocks, variant = 'text' }) {
           {pageBlocks.map((block) => (
             <div
               key={block.key}
-              className={block.tooTall ? 'dossierBlock dossierBlock--tooTall' : 'dossierBlock'}
-              style={block.tooTall ? { maxHeight: `${pageCapacityMm}mm` } : undefined}
+              className={block.tooLong ? 'dossierBlock dossierBlock--tooLong' : 'dossierBlock'}
+              data-pages={block.tooLong || undefined}
             >
               {block.node}
             </div>
@@ -133,6 +139,8 @@ export function htmlBlocks(prefix, htmlBlockList) {
   return htmlBlockList.map((block, index) => ({
     key: `${prefix}-${index}`,
     spacer: block.spacer,
+    splittable: !block.spacer,
+    lineHeightPt: TEXT_LINE_HEIGHT_PT,
     node: block.spacer ? <Spacer /> : <Html html={block.html} />,
   }));
 }
@@ -150,9 +158,15 @@ export function spacerBlock(key, keepWithNext = false) {
 export function teamBlock(biography) {
   const name = `${biography.name || ''} ${biography.surname || ''}`.trim();
   const role = biography.role ? `, ${biography.role}` : '';
+  // version courte écrite pour le dossier si elle existe, sinon la biographie complète du site
+  const text = biography.dossierBiography && biography.dossierBiography.trim() ? biography.dossierBiography : biography.biography;
 
   return {
     key: `team-${biography._id}`,
+    splittable: true,
+    lineHeightPt: TEAM_LINE_HEIGHT_PT,
+    splitSelector: '.dossierTeamRow_text',
+    minFirstMm: 62, // au moins la hauteur du portrait avant de couper
     node: (
       <div className='dossierTeamRow'>
         <div className='dossierTeamRow_photo'>
@@ -161,7 +175,7 @@ export function teamBlock(biography) {
         <div className='dossierTeamRow_text'>
           <Html html={`<strong>${name}</strong>${role}.`} />
           <Spacer />
-          <Html html={biography.biography} />
+          <Html html={text} />
         </div>
       </div>
     ),
@@ -221,6 +235,34 @@ export function PhotoPages({ images }) {
       </section>
     );
   });
+}
+
+/* ----------------------------------
+   La compagnie
+---------------------------------- */
+
+export function CompanyPage() {
+  const page = COMPANY_PAGE;
+
+  return (
+    <section className='dossierPage dossierPage--company dossierTypo'>
+      <h2 className='dossierTitle' {...editable}>{page.title}</h2>
+
+      <div className='dossierCompany_text'>
+        {page.paragraphs.map((paragraph, index) => (
+          <p key={index} className='dossierText' {...editable}>{paragraph}</p>
+        ))}
+        <p className='dossierText dossierCompany_quote' {...editable}>{page.quote}</p>
+        <p className='dossierCompany_signature' {...editable}>{page.signature}</p>
+      </div>
+
+      <p className='dossierCompany_credit' {...editable}>{page.photoCredit}</p>
+      <div className='dossierCompany_photos'>
+        <img src={companyPhotoLeft} alt='' />
+        <img src={companyPhotoRight} alt='' />
+      </div>
+    </section>
+  );
 }
 
 /* ----------------------------------

@@ -14,6 +14,7 @@ const initialFormState = {
     field: '',
     linkUrl: '',
     biography: '',
+    dossierBiography: '',
     isPermanentTeam: false,
 };
 
@@ -32,6 +33,7 @@ function BioForm({
     } = useContext(Context);
 
     const inputBioRef = useRef(null);
+    const inputDossierBioRef = useRef(null);
     const inputBioImageFileRef = useRef(null);
 
     const [formData, setFormData] = useState(initialFormState);
@@ -46,6 +48,12 @@ function BioForm({
             : 'trix-bio-new';
     }, [bioFormMode, biographyEdit?._id]);
 
+    const dossierTrixInputId = useMemo(() => {
+        return bioFormMode === 'edit' && biographyEdit?._id
+            ? `trix-dossier-bio-${biographyEdit._id}`
+            : 'trix-dossier-bio-new';
+    }, [bioFormMode, biographyEdit?._id]);
+
     useEffect(() => {
         if (bioFormMode === 'edit' && biographyEdit) {
             setFormData({
@@ -55,6 +63,7 @@ function BioForm({
                 field: biographyEdit.field || '',
                 linkUrl: biographyEdit.linkUrl || '',
                 biography: biographyEdit.biography || '',
+                dossierBiography: biographyEdit.dossierBiography || '',
                 isPermanentTeam: Boolean(biographyEdit.isPermanentTeam),
             });
 
@@ -95,6 +104,29 @@ function BioForm({
             element.removeEventListener('trix-initialize', loadBiographyIntoTrix);
         };
     }, [formData.biography, trixInputId, handleDisplayBioForm]);
+
+    useEffect(() => {
+        const element = document.getElementById('inputDossierBio');
+
+        if (!element) return;
+
+        const loadDossierBiographyIntoTrix = () => {
+            if (!element.editor) return;
+
+            element.editor.setSelectedRange([0, 0]);
+            element.editor.loadHTML(formData.dossierBiography || '');
+        };
+
+        if (element.editor) {
+            loadDossierBiographyIntoTrix();
+        } else {
+            element.addEventListener('trix-initialize', loadDossierBiographyIntoTrix, { once: true });
+        }
+
+        return () => {
+            element.removeEventListener('trix-initialize', loadDossierBiographyIntoTrix);
+        };
+    }, [formData.dossierBiography, dossierTrixInputId, handleDisplayBioForm]);
 
     function updateField(field, value) {
         setFormData((previousData) => ({
@@ -179,6 +211,12 @@ function BioForm({
         requestFormData.append(
             'biography',
             biographyValue || (bioFormMode === 'edit' ? biographyEdit?.biography || '' : '')
+        );
+
+        const dossierBiographyValue = inputDossierBioRef.current?.value;
+        requestFormData.append(
+            'dossierBiography',
+            dossierBiographyValue || (bioFormMode === 'edit' ? biographyEdit?.dossierBiography || '' : '')
         );
 
         const url =
@@ -311,6 +349,26 @@ function BioForm({
                     key={trixInputId}
                     id='inputBio'
                     input={trixInputId}
+                />
+            </div>
+
+            <div className='bioForm_bio'>
+                <label htmlFor='inputDossierBio'>BIOGRAPHIE COURTE (DOSSIER ARTISTIQUE)</label>
+                <p className='bioForm_hint'>
+                    Facultatif : version courte, d'environ 1 500 caractères, utilisée dans les dossiers artistiques.
+                    Si ce champ est vide, la biographie complète est utilisée.
+                </p>
+                <input
+                    key={`hidden-${dossierTrixInputId}`}
+                    id={dossierTrixInputId}
+                    type='hidden'
+                    name='dossierContent'
+                    ref={inputDossierBioRef}
+                />
+                <trix-editor
+                    key={dossierTrixInputId}
+                    id='inputDossierBio'
+                    input={dossierTrixInputId}
                 />
             </div>
 

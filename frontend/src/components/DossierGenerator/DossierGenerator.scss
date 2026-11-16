@@ -328,15 +328,14 @@ $dossierMagenta: #ff00ff;
 .dossierBlock {
     break-inside: avoid;
 
-    /* Texte plus haut qu'une page : coupé à l'export, signalé en rouge à l'écran */
-    &--tooTall {
+    /* Texte plus long qu'une page entière : signalé en rouge à l'écran (jamais à l'export) */
+    &--tooLong {
         position: relative;
-        overflow: hidden;
         outline: 2px dashed #e00000;
         outline-offset: -2px;
 
         &::after {
-            content: 'Texte trop long pour une page : il sera coupé. À raccourcir.';
+            content: 'Texte de ' attr(data-pages) ' pages : à raccourcir.';
             position: absolute;
             top: 0;
             right: 0;
@@ -353,6 +352,74 @@ $dossierMagenta: #ff00ff;
 
 .dossierSpacer {
     height: 12.2pt;
+}
+
+/* Morceau d'un texte coupé sur plusieurs pages : fenêtre sur le bloc complet */
+.dossierFragment {
+    overflow: hidden;
+}
+
+/* ---------- La compagnie ---------- */
+
+.dossierPage--company {
+    padding-top: 10mm;
+
+    .dossierTitle {
+        margin-left: 97mm;
+        font-family: 'SpecialFont_regular';
+        font-weight: normal;
+        font-size: 37pt;
+        line-height: 1;
+        text-transform: uppercase;
+        height: 19.5mm;
+        padding-top: 1mm;
+        box-sizing: border-box;
+    }
+}
+
+.dossierCompany {
+    &_text {
+        margin-left: 97mm;
+        width: 187mm;
+
+        .dossierText {
+            margin-bottom: 12.2pt;
+        }
+    }
+
+    &_quote {
+        font-style: italic;
+    }
+
+    &_signature {
+        text-align: right;
+    }
+
+    &_credit {
+        position: absolute;
+        left: 13mm;
+        top: 102mm;
+        font-size: 5.5pt;
+        line-height: 1;
+    }
+
+    &_photos {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 105mm;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6mm;
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
 }
 
 .dossierText {
@@ -785,7 +852,7 @@ $dossierMagenta: #ff00ff;
         outline: none;
     }
 
-    .dossierBlock--tooTall {
+    .dossierBlock--tooLong {
         outline: none;
 
         &::after {

@@ -7,6 +7,7 @@ import {
   GenericPage,
   FlowPages,
   PhotoPages,
+  CompanyPage,
   ContactPage,
   htmlBlocks,
   subtitleBlock,
@@ -131,6 +132,7 @@ function DossierEditor({ project, biographies, logos, onBack }) {
         <FlowPages title='Note d’intention' blocks={content.paragraphBlocks} />
         <PhotoPages images={content.otherImages} />
         <FlowPages title='L’équipe' blocks={content.teamBlocks} variant='team' />
+        <CompanyPage />
         <FlowPages title='Calendrier de création' blocks={content.calendarBlocks} variant='calendar' />
         <ContactPage logos={content.logos} />
       </div>
