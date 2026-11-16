@@ -237,3 +237,69 @@ export function dossierReducer(state, action) {
       return state;
   }
 }
+
+/* ----------------------------------
+   Enregistrement / ouverture d'un brouillon
+---------------------------------- */
+
+/* Contenu envoyé au serveur (et comparé pour détecter les modifications non enregistrées) */
+export function serializeDraft(state, name) {
+  return {
+    name,
+    cover: { imageUrl: state.cover.imageUrl, x: state.cover.x, y: state.cover.y },
+    middle: state.middle.map((page) =>
+      page.type === 'photos'
+        ? { pageId: page.id, type: 'photos', slots: page.slots.map((slot) => ({ imageUrl: slot.imageUrl, x: slot.x, y: slot.y })) }
+        : { pageId: page.id, type: 'text', title: page.title, html: page.html, align: page.align }
+    ),
+    teamOrder: state.teamOrder,
+  };
+}
+
+/* État de l'éditeur à partir d'un brouillon enregistré, recalé sur le projet actuel :
+   - une photo qui n'est plus dans le projet laisse son emplacement vide (avec un avertissement) ;
+   - les biographies qui ne sont plus dans la distribution disparaissent, les nouvelles arrivent à la fin. */
+export function buildStateFromDraft(draft, project, biographies) {
+  const projectUrls = new Set((project.images || []).map((image) => image.imageUrl));
+  let missingPhotos = 0;
+
+  const keepPhoto = (photo) => {
+    const imageUrl = photo && photo.imageUrl ? photo.imageUrl : '';
+    const x = photo && Number.isFinite(photo.x) ? photo.x : 50;
+    const y = photo && Number.isFinite(photo.y) ? photo.y : 50;
+    if (imageUrl && !projectUrls.has(imageUrl)) {
+      missingPhotos += 1;
+      return { imageUrl: '', x: 50, y: 50 };
+    }
+    return { imageUrl, x, y };
+  };
+
+  const cover = keepPhoto(draft.cover);
+
+  const middle = (draft.middle || []).map((page) =>
+    page.type === 'photos'
+      ? { id: page.pageId, type: 'photos', slots: [0, 1, 2].map((index) => keepPhoto(page.slots && page.slots[index])) }
+      : {
+          id: page.pageId,
+          type: 'text',
+          title: page.title || '',
+          html: page.html || '',
+          align: ['top', 'center', 'bottom'].includes(page.align) ? page.align : 'top',
+        }
+  );
+
+  const current = matchBiographies(project, biographies).map((biography) => biography._id);
+  const saved = (draft.teamOrder || []).filter((id) => current.includes(id));
+  const teamOrder = [...saved, ...current.filter((id) => !saved.includes(id))];
+
+  const warnings = [];
+  if (missingPhotos) {
+    warnings.push(
+      missingPhotos === 1
+        ? 'Une photo de ce brouillon n’est plus dans le projet : son emplacement est vide.'
+        : `${missingPhotos} photos de ce brouillon ne sont plus dans le projet : leurs emplacements sont vides.`
+    );
+  }
+
+  return { state: { cover, middle, teamOrder }, warnings };
+}

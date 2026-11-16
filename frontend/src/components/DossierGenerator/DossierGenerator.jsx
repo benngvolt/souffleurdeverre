@@ -3,42 +3,51 @@ import { Context } from '../../utils/Context';
 import { apiFetch } from '../../utils/api';
 import { slugify } from '../../utils/dossier/dossierData';
 import ProjectPicker from './ProjectPicker';
+import DossierDrafts from './DossierDrafts';
 import DossierEditor from './DossierEditor';
 import './DossierGenerator.scss';
 
 /* Onglet « GÉNÉRATEUR DE DOSSIER » du back-office :
    1. on choisit un projet dans une modale,
-   2. les données du projet sont récupérées auprès du serveur,
-   3. l'éditeur de dossier s'ouvre avec les pages générées. */
+   2. ses données sont récupérées auprès du serveur,
+   3. on choisit un brouillon existant ou on en crée un nouveau,
+   4. l'éditeur de dossier s'ouvre. */
 function DossierGenerator() {
   const { projects, biographies, logos } = useContext(Context);
 
   const [pickerOpen, setPickerOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [project, setProject] = useState(null); // projet choisi (données fraîches)
+  const [draftsOpen, setDraftsOpen] = useState(false);
+  const [session, setSession] = useState(null); // { draft: brouillon ouvert ou null, key }
   const [notice, setNotice] = useState('');
 
-  async function handleSelect(project) {
+  async function handleSelectProject(chosen) {
     setPickerOpen(false);
     setLoading(true);
     setNotice('');
 
     try {
-      const freshProject = await apiFetch(`/api/projects/${slugify(project.title)}`);
-      setSelectedProject(freshProject);
+      setProject(await apiFetch(`/api/projects/${slugify(chosen.title)}`));
     } catch (error) {
       // En cas d'échec, on se rabat sur les données déjà chargées dans le back-office.
       console.error(error.message);
-      setSelectedProject(project);
+      setProject(chosen);
       setNotice('Les données du projet n’ont pas pu être rechargées : les dernières données chargées sont utilisées.');
     } finally {
       setLoading(false);
+      setDraftsOpen(true);
     }
   }
 
-  function handleBack() {
-    setSelectedProject(null);
-    setPickerOpen(true);
+  function startSession(draft) {
+    setDraftsOpen(false);
+    setSession({ draft, key: `${draft ? draft._id : 'new'}-${Date.now()}` });
+  }
+
+  function closeEditor() {
+    setSession(null);
+    setDraftsOpen(true);
   }
 
   return (
@@ -48,7 +57,7 @@ function DossierGenerator() {
       <p className='dossierGenerator_tuto'>
         Génère le dossier artistique d’un spectacle à partir des informations déjà saisies sur le site
         (générique, textes, photos, biographies, calendrier de création, logos), selon la charte graphique de la compagnie.
-        Les textes peuvent ensuite être retouchés avant l’export en PDF.
+        Plusieurs brouillons peuvent être enregistrés par spectacle, puis exportés en PDF.
       </p>
 
       <button
@@ -63,16 +72,31 @@ function DossierGenerator() {
       {notice && <p className='dossierGenerator_notice'>{notice}</p>}
 
       {pickerOpen && (
-        <ProjectPicker projects={projects} onSelect={handleSelect} onClose={() => setPickerOpen(false)} />
+        <ProjectPicker projects={projects} onSelect={handleSelectProject} onClose={() => setPickerOpen(false)} />
       )}
 
-      {selectedProject && (
+      {project && draftsOpen && !session && (
+        <DossierDrafts
+          key={project._id}
+          project={project}
+          onNew={() => startSession(null)}
+          onOpen={(draft) => startSession(draft)}
+          onChangeProject={() => {
+            setDraftsOpen(false);
+            setPickerOpen(true);
+          }}
+          onClose={() => setDraftsOpen(false)}
+        />
+      )}
+
+      {project && session && (
         <DossierEditor
-          key={selectedProject._id}
-          project={selectedProject}
+          key={session.key}
+          project={project}
           biographies={biographies}
           logos={logos}
-          onBack={handleBack}
+          draft={session.draft}
+          onBack={closeEditor}
         />
       )}
     </div>

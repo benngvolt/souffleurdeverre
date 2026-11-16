@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft,
   faFilePdf,
+  faFloppyDisk,
   faFont,
   faImage,
   faMinus,
@@ -43,7 +44,16 @@ import {
   formatCreationDate,
   firstItem,
 } from '../../utils/dossier/dossierData';
-import { buildInitialState, dossierReducer, newPhotoPage, newTextPage } from '../../utils/dossier/dossierState';
+import {
+  buildInitialState,
+  buildStateFromDraft,
+  dossierReducer,
+  newPhotoPage,
+  newTextPage,
+  serializeDraft,
+} from '../../utils/dossier/dossierState';
+import { buildPdfFileName, defaultDraftName, formatDateTime } from '../../utils/dossier/dossierExport';
+import { apiFetch } from '../../utils/api';
 import { PAGE } from './dossierConfig';
 
 const PAGE_WIDTH_PX = (PAGE.widthMm * 96) / 25.4;
@@ -141,11 +151,46 @@ function MiddlePageFrame({ page, index, count, onEdit, onDelete, children }) {
   );
 }
 
+/* Invite « Enregistrer sous… » : demande le nom du nouveau brouillon */
+function NamePrompt({ initialName, onConfirm, onCancel }) {
+  const [value, setValue] = useState(initialName);
+
+  return createPortal(
+    <div className='dossierPicker' role='dialog' aria-modal='true' aria-label='Enregistrer sous' onClick={onCancel}>
+      <form
+        className='dossierPicker_box dossierPicker_box--prompt'
+        onClick={(event) => event.stopPropagation()}
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (value.trim()) onConfirm(value.trim());
+        }}
+      >
+        <p className='dossierPicker_title'>ENREGISTRER SOUS…</p>
+        <p className='dossierDrafts_date'>Le brouillon actuel reste tel qu’il est enregistré ; une copie portant ce nom est créée.</p>
+        <input
+          className='dossierPicker_search'
+          type='text'
+          value={value}
+          maxLength={120}
+          onChange={(event) => setValue(event.target.value)}
+          aria-label='Nom du nouveau brouillon'
+          autoFocus
+        />
+        <div className='dossierDrafts_promptButtons'>
+          <button type='submit' disabled={!value.trim()}>ENREGISTRER</button>
+          <button type='button' onClick={onCancel}>ANNULER</button>
+        </div>
+      </form>
+    </div>,
+    document.body
+  );
+}
+
 /* ----------------------------------
    Éditeur
 ---------------------------------- */
 
-function DossierEditor({ project, biographies, logos, onBack }) {
+function DossierEditor({ project, biographies, logos, draft, onBack }) {
   const [zoom, setZoom] = useState(fitZoom);
   const [state, dispatch] = useReducer(dossierReducer, null);
   const [editingId, setEditingId] = useState(null);
@@ -155,19 +200,100 @@ function DossierEditor({ project, biographies, logos, onBack }) {
   const pagesRef = useRef(null);
   const scrollRef = useRef(null);
 
+  /* ----- brouillon : enregistrement ----- */
+  const [draftId, setDraftId] = useState(draft ? draft._id : null);
+  const [name, setName] = useState(() => (draft ? draft.name : defaultDraftName()));
+  const [baseline, setBaseline] = useState(null); // contenu tel qu'il est enregistré (ou tel qu'il était à l'ouverture)
+  const [saving, setSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState(null); // { type: 'success' | 'error', text }
+  const [warnings, setWarnings] = useState([]);
+  const [askLeave, setAskLeave] = useState(false);
+  const [askSaveAs, setAskSaveAs] = useState(false);
+
   const content = useMemo(() => buildContent(project, logos), [project, logos]);
 
   // Le contenu par défaut est construit une seule fois par projet (il demande de mesurer le texte)
   useEffect(() => {
     let cancelled = false;
-    buildInitialState(project, biographies).then((initialState) => {
-      if (!cancelled) dispatch({ type: 'init', state: initialState });
-    });
+
+    const start = (initialState, initialWarnings = []) => {
+      if (cancelled) return;
+      dispatch({ type: 'init', state: initialState });
+      setWarnings(initialWarnings);
+      setBaseline(JSON.stringify(serializeDraft(initialState, name)));
+    };
+
+    if (draft) {
+      const restored = buildStateFromDraft(draft, project, biographies);
+      start(restored.state, restored.warnings);
+    } else {
+      buildInitialState(project, biographies).then((initialState) => start(initialState));
+    }
+
     return () => {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project._id]);
+
+  // Modifications non enregistrées : le contenu actuel diffère de celui enregistré
+  const currentJson = state ? JSON.stringify(serializeDraft(state, name)) : null;
+  const dirty = Boolean(state) && baseline !== null && currentJson !== baseline;
+
+  // Avertit avant de fermer ou recharger la page avec des modifications non enregistrées
+  useEffect(() => {
+    if (!dirty) return undefined;
+    const warn = (event) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [dirty]);
+
+  async function saveDraft(overrides = {}) {
+    if (!state || saving) return;
+
+    const content = serializeDraft(state, (overrides.name ?? name).trim() || defaultDraftName());
+    const asNew = overrides.asNew || !draftId;
+
+    setSaving(true);
+    setSaveStatus(null);
+    try {
+      const saved = asNew
+        ? await apiFetch('/api/dossiers', { method: 'POST', auth: true, json: { ...content, project: project._id } })
+        : await apiFetch(`/api/dossiers/${draftId}`, { method: 'PUT', auth: true, json: content });
+
+      setDraftId(saved._id);
+      setName(content.name);
+      setBaseline(JSON.stringify(content));
+      setSaveStatus({ type: 'success', text: `✓ Enregistré le ${formatDateTime(saved.updatedAt)}` });
+    } catch (error) {
+      console.error(error);
+      setSaveStatus({ type: 'error', text: error.payload?.error || 'L’enregistrement a échoué : vos modifications restent dans l’éditeur, réessayez.' });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function handleBack() {
+    if (dirty) setAskLeave(true);
+    else onBack();
+  }
+
+  /* Export PDF : le navigateur propose comme nom de fichier le titre de la page au moment de l'impression */
+  function exportPdf() {
+    const originalTitle = document.title;
+    document.title = buildPdfFileName(project.title, new Date(), 'A4-RVB');
+
+    const restore = () => {
+      document.title = originalTitle;
+      window.removeEventListener('afterprint', restore);
+    };
+    window.addEventListener('afterprint', restore);
+
+    window.print();
+  }
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -250,11 +376,34 @@ function DossierEditor({ project, biographies, logos, onBack }) {
   return createPortal(
     <div className={`dossierEditor ${editingPage ? 'dossierEditor--withPanel' : ''}`} lang='fr'>
       <header className='dossierEditor_toolbar'>
-        <button type='button' className='dossierEditor_toolbar_button' onClick={onBack}>
-          <FontAwesomeIcon icon={faArrowLeft} /> CHANGER DE PROJET
+        <button type='button' className='dossierEditor_toolbar_button' onClick={handleBack}>
+          <FontAwesomeIcon icon={faArrowLeft} /> DOSSIERS
         </button>
 
-        <p className='dossierEditor_toolbar_title'>Dossier artistique · {project.title}</p>
+        <input
+          className='dossierEditor_toolbar_name'
+          type='text'
+          value={name}
+          maxLength={120}
+          onChange={(event) => setName(event.target.value)}
+          aria-label='Nom du brouillon'
+          title={`Brouillon de ${project.title}`}
+        />
+
+        <p
+          className={`dossierEditor_toolbar_status ${dirty ? 'dossierEditor_toolbar_status--dirty' : ''} ${saveStatus && saveStatus.type === 'error' ? 'dossierEditor_toolbar_status--error' : ''}`}
+          role='status'
+        >
+          {saveStatus && saveStatus.type === 'error'
+            ? saveStatus.text
+            : dirty
+              ? '● Modifications non enregistrées'
+              : saveStatus
+                ? saveStatus.text
+                : draftId
+                  ? '✓ Enregistré'
+                  : 'Nouveau dossier'}
+        </p>
 
         <div className='dossierEditor_toolbar_group'>
           <button type='button' className='dossierEditor_toolbar_button dossierEditor_toolbar_button--icon' onClick={() => changeZoom(-0.1)} aria-label='Réduire'>
@@ -264,16 +413,26 @@ function DossierEditor({ project, biographies, logos, onBack }) {
           <button type='button' className='dossierEditor_toolbar_button dossierEditor_toolbar_button--icon' onClick={() => changeZoom(0.1)} aria-label='Agrandir'>
             <FontAwesomeIcon icon={faPlus} />
           </button>
-          <button type='button' className='dossierEditor_toolbar_button dossierEditor_toolbar_button--primary' onClick={() => window.print()}>
+          <button type='button' className='dossierEditor_toolbar_button' onClick={() => saveDraft()} disabled={!state || saving}>
+            <FontAwesomeIcon icon={faFloppyDisk} /> {saving ? 'ENREGISTREMENT…' : 'ENREGISTRER'}
+          </button>
+          <button type='button' className='dossierEditor_toolbar_button' onClick={() => setAskSaveAs(true)} disabled={!state || saving}>
+            ENREGISTRER SOUS…
+          </button>
+          <button type='button' className='dossierEditor_toolbar_button dossierEditor_toolbar_button--primary' onClick={exportPdf} disabled={!state}>
             <FontAwesomeIcon icon={faFilePdf} /> EXPORTER EN PDF
           </button>
         </div>
       </header>
 
       <p className='dossierEditor_hint'>
-        Les modifications ne sont pas encore sauvegardées : elles disparaissent si vous fermez l’éditeur.
         Pour l’export : destination « Enregistrer au format PDF », marges « Aucune », option « Graphiques d’arrière-plan » cochée.
+        Le fichier est nommé automatiquement (AAMMJJHHMM_PROJET_A4RVB).
       </p>
+
+      {warnings.map((warning) => (
+        <p key={warning} className='dossierEditor_warning' role='alert'>{warning}</p>
+      ))}
 
       {!state && <p className='dossierEditor_loading'>Préparation du dossier…</p>}
 
@@ -360,6 +519,24 @@ function DossierEditor({ project, biographies, logos, onBack }) {
           onClose={() => setPicker(null)}
         />
       )}
+
+      {askSaveAs && (
+        <NamePrompt
+          initialName={defaultDraftName()}
+          onCancel={() => setAskSaveAs(false)}
+          onConfirm={(chosenName) => {
+            setAskSaveAs(false);
+            saveDraft({ name: chosenName, asNew: true });
+          }}
+        />
+      )}
+
+      <ConfirmBox
+        confirmBoxState={askLeave}
+        question='Quitter sans enregistrer ? Les modifications seront perdues.'
+        affirmativeChoice={onBack}
+        negativeChoice={() => setAskLeave(false)}
+      />
 
       <ConfirmBox
         confirmBoxState={Boolean(pageToDelete)}

@@ -1385,6 +1385,195 @@ $dossierMagenta: #ff00ff;
     }
 }
 
+
+/* ============================================================
+   Brouillons : liste, nom, enregistrement
+============================================================ */
+
+.dossierEditor {
+    &_toolbar_name {
+        flex: 1 1 220px;
+        min-width: 160px;
+        max-width: 380px;
+        padding: 8px 10px;
+        border: 1px solid $colorDarkGrey;
+        border-radius: 0;
+        font-family: 'MainFont_light';
+        font-size: 15px;
+        font-weight: bold;
+        color: $colorDarkGrey;
+        background: white;
+    }
+
+    &_toolbar_status {
+        margin: 0;
+        font-size: 13px;
+        color: #2e7d32;
+
+        &--dirty {
+            color: #b26a00;
+            font-weight: bold;
+        }
+
+        &--error {
+            color: #c00000;
+            font-weight: bold;
+        }
+    }
+
+    &_toolbar_button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    &_warning {
+        max-width: 900px;
+        margin: 10px auto 0 auto;
+        padding: 8px 12px;
+        background: #fff3cd;
+        color: #5c4400;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+    }
+}
+
+.dossierPicker {
+    &_box--drafts {
+        width: 760px;
+    }
+
+    &_box--prompt {
+        width: 480px;
+    }
+}
+
+.dossierDrafts {
+    &_new {
+        align-self: flex-start;
+        margin: 0 0 14px 0;
+        padding: 10px 16px;
+        border: 1px solid $colorDarkGrey;
+        border-radius: 0;
+        background: $colorDarkGrey;
+        color: white;
+        font-family: 'MainFont_light';
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    &_error {
+        margin: 0 0 10px 0;
+        padding: 8px 10px;
+        background: #c00000;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    &_list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        overflow-y: auto;
+        border-top: 1px solid $colorLightGrey;
+    }
+
+    &_item {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px 16px;
+        padding: 12px 6px;
+        border-bottom: 1px solid $colorLightGrey;
+    }
+
+    &_info {
+        min-width: 0;
+    }
+
+    &_name {
+        margin: 0;
+        font-size: 17px;
+        font-weight: bold;
+        overflow-wrap: anywhere;
+    }
+
+    &_date {
+        margin: 3px 0 0 0;
+        font-size: 13px;
+        color: $colorMediumGrey;
+    }
+
+    &_actions,
+    &_promptButtons {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+
+        button {
+            padding: 7px 10px;
+            border: 1px solid $colorDarkGrey;
+            border-radius: 0;
+            background: white;
+            color: $colorDarkGrey;
+            font-family: 'MainFont_light';
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+
+            &:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+
+            @include hoverable {
+                background: $colorLightGrey;
+            }
+        }
+    }
+
+    &_promptButtons {
+        margin-top: 14px;
+    }
+
+    &_rename {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+        width: 100%;
+
+        input {
+            flex: 1 1 240px;
+            padding: 8px 10px;
+            border: 1px solid $colorDarkGrey;
+            border-radius: 0;
+            font-family: 'MainFont_light';
+            font-size: 15px;
+        }
+
+        button {
+            padding: 7px 12px;
+            border: 1px solid $colorDarkGrey;
+            border-radius: 0;
+            background: white;
+            font-family: 'MainFont_light';
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+
+            &:disabled {
+                opacity: 0.4;
+            }
+        }
+    }
+}
+
 /* ============================================================
    Impression / export PDF : on n'imprime que les pages du dossier
 ============================================================ */
@@ -1402,6 +1591,7 @@ $dossierMagenta: #ff00ff;
     .dossierOverview,
     .dossierEditor_toolbar,
     .dossierEditor_hint,
+    .dossierEditor_warning,
     .dossierEditor_loading,
     .dossierEditor_section,
     .dossierEditor_addBar,
