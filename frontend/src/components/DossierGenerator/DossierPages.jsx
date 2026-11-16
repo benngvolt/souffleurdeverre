@@ -287,28 +287,38 @@ export function FlowPages({ title, blocks, variant = 'calendar' }) {
   );
 }
 
-export function calendarBlock(group) {
-  return {
-    key: `calendar-${group.type}`,
-    node: (
-      <div className='dossierCalendar'>
-        <p className='dossierCalendar_heading'>{group.type}</p>
-        {group.items.map((item, index) => (
-          <React.Fragment key={index}>
-            <p className='dossierCalendar_dates'>{item.dates}</p>
-            <p className='dossierCalendar_place'>
-              {item.lines.map((line, lineIndex) => (
-                <React.Fragment key={lineIndex}>
-                  {lineIndex > 0 && <br />}
-                  {line}
-                </React.Fragment>
-              ))}
-            </p>
-          </React.Fragment>
-        ))}
-      </div>
-    ),
-  };
+/* Un groupe (type de résidence, année de diffusion...) devient une suite de blocs : un titre, puis une ligne
+   par date. Ainsi une longue liste se répartit sur plusieurs pages, et un titre n'est jamais seul en bas de page. */
+export function calendarBlocks(group, prefix = 'calendar') {
+  const last = group.items.length - 1;
+
+  return [
+    {
+      key: `${prefix}-${group.type}-heading`,
+      keepWithNext: true,
+      node: (
+        <div className='dossierCalendar dossierCalendar--heading'>
+          <p className='dossierCalendar_heading'>{group.type}</p>
+        </div>
+      ),
+    },
+    ...group.items.map((item, index) => ({
+      key: `${prefix}-${group.type}-${index}`,
+      node: (
+        <div className={`dossierCalendar ${index === last ? 'dossierCalendar--last' : ''}`}>
+          <p className='dossierCalendar_dates'>{item.dates}</p>
+          <p className='dossierCalendar_place'>
+            {item.lines.map((line, lineIndex) => (
+              <React.Fragment key={lineIndex}>
+                {lineIndex > 0 && <br />}
+                {line}
+              </React.Fragment>
+            ))}
+          </p>
+        </div>
+      ),
+    })),
+  ];
 }
 
 /* ----------------------------------

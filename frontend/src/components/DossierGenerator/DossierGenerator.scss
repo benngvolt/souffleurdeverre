@@ -694,25 +694,31 @@ $dossierMagenta: #ff00ff;
     display: grid;
     grid-template-columns: 66mm 1fr;
     column-gap: 4mm;
-    padding-bottom: 9mm;
+    padding-bottom: 1.2mm;
+
+    &--heading {
+        display: block;
+        padding-bottom: 1.4mm;
+    }
+
+    &--last {
+        padding-bottom: 9mm;
+    }
 
     &_heading {
-        grid-column: 1 / -1;
         font-weight: bold;
         line-height: 4.2mm;
-        margin-bottom: 1.4mm;
     }
 
     &_dates {
         text-align: right;
         font-weight: bold;
         line-height: 4.2mm;
-        margin-bottom: 1.2mm;
+        white-space: pre-line;
     }
 
     &_place {
         line-height: 4.2mm;
-        margin-bottom: 1.2mm;
         text-align: left;
         hyphens: manual;
         -webkit-hyphens: manual;

@@ -34,7 +34,7 @@ import {
   TeamPages,
   CompanyPage,
   ContactPage,
-  calendarBlock,
+  calendarBlocks,
 } from './DossierPages';
 import PhotoPicker from './PhotoPicker';
 import TextPagePanel from './TextPagePanel';
@@ -44,6 +44,7 @@ import {
   splitLeadingItalic,
   htmlToBlocks,
   groupResidencies,
+  groupDiffusion,
   formatCreationDate,
   firstItem,
 } from '../../utils/dossier/dossierData';
@@ -81,7 +82,8 @@ function buildContent(project, allLogos) {
     images,
     cover: { title: project.title, credits: coverCredits, notes: coverNotes },
     generic: { title: project.title, tagline: project.moreInfos ? htmlToText(project.moreInfos) : '', rows: genericRows },
-    calendarBlocks: groupResidencies(project.residenciesList).map(calendarBlock),
+    calendarBlocks: groupResidencies(project.residenciesList).flatMap((group) => calendarBlocks(group, 'calendar')),
+    diffusionBlocks: groupDiffusion(project.showsList).flatMap((group) => calendarBlocks(group, 'diffusion')),
     logos: (project.logos || []).map((name) => allLogos.find((logo) => logo.name === name)).filter(Boolean),
   };
 }
@@ -347,8 +349,9 @@ function DossierEditor({ project, biographies, logos, onBack }) {
             <SectionLabel number='5' title='LA COMPAGNIE' hint='Page fixe.' />
             <CompanyPage />
 
-            <SectionLabel number='·' title='CALENDRIER DE CRÉATION' hint='Repris des résidences du projet.' />
+            <SectionLabel number='·' title='CALENDRIER DE CRÉATION ET DIFFUSION' hint='Repris des résidences et des représentations du projet.' />
             <FlowPages title='Calendrier de création' blocks={content.calendarBlocks} variant='calendar' />
+            <FlowPages title='Diffusion' blocks={content.diffusionBlocks} variant='calendar' />
 
             <SectionLabel number='6' title='INFOS DE LA COMPAGNIE ET LOGOS' hint='Page fixe, logos choisis dans le projet.' />
             <ContactPage logos={content.logos} />

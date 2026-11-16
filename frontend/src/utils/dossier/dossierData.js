@@ -171,6 +171,67 @@ export function groupResidencies(list = []) {
 }
 
 /* ----------------------------------
+   Liste de diffusion (représentations du projet)
+---------------------------------- */
+
+/* Représentations regroupées par année, classées par date. Pour chacune :
+   - colonne « date » : les dates (jour ou période) ; à défaut, le texte d'information
+     (ex. « Automne 2027 », fréquent quand la date n'est pas fixée) ;
+   - colonne « lieu » : le lieu et la ville, puis l'information si des dates existent.
+   Les représentations sans date sont classées d'après l'année trouvée dans leur texte. */
+export function groupDiffusion(showsList = []) {
+  const entries = (showsList || []).map((show, index) => {
+    const dated = (show.dates || [])
+      .map((date) => {
+        if (date.period && date.period.startDate) return { start: date.period.startDate, end: date.period.endDate };
+        if (date.day) return { start: date.day, end: date.day };
+        return null;
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.start.localeCompare(b.start));
+
+    const info = htmlToText(show.moreInfos || '');
+    const dateLines = dated.map((date) => formatDateRange(date.start, date.end, true));
+    const yearInInfo = /(\d{4})/.exec(info);
+    const year = dated.length ? Number(dated[0].start.slice(0, 4)) : yearInInfo ? Number(yearInInfo[1]) : null;
+    const place = [show.placeName, show.city].filter(Boolean).join(', ');
+
+    return {
+      index,
+      year,
+      firstDate: dated.length ? dated[0].start : '',
+      item: {
+        dates: dateLines.length ? dateLines.join('\n') : info,
+        lines: [place, dateLines.length ? info : ''].filter(Boolean),
+      },
+    };
+  });
+
+  entries.sort((a, b) => {
+    if ((a.year === null) !== (b.year === null)) return a.year === null ? 1 : -1;
+    if (a.year !== b.year) return a.year - b.year;
+    if (Boolean(a.firstDate) !== Boolean(b.firstDate)) return a.firstDate ? -1 : 1;
+    if (a.firstDate !== b.firstDate) return a.firstDate.localeCompare(b.firstDate);
+    return a.index - b.index;
+  });
+
+  const groups = [];
+  entries
+    .filter((entry) => entry.item.dates || entry.item.lines.length)
+    .forEach((entry) => {
+      const label = entry.year === null ? 'Dates à confirmer' : String(entry.year);
+      let group = groups[groups.length - 1];
+      if (!group || group.type !== label) {
+        group = { type: label, items: [] };
+        groups.push(group);
+      }
+      group.items.push(entry.item);
+    });
+
+  return groups;
+}
+
+/* ----------------------------------
    Équipe : biographies citées dans la distribution
 ---------------------------------- */
 
