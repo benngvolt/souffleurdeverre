@@ -2,6 +2,7 @@ const { storage, bucket } = require('../config/storage');
 const Project = require('../models/project');
 const Biography = require('../models/biography');
 const Logo = require('../models/logo');
+const Dossier = require('../models/dossier');
 const User = require('../models/user');
 const pcloud = require('./pcloud');
 const { syncFilesToPcloud } = require('./backupFiles');
@@ -21,6 +22,7 @@ const SOURCES = [
   ['projects', Project],
   ['biographies', Biography],
   ['logos', Logo],
+  ['dossiers', Dossier],
   ['users', User],
 ];
 

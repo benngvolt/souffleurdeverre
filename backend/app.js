@@ -8,6 +8,7 @@ const rateLimit = require('express-rate-limit');
 const projectsRoutes = require('./routes/projects');
 const biographiesRoutes = require('./routes/biographies');
 const logosRoutes = require('./routes/logos');
+const dossiersRoutes = require('./routes/dossiers');
 const backupRoutes = require('./routes/backup');
 const usersRoutes = require('./routes/users');
 const newslettersRoutes = require('./routes/newsletters');
@@ -31,6 +32,10 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content', 'Accept', 'Content-Type', 'Authorization'],
 }));
+
+// Brouillons de dossier : ils contiennent du texte riche, la limite par défaut (100 ko) est trop basse.
+// Doit rester AVANT le express.json() général, qui ignore ensuite les requêtes déjà lues.
+app.use('/api/dossiers', express.json({ limit: '2mb' }), dossiersRoutes);
 
 app.use(express.json());
 
