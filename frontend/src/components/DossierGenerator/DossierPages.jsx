@@ -159,7 +159,7 @@ export function PhotosPage({ page, images, onPanSlot, onChooseSlot }) {
 
   return (
     <section className='dossierPage dossierPage--photos dossierPage--noNumber dossierTypo' data-section='middle' data-page-id={page.id}>
-      <div className='dossierPhotos dossierPhotos--n3'>
+      <div className={`dossierPhotos dossierPhotos--${page.layout || 'three-bottom'}`}>
         {page.slots.map((slot, index) => (
           <PhotoFrame
             key={index}

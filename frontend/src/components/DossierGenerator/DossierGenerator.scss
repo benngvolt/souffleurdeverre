@@ -756,6 +756,7 @@ $dossierMagenta: #ff00ff;
 /* ---------- Pages photo ---------- */
 
 .dossierPhotos {
+    // zone des photos : toujours la même (même largeur, toute la hauteur), quelle que soit la disposition
     position: absolute;
     top: 0;
     bottom: 0;
@@ -765,7 +766,8 @@ $dossierMagenta: #ff00ff;
     gap: 0.6mm;
     background: white;
 
-    &--n3 {
+    // 3 photos : deux en haut, une large en bas (par défaut)
+    &--three-bottom {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
 
@@ -774,13 +776,31 @@ $dossierMagenta: #ff00ff;
         }
     }
 
-    &--n2 {
+    // 3 photos : une verticale à gauche, deux carrées l'une sur l'autre à droite
+    // (carrées : largeur de la colonne = hauteur d'une rangée, soit (210 - 0,6) / 2 mm)
+    &--three-left {
+        grid-template-columns: 1fr 104.7mm;
+        grid-template-rows: 1fr 1fr;
+
+        .dossierPhotos_item:nth-child(1) {
+            grid-row: 1 / -1;
+        }
+    }
+
+    // 2 photos horizontales, l'une sur l'autre
+    &--two-stacked {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 1fr;
     }
 
-    &--n1 {
-        left: 58mm;
+    // 2 photos verticales, côte à côte
+    &--two-columns {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    // 1 photo
+    &--one {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr;
     }
@@ -1426,6 +1446,14 @@ $dossierMagenta: #ff00ff;
         cursor: not-allowed;
     }
 
+    &_exportNote {
+        max-width: 900px;
+        margin: 8px auto 0 auto;
+        font-size: 13px;
+        text-align: center;
+        color: #bfe3bf;
+    }
+
     &_warning {
         max-width: 900px;
         margin: 10px auto 0 auto;
@@ -1574,6 +1602,170 @@ $dossierMagenta: #ff00ff;
     }
 }
 
+
+/* ============================================================
+   Dispositions des pages photo : schémas et choix des photos à garder
+============================================================ */
+
+.layoutIcon {
+    display: flex;
+    flex-direction: row;
+    width: 96px;
+    height: 68px;
+    box-sizing: border-box;
+    border: 1px solid #8a8a8a;
+    background: white;
+
+    // marge blanche à gauche, comme dans le dossier (65 mm sur 297)
+    &_margin {
+        flex: 0 0 22%;
+    }
+
+    &_grid {
+        flex: 1;
+        display: grid;
+        gap: 2px;
+    }
+
+    &_photo {
+        display: block;
+        background: #535353;
+        min-width: 0;
+        min-height: 0;
+    }
+
+    &--three-bottom &_grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    &--three-bottom &_photo:nth-child(3) {
+        grid-column: 1 / -1;
+    }
+
+    &--three-left &_grid {
+        grid-template-columns: 1fr 0.85fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    &--three-left &_photo:nth-child(1) {
+        grid-row: 1 / -1;
+    }
+
+    &--two-stacked &_grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    &--two-columns &_grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    &--one &_grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+}
+
+.layoutPicker {
+    &_group {
+        margin-top: 16px;
+    }
+
+    &_title {
+        margin: 0 0 6px 0;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    &_options {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    &_option {
+        padding: 6px;
+        border: 2px solid transparent;
+        border-radius: 0;
+        background: $colorLightGrey;
+        cursor: pointer;
+
+        &--current {
+            border-color: $colorDarkGrey;
+            background: white;
+        }
+
+        @include hoverable {
+            border-color: #00b300;
+        }
+    }
+}
+
+.dossierPicker_box--keep {
+    width: 640px;
+}
+
+.dossierKeep {
+    &_text {
+        margin: 0 0 14px 0;
+        font-size: 15px;
+        line-height: 1.4;
+    }
+
+    &_list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &_photo {
+        position: relative;
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        padding: 0;
+        border: 3px solid transparent;
+        background: #e3e3e3;
+        cursor: pointer;
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        &:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        &--selected {
+            border-color: #00b300;
+        }
+    }
+
+    &_badge {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        min-width: 22px;
+        padding: 2px 6px;
+        background: #00b300;
+        color: white;
+        font-family: 'MainFont_light';
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+    }
+}
+
 /* ============================================================
    Impression / export PDF : on n'imprime que les pages du dossier
 ============================================================ */
@@ -1592,6 +1784,7 @@ $dossierMagenta: #ff00ff;
     .dossierEditor_toolbar,
     .dossierEditor_hint,
     .dossierEditor_warning,
+    .dossierEditor_exportNote,
     .dossierEditor_loading,
     .dossierEditor_section,
     .dossierEditor_addBar,

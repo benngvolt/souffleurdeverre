@@ -19,6 +19,7 @@ import {
   faMinus,
   faPenToSquare,
   faPlus,
+  faTableCells,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -33,6 +34,8 @@ import {
   calendarBlocks,
 } from './DossierPages';
 import PageOverview from './PageOverview';
+import PhotoLayoutPanel from './PhotoLayoutPanel';
+import PhotoKeepModal from './PhotoKeepModal';
 import PhotoPicker from './PhotoPicker';
 import TextPagePanel from './TextPagePanel';
 import ConfirmBox from '../ConfirmBox/ConfirmBox';
@@ -50,9 +53,10 @@ import {
   dossierReducer,
   newPhotoPage,
   newTextPage,
+  planLayoutChange,
   serializeDraft,
 } from '../../utils/dossier/dossierState';
-import { buildPdfFileName, defaultDraftName, formatDateTime } from '../../utils/dossier/dossierExport';
+import { buildPdfFileName, defaultDraftName, formatDateTime, optimizeImagesForPdf } from '../../utils/dossier/dossierExport';
 import { apiFetch } from '../../utils/api';
 import { PAGE } from './dossierConfig';
 
@@ -136,11 +140,17 @@ function MiddlePageFrame({ page, index, count, onEdit, onDelete, children }) {
           {label} · {index + 1}/{count}
         </span>
         <div className='dossierFrame_actions'>
-          {page.type === 'text' && (
-            <button type='button' className='dossierFrame_edit' onClick={() => onEdit(page.id)}>
-              <FontAwesomeIcon icon={faPenToSquare} /> MODIFIER
-            </button>
-          )}
+          <button type='button' className='dossierFrame_edit' onClick={() => onEdit(page.id)}>
+            {page.type === 'text' ? (
+              <>
+                <FontAwesomeIcon icon={faPenToSquare} /> MODIFIER
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faTableCells} /> DISPOSITION
+              </>
+            )}
+          </button>
           <button type='button' onClick={() => onDelete(page.id)} aria-label='Supprimer la page'>
             <FontAwesomeIcon icon={faTrashCan} />
           </button>
@@ -207,8 +217,11 @@ function DossierEditor({ project, biographies, logos, draft, onBack }) {
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null); // { type: 'success' | 'error', text }
   const [warnings, setWarnings] = useState([]);
+  const [keepRequest, setKeepRequest] = useState(null); // { pageId, layout, count, photos } : choix des photos à garder
   const [askLeave, setAskLeave] = useState(false);
   const [askSaveAs, setAskSaveAs] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [exportNote, setExportNote] = useState('');
 
   const content = useMemo(() => buildContent(project, logos), [project, logos]);
 
@@ -281,13 +294,37 @@ function DossierEditor({ project, biographies, logos, draft, onBack }) {
     else onBack();
   }
 
-  /* Export PDF : le navigateur propose comme nom de fichier le titre de la page au moment de l'impression */
-  function exportPdf() {
+  /* Export PDF : les photos sont d'abord allégées (JPEG à la largeur utile, PDF visé sous 10 Mo), puis le navigateur
+     propose comme nom de fichier le titre de la page au moment de l'impression. */
+  async function exportPdf() {
+    if (exporting || !pagesRef.current) return;
+    setExporting(true);
+    setExportNote('');
+
+    let restoreImages = () => {};
+    try {
+      const result = await optimizeImagesForPdf(pagesRef.current, { zoom });
+      restoreImages = result.restore;
+      const megabytes = (result.bytes / (1024 * 1024)).toFixed(1).replace('.', ',');
+      setExportNote(
+        result.failures
+          ? `PDF préparé, mais ${result.failures} photo${result.failures > 1 ? 's n’ont' : ' n’a'} pas pu être allégée${result.failures > 1 ? 's' : ''} : le fichier peut être plus lourd.`
+          : result.overBudget
+            ? `PDF préparé : photos très lourdes (${megabytes} Mo), le fichier peut dépasser 10 Mo.`
+            : `PDF préparé : photos allégées (${megabytes} Mo, ${result.step.dpi} dpi maximum), fichier visé sous 10 Mo.`
+      );
+    } catch (error) {
+      console.error(error);
+      setExportNote('Les photos n’ont pas pu être allégées : le PDF sera plus lourd (jusqu’à 25 Mo).');
+    }
+
     const originalTitle = document.title;
     document.title = buildPdfFileName(project.title, new Date(), 'A4-RVB');
 
     const restore = () => {
       document.title = originalTitle;
+      restoreImages();
+      setExporting(false);
       window.removeEventListener('afterprint', restore);
     };
     window.addEventListener('afterprint', restore);
@@ -319,6 +356,27 @@ function DossierEditor({ project, biographies, logos, draft, onBack }) {
     dispatch({ type: 'deletePage', id: pageToDelete });
     if (editingId === pageToDelete) setEditingId(null);
     setPageToDelete(null);
+  }
+
+  /* ----- disposition d'une page photo ----- */
+  function chooseLayout(pageId, layout) {
+    const page = state.middle.find((item) => item.id === pageId);
+    if (!page || page.layout === layout) return;
+
+    const plan = planLayoutChange(page, layout);
+    if (plan.needsChoice) {
+      setKeepRequest({ pageId, layout, count: plan.count, photos: plan.filled });
+    } else {
+      dispatch({ type: 'setLayout', id: pageId, layout, slots: plan.slots });
+    }
+  }
+
+  function confirmKeep(keptIndexes) {
+    const page = state.middle.find((item) => item.id === keepRequest.pageId);
+    if (page) {
+      dispatch({ type: 'setLayout', id: page.id, layout: keepRequest.layout, slots: keptIndexes.map((index) => page.slots[index]) });
+    }
+    setKeepRequest(null);
   }
 
   /* ----- photos ----- */
@@ -419,8 +477,8 @@ function DossierEditor({ project, biographies, logos, draft, onBack }) {
           <button type='button' className='dossierEditor_toolbar_button' onClick={() => setAskSaveAs(true)} disabled={!state || saving}>
             ENREGISTRER SOUS…
           </button>
-          <button type='button' className='dossierEditor_toolbar_button dossierEditor_toolbar_button--primary' onClick={exportPdf} disabled={!state}>
-            <FontAwesomeIcon icon={faFilePdf} /> EXPORTER EN PDF
+          <button type='button' className='dossierEditor_toolbar_button dossierEditor_toolbar_button--primary' onClick={exportPdf} disabled={!state || exporting}>
+            <FontAwesomeIcon icon={faFilePdf} /> {exporting ? 'PRÉPARATION DU PDF…' : 'EXPORTER EN PDF'}
           </button>
         </div>
       </header>
@@ -429,6 +487,8 @@ function DossierEditor({ project, biographies, logos, draft, onBack }) {
         Pour l’export : destination « Enregistrer au format PDF », marges « Aucune », option « Graphiques d’arrière-plan » cochée.
         Le fichier est nommé automatiquement (AAMMJJHHMM_PROJET_A4RVB).
       </p>
+
+      {exportNote && <p className='dossierEditor_exportNote' role='status'>{exportNote}</p>}
 
       {warnings.map((warning) => (
         <p key={warning} className='dossierEditor_warning' role='alert'>{warning}</p>
@@ -500,13 +560,32 @@ function DossierEditor({ project, biographies, logos, draft, onBack }) {
         </DndContext>
       )}
 
-      {editingPage && (
+      {editingPage && editingPage.type === 'text' && (
         <TextPagePanel
           key={editingPage.id}
           page={editingPage}
           pageNumber={editingIndex}
           onChange={(patch) => dispatch({ type: 'updatePage', id: editingPage.id, patch })}
           onClose={() => setEditingId(null)}
+        />
+      )}
+
+      {editingPage && editingPage.type === 'photos' && (
+        <PhotoLayoutPanel
+          key={editingPage.id}
+          page={editingPage}
+          pageNumber={editingIndex}
+          onChoose={chooseLayout}
+          onClose={() => setEditingId(null)}
+        />
+      )}
+
+      {keepRequest && (
+        <PhotoKeepModal
+          photos={keepRequest.photos}
+          count={keepRequest.count}
+          onConfirm={confirmKeep}
+          onCancel={() => setKeepRequest(null)}
         />
       )}
 

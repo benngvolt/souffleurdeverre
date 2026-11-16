@@ -17,7 +17,20 @@ import {
    page texte  : { id, type: 'text',   title, html, align: 'top' | 'center' }
    page photo  : { id, type: 'photos', slots: [ { imageUrl, x, y } x 3 ] }       */
 
-export const PHOTOS_PER_PAGE = 3;
+// Dispositions d'une page photo : la zone occupée reste la même (même largeur, toute la hauteur)
+export const PHOTO_LAYOUTS = {
+  'three-bottom': { count: 3, label: '3 photos : deux en haut, une large en bas' },
+  'three-left': { count: 3, label: '3 photos : une verticale à gauche, deux carrées à droite' },
+  'two-stacked': { count: 2, label: '2 photos horizontales, l’une sur l’autre' },
+  'two-columns': { count: 2, label: '2 photos verticales, côte à côte' },
+  one: { count: 1, label: '1 photo' },
+};
+export const DEFAULT_LAYOUT = 'three-bottom';
+export const PHOTOS_PER_PAGE = 3; // nombre de photos par défaut (disposition par défaut)
+
+export function isValidLayout(layout) {
+  return Object.prototype.hasOwnProperty.call(PHOTO_LAYOUTS, layout);
+}
 
 const PX_PER_MM = 96 / 25.4;
 const TEXT_COLUMN_MM = 187;
@@ -38,11 +51,27 @@ export function newTextPage(overrides = {}) {
   return { id: newPageId('text'), type: 'text', title: '', html: '', align: 'top', ...overrides };
 }
 
-export function newPhotoPage(images = []) {
-  const slots = Array.from({ length: PHOTOS_PER_PAGE }, (_, index) =>
+export function newPhotoPage(images = [], layout = DEFAULT_LAYOUT) {
+  const slots = Array.from({ length: PHOTO_LAYOUTS[layout].count }, (_, index) =>
     images[index] ? { imageUrl: images[index].imageUrl, x: 50, y: 50 } : emptyPhotoSlot()
   );
-  return { id: newPageId('photos'), type: 'photos', slots };
+  return { id: newPageId('photos'), type: 'photos', layout, slots };
+}
+
+/* Changement de disposition d'une page photo.
+   - même nombre de photos : les photos restent à leur place ;
+   - moins de photos que prévu : les photos présentes sont regroupées au début, les emplacements complétés ;
+   - plus de photos présentes que d'emplacements : l'utilisateur doit choisir celles qu'il garde (needsChoice). */
+export function planLayoutChange(page, layout) {
+  const count = PHOTO_LAYOUTS[layout].count;
+  if (count === page.slots.length) return { needsChoice: false, slots: page.slots };
+
+  const filled = page.slots.map((slot, index) => ({ slot, index })).filter(({ slot }) => slot.imageUrl);
+  if (filled.length > count) return { needsChoice: true, count, filled };
+
+  const slots = filled.map(({ slot }) => slot);
+  while (slots.length < count) slots.push(emptyPhotoSlot());
+  return { needsChoice: false, slots };
 }
 
 /* ----------------------------------
@@ -217,6 +246,12 @@ export function dossierReducer(state, action) {
         middle: state.middle.map((page) => (page.id === action.id ? { ...page, ...action.patch } : page)),
       };
 
+    case 'setLayout':
+      return {
+        ...state,
+        middle: state.middle.map((page) => (page.id === action.id ? { ...page, layout: action.layout, slots: action.slots } : page)),
+      };
+
     case 'updateSlot':
       return {
         ...state,
@@ -249,7 +284,12 @@ export function serializeDraft(state, name) {
     cover: { imageUrl: state.cover.imageUrl, x: state.cover.x, y: state.cover.y },
     middle: state.middle.map((page) =>
       page.type === 'photos'
-        ? { pageId: page.id, type: 'photos', slots: page.slots.map((slot) => ({ imageUrl: slot.imageUrl, x: slot.x, y: slot.y })) }
+        ? {
+            pageId: page.id,
+            type: 'photos',
+            layout: page.layout || DEFAULT_LAYOUT,
+            slots: page.slots.map((slot) => ({ imageUrl: slot.imageUrl, x: slot.x, y: slot.y })),
+          }
         : { pageId: page.id, type: 'text', title: page.title, html: page.html, align: page.align }
     ),
     teamOrder: state.teamOrder,
@@ -276,17 +316,22 @@ export function buildStateFromDraft(draft, project, biographies) {
 
   const cover = keepPhoto(draft.cover);
 
-  const middle = (draft.middle || []).map((page) =>
-    page.type === 'photos'
-      ? { id: page.pageId, type: 'photos', slots: [0, 1, 2].map((index) => keepPhoto(page.slots && page.slots[index])) }
-      : {
-          id: page.pageId,
-          type: 'text',
-          title: page.title || '',
-          html: page.html || '',
-          align: ['top', 'center', 'bottom'].includes(page.align) ? page.align : 'top',
-        }
-  );
+  const middle = (draft.middle || []).map((page) => {
+    if (page.type !== 'photos') {
+      return {
+        id: page.pageId,
+        type: 'text',
+        title: page.title || '',
+        html: page.html || '',
+        align: ['top', 'center', 'bottom'].includes(page.align) ? page.align : 'top',
+      };
+    }
+
+    // anciens brouillons : pas de disposition enregistrée = trois photos (disposition par défaut)
+    const layout = isValidLayout(page.layout) ? page.layout : DEFAULT_LAYOUT;
+    const slots = Array.from({ length: PHOTO_LAYOUTS[layout].count }, (_, index) => keepPhoto(page.slots && page.slots[index]));
+    return { id: page.pageId, type: 'photos', layout, slots };
+  });
 
   const current = matchBiographies(project, biographies).map((biography) => biography._id);
   const saved = (draft.teamOrder || []).filter((id) => current.includes(id));
